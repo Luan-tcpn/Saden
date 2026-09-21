@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SADEN — Análise de Commodities Agrícolas</title>
+  <meta name="description" content="SADEN: preços de referência, clima e previsão para commodities agrícolas brasileiras." />
+  <link rel="icon" href="/img/logo.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha384-sHL9NAb7lN7rfvG5lfHpm643Xkcjzp4jFvuavGOndn6pjVqS6ny56CAt3nsEVT4H" crossorigin="anonymous" />
+  <link rel="stylesheet" href="/css/styles.css" />
+  <script src="/js/theme.js"></script>
+</head>
+<body>
+  <div id="app">
+    <!-- ============ LANDING PÚBLICA ============ -->
+    <section id="view-landing" class="landing hidden">
+      <header class="landing-top" id="inicio">
+        <div class="brand small light">
+          <img class="brand-mark" src="/img/logo.svg" alt="SADEN" />
+          <div><strong>SADEN</strong><span>AgroClima</span></div>
+        </div>
+        <button id="btn-landing-menu" class="icon-btn only-mobile" type="button" aria-label="Abrir menu" aria-expanded="false">☰</button>
+        <nav class="landing-nav" id="landing-nav">
+          <a href="#inicio">Início</a>
+          <a href="#plataforma">Plataforma</a>
+          <a href="#funcionalidades">Funcionalidades</a>
+          <a href="#como-funciona">Como funciona</a>
+          <a href="#dados">Dados</a>
+        </nav>
+        <nav class="landing-actions">
+          <button class="btn" data-go="/login" type="button">Entrar</button>
+          <button class="btn primary" data-go="/register" type="button">Criar conta</button>
+        </nav>
+      </header>
+      <section class="hero">
+        <div class="hero-text">
+          <p class="eyebrow">Monitoramento agrícola · Commodities brasileiras</p>
+          <h1>Preço, clima e previsão da sua lavoura em um só painel.</h1>
+          <p>O SADEN reúne cotações de referência, meteorologia por localidade e
+            previsão quantitativa para soja, milho, café, trigo e algodão — para
+            você decidir com base em dados, não em boato de mercado.</p>
+          <div class="hero-cta">
+            <button class="btn primary big" data-go="/register" type="button">Criar conta grátis</button>
+            <button class="btn big" data-go="/login" type="button">Entrar</button>
+          </div>
+          <div class="hero-facts">
+            <span><strong>5</strong> commodities</span>
+            <span><strong>7 dias</strong> de clima</span>
+            <span><strong>30 dias</strong> de previsão</span>
+          </div>
+        </div>
+        <div class="hero-photo">
+          <img src="/img/hero-pivo.jpg" alt="Vista aérea de pivô de irrigação e estação meteorológica em lavoura" fetchpriority="high" />
+          <figcaption>Irrigação e estação meteorológica — o campo que gera os dados</figcaption>
+        </div>
+      </section>
+      <section class="landing-section" id="problema">
+        <p class="eyebrow">O problema</p>
+        <h2>Decidir no escuro custa caro.</h2>
+        <p class="section-lead">Quem vive do campo decide todo dia — e decide melhor quando preço, clima e histórico estão na mesma mesa.</p>
+        <div class="accent-list">
+          <div class="accent-item"><h3>Informação dispersa</h3><p>Preço em um site, clima em outro, câmbio em outro. Reunir tudo toma o tempo de quem planta.</p></div>
+          <div class="accent-item"><h3>Preço anda com o clima</h3><p>Chuva, seca e temperatura movem oferta — e oferta move preço. Olhar só a cotação é ver metade do quadro.</p></div>
+          <div class="accent-item"><h3>Palpite não é análise</h3><p>Sem histórico, sem fonte e sem medida de incerteza, qualquer previsão vira torcida.</p></div>
+        </div>
+      </section>
+      <section class="landing-section alt" id="plataforma">
+        <div class="split">
+          <div>
+            <p class="eyebrow">A solução</p>
+            <h2>Do dado à decisão, em um fluxo só.</h2>
+            <ol class="flow">
+              <li><strong>Dados</strong> — cotações de referência, câmbio PTAX, clima por coordenada e localidades IBGE.</li>
+              <li><strong>Análise</strong> — histórico, variação, comparação entre commodities e indicadores climáticos.</li>
+              <li><strong>Previsão</strong> — modelo próprio com baselines, métricas e intervalo de incerteza.</li>
+              <li><strong>Decisão</strong> — relatório consolidado com fontes, período e limitações.</li>
+            </ol>
+          </div>
+          <div class="split-photo">
+            <img src="/img/solucao-soja.jpg" alt="Lavoura de soja ao pôr do sol" loading="lazy" />
+          </div>
+        </div>
+      </section>
+      <section class="landing-section" id="funcionalidades">
+        <p class="eyebrow">Funcionalidades</p>
+        <h2>Tudo o que a plataforma faz hoje.</h2>
+        <p class="section-lead">Recursos reais, conectados aos mesmos dados do backend — sem demonstração de fachada.</p>
+        <div class="landing-grid">
+          <div class="panel feat"><h3><span class="fic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 20h18"/><path d="M6 20v-6M11 20V6M16 20v-9"/></svg></span>Preços de referência</h3><p>Soja, milho, café, trigo e algodão convertidos pelo dólar PTAX, com fonte, data e unidade em cada valor.</p></div>
+          <div class="panel"><h3><span class="fic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M7 18a4 4 0 1 1 .6-7.96A5.5 5.5 0 0 1 18.3 12 3.5 3.5 0 0 1 17.5 18Z"/></svg></span>Clima por localidade</h3><p>Previsão de 7 dias e histórico: temperatura, chuva, umidade e vento para qualquer ponto do Brasil.</p></div>
+          <div class="panel"><h3><span class="fic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 21s-6-5.3-6-10a6 6 0 1 1 12 0c0 4.7-6 10-6 10Z"/><circle cx="12" cy="11" r="2.2"/></svg></span>Mapa do Brasil</h3><p>Camadas de ruas e satélite. Clique em qualquer ponto e consulte preço + clima na hora.</p></div>
+          <div class="panel"><h3><span class="fic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 17l5-5 4 4 9-9"/><path d="M15 7h6v6"/></svg></span>Previsão quantitativa</h3><p>Modelo próprio com baselines, métricas e intervalo de incerteza — sem prometer precisão impossível.</p></div>
+          <div class="panel"><h3><span class="fic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="6"/><path d="M16 16l5 5"/></svg></span>Busca territorial</h3><p>Cidade, endereço, rua ou coordenadas, com geocodificação real e código IBGE quando aplicável.</p></div>
+          <div class="panel"><h3><span class="fic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l4 4v14H7Z"/><path d="M14 3v4h4"/></svg></span>Relatórios</h3><p>Consolide a análise em JSON, CSV ou impressão, com fontes, período e limitações.</p></div>
+        </div>
+      </section>
+      <section class="landing-section alt" id="como-funciona">
+        <p class="eyebrow">Como funciona</p>
+        <h2>Em 5 passos, da conta ao relatório.</h2>
+        <p class="section-lead">O mesmo caminho que o sistema executa por dentro — aqui, na sua mão.</p>
+        <ol class="steps">
+          <li><strong>Crie sua conta</strong> — cadastro simples, sem cartão.</li>
+          <li><strong>Informe sua localização</strong> — cidade, endereço, coordenadas ou “Minha localização”.</li>
+          <li><strong>O SADEN reúne os dados</strong> — preços, câmbio, clima e mapa da sua região.</li>
+          <li><strong>Analise e preveja</strong> — dashboard com histórico, métricas e previsão com intervalo.</li>
+          <li><strong>Exporte o relatório</strong> — CSV, JSON ou impressão, com fontes e limitações.</li>
+        </ol>
+      </section>
+      <section class="landing-section" id="dados">
+        <p class="eyebrow">Dados e confiança</p>
+        <h2>Fonte declarada, sempre.</h2>
+        <p class="section-lead">Cada número do SADEN carrega origem, data e unidade. O que não tem fonte, não entra.</p>
+        <div class="landing-grid cols-3">
+          <div class="panel"><h3>Mercado</h3><p>Futuros internacionais (Yahoo Finance) × dólar PTAX (Banco Central). Referência convertida — o sistema diz isso em cada tela.</p></div>
+          <div class="panel"><h3>Território e clima</h3><p>IBGE, Open-Meteo e OpenStreetMap para localidades, meteorologia e geocodificação, com coordenadas e fuso explícitos.</p></div>
+          <div class="panel"><h3>Sem número inventado</h3><p>Sem estatísticas fabricadas, sem promessa de precisão. Incerteza e limitações aparecem junto do resultado.</p></div>
+        </div>
+      </section>
+      <section class="landing-cta" id="cta-final">
+        <h2>Comece a analisar o mercado hoje.</h2>
+        <p>Crie sua conta e consulte preços, clima e previsão da sua região.</p>
+        <button class="btn primary big" data-go="/register" type="button">Criar minha conta</button>
+      </section>
+      <footer class="landing-foot">
+        <div class="foot-cols">
+          <div class="foot-brand">
+            <div class="brand small light">
+              <img class="brand-mark sm" src="/img/logo.svg" alt="SADEN" />
+              <div><strong>SADEN</strong><span>AgroClima</span></div>
+            </div>
+            <p>Plataforma de análise de commodities agrícolas brasileiras: preços de referência, clima, mapa, previsão e relatórios — com fonte declarada.</p>
+          </div>
+          <nav aria-label="Plataforma">
+            <h3>Plataforma</h3>
+            <button class="linklike" data-go="/dashboard" type="button">Dashboard</button>
+            <button class="linklike" data-go="/dashboard" type="button">Mapa do Brasil</button>
+            <button class="linklike" data-go="/dashboard" type="button">Relatórios</button>
+            <button class="linklike" data-go="/dashboard" type="button">Aparência</button>
+          </nav>
+          <nav aria-label="Projeto">
+            <h3>Projeto</h3>
+            <a href="#como-funciona">Como funciona</a>
+            <a href="#dados">Dados e confiança</a>
+            <button class="linklike" data-go="/login" type="button">Entrar</button>
+            <button class="linklike" data-go="/register" type="button">Criar conta</button>
+          </nav>
+          <nav aria-label="Fontes">
+            <h3>Fontes de dados</h3>
+            <a href="https://finance.yahoo.com" rel="noopener">Yahoo Finance</a>
+            <a href="https://www.bcb.gov.br" rel="noopener">Banco Central (PTAX)</a>
+            <a href="https://open-meteo.com" rel="noopener">Open-Meteo</a>
+            <a href="https://www.ibge.gov.br" rel="noopener">IBGE</a>
+            <a href="https://www.openstreetmap.org/copyright" rel="noopener">OpenStreetMap</a>
+          </nav>
+        </div>
+        <div class="foot-base">
+          <span>© 2026 SADEN — Sistema de Análise, Dados e Estimativa. Projeto acadêmico (TCC).</span>
+          <span>Fotografias: acervo do autor do projeto.</span>
+        </div>
+      </footer>
+    </section>
+
+    <!-- ============ AUTH VIEW ============ -->
+    <section id="view-auth" class="auth-wrap hidden">
+      <div class="auth-card">
+        <div class="brand">
+          <img class="brand-mark lg" src="/img/logo.svg" alt="SADEN" />
+          <div>
+            <h1>SADEN</h1>
+            <p>Sistema de Análise, Dados e Estimativa de preços de commodities agrícolas brasileiras</p>
+          </div>
+        </div>
+        <div class="tabs">
+          <button id="tab-login" class="tab active" type="button">Entrar</button>
+          <button id="tab-register" class="tab" type="button">Cadastrar</button>
+        </div>
+        <form id="form-login" class="auth-form">
+          <label>E-mail<input id="login-email" type="email" required autocomplete="email" /></label>
+          <label>Senha<input id="login-password" type="password" required autocomplete="current-password" /></label>
+          <p class="form-error hidden" id="login-error" role="alert"></p>
+          <button class="btn primary" type="submit">Entrar</button>
+          <p class="auth-links"><button class="linklike" id="link-forgot" type="button">Esqueci minha senha</button></p>
+        </form>
+        <form id="form-register" class="auth-form hidden">
+          <label>Nome<input id="reg-name" type="text" required autocomplete="name" /></label>
+          <label>E-mail<input id="reg-email" type="email" required autocomplete="email" /></label>
+          <label>Senha (mín. 6)<input id="reg-password" type="password" required minlength="6" autocomplete="new-password" /></label>
+          <p class="form-error hidden" id="register-error" role="alert"></p>
+          <button class="btn primary" type="submit">Criar conta</button>
+        </form>
+        <form id="form-forgot" class="auth-form hidden">
+          <h2 class="auth-title">Recuperar senha</h2>
+          <p class="auth-note">Informe seu e-mail. Se houver uma conta associada, enviaremos instruções para redefinição.</p>
+          <label>E-mail<input id="forgot-email" type="email" required autocomplete="email" /></label>
+          <p class="form-error hidden" id="forgot-error" role="alert"></p>
+          <p class="form-ok hidden" id="forgot-ok" role="status"></p>
+          <button class="btn primary" type="submit">Enviar instruções</button>
+          <p class="auth-links"><button class="linklike" id="link-back-login" type="button">Voltar ao login</button></p>
+        </form>
+        <form id="form-reset" class="auth-form hidden">
+          <h2 class="auth-title">Nova senha</h2>
+          <label>Nova senha (mín. 6)<input id="reset-password" type="password" required minlength="6" autocomplete="new-password" /></label>
+          <p class="form-error hidden" id="reset-error" role="alert"></p>
+          <p class="form-ok hidden" id="reset-ok" role="status"></p>
+          <button class="btn primary" type="submit">Redefinir senha</button>
+        </form>
+        <p class="auth-note">Dados de mercado: referência internacional (Yahoo Finance) convertida pelo dólar PTAX (BCB). Clima: Open-Meteo. Localidades: IBGE.</p>
+      </div>
+    </section>
+
+    <!-- ============ APP SHELL ============ -->
+    <div id="view-app" class="hidden">
+      <div id="drawer-overlay" class="drawer-overlay hidden"></div>
+      <aside class="sidebar" id="sidebar">
+        <div class="brand small">
+          <img class="brand-mark" src="/img/logo.svg" alt="SADEN" />
+          <div><strong>SADEN</strong><span>AgroClima</span></div>
+          <button id="btn-drawer-close" class="icon-btn only-mobile" type="button" aria-label="Fechar menu">✕</button>
+        </div>
+        <nav>
+          <button data-nav="dashboard" class="nav-btn active" type="button">Dashboard</button>
+          <button data-nav="mapa" class="nav-btn" type="button">Mapa do Brasil</button>
+          <button data-nav="relatorio" class="nav-btn" type="button">Relatórios</button>
+          <button data-nav="fontes" class="nav-btn" type="button">Fontes de dados</button>
+          <button data-nav="alertas" class="nav-btn" type="button">Alertas</button>
+          <button data-nav="aparencia" class="nav-btn" type="button">Aparência</button>
+        </nav>
+        <div class="sidebar-foot">
+          <span id="user-label"></span>
+          <button id="btn-logout" class="btn ghost" type="button">Sair</button>
+        </div>
+      </aside>
+
+      <main class="main">
+        <button id="btn-drawer" class="icon-btn only-mobile" type="button" aria-label="Abrir menu">☰</button>
+
+        <!-- DASHBOARD -->
+        <section id="page-dashboard" class="page">
+          <header class="topbar">
+            <div class="filters">
+              <label>Commodity
+                <select id="sel-commodity"></select>
+              </label>
+              <label class="loc-field">Localidade
+                <input id="inp-location" placeholder="Cidade, endereço ou lat, lon" autocomplete="off" />
+                <div id="location-results" class="suggest hidden" role="listbox"></div>
+              </label>
+              <button id="btn-myloc" class="btn" type="button" title="Usar minha localização atual">Minha localização</button>
+              <label>UF
+                <select id="sel-uf"><option value="">—</option></select>
+              </label>
+              <label>Município
+                <select id="sel-municipio"><option value="">—</option></select>
+              </label>
+              <label>Previsão
+                <select id="sel-horizon">
+                  <option value="7">7 dias</option>
+                  <option value="14" selected>14 dias</option>
+                  <option value="30">30 dias</option>
+                </select>
+              </label>
+              <label>Período
+                <select id="sel-range">
+                  <option value="1mo">30 dias</option>
+                  <option value="3mo">3 meses</option>
+                  <option value="6mo">6 meses</option>
+                  <option value="1y" selected>1 ano</option>
+                </select>
+              </label>
+              <button id="btn-apply" class="btn primary" type="button">Consultar</button>
+              <button id="btn-clear" class="btn" type="button" title="Voltar aos filtros iniciais">Limpar</button>
+            </div>
+            <p class="coord-line">Coordenadas: <strong id="coord-label">—</strong> <span id="place-label"></span></p>
+            <p class="status" id="loc-status" aria-live="polite"></p>
+          </header>
+          <div id="dash-status" class="status" aria-live="polite"></div>
+          <div class="cards" id="price-cards"></div>
+          <div class="grid-2">
+            <div class="panel">
+              <h2>Série histórica <small id="hist-sub"></small></h2>
+              <canvas id="chart-history" height="140" role="img" aria-label="Gráfico da série histórica de preços"></canvas>
+            </div>
+            <div class="panel">
+              <h2>Previsão <small id="fc-sub"></small></h2>
+              <canvas id="chart-forecast" height="140" role="img" aria-label="Gráfico da previsão de preços com intervalo"></canvas>
+              <div id="forecast-meta" class="meta"></div>
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="panel">
+              <h2>Métricas do modelo <small>split temporal 70/15/15</small></h2>
+              <div id="metrics-table"></div>
+            </div>
+            <div class="panel">
+              <h2>Clima — 7 dias <small id="wx-sub"></small></h2>
+              <div id="wx-cards" class="cards small"></div>
+              <canvas id="chart-climate" height="120" role="img" aria-label="Gráfico de temperatura e chuva"></canvas>
+            </div>
+          </div>
+          <div class="panel">
+            <h2>Comparação entre commodities <small>preço de referência atual</small></h2>
+            <div id="compare-table"></div>
+            <h2 style="margin-top:16px">Variação no pregão <small>em %, sem unidade — comparável entre contratos</small></h2>
+            <canvas id="chart-compare" height="110" role="img" aria-label="Gráfico de variação percentual por commodity"></canvas>
+          </div>
+        </section>
+
+        <!-- MAPA -->
+        <section id="page-mapa" class="page hidden">
+          <div class="map-toolbar">
+            <button id="btn-layer-osm" class="btn chip active" type="button">Ruas</button>
+            <button id="btn-layer-sat" class="btn chip" type="button">Satélite</button>
+            <button id="btn-layer-lulc" class="btn chip" type="button">Cobertura do solo</button>
+            <span class="hint">Clique no mapa para consultar preço + clima do ponto.</span>
+          </div>
+          <div id="map"></div>
+          <div class="legend" id="map-legend">
+            <span><i class="dot marker"></i>Ponto consultado (preço ref. + clima)</span>
+            <span><i class="dot streets"></i>Ruas: OpenStreetMap</span>
+            <span><i class="dot sat"></i>Satélite: Esri World Imagery</span>
+          </div>
+          <div class="legend hidden" id="lulc-legend"></div>
+          <div id="map-status" class="status" aria-live="polite"></div>
+          <div id="map-result" class="panel hidden"></div>
+          <div class="panel">
+            <h2>Meus locais salvos</h2>
+            <div class="filters">
+              <label>Rótulo
+                <input id="inp-place-label" maxlength="120" placeholder="Ex.: Fazenda Boa Vista" />
+              </label>
+              <button id="btn-place-save" class="btn" type="button">Salvar ponto atual</button>
+            </div>
+            <p class="status" id="places-status" aria-live="polite"></p>
+            <div id="places-list"></div>
+          </div>
+        </section>
+
+        <!-- RELATÓRIO -->
+        <section id="page-relatorio" class="page hidden">
+          <div class="report-actions">
+            <button id="btn-report" class="btn primary" type="button">Gerar relatório</button>
+            <button id="btn-csv" class="btn" type="button">Exportar CSV</button>
+            <button id="btn-print" class="btn" type="button">Imprimir / PDF</button>
+          </div>
+          <p class="meta">Usa a commodity e a localidade atuais (barra de contexto acima; ajuste no Dashboard).</p>
+          <div id="report-status" class="status" aria-live="polite"></div>
+          <article id="report-body" class="report"></article>
+        </section>
+
+        <!-- FONTES -->
+        <section id="page-fontes" class="page hidden">
+          <div class="panel">
+            <h2>Fontes de dados e rastreabilidade</h2>
+            <div id="sources-table"></div>
+          </div>
+          <div class="panel">
+            <h2>Metodologia (resumo)</h2>
+            <ul class="method">
+              <li><strong>Preços:</strong> futuros internacionais (CBOT/ICE via Yahoo Finance) convertidos para BRL pela PTAX de venda (BCB). O Price Reference Engine resolve o nível geográfico (hoje: nacional, com fallback declarado) — é uma <em>referência</em>, não o preço físico regional (CEPEA/CONAB não oferecem API pública — ver tabela).</li>
+<li><strong>Frete:</strong> sem fonte estruturada verificada (tabela ANTT em DOU/calculadora interativa); o SADEN não calcula frete automaticamente. Referência manual na tabela de fontes.</li>
+              <li><strong>Clima:</strong> Open-Meteo (previsão 7 dias + arquivo ERA5), por latitude/longitude, fuso America/Sao_Paulo.</li>
+              <li><strong>Localidades:</strong> IBGE (estados/municípios) + geocodificação (Open-Meteo para lugares, Nominatim/OSM para endereços e reverse) com ancoragem IBGE quando possível.</li>
+              <li><strong>Previsão:</strong> pipeline próprio — limpeza, features (lags, médias móveis, volatilidade), split temporal, baselines (naive, seasonal-naive-5, MM7) e regressão ridge com seleção por RMSE de validação. Intervalo ±1,96·σ.</li>
+            </ul>
+          </div>
+        </section>
+        <!-- ALERTAS -->
+        <section id="page-alertas" class="page hidden">
+          <div class="panel">
+            <h2>Novo alerta</h2>
+            <div class="filters">
+              <label>Commodity
+                <select id="al-commodity"></select>
+              </label>
+              <label>Condição
+                <select id="al-kind">
+                  <option value="price_below">Preço abaixo de (R$)</option>
+                  <option value="price_above">Preço acima de (R$)</option>
+                  <option value="rain_above">Chuva 7 dias acima de (mm)</option>
+                </select>
+              </label>
+              <label>Valor
+                <input id="al-threshold" type="number" min="0" step="any" placeholder="Ex.: 150" />
+              </label>
+              <label>Rótulo (opcional)
+                <input id="al-label" type="text" maxlength="120" placeholder="Ex.: vender soja" />
+              </label>
+              <button id="btn-al-create" class="btn primary" type="button">Criar alerta</button>
+            </div>
+            <p class="meta" id="al-coords-note"></p>
+            <p class="status" id="al-form-status" aria-live="polite"></p>
+          </div>
+          <div class="panel">
+            <h2>Meus alertas</h2>
+            <div class="report-actions">
+              <button id="btn-al-check" class="btn primary" type="button">Verificar agora</button>
+            </div>
+            <p class="status" id="al-status" aria-live="polite"></p>
+            <div id="al-list"></div>
+          </div>
+          <div class="panel">
+            <h2>Últimas avaliações</h2>
+            <div id="al-events"></div>
+          </div>
+        </section>
+        <!-- APARÊNCIA -->
+        <section id="page-aparencia" class="page hidden">
+          <div class="panel">
+            <h2>Aparência</h2>
+            <p class="meta">O tema se aplica a telas, tabelas, gráficos e formulários. A preferência fica salva neste navegador.</p>
+            <div class="theme-options" role="radiogroup" aria-label="Tema">
+              <label><input type="radio" name="theme" value="light" /> Claro</label>
+              <label><input type="radio" name="theme" value="dark" /> Escuro</label>
+              <label><input type="radio" name="theme" value="system" /> Automático (sistema)</label>
+            </div>
+            <p class="status ok hidden" id="theme-ok">Tema aplicado.</p>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha384-cxOPjt7s7Iz04uaHJceBmS+qpjv2JkIHNVcuOrM+YHwZOmJGBXI00mdUXEq65HTH" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"
+    integrity="sha384-9nhczxUqK87bcKHh20fSQcTGD4qq5GhayNYSYWqwBkINBhOfQLg/P5HG5lF1urn4" crossorigin="anonymous"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>

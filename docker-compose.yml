@@ -1,0 +1,26 @@
+# SADEN — execução reproduzível da Release Candidate.
+# Uso:
+#   $env:JWT_SECRET = "segredo-forte-aqui"   # PowerShell (obrigatório)
+#   docker compose build
+#   docker compose up
+# Acesso: http://localhost:3001
+services:
+  saden:
+    build: .
+    image: saden:rc
+    ports:
+      - "3001:3001"
+    environment:
+      PORT: 3001
+      # Obrigatório: sem fallback silencioso em produção (fail-fast do backend).
+      JWT_SECRET: ${JWT_SECRET:?Defina JWT_SECRET no ambiente antes do up}
+      JWT_EXPIRES_IN: 12h
+      DATABASE_PATH: data/saden.db
+      FRONTEND_ORIGIN: http://localhost:3001
+    volumes:
+      # SQLite persiste fora do ciclo de vida do container.
+      - ./data:/app/data
+      # Outbox de e-mails de desenvolvimento (recuperação de senha sem SMTP):
+      # montado para inspeção local e para os testes E2E.
+      - ./tmp/mail-outbox:/app/tmp/mail-outbox
+    restart: unless-stopped

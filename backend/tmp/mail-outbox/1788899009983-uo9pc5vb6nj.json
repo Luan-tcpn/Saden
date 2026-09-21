@@ -1,0 +1,8 @@
+{
+ "to": "recovery@saden.local",
+ "subject": "SADEN — redefinição de senha",
+ "text": "Olá Rec. Para redefinir sua senha, acesse o link abaixo (válido por 1 hora, uso único):\nhttp://localhost:3001/reset?token=cceae70da062a491f3fe6ed835d99b7eecafbd73eee3f59b0cd5d08c7ba0bacf\nSe você não solicitou, ignore esta mensagem.",
+ "link": "http://localhost:3001/reset?token=cceae70da062a491f3fe6ed835d99b7eecafbd73eee3f59b0cd5d08c7ba0bacf",
+ "created_at": "2026-09-08T20:23:29.982Z",
+ "transport": "dev-outbox"
+}
