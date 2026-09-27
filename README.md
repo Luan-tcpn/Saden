@@ -131,4 +131,4 @@ Na árvore canônica: `docs/ARCHITECTURE.md` (arquitetura e endpoints), `docs/AP
 
 ## Status do projeto
 
-**Release Candidate / feature freeze**: funcional, com suíte verde (80/80 + smoke 8/8 + E2E 57/57 revalidado em 2026-09-27). Novas funcionalidades fora do escopo; correções de bugs/regressões e segurança continuam possíveis. Não avaliado formalmente para produção.
+**v1.1 consolidada (2026-09-27)**: v1.0 preservada + challenger AR(p) opt-in (`?model=ar`, seletor Ridge/AR no dashboard) + backup operacional. Suíte verde (80/80 + smoke 8/8 + E2E 57/57). Ridge continua champion/default; AR é experimental. Docker não validado neste ambiente (daemon indisponível). Não avaliado formalmente para produção.

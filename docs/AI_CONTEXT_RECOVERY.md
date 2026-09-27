@@ -1,4 +1,4 @@
-# SADEN — AI Context Recovery (v1.0.0 → v1.1.x)
+# SADEN — AI Context Recovery (v1.0.0 → v1.1.x, CONSOLIDADA 2026-09-27)
 
 > Gerado em 2026-09-27 pelo agente de continuidade, após auditoria completa da árvore real.
 > Fonte canônica: implementação + testes + schema + docs. SADEN-TCC = somente leitura.
@@ -81,7 +81,8 @@
 - [x] **G6 (fonte regional)** — feito 2026-09-27, sem código: nenhuma fonte integrável (CONAB CAPTCHA, CEPEA paga, IMEA parcial-MT, B3 futuros). Evidência em `REGIONAL_INVESTIGATION.md`. Sem schema, sem D39. Trilha encerrada por enquanto.
 - [x] **Backup** — feito 2026-09-27: `scripts/backup.js` + 3 testes + rotina no README; CLI real validado. Sem D-number (tooling).
 - [x] **D39 (seletor Ridge/AR)** — feito 2026-09-27: select opt-in mínimo + E2E 57/57; Ridge default; sem D40.
-- [ ] Docker build+up+health+down/up num ambiente com daemon ativo.
+- [x] **Consolidação v1.1** — 2026-09-27: `V1_1_RESULT.md`, `V1_1_TCC_IMPACT.md`, `CHANGELOG.md` criados; README sem "feature freeze" obsoleto; STATUS: FUNCTIONALLY COMPLETE (Docker NOT RUN separado).
+- [ ] Docker build+up+health+down/up num ambiente com daemon ativo (única validação pendente).
 
 ## 10. Decisões ativas / hipóteses em investigação
 
