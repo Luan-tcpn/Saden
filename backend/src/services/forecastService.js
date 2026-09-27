@@ -7,6 +7,7 @@
 // com intervalo (±1,96·σ dos resíduos de validação, alargado com o horizonte).
 const { connect } = require('../db');
 const priceService = require('./priceService');
+const { solve } = require('../utils/linalg');
 
 const MIN_POINTS = 60;
 const WARMUP = 30; // janela mínima para features estáveis
@@ -72,26 +73,6 @@ function standardize(X) {
   }
   const Xs = X.map((row) => row.map((v, j) => (v - mean[j]) / sd[j]));
   return { Xs, mean, sd };
-}
-
-function solve(A, b) {
-  // Eliminação de Gauss com pivoteamento parcial.
-  const n = A.length;
-  const M = A.map((row, i) => [...row, b[i]]);
-  for (let col = 0; col < n; col++) {
-    let piv = col;
-    for (let r = col + 1; r < n; r++) {
-      if (Math.abs(M[r][col]) > Math.abs(M[piv][col])) piv = r;
-    }
-    if (Math.abs(M[piv][col]) < 1e-12) throw new Error('Matriz singular no ajuste ridge');
-    [M[col], M[piv]] = [M[piv], M[col]];
-    for (let r = 0; r < n; r++) {
-      if (r === col) continue;
-      const f = M[r][col] / M[col][col];
-      for (let c = col; c <= n; c++) M[r][c] -= f * M[col][c];
-    }
-  }
-  return M.map((row, i) => row[n] / M[i][i]);
 }
 
 function fitRidge(X, y, lambda) {
@@ -313,5 +294,5 @@ function persistRun(commodityKey, payload) {
 module.exports = {
   run,
   MIN_POINTS,
-  _test: { clean, featuresFor, buildRows, splitRows, fitRidge, metrics, baselinePredict },
+  _test: { clean, featuresFor, buildRows, splitRows, fitRidge, metrics, baselinePredict, nextBusinessDates },
 };

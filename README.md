@@ -89,12 +89,12 @@ SQLite em `data/saden.db` (WAL: `saden.db-wal`/`saden.db-shm` em execução). A 
 ## Testes (estado real, executado em 2026-09-21)
 
 ```powershell
-cd backend; npm test                  # 51/51 (7 suítes; inclui 2 testes live nas fontes + cache/TTL + 422)
+cd backend; npm test                  # 69/69 (12 suítes; inclui 2 testes live + cache/TTL + 422 + AR challenger)
 cd ..; node scripts\smoke-test.js     # 8/8 contra servidor em execução
 node scripts\e2e-round2.js            # 53/53 verificações com navegador real
 ```
 
-Suíte `node --test` sem frameworks: 6 arquivos unitários (conversão, validação, matemática da previsão, HTTP/retry, coordenadas, CSV) + integração (auth, rotas, token, rate-limit, recuperação, fontes vivas, alertas, locais, cache KV, hit de rota, 422 de série curta). 51 testes ≠ 51% de cobertura (cobertura medida: 88,5% linhas via c8 — ver `docs/V1_1_AUDIT.md`). Sem teste formal de carga — há apenas medições exploratórias locais.
+Suíte `node --test` sem frameworks: 7 arquivos unitários (conversão, validação, matemática da previsão, HTTP/retry, coordenadas, CSV, AR challenger) + integração (auth, rotas, token, rate-limit, recuperação, fontes vivas, alertas, locais, cache KV, 422, AR service). Cobertura medida: 88,5% linhas via c8 (E1; ver `docs/V1_1_AUDIT.md`). Sem teste formal de carga — há apenas medições exploratórias locais.
 
 ## Docker
 
@@ -129,4 +129,4 @@ Na árvore canônica: `docs/ARCHITECTURE.md` (arquitetura e endpoints), `docs/AP
 
 ## Status do projeto
 
-**Release Candidate / feature freeze**: funcional, com suíte verde (51/51 + smoke 8/8 + E2E 53/53 na última validação registrada). Novas funcionalidades fora do escopo; correções de bugs/regressões e segurança continuam possíveis. Não avaliado formalmente para produção.
+**Release Candidate / feature freeze**: funcional, com suíte verde (69/69 + smoke 8/8 + E2E 53/53 na última validação registrada). Novas funcionalidades fora do escopo; correções de bugs/regressões e segurança continuam possíveis. Não avaliado formalmente para produção.

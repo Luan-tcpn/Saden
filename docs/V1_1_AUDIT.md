@@ -6,7 +6,7 @@
 
 | Verificação | Resultado |
 |---|---|
-| `npm test` (backend) | 51/51 PASS, 7 suítes (2026-09-27; E1 adicionou cache-KV + hit de rota + 422) |
+| `npm test` (backend) | 69/69 PASS, 12 suítes (2026-09-27; E3 adicionou 16 unitários AR + 2 integração) |
 | `scripts/smoke-test.js` (live) | 8/8 PASS (soja R$ 151,18 real, clima real, `modelo=ridge`) |
 | Cobertura (c8 efêmero via npx, sem dependência nova) | **88,51% linhas · 74,75% branches · 86,91% funcs** (suíte completa) |
 | E2E navegador (53/53) | Não reexecutado (requer harness CDP + Edge; última validação registrada vale) |
@@ -44,6 +44,15 @@ validada contra `model_runs`: divergência ≤15% por janelas distintas). Evidê
 algodão 0,0695 vs 0,0907). Limites: one-step ≠ recursivo multi-passo (uso operacional);
 val_n 33–35; sem termos MA/sazonais. Veredito: GO condicional à implementação do
 challenger no JS (E3); Ridge permanece champion.
+
+## A8. E3 — AR challenger implementado e avaliado (2026-09-27, D37)
+
+Implementação: `utils/linalg.js` + `services/arService.js`; Ridge com
+comportamento inalterado (só import + export aditivo). Testes 69/69
+(16 unitários AR incl. gate de leakage + 2 integração). Evidência em
+`docs/FORECAST_EVALUATION.md` (E3): AR vence Ridge no one-step e no
+recursivo H=7/14/30 nas 5 commodities; H30 absoluto fraco nos dois.
+Veredito: challenger APROVADO; champion inalterado; exposição = D38.
 
 ## A4. Não-bugs (verificado, sem ação)
 

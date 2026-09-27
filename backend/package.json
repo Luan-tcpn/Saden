@@ -7,7 +7,7 @@
     "start": "node src/index.js",
     "dev": "node --watch src/index.js",
     "seed": "node ../scripts/seed.js",
-    "test": "node --test ../tests/unit/fx.test.js ../tests/unit/validate.test.js ../tests/unit/forecast-math.test.js ../tests/unit/http.test.js ../tests/unit/coords.test.js ../tests/unit/csv.test.js ../tests/integration/api.test.js"
+    "test": "node --test ../tests/unit/fx.test.js ../tests/unit/validate.test.js ../tests/unit/forecast-math.test.js ../tests/unit/http.test.js ../tests/unit/coords.test.js ../tests/unit/csv.test.js ../tests/unit/ar.test.js ../tests/integration/api.test.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

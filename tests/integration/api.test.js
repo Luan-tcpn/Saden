@@ -406,4 +406,47 @@ describe('API SADEN — integração', () => {
       connect().prepare('DELETE FROM kv_cache WHERE key = ?').run('prices:soja:1y');
     }
   });
+
+  it('arService.run 422 com série curta (cache semeado)', async () => {
+    const { connect, cacheSet } = require('../../backend/src/db');
+    const arService = require('../../backend/src/services/arService');
+    const pts = [];
+    for (let i = 0; i < 10; i++) pts.push({ date: `2026-01-${String(i + 1).padStart(2, '0')}`, price_brl: 100 + i });
+    cacheSet('prices:soja:1y', { points: pts }, 60 * 1000);
+    try {
+      await assert.rejects(() => arService.run('soja', 7), (e) => {
+        assert.equal(e.status, 422);
+        assert.match(e.message, /insuficiente/i);
+        return true;
+      });
+    } finally {
+      connect().prepare('DELETE FROM kv_cache WHERE key = ?').run('prices:soja:1y');
+    }
+  });
+
+  it('arService.run em série sintética semeada (payload completo)', { timeout: 60000 }, async () => {
+    const { connect, cacheSet } = require('../../backend/src/db');
+    const arService = require('../../backend/src/services/arService');
+    const pts = [];
+    const d0 = new Date('2026-01-01T12:00:00Z');
+    for (let i = 0; i < 100; i++) {
+      const d = new Date(d0);
+      d.setUTCDate(d.getUTCDate() + i);
+      pts.push({ date: d.toISOString().slice(0, 10), price_brl: 100 + i * 0.1 + Math.sin(i / 5) * 2 });
+    }
+    cacheSet('prices:soja:1y', { points: pts }, 60 * 1000);
+    try {
+      const out = await arService.run('soja', 14);
+      assert.equal(out.model, 'ar');
+      assert.ok(out.ar_order >= 1 && out.ar_order <= 8);
+      assert.equal(out.horizon_days, 14);
+      assert.equal(out.forecast.length, 14);
+      assert.ok(['ar', 'baseline'].includes(out.model_selected));
+      for (const H of ['h7', 'h14', 'h30']) assert.ok(out.recursive_eval[H].origins >= 0);
+      assert.equal(out.limitations.length, 5);
+      assert.ok(Number.isFinite(out.interval_sigma) && out.interval_sigma >= 0);
+    } finally {
+      connect().prepare('DELETE FROM kv_cache WHERE key = ?').run('prices:soja:1y');
+    }
+  });
 });

@@ -227,3 +227,9 @@ mesmo split da Ridge; (2) avaliacao one-step + recursiva H=7/14/30 com intervalo
 (3) sem ensemble; (4) resultado negativo mantem Ridge e e registrado. ARIMA com
 termos MA/sazonalidade continua nao testado. Script da investigacao em `tmp/`
 (nao versionado); metodo reproduzivel documentado no FORECAST_EVALUATION.md.
+
+Resultado E3 (2026-09-27): challenger implementado (`arService.js` + `linalg.js`,
+Ridge com comportamento inalterado) e avaliado em dados reais — AR vence Ridge
+no one-step E no recursivo H=7/14/30 nas 5 commodities (ver FORECAST_EVALUATION.md).
+Veredito: AR APROVADO como challenger; Ridge CONTINUA champion; exposicao em
+rota/persistencia = proxima decisao (D38). Sem ensemble. ARIMA segue nao testado.

@@ -6,7 +6,7 @@
 ## 1. Onde estamos
 
 - **Baseline v1.0.0 congelado e VERDE** (tag lógica `9218e01 v1.0.0`; branch `main`, `origin https://github.com/Luan-tcpn/Saden.git`). Em 2026-09-27 foram empilhados 2 commits de docs locais (`dd32a30`, `f6d6040`) ainda não enviados ao remoto — push é decisão do usuário.
-- Backend **51/51 PASS** (`node --test`, 7 suítes: E1 adicionou cache-KV, hit de rota e 422 em 2026-09-27) — revalidado em 2026-09-27.
+- Backend **69/69 PASS** (`node --test`, 12 suítes: E3 adicionou 16 unitários AR + 2 integração) — revalidado em 2026-09-27.
 - Smoke **8/8 PASS** contra servidor live em 2026-09-27 (soja R$ 151,18 real, clima real, previsão `modelo=ridge`, relatório OK).
 - `docs/` **PRESENTE e versionado** (8 arquivos, `git ls-tree HEAD docs/` confirma) — a nota do README que dizia "docs ausente nesta cópia" está **obsoleta** (era verdadeira numa árvore anterior, não nesta).
 - Docker **não validável neste ambiente** (daemon Docker Desktop inativo em 2026-09-27); `Dockerfile` + `compose` íntegros por inspeção, `COPY docs ./docs` agora consistente porque `docs/` existe.
@@ -76,8 +76,8 @@
 - [x] `docs/V1_1_AUDIT.md` — feito. Gaps A3.1–A3.3 viram fila E1.
 - [x] `docs/V1_1_DECISION_MATRIX.md` — feito.
 - [x] D35 Champion/Challenger — feito.
-- [x] **E2 (investigação AR challenger, D37)** — feito 2026-09-27: AR(p)+AIC vence Ridge na val one-step em 5/5 (16–37%), D35-cumprido; GO condicional para implementar challenger no JS (Ridge segue champion). Evidência em `docs/FORECAST_EVALUATION.md`.
-- [ ] **E3 (próximo, implementação sob D37)**: challenger AR(p)+AIC no pipeline JS + testes + avaliação one-step e recursiva H=7/14/30.
+- [x] **E3 (challenger AR)** — feito 2026-09-27: `arService.js` + `linalg.js`, 69/69, AR aprovado como challenger (one-step + recursivo H=7/14/30, 5/5); Ridge segue champion. Sem rota, sem persistência (D38).
+- [ ] **D38 (próxima decisão)**: expor AR (rota/persistência/frontend) ou manter challenger interno; só após definir formato de comparação no produto.
 - [ ] Investigação regionalização (CONAB/CEPEA/acesso legítimo) — sem proxy rotulado de preço real.
 - [ ] Docker build+up+health+down/up num ambiente com daemon ativo.
 - [ ] E2E 53/53 (navegador real) quando ambiente permitir.
@@ -85,6 +85,6 @@
 ## 10. Decisões ativas / hipóteses em investigação
 
 - Ativas: v1.0.0 = baseline imutável; acrescentar-não-destruir; preço = referência internacional declarada; Ridge = champion; café-naive = evidência de que baselines importam.
-- Em investigação: E3 (implementar AR challenger sob D37); preço regional real; NDVI (bloqueado por credencial); OpenAPI; teste de carga; backup `data/saden.db`; LICENSE (decisão do autor).
+- Em investigação: D38 (exposição do AR challenger); preço regional real; NDVI (bloqueado por credencial); OpenAPI; teste de carga; backup `data/saden.db`; LICENSE (decisão do autor).
 - Medido e encerrado: cobertura c8 88,51% linhas (sem dependência nova).
 - Rejeitado por ora: LSTM/RF/XGBoost (dados curtos, sem justificativa); ensemble (antes de validar individuais); CSRF (sem cookies); Python (sem benefício demonstrado).

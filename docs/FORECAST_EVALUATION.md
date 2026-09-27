@@ -69,3 +69,35 @@ AR vence na validação em **5/5** (margem 16–37%). ACF confirma persistência
 **GO condicional**: implementar `AR(p)+AIC` como challenger isolado no backend,
 sob os gates da D37. Ridge permanece champion até o challenger provar valor
 também no horizonte recursivo.
+
+---
+
+# E3 — Implementação e avaliação recursiva (2026-09-27)
+
+## Implementado
+
+- `backend/src/utils/linalg.js` (novo): `solve` movido verbatim da Ridge + `olsBeta`. Ridge usa o import; comportamento numérico idêntico (suíte cobre).
+- `backend/src/services/arService.js` (novo, ~260 linhas): `fitAR`, `selectOrder` (AIC p∈1..8 no treino; fallback: ignora ordens singulares; 422 honesto se nenhuma ajustar), `predictOneStep`, `predictRecursive` (só lê prefixo até a origem + próprias previsões; 422 em divergência, sem clamp), `recursiveSkill` (modelo congelado, origens no teste), `evaluate` (mesmos gates/split/baselines/intervalo da Ridge + `recursive_eval` H=7/14/30 + limitação AR explícita), `run` (mesma série `1y`; **sem persistência** — exposição = D38).
+- Ridge **intocada** em comportamento (só import + 1 export aditivo em `_test`).
+- Testes: `tests/unit/ar.test.js` (16: AIC/coeficientes, H=7/14/30, **gate de leakage** por adulteração do futuro, 422/400, paridade de split) + 2 de integração (`run` 422 e payload completo). Suíte: **69/69**.
+- Réplica cruzada: JS × Python independente produzem RMSE idênticos (4 casas) — validação da implementação.
+
+## Resultado Ridge × AR, dados reais (mesmas origens; teste = relato)
+
+| commodity | 1-step val R / AR | 1-step test R / AR | rec H7 R / AR | rec H14 R / AR | rec H30 R / AR |
+|---|---|---|---|---|---|
+| soja | 2,135 / **1,671** | 3,671 / **2,103** | 6,93 / **5,48** | 10,28 / **8,67** | 15,30 / **14,69** |
+| milho | 0,911 / **0,765** | 1,934 / **1,069** | 3,55 / **2,59** | 5,42 / **4,37** | 7,06 / **5,39** |
+| café | 164,5 / **102,9** | 192,9 / **68,4** | 445,9 / **136,6** | 728,2 / **206,9** | 1011,7 / **236,9** |
+| trigo | 2,158 / **1,470** | 3,914 / **1,930** | 7,17 / **4,90** | 10,07 / **7,74** | 12,70 / **9,72** |
+| algodão | 0,0907 / **0,0695** | 0,1553 / **0,0823** | 0,245 / **0,195** | 0,373 / **0,262** | 0,611 / **0,423** |
+
+(p selecionado: soja 3, milho 7, café 8, trigo 8, algodão 1; λ Ridge 0.1, exceto algodão 10.)
+
+## Conclusão E3 (§14)
+
+**AR challenger APROVADO como challenger**: competitivo no one-step E no
+recursivo, nos 3 horizontes, nas 5 commodities. **Ridge CONTINUA champion**:
+nenhuma troca sem decisão explícita (D38); H30 absoluto é fraco nos dois
+modelos (erro acumulado — registrado, não escondido). Sem ensemble. ARIMA
+propriamente dito (MA/sazonalidade) continua NÃO implementado e NÃO avaliado.
