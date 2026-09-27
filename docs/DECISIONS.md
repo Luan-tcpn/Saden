@@ -217,3 +217,13 @@ não por remoção da instrução. Criados `docs/AI_CONTEXT_RECOVERY.md` (estado
 recuperado, baseline, pendências) e `docs/V1_1_DECISION_MATRIX.md`
 (classificação da segunda opinião). Docker build segue pendente de ambiente
 com daemon ativo. Nada de funcionalidade alterado.
+
+## D37 - GO condicional ao challenger AR(p) (investigacao E2, 2026-09-27)
+Evidencia: AR(p)+AIC vence Ridge na validacao one-step em 5/5 commodities
+(margem 16-37%), mesma serie, mesmo split, mesmas metricas; teste so relatado
+(ver `docs/FORECAST_EVALUATION.md`). Decisao: implementar AR(p) como challenger
+isolado no pipeline JS, SEM substituir Ridge. Gates: (1) mesma serie viva e
+mesmo split da Ridge; (2) avaliacao one-step + recursiva H=7/14/30 com intervalo;
+(3) sem ensemble; (4) resultado negativo mantem Ridge e e registrado. ARIMA com
+termos MA/sazonalidade continua nao testado. Script da investigacao em `tmp/`
+(nao versionado); metodo reproduzivel documentado no FORECAST_EVALUATION.md.

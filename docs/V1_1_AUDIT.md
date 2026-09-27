@@ -31,10 +31,19 @@
 7. Docker não revalidado nesta máquina (pendente de ambiente com daemon).
 
 ## A6. Validações NOT RUN (explicitamente não executadas)
-
 - E2E navegador 53/53: harness CDP + Edge indisponível aqui — como executar: `node scripts\e2e-round2.js` com servidor em execução.
 - Docker build/up/health: daemon inativo — como executar: `docker compose build && docker compose up` com `JWT_SECRET` no ambiente.
 - 502 de rota com upstream morto: sem seam de injeção (proposital, sem DI em produção); coberto em nível unitário (http.test).
+
+## A7. E2 — investigação AR challenger (2026-09-27, D37)
+
+Método: `tmp/ar-challenger.py` (só leitura; réplica numpy de `buildRows`/`splitRows`/`fitRidge`
+validada contra `model_runs`: divergência ≤15% por janelas distintas). Evidência em
+`docs/FORECAST_EVALUATION.md`: AR(p)+AIC vence Ridge na validação one-step em 5/5
+(soja 1,67 vs 2,13; milho 0,76 vs 0,91; café 102,9 vs 164,5; trigo 1,47 vs 2,16;
+algodão 0,0695 vs 0,0907). Limites: one-step ≠ recursivo multi-passo (uso operacional);
+val_n 33–35; sem termos MA/sazonais. Veredito: GO condicional à implementação do
+challenger no JS (E3); Ridge permanece champion.
 
 ## A4. Não-bugs (verificado, sem ação)
 

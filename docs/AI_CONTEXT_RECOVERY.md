@@ -53,7 +53,7 @@
 
 ## 6. Decisões recuperadas
 
-- `docs/DECISIONS.md`: **D1–D36** (última = D36 correção README/docs). Próxima decisão nova = **D37**.
+- `docs/DECISIONS.md`: **D1–D37** (última = D37 GO condicional ao challenger AR). Próxima decisão nova = **D38**.
 - Segunda opinião (`segunda opnião.txt`, 940 linhas): fonte de hipóteses, NÃO especificação. Números de MAPE futuro (8–10%, 6–8%) são hipóteses, não resultados.
 
 ## 7. Discrepâncias encontradas e corrigidas
@@ -76,15 +76,15 @@
 - [x] `docs/V1_1_AUDIT.md` — feito. Gaps A3.1–A3.3 viram fila E1.
 - [x] `docs/V1_1_DECISION_MATRIX.md` — feito.
 - [x] D35 Champion/Challenger — feito.
-- [x] **E1 (teste/baixo risco)** — feito 2026-09-27: 3 testes novos só em `tests/` (cache KV, hit de rota, 422 via cache semeado), 51/51 verde, zero production code. Gaps A3.1–A3.3 fechados; 502 de rota = NOT RUN documentado (A6).
+- [x] **E2 (investigação AR challenger, D37)** — feito 2026-09-27: AR(p)+AIC vence Ridge na val one-step em 5/5 (16–37%), D35-cumprido; GO condicional para implementar challenger no JS (Ridge segue champion). Evidência em `docs/FORECAST_EVALUATION.md`.
+- [ ] **E3 (próximo, implementação sob D37)**: challenger AR(p)+AIC no pipeline JS + testes + avaliação one-step e recursiva H=7/14/30.
 - [ ] Investigação regionalização (CONAB/CEPEA/acesso legítimo) — sem proxy rotulado de preço real.
-- [ ] ARIMA challenger sob D35 — investigação antes de código (ACF/estacionariedade no dataset real).
 - [ ] Docker build+up+health+down/up num ambiente com daemon ativo.
 - [ ] E2E 53/53 (navegador real) quando ambiente permitir.
 
 ## 10. Decisões ativas / hipóteses em investigação
 
 - Ativas: v1.0.0 = baseline imutável; acrescentar-não-destruir; preço = referência internacional declarada; Ridge = champion; café-naive = evidência de que baselines importam.
-- Em investigação: ARIMA challenger (sob D35); preço regional real; NDVI (bloqueado por credencial); OpenAPI; teste de carga; backup `data/saden.db`; LICENSE (decisão do autor).
+- Em investigação: E3 (implementar AR challenger sob D37); preço regional real; NDVI (bloqueado por credencial); OpenAPI; teste de carga; backup `data/saden.db`; LICENSE (decisão do autor).
 - Medido e encerrado: cobertura c8 88,51% linhas (sem dependência nova).
 - Rejeitado por ora: LSTM/RF/XGBoost (dados curtos, sem justificativa); ensemble (antes de validar individuais); CSRF (sem cookies); Python (sem benefício demonstrado).

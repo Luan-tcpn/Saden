@@ -8,7 +8,7 @@
 
 | Sugestão | Problema | Evidência | Viabilidade | Esforço | Risco | Teste | Resultado | Decisão | Status |
 |---|---|---|---|---|---|---|---|---|---|
-| ARIMA como challenger | Ridge pode não captar autocorrelação | Nenhum experimento SADEN ainda | Alta (JS puro possível) | Médio | Baixo (challenger isolado) | Mesmo protocolo 70/15/15 + mesmas métricas | — | INVESTIGAR | Aberto (D35 rege) |
+| ARIMA como challenger | Ridge pode não captar autocorrelação | **E2 mediu: AR(p)+AIC vence Ridge na val one-step 5/5 (16–37%); réplica Ridge validada contra model_runs** | Alta (JS puro, OLS) | Médio | Baixo (challenger isolado, Ridge intacta) | Mesmo protocolo + recursivo H + intervalo (E3) | GO condicional | **D37** | Aberto (E3 = implementação) |
 | SARIMA/ETS | Sazonalidade explícita | Sazonalidade não demonstrada na série | Média | Médio | Médio (complexidade) | Idem + análise ACF/estacionariedade | — | INVESTIGAR | Aberto, após ARIMA |
 | Regressão multivariada (clima/PTAX) | Features exógenas podem ajudar | Clima/PTAX hoje são contexto, não features; risco de leakage | Média | Alto (pareamento temporal/espacial) | Alto (leakage) | Gate: "estaria disponível na origem?" | — | INVESTIGAR | Aberto, com gate D35 |
 | Prophet | Sazonalidade pronta | Dependência nova, benefício não demonstrado | Baixa | Médio | Médio (manutenção) | Só se ARIMA/ETS falharem | — | ADIAR | Adiado |

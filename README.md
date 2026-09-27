@@ -123,9 +123,9 @@ Autenticação: `POST /api/auth/register|/login`, `POST /api/auth/forgot|/reset`
 
 ## Estrutura do projeto
 
-`backend/` (Express: `src/{index,config,db,middleware,routes,services,integrations,utils}`) · `frontend/` (`index.html`, `css/`, `js/{api,auth,app,theme}.js`, `img/`) · `tests/` (`unit/` 6 arquivos, `integration/api.test.js`, `e2e/` vazio) · `scripts/` (seed, smoke, E2E, verificações) · `docs/` (ARCHITECTURE, API_SOURCES, PROJECT_STATUS, PROJECT_ROADMAP, DECISIONS, NDVI_STUDY, TCC, AI_CONTEXT_RECOVERY) · `data/` (banco runtime, ignorado no git) · `tmp/` (outbox, evidências; ignorado) · `logs/` (ignorados).
+`backend/` (Express: `src/{index,config,db,middleware,routes,services,integrations,utils}`) · `frontend/` (`index.html`, `css/`, `js/{api,auth,app,theme}.js`, `img/`) · `tests/` (`unit/` 6 arquivos, `integration/api.test.js`, `e2e/` vazio) · `scripts/` (seed, smoke, E2E, verificações) · `docs/` (ARCHITECTURE, API_SOURCES, PROJECT_STATUS, PROJECT_ROADMAP, DECISIONS, NDVI_STUDY, TCC, AI_CONTEXT_RECOVERY, FORECAST_EVALUATION) · `data/` (banco runtime, ignorado no git) · `tmp/` (outbox, evidências; ignorado) · `logs/` (ignorados).
 
-Na árvore canônica: `docs/ARCHITECTURE.md` (arquitetura e endpoints), `docs/API_SOURCES.md` (fontes), `docs/PROJECT_STATUS.md` (estado), `docs/PROJECT_ROADMAP.md` (plano oficial), `docs/DECISIONS.md` (D1–D36), `docs/NDVI_STUDY.md` (viabilidade NDVI), `docs/TCC.md` (material técnico do TCC), `docs/AI_CONTEXT_RECOVERY.md` (recuperação de contexto v1.0.0 → v1.1.x).
+Na árvore canônica: `docs/ARCHITECTURE.md` (arquitetura e endpoints), `docs/API_SOURCES.md` (fontes), `docs/PROJECT_STATUS.md` (estado), `docs/PROJECT_ROADMAP.md` (plano oficial), `docs/DECISIONS.md` (D1–D37), `docs/NDVI_STUDY.md` (viabilidade NDVI), `docs/TCC.md` (material técnico do TCC), `docs/AI_CONTEXT_RECOVERY.md` (recuperação de contexto v1.0.0 → v1.1.x), `docs/FORECAST_EVALUATION.md` (experimentos de forecast).
 
 ## Status do projeto
 
