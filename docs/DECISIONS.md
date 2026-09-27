@@ -218,6 +218,20 @@ recuperado, baseline, pendências) e `docs/V1_1_DECISION_MATRIX.md`
 (classificação da segunda opinião). Docker build segue pendente de ambiente
 com daemon ativo. Nada de funcionalidade alterado.
 
+## D38 - Exposicao do AR challenger: parametro opt-in (investigacao, 2026-09-27)
+Contexto: E3 aprovou AR(p)+AIC como challenger; Ridge segue champion; sem rota.
+Alternativas avaliadas: (A) manter interno; (B) `?model=ar` opt-in no endpoint
+existente; (C) endpoint `/compare`; (D) seletor no dashboard. Decisao: **B**,
+com Ridge como default. Fundamentos: menor superficie (query param aditivo,
+contrato atual preservado); mesmo formato de payload (`model` distingue);
+persistencia sem migracao (`model_runs.model='ar(order=N)'`, tabela ja
+generica e write-only); reversivel (remover o parametro); sem UI nesta etapa
+(evita redesenho e E2E prematuro; UI comparativa = decisao futura).
+Limites honestos mantidos: H30 fraco bilateral, val_n pequeno, historico nao
+garante futuro; CSV passa a identificar o modelo em vez de `lambda` fixo.
+Implementacao, testes e numero de suíte ficam para o ciclo seguinte; nada de
+codigo alterado nesta investigacao. ARIMA/ensemble seguem fora.
+
 ## D37 - GO condicional ao challenger AR(p) (investigacao E2, 2026-09-27)
 Evidencia: AR(p)+AIC vence Ridge na validacao one-step em 5/5 commodities
 (margem 16-37%), mesma serie, mesmo split, mesmas metricas; teste so relatado

@@ -54,6 +54,20 @@ comportamento inalterado (só import + export aditivo). Testes 69/69
 recursivo H=7/14/30 nas 5 commodities; H30 absoluto fraco nos dois.
 Veredito: challenger APROVADO; champion inalterado; exposição = D38.
 
+## A9. D38 — investigação de exposição (2026-09-27, sem código)
+
+Contrato mapeado: dashboard usa `GET /api/forecast/:key` (gráfico + `model_selected`
++ métricas + limitações); relatórios usam `forecastService.run` (JSON + CSV com
+`lambda` no cabeçalho); `model_runs`/`forecasts` são genéricas e write-only
+(nenhuma leitura em produção) — AR persiste sem migração (`model='ar(order=N)'`).
+Matriz das alternativas (B vence por parsimônia): A interna/custo-0/valor-0;
+B opt-in/aditiva/reversível/testável sem E2E; C dobra payload e custo; D exige
+UI+E2E prematuramente. Testes mapeados para a implementação: param
+ausente/ridge/ar/inválido(400), payload, CSV por modelo, persistência,
+regressão do default. E2E só quando houver UI. Veredito: **EXPOR via B**;
+implementação no próximo ciclo. Framing futuro: "Ridge (principal)" /
+"AR (experimental)", com caveat H30.
+
 ## A4. Não-bugs (verificado, sem ação)
 
 - XSS: `esc()` em strings externas; restante numérico/constantes — padrão D20 íntegro.

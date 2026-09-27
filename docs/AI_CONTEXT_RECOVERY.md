@@ -53,7 +53,7 @@
 
 ## 6. Decisões recuperadas
 
-- `docs/DECISIONS.md`: **D1–D37** (última = D37 GO condicional ao challenger AR). Próxima decisão nova = **D38**.
+- `docs/DECISIONS.md`: **D1–D38** (última = D38 exposição opt-in do AR). Próxima decisão nova = **D39**.
 - Segunda opinião (`segunda opnião.txt`, 940 linhas): fonte de hipóteses, NÃO especificação. Números de MAPE futuro (8–10%, 6–8%) são hipóteses, não resultados.
 
 ## 7. Discrepâncias encontradas e corrigidas
@@ -77,7 +77,8 @@
 - [x] `docs/V1_1_DECISION_MATRIX.md` — feito.
 - [x] D35 Champion/Challenger — feito.
 - [x] **E3 (challenger AR)** — feito 2026-09-27: `arService.js` + `linalg.js`, 69/69, AR aprovado como challenger (one-step + recursivo H=7/14/30, 5/5); Ridge segue champion. Sem rota, sem persistência (D38).
-- [ ] **D38 (próxima decisão)**: expor AR (rota/persistência/frontend) ou manter challenger interno; só após definir formato de comparação no produto.
+- [x] **D38 (investigação de exposição)** — feito 2026-09-27, sem código: veredito EXPOR via `?model=ar` opt-in (Ridge default), persistência sem migração, sem UI nesta etapa. Contrato, matriz e testes mapeados em D38/A9.
+- [ ] **E4 (próximo, implementação D38)**: `?model=ar` na rota forecast + CSV por modelo + persistência `ar(order=N)` + testes (default/regressão/400) — sem frontend.
 - [ ] Investigação regionalização (CONAB/CEPEA/acesso legítimo) — sem proxy rotulado de preço real.
 - [ ] Docker build+up+health+down/up num ambiente com daemon ativo.
 - [ ] E2E 53/53 (navegador real) quando ambiente permitir.
