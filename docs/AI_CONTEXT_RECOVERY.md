@@ -6,7 +6,7 @@
 ## 1. Onde estamos
 
 - **Baseline v1.0.0 congelado e VERDE** (tag lógica `9218e01 v1.0.0`; branch `main`, sincronizado com `origin https://github.com/Luan-tcpn/Saden.git`).
-- Backend **77/77 PASS** (`node --test`, 13 suítes: E4 adicionou 1 unitário runFor + 7 integração D38) — revalidado em 2026-09-27.
+- Backend **80/80 PASS** (`node --test`, 14 suítes: backup adicionou 3 unitários) — revalidado em 2026-09-27.
 - Smoke **8/8 PASS** contra servidor live em 2026-09-27 (soja R$ 151,18 real, clima real, previsão `modelo=ridge`, relatório OK).
 - `docs/` **PRESENTE e versionado** (8 arquivos, `git ls-tree HEAD docs/` confirma) — a nota do README que dizia "docs ausente nesta cópia" está **obsoleta** (era verdadeira numa árvore anterior, não nesta).
 - Docker **não validável neste ambiente** (daemon Docker Desktop inativo em 2026-09-27); `Dockerfile` + `compose` íntegros por inspeção, `COPY docs ./docs` agora consistente porque `docs/` existe.
@@ -79,6 +79,7 @@
 - [x] **E3 (challenger AR)** — feito 2026-09-27: `arService.js` + `linalg.js`, 69/69, AR aprovado como challenger (one-step + recursivo H=7/14/30, 5/5); Ridge segue champion. Sem rota, sem persistência (D38).
 - [x] **E4 (D38 implementada)** — feito 2026-09-27: `runFor` (Ridge default, `?model=ar` opt-in, inválido→400) + `persistRun` partilhado + CSV por modelo + 8 testes; 77/77; default provado idêntico por deep-equal; sem frontend. Ridge champion; AR challenger opt-in.
 - [x] **G6 (fonte regional)** — feito 2026-09-27, sem código: nenhuma fonte integrável (CONAB CAPTCHA, CEPEA paga, IMEA parcial-MT, B3 futuros). Evidência em `REGIONAL_INVESTIGATION.md`. Sem schema, sem D39. Trilha encerrada por enquanto.
+- [x] **Backup** — feito 2026-09-27: `scripts/backup.js` + 3 testes + rotina no README; CLI real validado. Sem D-number (tooling).
 - [x] **E2E revalidado** — 2026-09-27: E2E-R2 OK (Edge headless, pós-E3/E4). Headed falha 1 check de geolocalização por prompt (artefato, não regressão).
 - [ ] Docker build+up+health+down/up num ambiente com daemon ativo.
 

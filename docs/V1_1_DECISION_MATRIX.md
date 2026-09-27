@@ -46,9 +46,9 @@
 | CSRF | Sessões via cookie | Auth usa `Authorization: Bearer`, sem cookies | — | — | — | — | N/A | REJEITAR | Rejeitado (não aplicável) |
 | Validar FRONTEND_ORIGIN | CORS aberto | CORS configurável, instância única local | Média | Baixo | Baixo | — | — | INVESTIGAR | Aberto (baixa prioridade) |
 | SMTP+TLS real | Outbox não é e-mail | D14 documentou; fora do escopo acadêmico | Baixa | Alto | Médio | — | — | ADIAR | Adiado |
-| Logger pino/winston | Logging atual suficiente? | Logging atual NÃO auditado ainda | Média | Baixo | Baixo | Auditar antes | — | INVESTIGAR | Aberto (auditar primeiro) |
+| Logger pino/winston | Logging atual suficiente? | **Auditado 2026-09-27: 6 call sites, todos JSON estruturado sem segredos; instância única** | Baixa (dependência sem benefício) | Baixo | Baixo (dependência nova) | — | Sem ganho demonstrado | REJEITAR | Fechado (log atual adequado) |
 | Nginx + TLS Let's Encrypt | Produção real | Fora do escopo (RC acadêmica, D34) | Baixa | Alto | Médio | — | — | ADIAR | Adiado |
-| Backup `data/saden.db` | Perda de dados | Volume persiste; sem rotina de backup | Alta | Baixo | Baixo | — | — | INVESTIGAR | Aberto (documentar rotina) |
+| Backup `data/saden.db` | Perda de dados | Volume persiste; **rotina implementada 2026-09-27: `scripts/backup.js` (cópia online, retenção 7) + 3 testes + README** | Alta | Baixo | Nenhum | CLI real validado (`integrity_check` ok) | Feito | JÁ IMPLEMENTADO | Feito |
 | Restringir `/api/sources` | Catálogo público | Por desenho é público (landing cita fontes) | — | — | — | — | N/A | REJEITAR | Rejeitado (público por decisão) |
 
 ## Docs / DX / GitHub

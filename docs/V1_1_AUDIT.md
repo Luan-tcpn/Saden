@@ -27,7 +27,7 @@
 3. ~~Teste de série insuficiente (422) e commodity inexistente~~ → **FECHADO em E1**: 422 via cache semeado com série curta (sem mock) + rota propaga 422; commodity inexistente já coberta (404 em commodities/alerts/prices).
 4. Logging atual não auditado (pino/winston só após auditoria).
 5. LICENSE ausente (decisão do autor, não técnica).
-6. Rotina de backup `data/saden.db` não documentada.
+6. ~~Rotina de backup `data/saden.db` não documentada~~ → **FECHADO 2026-09-27**: `scripts/backup.js` (cópia online, retenção 7, 3 testes) + rotina no README. Backup real validado (`integrity_check` ok).
 7. Docker não revalidado nesta máquina (pendente de ambiente com daemon).
 
 ## A6. Validações NOT RUN (explicitamente não executadas)
@@ -53,6 +53,17 @@ comportamento inalterado (só import + export aditivo). Testes 69/69
 `docs/FORECAST_EVALUATION.md` (E3): AR vence Ridge no one-step e no
 recursivo H=7/14/30 nas 5 commodities; H30 absoluto fraco nos dois.
 Veredito: challenger APROVADO; champion inalterado; exposição = D38.
+
+## A12. Pós-G6: logging, backup, OpenAPI (2026-09-27, sem D nova)
+
+- Logging: 6 call sites, todos JSON estruturado sem segredos (erros, prune,
+  mail, request log). pino/winston **rejeitado** (dependência sem benefício
+  para instância única acadêmica).
+- Backup: `scripts/backup.js` + 3 testes + rotina no README (80/80). Sem D-number
+  (tooling operacional, sem mudança de arquitetura/API).
+- OpenAPI: adiamento **reafirmado** (~40 endpoints; ARCHITECTURE.md basta; YAML
+  manual derivaria).
+- Docker: daemon segue inativo → NOT RUN mantido.
 
 ## A11. G6 — investigação regional atualizada (2026-09-27, sem código, sem D)
 

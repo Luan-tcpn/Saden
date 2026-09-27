@@ -86,10 +86,12 @@ node backend\src\index.js     # ou: cd backend; npm start
 
 SQLite em `data/saden.db` (WAL: `saden.db-wal`/`saden.db-shm` em execução). A pasta `data/` é criada automaticamente na primeira conexão; em instalação limpa basta iniciar o app (o seed completa as tabelas base). O banco é **runtime**: está ignorado no git (`data/*.db*`) — não baixe nem versione `saden.db`, ele é gerado localmente. Parar e iniciar preserva tudo (inclusive no Docker, via volume `./data`).
 
+Backup: `node scripts/backup.js [destino]` (padrão `tmp/backups/`, ignorado no git) gera cópia online consistente (`saden-AAAAMMDDTHHMMSS.db`, mantém as 7 mais recentes, respeita `DATABASE_PATH`). Restauração: com o backend parado, copie o arquivo de volta para `data/saden.db`.
+
 ## Testes (estado real, executado em 2026-09-21)
 
 ```powershell
-cd backend; npm test                  # 77/77 (13 suítes; inclui 2 testes live + cache/TTL + 422 + AR challenger + opt-in D38)
+cd backend; npm test                  # 80/80 (14 suítes; inclui 2 testes live + cache/TTL + 422 + AR challenger + opt-in D38 + backup)
 cd ..; node scripts\smoke-test.js     # 8/8 contra servidor em execução
 node scripts\e2e-round2.js            # 53/53 verificações com navegador real
 ```
@@ -129,4 +131,4 @@ Na árvore canônica: `docs/ARCHITECTURE.md` (arquitetura e endpoints), `docs/AP
 
 ## Status do projeto
 
-**Release Candidate / feature freeze**: funcional, com suíte verde (77/77 + smoke 8/8 + E2E 53/53 na última validação registrada). Novas funcionalidades fora do escopo; correções de bugs/regressões e segurança continuam possíveis. Não avaliado formalmente para produção.
+**Release Candidate / feature freeze**: funcional, com suíte verde (80/80 + smoke 8/8 + E2E 53/53 revalidado em 2026-09-27). Novas funcionalidades fora do escopo; correções de bugs/regressões e segurança continuam possíveis. Não avaliado formalmente para produção.
