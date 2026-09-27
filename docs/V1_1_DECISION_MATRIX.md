@@ -28,7 +28,7 @@
 
 | Sugestão | Problema | Evidência | Viabilidade | Esforço | Risco | Teste | Resultado | Decisão | Status |
 |---|---|---|---|---|---|---|---|---|---|
-| Cobertura c8 | Cobertura não medida | 48/48 passam, cobertura desconhecida | Alta | Baixo | Baixo | `c8` exploratório | — | INVESTIGAR | Aberto (sem meta arbitrária) |
+| Cobertura c8 | Cobertura não medida | **Medida em 2026-09-27: 88,51% linhas · 74,75% branches · 86,91% funcs (suíte completa, c8 efêmero via npx)** | Alta | Nulo (sem dependência nova) | Nenhum | `V1_1_AUDIT.md` A2 | Meta 70%+ superada | JÁ MEDIDO | Feito (sem `c8` no package.json, pelo dependency gate) |
 | Teste de carga k6/Artillery | Capacidade desconhecida | Só medições exploratórias (D12) | Média | Médio | Baixo | Concorrência/latência/throughput locais | — | ADIAR | Adiado (após forecast/regionalização) |
 | Testes cache/TTL | Cobertura de cache | Existência não verificada nesta sessão | Alta | Baixo | Baixo | hit/miss/TTL/expiração | — | INVESTIGAR | Aberto |
 | Testes timeout/fonte fora do ar | Resiliência | `withRetry` existe, teste dedicado não verificado | Alta | Baixo | Baixo | 502 honesto, sem persistir lixo | — | INVESTIGAR | Aberto |
