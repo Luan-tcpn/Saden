@@ -212,6 +212,18 @@ function sleep(ms) {
   await ev(`document.querySelector('#btn-apply').click()`);
   check('período 3m aplica', await waitFor(`document.querySelector('#hist-sub').textContent.includes('2026-06')`, 90000));
 
+  // 6b2) D39: seletor Ridge (padrão) / AR (experimental)
+  check('modelo padrão é Ridge', await ev(`document.querySelector('#sel-model').value === 'ridge'`));
+  await ev(`document.querySelector('#sel-model').value = 'ar'`);
+  await ev(`document.querySelector('#sel-model').dispatchEvent(new Event('change', {bubbles:true}))`);
+  await ev(`document.querySelector('#btn-apply').click()`);
+  check('AR experimental aplica', await waitFor(`/ar \\(ordem/.test(document.querySelector('#fc-sub').textContent)`, 180000));
+  check('nota experimental visível', await ev(`document.querySelector('#forecast-meta').textContent.includes('experimental')`));
+  await ev(`document.querySelector('#sel-model').value = 'ridge'`);
+  await ev(`document.querySelector('#sel-model').dispatchEvent(new Event('change', {bubbles:true}))`);
+  await ev(`document.querySelector('#btn-apply').click()`);
+  check('volta a Ridge', await waitFor(`/ridge/.test(document.querySelector('#fc-sub').textContent)`, 180000));
+
   // 6c) locais salvos: salvar ponto, usar, excluir
   await ev(`document.querySelector('[data-nav="mapa"]').click()`);
   check('página mapa', await waitFor(`!document.querySelector('#page-mapa').classList.contains('hidden')`, 15000));

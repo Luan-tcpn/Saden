@@ -80,7 +80,7 @@
 - [x] **E4 (D38 implementada)** — feito 2026-09-27: `runFor` (Ridge default, `?model=ar` opt-in, inválido→400) + `persistRun` partilhado + CSV por modelo + 8 testes; 77/77; default provado idêntico por deep-equal; sem frontend. Ridge champion; AR challenger opt-in.
 - [x] **G6 (fonte regional)** — feito 2026-09-27, sem código: nenhuma fonte integrável (CONAB CAPTCHA, CEPEA paga, IMEA parcial-MT, B3 futuros). Evidência em `REGIONAL_INVESTIGATION.md`. Sem schema, sem D39. Trilha encerrada por enquanto.
 - [x] **Backup** — feito 2026-09-27: `scripts/backup.js` + 3 testes + rotina no README; CLI real validado. Sem D-number (tooling).
-- [x] **E2E revalidado** — 2026-09-27: E2E-R2 OK (Edge headless, pós-E3/E4). Headed falha 1 check de geolocalização por prompt (artefato, não regressão).
+- [x] **D39 (seletor Ridge/AR)** — feito 2026-09-27: select opt-in mínimo + E2E 57/57; Ridge default; sem D40.
 - [ ] Docker build+up+health+down/up num ambiente com daemon ativo.
 
 ## 10. Decisões ativas / hipóteses em investigação

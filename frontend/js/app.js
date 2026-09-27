@@ -6,6 +6,13 @@
     commodities: [],
     commodity: 'soja',
     horizon: 14,
+    model: (() => {
+      try {
+        return window.localStorage.getItem('saden_model') === 'ar' ? 'ar' : 'ridge';
+      } catch {
+        return 'ridge';
+      }
+    })(),
     range: '1y',
     uf: null,
     lat: -21.1775, // Ribeirão Preto (referência inicial)
@@ -159,6 +166,15 @@
     $('sel-horizon').addEventListener('change', (e) => {
       state.horizon = Number(e.target.value);
     });
+    if ($('sel-model').value !== state.model) $('sel-model').value = state.model;
+    $('sel-model').addEventListener('change', (e) => {
+      state.model = e.target.value === 'ar' ? 'ar' : 'ridge';
+      try {
+        window.localStorage.setItem('saden_model', state.model);
+      } catch {
+        /* sem persistência: segue Ridge na sessão */
+      }
+    });
     $('sel-range').addEventListener('change', (e) => {
       state.range = e.target.value;
     });
@@ -290,6 +306,7 @@
     $('btn-clear').addEventListener('click', () => {
       state.commodity = 'soja';
       state.horizon = 14;
+      state.model = 'ridge';
       state.range = '1y';
       state.lat = -21.1775;
       state.lon = -47.8103;
@@ -297,6 +314,12 @@
       state.locApplied = null;
       $('sel-commodity').value = 'soja';
       $('sel-horizon').value = '14';
+      $('sel-model').value = 'ridge';
+      try {
+        window.localStorage.setItem('saden_model', 'ridge');
+      } catch {
+        /* sem persistência: segue na sessão */
+      }
       $('sel-range').value = '1y';
       $('inp-location').value = '';
       $('sel-uf').value = '';
@@ -414,7 +437,7 @@
       const [latest, series, fc, wx] = await Promise.all([
         Api().reference(state.commodity, { uf: state.uf }),
         Api().series(state.commodity, state.range),
-        Api().forecast(state.commodity, state.horizon),
+        Api().forecast(state.commodity, state.horizon, state.model),
         Api().weather(state.lat, state.lon),
       ]);
       renderPriceCards(latest, series);
@@ -461,7 +484,10 @@
   }
 
   function renderForecast(fc) {
-    $('fc-sub').textContent = `· ${fc.model} (λ=${fc.lambda}) · tendência: ${fc.trend}`;
+    const isAR = fc.model === 'ar';
+    $('fc-sub').textContent = isAR
+      ? `· ar (ordem ${fc.ar_order}, experimental) · tendência: ${fc.trend}`
+      : `· ${fc.model} (λ=${fc.lambda}) · tendência: ${fc.trend}`;
     const hist = fc.history_tail.slice(-30);
     destroyChart('chart-forecast');
     state.charts['chart-forecast'] = new Chart($('chart-forecast'), {
@@ -478,20 +504,24 @@
       options: { responsive: true, scales: { x: { ticks: { maxTicksLimit: 8 } } } },
     });
     const last = fc.forecast[fc.forecast.length - 1];
+    const expNote = isAR
+      ? `<br/><span>Modelo experimental (challenger): desempenho passado não garante o futuro; em horizontes longos o erro cresce nos dois modelos.</span>`
+      : '';
     $('forecast-meta').innerHTML =
       `Atual: R$ ${fmtBRL(fc.current_price_brl)} → ${fc.horizon_days}d: <strong>R$ ${fmtBRL(last.price_brl)}</strong> ` +
       `(faixa R$ ${fmtBRL(last.lower_brl)} – R$ ${fmtBRL(last.upper_brl)}) · modelo vencedor: <strong>${esc(fc.model_selected)}</strong>` +
-      `<br/><span>A faixa indica a incerteza do modelo (95%), não uma garantia: o preço real pode ficar fora dela, sobretudo em choques de mercado.</span>`;
+      `<br/><span>A faixa indica a incerteza do modelo (95%), não uma garantia: o preço real pode ficar fora dela, sobretudo em choques de mercado.</span>${expNote}`;
   }
 
   function renderMetrics(fc) {
+    const tag = fc.model === 'ar' ? 'AR' : 'Ridge';
     const row = (name, m) => `<tr><td>${name}</td><td>${m.mae}</td><td>${m.rmse}</td><td>${m.mape_pct}%</td><td>${m.n}</td></tr>`;
     $('metrics-table').innerHTML = `
       <table class="data"><thead><tr><th>Modelo / segmento</th><th>MAE</th><th>RMSE</th><th>MAPE</th><th>n</th></tr></thead>
       <tbody>
-        ${row('Ridge — treino', fc.metrics.train)}
-        ${row('Ridge — validação', fc.metrics.val)}
-        ${row('Ridge — teste', fc.metrics.test)}
+        ${row(`${tag} — treino`, fc.metrics.train)}
+        ${row(`${tag} — validação`, fc.metrics.val)}
+        ${row(`${tag} — teste`, fc.metrics.test)}
         ${row('Baseline naive (val)', fc.baselines.naive)}
         ${row('Baseline sazonal-5 (val)', fc.baselines.seasonal_naive_5)}
         ${row('Baseline MM7 (val)', fc.baselines.ma7)}

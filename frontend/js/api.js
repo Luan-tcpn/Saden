@@ -54,7 +54,8 @@
       const s = qs.toString();
       return request(`/api/prices/reference?commodity=${key}${s ? `&${s}` : ''}`);
     },
-    forecast: (key, horizon) => request(`/api/forecast/${key}?horizon=${horizon || 14}`),
+    forecast: (key, horizon, model) =>
+      request(`/api/forecast/${key}?horizon=${horizon || 14}${model === 'ar' ? '&model=ar' : ''}`),
     weather: (lat, lon) => request(`/api/weather/forecast?lat=${lat}&lon=${lon}`),
     weatherHistory: (lat, lon, start, end) => request(`/api/weather/history?lat=${lat}&lon=${lon}&start=${start}&end=${end}`),
     geoSearch: (q) => request(`/api/geo/search?q=${encodeURIComponent(q)}`),

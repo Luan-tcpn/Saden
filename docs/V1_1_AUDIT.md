@@ -65,6 +65,16 @@ Veredito: challenger APROVADO; champion inalterado; exposição = D38.
   manual derivaria).
 - Docker: daemon segue inativo → NOT RUN mantido.
 
+## A13. D39 — seletor Ridge/AR na UI (2026-09-27, implementado, sem D40)
+
+Escopo mínimo: select nativo "Ridge (principal) / AR (experimental)" no topbar,
+`?model=ar` só no opt-in, subtitle/métricas/nota por modelo, persistência
+`localStorage saden_model`, reset no Limpar. Sem CSS/endpoint novos; relatórios
+e backend de rotas inalterados (só consumem D38). E2E 57/57 (53 + 4 D39).
+Lição operacional: processos `Start-Process` sobrevivem entre invocações do
+shell — servidor órfão pré-edit serviu HTML obsoleto (3 checks falharam);
+verificar marcador da versão servida e encerrar por PID antes de validar E2E.
+
 ## A11. G6 — investigação regional atualizada (2026-09-27, sem código, sem D)
 
 Re-verificação pós-D26 com fontes atuais: CONAB precosiagroweb viva mas com

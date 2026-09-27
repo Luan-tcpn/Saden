@@ -252,3 +252,22 @@ Resultado E4 (2026-09-27): implementado `runFor` (fonte única; Ridge default),
 persistência partilhada `persistRun` (Ridge byte-idêntica), CSV por modelo,
 7 testes de rota/persistência/CSV + 1 unitário (suíte 77/77). Default
 provado idêntico (`model=ridge` deep-equal à ausência). Sem frontend.
+
+## D39 - Seletor Ridge/AR no dashboard (IMPLEMENTAR, escopo mínimo, 2026-09-27)
+Investigação D39 avaliou A (nada), B (seletor opt-in), C (comparação sob demanda),
+D (seção resumida). Veredito: **B**. Fundamentos: valor real (transparência
+champion×challenger no produto + framing honesto), custo mínimo (1 select nativo,
++1 fetch só no opt-in, sem endpoint novo, sem CSS novo, sem modal), mobile e
+a11y herdados do select nativo (teclado/leitor gratuitos), reversível (remover o
+select), E2E cobre (toggle + subtitle). D12 reafirmada: sem endpoint de comparação
+(o 2º fetch é client-side e só no opt-in). Framing: "Ridge (principal)" default,
+"AR (experimental)" + nota curta (passado ≠ futuro; H30 fraco bilateral). Sem D40
+(só se surgir nova decisão técnica real).
+
+Resultado (2026-09-27): implementado exatamente no escopo (select nativo no
+topbar + `Api().forecast(key,h,model)` + subtitle/métricas/nota por modelo +
+`localStorage saden_model` + reset no Limpar; sem CSS novo, sem endpoint novo,
+relatórios inalterados). E2E 57/57 (53 + 4 checks D39) em Edge headless.
+Incidente: servidor órfão pré-edit sobrevivendo entre sessões serviu HTML
+obsoleto e quebrou 3 checks — causa identificada (Start-Process sobrevive a
+`Remove-Job`; doravante verificar versão servida + matar por PID). Sem D40.

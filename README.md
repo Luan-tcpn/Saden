@@ -11,7 +11,7 @@ Sobre CEPEA/CONAB: o CEPEA disponibiliza API mediante contratação e licenciame
 ## Principais funcionalidades
 
 - Landing pública + cadastro, login, recuperação de senha (token único de 1 h, outbox local sem SMTP)
-- Dashboard: 5 commodities (soja, milho, café, trigo, algodão), série histórica, KPIs, previsão 7/14/30 dias com intervalo, métricas treino/val/teste, clima 7 dias, comparativo
+- Dashboard: 5 commodities (soja, milho, café, trigo, algodão), série histórica, KPIs, previsão 7/14/30 dias com intervalo, seletor de modelo Ridge (principal) / AR (experimental, opt-in), métricas treino/val/teste, clima 7 dias, comparativo
 - Mapa do Brasil (Leaflet + OSM/Esri, clique → preço e clima) + camada Sentinel-2 Land Cover (visual, com legenda)
 - Busca por cidade/rua/coordenadas, reverse geocoding, "minha localização", locais salvos
 - Relatórios consolidados (JSON + CSV com BOM + impressão/PDF via navegador), com fontes e limitações
@@ -93,7 +93,7 @@ Backup: `node scripts/backup.js [destino]` (padrão `tmp/backups/`, ignorado no 
 ```powershell
 cd backend; npm test                  # 80/80 (14 suítes; inclui 2 testes live + cache/TTL + 422 + AR challenger + opt-in D38 + backup)
 cd ..; node scripts\smoke-test.js     # 8/8 contra servidor em execução
-node scripts\e2e-round2.js            # 53/53 verificações com navegador real
+node scripts\e2e-round2.js            # 57/57 verificações com navegador real (53 + 4 do seletor D39)
 ```
 
 Suíte `node --test` sem frameworks: 7 arquivos unitários (conversão, validação, matemática da previsão, HTTP/retry, coordenadas, CSV, AR challenger) + integração (auth, rotas, token, rate-limit, recuperação, fontes vivas, alertas, locais, cache KV, 422, AR service). Cobertura medida: 88,5% linhas via c8 (E1; ver `docs/V1_1_AUDIT.md`). Sem teste formal de carga — há apenas medições exploratórias locais.
@@ -131,4 +131,4 @@ Na árvore canônica: `docs/ARCHITECTURE.md` (arquitetura e endpoints), `docs/AP
 
 ## Status do projeto
 
-**Release Candidate / feature freeze**: funcional, com suíte verde (80/80 + smoke 8/8 + E2E 53/53 revalidado em 2026-09-27). Novas funcionalidades fora do escopo; correções de bugs/regressões e segurança continuam possíveis. Não avaliado formalmente para produção.
+**Release Candidate / feature freeze**: funcional, com suíte verde (80/80 + smoke 8/8 + E2E 57/57 revalidado em 2026-09-27). Novas funcionalidades fora do escopo; correções de bugs/regressões e segurança continuam possíveis. Não avaliado formalmente para produção.
