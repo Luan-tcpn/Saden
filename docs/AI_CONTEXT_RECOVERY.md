@@ -5,8 +5,8 @@
 
 ## 1. Onde estamos
 
-- **Baseline v1.0.0 congelado e VERDE** (commit único `9218e01 v1.0.0`, branch `main`, `origin https://github.com/Luan-tcpn/Saden.git`, working tree limpo).
-- Backend **48/48 PASS** (`node --test`, 7 suítes, inclui 2 testes live nas fontes) — revalidado em 2026-09-27.
+- **Baseline v1.0.0 congelado e VERDE** (tag lógica `9218e01 v1.0.0`; branch `main`, `origin https://github.com/Luan-tcpn/Saden.git`). Em 2026-09-27 foram empilhados 2 commits de docs locais (`dd32a30`, `f6d6040`) ainda não enviados ao remoto — push é decisão do usuário.
+- Backend **51/51 PASS** (`node --test`, 7 suítes: E1 adicionou cache-KV, hit de rota e 422 em 2026-09-27) — revalidado em 2026-09-27.
 - Smoke **8/8 PASS** contra servidor live em 2026-09-27 (soja R$ 151,18 real, clima real, previsão `modelo=ridge`, relatório OK).
 - `docs/` **PRESENTE e versionado** (8 arquivos, `git ls-tree HEAD docs/` confirma) — a nota do README que dizia "docs ausente nesta cópia" está **obsoleta** (era verdadeira numa árvore anterior, não nesta).
 - Docker **não validável neste ambiente** (daemon Docker Desktop inativo em 2026-09-27); `Dockerfile` + `compose` íntegros por inspeção, `COPY docs ./docs` agora consistente porque `docs/` existe.
@@ -53,7 +53,7 @@
 
 ## 6. Decisões recuperadas
 
-- `docs/DECISIONS.md`: **D1–D34** (última = D34 Docker RC). Maior D existente = **D34** → próxima decisão nova = **D35**.
+- `docs/DECISIONS.md`: **D1–D36** (última = D36 correção README/docs). Próxima decisão nova = **D37**.
 - Segunda opinião (`segunda opnião.txt`, 940 linhas): fonte de hipóteses, NÃO especificação. Números de MAPE futuro (8–10%, 6–8%) são hipóteses, não resultados.
 
 ## 7. Discrepâncias encontradas e corrigidas
@@ -61,25 +61,30 @@
 1. README dizia "`docs/` ausente nesta cópia" + "`docker compose build` falha nesta árvore" — **obsoleto**: docs presente e versionado; build não testável aqui por daemon inativo, mas causa citada (docs ausente) não existe mais. → corrigido no README nesta sessão.
 2. Nenhuma outra divergência entre README, docs e código (TTLs, timeouts, tabelas, endpoints, seed, credenciais demo — tudo confere).
 
-## 8. O que foi feito (nesta sessão, 2026-09-27)
+## 8. O que foi feito (2026-09-27, 2 ciclos)
 
 - [x] FASE 1: inspeção raiz + Saden_AgroClima + SADEN-TCC (leitura) + git/remoto + docs + código + testes + schema + data + README.
 - [x] Baseline executado: backend 48/48 + smoke 8/8 (live). Docker daemon inativo — build pendente de ambiente com Docker.
-- [x] Este arquivo `AI_CONTEXT_RECOVERY.md` criado.
+- [x] Este arquivo `AI_CONTEXT_RECOVERY.md` criado e reconciliado.
 - [x] README: removidas notas obsoletas sobre docs ausente / build falhando.
+- [x] `docs/V1_1_DECISION_MATRIX.md` — 40+ sugestões da segunda opinião classificadas.
+- [x] D35 (Champion/Challenger) + D36 (correção README/docs) registradas.
+- [x] `docs/V1_1_AUDIT.md` — cobertura medida 88,51% linhas (c8 efêmero, sem dependência nova); gaps A3.1–A3.3 viram fila E1.
 
-## 9. O que falta (próximo passo)
+## 9. Fila racional (impacto × risco; atualizada 2026-09-27)
 
-- [ ] `docs/V1_1_AUDIT.md` — auditoria formal (bugs, gaps, riscos, oportunidades).
-- [ ] `docs/V1_1_DECISION_MATRIX.md` — classificar sugestões da segunda opinião (IMPLEMENTAR/INVESTIGAR/ADIAR/REJEITAR/JÁ IMPLEMENTADO).
-- [ ] D35: Champion/Challenger (regras do jogo forecast) — sem trocar Ridge antes de comparação.
+- [x] `docs/V1_1_AUDIT.md` — feito. Gaps A3.1–A3.3 viram fila E1.
+- [x] `docs/V1_1_DECISION_MATRIX.md` — feito.
+- [x] D35 Champion/Challenger — feito.
+- [x] **E1 (teste/baixo risco)** — feito 2026-09-27: 3 testes novos só em `tests/` (cache KV, hit de rota, 422 via cache semeado), 51/51 verde, zero production code. Gaps A3.1–A3.3 fechados; 502 de rota = NOT RUN documentado (A6).
 - [ ] Investigação regionalização (CONAB/CEPEA/acesso legítimo) — sem proxy rotulado de preço real.
-- [ ] Challengers Ridge (ARIMA/SARIMA/ETS/multivariada) sob protocolo train/val/test travado — sem ensemble antes de validar individuais.
+- [ ] ARIMA challenger sob D35 — investigação antes de código (ACF/estacionariedade no dataset real).
 - [ ] Docker build+up+health+down/up num ambiente com daemon ativo.
 - [ ] E2E 53/53 (navegador real) quando ambiente permitir.
 
 ## 10. Decisões ativas / hipóteses em investigação
 
 - Ativas: v1.0.0 = baseline imutável; acrescentar-não-destruir; preço = referência internacional declarada; Ridge = champion; café-naive = evidência de que baselines importam.
-- Em investigação: challengers forecast; preço regional real; NDVI (bloqueado por credencial); OpenAPI; teste de carga; cobertura c8.
+- Em investigação: ARIMA challenger (sob D35); preço regional real; NDVI (bloqueado por credencial); OpenAPI; teste de carga; backup `data/saden.db`; LICENSE (decisão do autor).
+- Medido e encerrado: cobertura c8 88,51% linhas (sem dependência nova).
 - Rejeitado por ora: LSTM/RF/XGBoost (dados curtos, sem justificativa); ensemble (antes de validar individuais); CSRF (sem cookies); Python (sem benefício demonstrado).

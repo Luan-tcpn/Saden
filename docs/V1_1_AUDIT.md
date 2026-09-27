@@ -6,12 +6,12 @@
 
 | Verificação | Resultado |
 |---|---|
-| `npm test` (backend) | 48/48 PASS, 7 suítes (2026-09-27, 2× seguidas) |
+| `npm test` (backend) | 51/51 PASS, 7 suítes (2026-09-27; E1 adicionou cache-KV + hit de rota + 422) |
 | `scripts/smoke-test.js` (live) | 8/8 PASS (soja R$ 151,18 real, clima real, `modelo=ridge`) |
 | Cobertura (c8 efêmero via npx, sem dependência nova) | **88,51% linhas · 74,75% branches · 86,91% funcs** (suíte completa) |
 | E2E navegador (53/53) | Não reexecutado (requer harness CDP + Edge; última validação registrada vale) |
 | Docker build/up | Não executável aqui (daemon inativo); `COPY docs` consistente (docs versionado) |
-| Git | `main` limpo, 2 commits (`v1.0.0` + docs desta sessão), sem segredos |
+| Git | `main` limpo, 3 commits (`v1.0.0` + 2 de docs locais ainda não enviados ao remoto), sem segredos |
 
 ## A2. Cobertura por área (c8, suíte completa)
 
@@ -22,13 +22,19 @@
 
 ## A3. Gaps confirmados (viram itens INVESTIGAR, não bugs)
 
-1. Teste dedicado de cache hit/miss/TTL — ausente (só flag `cached` observada em runtime).
-2. Teste de fonte lenta/fora do ar com 502 honesto — parcial (http.test cobre timeout unitário; falta E2E de rota com upstream morto).
-3. Teste de série insuficiente (422) e commodity inexistente — verificar cobertura na integração.
+1. ~~Teste dedicado de cache hit/miss/TTL — ausente~~ → **FECHADO em E1** (2026-09-27): `cache kv: miss → hit → expiração/TTL → sobrescrita` + hit de rota via `latest` (51/51).
+2. Teste de fonte lenta/fora do ar com 502 honesto — parcial (http.test cobre timeout unitário; rota com upstream morto exigiria injeção de dependência em produção — rejeitado; registrado como NOT RUN, §A6).
+3. ~~Teste de série insuficiente (422) e commodity inexistente~~ → **FECHADO em E1**: 422 via cache semeado com série curta (sem mock) + rota propaga 422; commodity inexistente já coberta (404 em commodities/alerts/prices).
 4. Logging atual não auditado (pino/winston só após auditoria).
 5. LICENSE ausente (decisão do autor, não técnica).
 6. Rotina de backup `data/saden.db` não documentada.
 7. Docker não revalidado nesta máquina (pendente de ambiente com daemon).
+
+## A6. Validações NOT RUN (explicitamente não executadas)
+
+- E2E navegador 53/53: harness CDP + Edge indisponível aqui — como executar: `node scripts\e2e-round2.js` com servidor em execução.
+- Docker build/up/health: daemon inativo — como executar: `docker compose build && docker compose up` com `JWT_SECRET` no ambiente.
+- 502 de rota com upstream morto: sem seam de injeção (proposital, sem DI em produção); coberto em nível unitário (http.test).
 
 ## A4. Não-bugs (verificado, sem ação)
 

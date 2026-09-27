@@ -360,4 +360,50 @@ describe('API SADEN — integração', () => {
     assert.equal(data.daily.length, 7);
     assert.ok(Number.isFinite(data.current.temperature_2m));
   });
+
+  it('cache kv: miss → hit → expiração/TTL → sobrescrita', async () => {
+    const { cacheGet, cacheSet } = require('../../backend/src/db');
+    assert.equal(cacheGet('e1:ausente'), null, 'miss retorna null');
+    cacheSet('e1:obj', { a: 1, b: 'x' }, 60 * 1000);
+    assert.deepEqual(cacheGet('e1:obj'), { a: 1, b: 'x' }, 'hit devolve o objeto');
+    cacheSet('e1:obj', { a: 2 }, 60 * 1000);
+    assert.deepEqual(cacheGet('e1:obj'), { a: 2 }, 'REPLACE sobrescreve');
+    cacheSet('e1:expirada', { a: 1 }, -1000);
+    assert.equal(cacheGet('e1:expirada'), null, 'TTL vencido retorna null');
+    assert.equal(cacheGet('e1:expirada'), null, 'entrada expirada foi invalidada (não ressuscita)');
+  });
+
+  it('latest indica hit de cache na segunda chamada', async () => {
+    const T = process.env.SADEN_TEST_TOKEN;
+    const r1 = await api('/api/commodities/soja/latest', { token: T });
+    assert.equal(r1.status, 200);
+    assert.equal(typeof r1.data.cached, 'boolean');
+    const r2 = await api('/api/commodities/soja/latest', { token: T });
+    assert.equal(r2.status, 200);
+    assert.equal(r2.data.cached, true, 'segunda chamada dentro do TTL usa cache');
+    assert.equal(r2.data.price_brl, r1.data.price_brl);
+  });
+
+  it('forecast 422 com série curta (cache semeado, sem mock)', { timeout: 60000 }, async () => {
+    const T = process.env.SADEN_TEST_TOKEN;
+    const { connect, cacheSet } = require('../../backend/src/db');
+    const forecastService = require('../../backend/src/services/forecastService');
+    assert.ok(forecastService.MIN_POINTS >= 60, 'guarda mínima documentada');
+    const points = [];
+    for (let i = 0; i < 10; i++) {
+      points.push({ date: `2026-01-${String(i + 1).padStart(2, '0')}`, price_brl: 100 + i });
+    }
+    cacheSet('prices:soja:1y', { points }, 60 * 1000);
+    try {
+      await assert.rejects(() => forecastService.run('soja', 7), (e) => {
+        assert.equal(e.status, 422);
+        assert.match(e.message, /insuficiente/i);
+        return true;
+      });
+      const r = await api('/api/forecast/soja?horizon=7', { token: T });
+      assert.equal(r.status, 422, 'rota propaga o 422 honesto');
+    } finally {
+      connect().prepare('DELETE FROM kv_cache WHERE key = ?').run('prices:soja:1y');
+    }
+  });
 });

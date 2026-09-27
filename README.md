@@ -89,12 +89,12 @@ SQLite em `data/saden.db` (WAL: `saden.db-wal`/`saden.db-shm` em execução). A 
 ## Testes (estado real, executado em 2026-09-21)
 
 ```powershell
-cd backend; npm test                  # 48/48 (7 suítes; inclui 2 testes live nas fontes)
+cd backend; npm test                  # 51/51 (7 suítes; inclui 2 testes live nas fontes + cache/TTL + 422)
 cd ..; node scripts\smoke-test.js     # 8/8 contra servidor em execução
 node scripts\e2e-round2.js            # 53/53 verificações com navegador real
 ```
 
-Suíte `node --test` sem frameworks: 6 arquivos unitários (conversão, validação, matemática da previsão, HTTP/retry, coordenadas, CSV) + integração (auth, rotas, token, rate-limit, recuperação, fontes vivas, alertas, locais). 48 testes ≠ 48% de cobertura (cobertura não medida). Sem teste formal de carga — há apenas medições exploratórias locais.
+Suíte `node --test` sem frameworks: 6 arquivos unitários (conversão, validação, matemática da previsão, HTTP/retry, coordenadas, CSV) + integração (auth, rotas, token, rate-limit, recuperação, fontes vivas, alertas, locais, cache KV, hit de rota, 422 de série curta). 51 testes ≠ 51% de cobertura (cobertura medida: 88,5% linhas via c8 — ver `docs/V1_1_AUDIT.md`). Sem teste formal de carga — há apenas medições exploratórias locais.
 
 ## Docker
 
@@ -125,8 +125,8 @@ Autenticação: `POST /api/auth/register|/login`, `POST /api/auth/forgot|/reset`
 
 `backend/` (Express: `src/{index,config,db,middleware,routes,services,integrations,utils}`) · `frontend/` (`index.html`, `css/`, `js/{api,auth,app,theme}.js`, `img/`) · `tests/` (`unit/` 6 arquivos, `integration/api.test.js`, `e2e/` vazio) · `scripts/` (seed, smoke, E2E, verificações) · `docs/` (ARCHITECTURE, API_SOURCES, PROJECT_STATUS, PROJECT_ROADMAP, DECISIONS, NDVI_STUDY, TCC, AI_CONTEXT_RECOVERY) · `data/` (banco runtime, ignorado no git) · `tmp/` (outbox, evidências; ignorado) · `logs/` (ignorados).
 
-Na árvore canônica: `docs/ARCHITECTURE.md` (arquitetura e endpoints), `docs/API_SOURCES.md` (fontes), `docs/PROJECT_STATUS.md` (estado), `docs/PROJECT_ROADMAP.md` (plano oficial), `docs/DECISIONS.md` (D1–D34), `docs/NDVI_STUDY.md` (viabilidade NDVI), `docs/TCC.md` (material técnico do TCC), `docs/AI_CONTEXT_RECOVERY.md` (recuperação de contexto v1.0.0 → v1.1.x).
+Na árvore canônica: `docs/ARCHITECTURE.md` (arquitetura e endpoints), `docs/API_SOURCES.md` (fontes), `docs/PROJECT_STATUS.md` (estado), `docs/PROJECT_ROADMAP.md` (plano oficial), `docs/DECISIONS.md` (D1–D36), `docs/NDVI_STUDY.md` (viabilidade NDVI), `docs/TCC.md` (material técnico do TCC), `docs/AI_CONTEXT_RECOVERY.md` (recuperação de contexto v1.0.0 → v1.1.x).
 
 ## Status do projeto
 
-**Release Candidate / feature freeze**: funcional, com suíte verde (48/48 + smoke 8/8 + E2E 53/53 na última validação registrada). Novas funcionalidades fora do escopo; correções de bugs/regressões e segurança continuam possíveis. Não avaliado formalmente para produção.
+**Release Candidate / feature freeze**: funcional, com suíte verde (51/51 + smoke 8/8 + E2E 53/53 na última validação registrada). Novas funcionalidades fora do escopo; correções de bugs/regressões e segurança continuam possíveis. Não avaliado formalmente para produção.

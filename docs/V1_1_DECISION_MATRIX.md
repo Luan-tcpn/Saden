@@ -30,9 +30,9 @@
 |---|---|---|---|---|---|---|---|---|---|
 | Cobertura c8 | Cobertura não medida | **Medida em 2026-09-27: 88,51% linhas · 74,75% branches · 86,91% funcs (suíte completa, c8 efêmero via npx)** | Alta | Nulo (sem dependência nova) | Nenhum | `V1_1_AUDIT.md` A2 | Meta 70%+ superada | JÁ MEDIDO | Feito (sem `c8` no package.json, pelo dependency gate) |
 | Teste de carga k6/Artillery | Capacidade desconhecida | Só medições exploratórias (D12) | Média | Médio | Baixo | Concorrência/latência/throughput locais | — | ADIAR | Adiado (após forecast/regionalização) |
-| Testes cache/TTL | Cobertura de cache | Existência não verificada nesta sessão | Alta | Baixo | Baixo | hit/miss/TTL/expiração | — | INVESTIGAR | Aberto |
-| Testes timeout/fonte fora do ar | Resiliência | `withRetry` existe, teste dedicado não verificado | Alta | Baixo | Baixo | 502 honesto, sem persistir lixo | — | INVESTIGAR | Aberto |
-| Testes dados inválidos | Robustez de entrada | validate.js + coords existem | Alta | Baixo | Baixo | commodity/coords/campos/série curta | — | INVESTIGAR | Aberto (parcial coberto na integração) |
+| Testes cache/TTL | Cobertura de cache | Cache KV + hit de rota testados em E1 (2026-09-27, 51/51) | Alta | Baixo | Nenhum | `api.test.js` (miss/hit/expiração/sobrescrita + hit de rota) | PASS | JÁ IMPLEMENTADO | Feito |
+| Testes timeout/fonte fora do ar | Resiliência | http.test cobre timeout unitário; rota com upstream morto sem seam (sem DI proposital) | Alta | Baixo | Baixo | http.test (502) + NOT RUN de rota em `V1_1_AUDIT.md` A6 | Parcial | JÁ IMPLEMENTADO (parcial) | Feito o possível sem DI |
+| Testes dados inválidos | Robustez de entrada | validate.js + coords existem | Alta | Baixo | Baixo | commodity 404 (3 rotas), 422 série curta (E1), coords/range/places/alerts inválidos | PASS | JÁ IMPLEMENTADO | Feito (E1 fechou o 422) |
 | joi/zod | Validação "padrão" | validate.js próprio passa 48/48 | Média | Médio | Médio (migração) | — | — | REJEITAR | Rejeitado (solução atual adequada) |
 | Timeout Yahoo 12s → 15s | Suposta lentidão | Testes live passam com 12s | — | — | Baixo | — | — | REJEITAR | Rejeitado (sem evidência de problema) |
 | Backoff + circuit breaker | Retry atual é linear 600ms | withRetry 3× existe e funciona | Média | Médio | Médio | — | — | INVESTIGAR | Aberto (backoff exponencial avaliável) |
