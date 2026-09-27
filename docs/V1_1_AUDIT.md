@@ -9,7 +9,7 @@
 | `npm test` (backend) | 69/69 PASS, 12 suítes (2026-09-27; E3 adicionou 16 unitários AR + 2 integração) |
 | `scripts/smoke-test.js` (live) | 8/8 PASS (soja R$ 151,18 real, clima real, `modelo=ridge`) |
 | Cobertura (c8 efêmero via npx, sem dependência nova) | **88,51% linhas · 74,75% branches · 86,91% funcs** (suíte completa) |
-| E2E navegador (53/53) | Não reexecutado (requer harness CDP + Edge; última validação registrada vale) |
+| E2E navegador (53/53) | Não reexecutado (requer harness CDP + Edge; última validação registrada vale). **Atualização 2026-09-27: revalidado — E2E-R2 OK em Edge headless (pós-E3/E4).** |
 | Docker build/up | Não executável aqui (daemon inativo); `COPY docs` consistente (docs versionado) |
 | Git | `main` limpo e sincronizado com `origin/main`, sem segredos |
 
@@ -31,7 +31,7 @@
 7. Docker não revalidado nesta máquina (pendente de ambiente com daemon).
 
 ## A6. Validações NOT RUN (explicitamente não executadas)
-- E2E navegador 53/53: harness CDP + Edge indisponível aqui — como executar: `node scripts\e2e-round2.js` com servidor em execução.
+- E2E navegador 53/53: **revalidado em 2026-09-27 (E2E-R2 OK, Edge headless + CDP 9333)**. Nota: em Edge headed, o check de geolocalização negada falha (prompt de permissão em vez de negação) — artefato de ambiente, não regressão.
 - Docker build/up/health: daemon inativo — como executar: `docker compose build && docker compose up` com `JWT_SECRET` no ambiente.
 - 502 de rota com upstream morto: sem seam de injeção (proposital, sem DI em produção); coberto em nível unitário (http.test).
 
