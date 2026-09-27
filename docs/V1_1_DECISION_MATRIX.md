@@ -20,7 +20,7 @@
 
 | Sugestão | Problema | Evidência | Viabilidade | Esforço | Risco | Teste | Resultado | Decisão | Status |
 |---|---|---|---|---|---|---|---|---|---|
-| Mesorregião (137) + tabelas `mesorregions`/`commodity_prices_regional` | Preço regional real | D26: CONAB reCAPTCHA, PGPAF 403, CEPEA Cloudflare, ANTT sem API — nenhuma fonte automatizável | Baixa (hoje) | Alto | Alto (proxy rotulado de real) | Investigar fonte antes de schema | — | INVESTIGAR (fonte primeiro) | Aberto; schema SÓ após fonte real |
+| Mesorregião (137) + tabelas `mesorregions`/`commodity_prices_regional` | Preço regional real | **G6 (2026-09-27) re-investigou: CONAB exige CAPTCHA (confirmado ao vivo), CEPEA R$ 11–22 mil (contratação), IMEA parcial MT sob licença restritiva, B3 só futuros — ver `REGIONAL_INVESTIGATION.md`** | Baixa (hoje) | Alto | Alto (proxy rotulado de real) | Investigar fonte antes de schema | Confirmado: nenhuma fonte integrável | REJEITAR (por ora) | Fechado sem schema; portas futuras: convênio CEPEA, autorização IMEA |
 | Microclima por coordenada | Clima granular | Open-Meteo por lat/lon JÁ funciona | Alta | Baixo | Baixo | — | — | JÁ IMPLEMENTADO | Feito (weather por coords) |
 | Yahoo × IBGE = preço regional | Proxy sem observação | Seria estimativa derivada, não preço | — | — | Crítico (desonestidade metodológica) | — | — | REJEITAR | Rejeitado; se um dia existir proxy, rotular DERIVED |
 

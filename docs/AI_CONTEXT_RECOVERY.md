@@ -78,13 +78,14 @@
 - [x] D35 Champion/Challenger — feito.
 - [x] **E3 (challenger AR)** — feito 2026-09-27: `arService.js` + `linalg.js`, 69/69, AR aprovado como challenger (one-step + recursivo H=7/14/30, 5/5); Ridge segue champion. Sem rota, sem persistência (D38).
 - [x] **E4 (D38 implementada)** — feito 2026-09-27: `runFor` (Ridge default, `?model=ar` opt-in, inválido→400) + `persistRun` partilhado + CSV por modelo + 8 testes; 77/77; default provado idêntico por deep-equal; sem frontend. Ridge champion; AR challenger opt-in.
-- [ ] Investigação regionalização (CONAB/CEPEA/acesso legítimo) — sem proxy rotulado de preço real.
+- [x] **G6 (fonte regional)** — feito 2026-09-27, sem código: nenhuma fonte integrável (CONAB CAPTCHA, CEPEA paga, IMEA parcial-MT, B3 futuros). Evidência em `REGIONAL_INVESTIGATION.md`. Sem schema, sem D39. Trilha encerrada por enquanto.
 - [ ] Docker build+up+health+down/up num ambiente com daemon ativo.
 - [ ] E2E 53/53 (navegador real) quando ambiente permitir.
 
 ## 10. Decisões ativas / hipóteses em investigação
 
 - Ativas: v1.0.0 = baseline imutável; acrescentar-não-destruir; preço = referência internacional declarada; Ridge = champion; café-naive = evidência de que baselines importam.
-- Em investigação: D38 (exposição do AR challenger); preço regional real; NDVI (bloqueado por credencial); OpenAPI; teste de carga; backup `data/saden.db`; LICENSE (decisão do autor).
+- Em investigação: UI comparativa Ridge×AR (futura, D39); NDVI (bloqueado por credencial); OpenAPI; teste de carga; backup `data/saden.db`; LICENSE (decisão do autor).
+- Encerradas por enquanto: regionalização G6 (sem fonte integrável); cobertura c8 (medida).
 - Medido e encerrado: cobertura c8 88,51% linhas (sem dependência nova).
 - Rejeitado por ora: LSTM/RF/XGBoost (dados curtos, sem justificativa); ensemble (antes de validar individuais); CSRF (sem cookies); Python (sem benefício demonstrado).

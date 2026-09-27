@@ -54,6 +54,17 @@ comportamento inalterado (só import + export aditivo). Testes 69/69
 recursivo H=7/14/30 nas 5 commodities; H30 absoluto fraco nos dois.
 Veredito: challenger APROVADO; champion inalterado; exposição = D38.
 
+## A11. G6 — investigação regional atualizada (2026-09-27, sem código, sem D)
+
+Re-verificação pós-D26 com fontes atuais: CONAB precosiagroweb viva mas com
+CAPTCHA por consulta (confirmado ao vivo) → NÃO AUTOMATIZÁVEL; CEPEA com API
+REST documentada porém paga (R$ 11.000 Grãos / R$ 22.300 Completo, 50 req/min)
+→ VIÁVEL COM CONTRATAÇÃO; IMEA (novo candidato) com físico diário municipal
+p/ soja/milho/algodão mas só MT e sob licença restritiva → PARCIAL; B3 só
+futuros → INCOMPATÍVEL; scrapers terceiros → INCOMPATÍVEL. Evidência em
+`docs/REGIONAL_INVESTIGATION.md`. Conclusão: NENHUMA FONTE ADEQUADA PARA
+INTEGRAÇÃO NESTE MOMENTO. Sem schema, sem D39, proxy segue proibido.
+
 ## A9. D38 — investigação de exposição (2026-09-27, sem código)
 
 Contrato mapeado: dashboard usa `GET /api/forecast/:key` (gráfico + `model_selected`
