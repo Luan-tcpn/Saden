@@ -108,7 +108,7 @@ docker compose up
 docker compose down   # o banco em ./data é preservado; nada além disso persiste
 ```
 
-> Situação em 2026-09-21: `docker compose build` **falha nesta árvore** porque o `Dockerfile` copia `docs/` (`COPY docs ./docs`) e esse diretório está ausente nela (ver `docs/README_AUDIT.md`). Com `docs/` restaurado da origem canônica, o fluxo acima se aplica. Docker não torna o sistema automaticamente pronto para produção (sem TLS, backup ou monitoramento).
+> Situação em 2026-09-27: `docs/` faz parte da árvore canônica e está versionado (ver `git ls-tree HEAD docs/`); com o daemon Docker ativo, o fluxo acima se aplica. Nesta máquina o daemon estava inativo, então o build não pôde ser executado aqui — pendente de ambiente com Docker. Docker não torna o sistema automaticamente pronto para produção (sem TLS, backup ou monitoramento).
 
 ## Principais endpoints
 
@@ -123,13 +123,9 @@ Autenticação: `POST /api/auth/register|/login`, `POST /api/auth/forgot|/reset`
 
 ## Estrutura do projeto
 
-`backend/` (Express: `src/{index,config,db,middleware,routes,services,integrations,utils}`) · `frontend/` (`index.html`, `css/`, `js/{api,auth,app,theme}.js`, `img/`) · `tests/` (`unit/` 6 arquivos, `integration/api.test.js`, `e2e/` vazio) · `scripts/` (seed, smoke, E2E, verificações) · `docs/` (ver nota abaixo) · `data/` (banco runtime, ignorado no git) · `tmp/` (outbox, evidências; ignorado) · `logs/` (ignorados).
+`backend/` (Express: `src/{index,config,db,middleware,routes,services,integrations,utils}`) · `frontend/` (`index.html`, `css/`, `js/{api,auth,app,theme}.js`, `img/`) · `tests/` (`unit/` 6 arquivos, `integration/api.test.js`, `e2e/` vazio) · `scripts/` (seed, smoke, E2E, verificações) · `docs/` (ARCHITECTURE, API_SOURCES, PROJECT_STATUS, PROJECT_ROADMAP, DECISIONS, NDVI_STUDY, TCC, AI_CONTEXT_RECOVERY) · `data/` (banco runtime, ignorado no git) · `tmp/` (outbox, evidências; ignorado) · `logs/` (ignorados).
 
-> Nota: `docs/` (ARCHITECTURE, API_SOURCES, PROJECT_STATUS, PROJECT_ROADMAP, DECISIONS, NDVI_STUDY, TCC) faz parte da árvore canônica mas está ausente nesta cópia de trabalho — ver `docs/README_AUDIT.md`.
-
-## Documentação complementar
-
-Na árvore canônica: `docs/ARCHITECTURE.md` (arquitetura e endpoints), `docs/API_SOURCES.md` (fontes), `docs/PROJECT_STATUS.md` (estado), `docs/PROJECT_ROADMAP.md` (plano oficial), `docs/DECISIONS.md` (D1–D34), `docs/NDVI_STUDY.md` (viabilidade NDVI), `docs/TCC.md` (material técnico do TCC).
+Na árvore canônica: `docs/ARCHITECTURE.md` (arquitetura e endpoints), `docs/API_SOURCES.md` (fontes), `docs/PROJECT_STATUS.md` (estado), `docs/PROJECT_ROADMAP.md` (plano oficial), `docs/DECISIONS.md` (D1–D34), `docs/NDVI_STUDY.md` (viabilidade NDVI), `docs/TCC.md` (material técnico do TCC), `docs/AI_CONTEXT_RECOVERY.md` (recuperação de contexto v1.0.0 → v1.1.x).
 
 ## Status do projeto
 

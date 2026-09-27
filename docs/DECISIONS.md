@@ -197,3 +197,23 @@ seed não-destrutivo) + `./tmp/mail-outbox` (E2E de recuperação idêntico ao
 local). `JWT_SECRET` obrigatório via ambiente (fail-fast). SQLite/Postgres/
 Redis/Nginx: nada trocado, nada adicionado. Limitações declaradas: instância
 única, sem TLS, sem alta disponibilidade.
+
+## D35 — Champion/Challenger do forecast (regras do jogo, 2026-09-27)
+Champion = Ridge v1.0 (travada: features, λ-grade, split 70/15/15, métricas).
+Todo challenger (ARIMA, SARIMA, ETS, multivariada) usa MESMA série, MESMO
+período, MESMO horizonte, MESMA divisão, MESMAS métricas e MESMA regra
+temporal — sem teste na seleção (test só após lock). Gate de leakage para
+cada feature exógena: "estaria disponível na origem da previsão?" Se não,
+não entra. Ensemble proibido até ≥1 challenger validado individualmente, e
+então só com pesos vindos de validação (nunca 0.4/0.3/0.3 arbitrário).
+Resultado negativo (challenger pior) é válido e será registrado. Números de
+MAPE vindos de fora do projeto são hipótese, nunca meta nem resultado.
+
+## D36 — Correção README/docs obsoletos (2026-09-27, sem reescrita)
+`docs/` voltou a fazer parte da árvore versionada (8 arquivos em HEAD), logo
+as notas do README sobre "docs ausente" e "build falha por docs ausente"
+foram removidas/atualizadas; causa do `COPY docs` eliminada por restauração,
+não por remoção da instrução. Criados `docs/AI_CONTEXT_RECOVERY.md` (estado
+recuperado, baseline, pendências) e `docs/V1_1_DECISION_MATRIX.md`
+(classificação da segunda opinião). Docker build segue pendente de ambiente
+com daemon ativo. Nada de funcionalidade alterado.
