@@ -262,11 +262,13 @@ async function run(commodityKey, horizonDays = 14) {
     retrieved_at: new Date().toISOString(),
   };
 
-  persistRun(commodityKey, payload);
+  persistRun(commodityKey, `ridge(lambda=${payload.lambda})`, { winner: payload.model_selected, interval_sigma: payload.interval_sigma }, payload);
   return payload;
 }
 
-function persistRun(commodityKey, payload) {
+// Persistência genérica de runs (E4, D38): mesma tabela/linhas para Ridge e AR;
+// só `model` e `params` distinguem. Sem migração, sem mudança de semântica.
+function persistRun(commodityKey, modelLabel, paramsObj, payload) {
   const db = connect();
   const info = db
     .prepare(
@@ -275,10 +277,10 @@ function persistRun(commodityKey, payload) {
     )
     .run(
       commodityKey,
-      `ridge(lambda=${payload.lambda})`,
+      modelLabel,
       payload.horizon_days,
       JSON.stringify(payload.metrics),
-      JSON.stringify({ winner: payload.model_selected, interval_sigma: payload.interval_sigma }),
+      JSON.stringify(paramsObj),
       payload.data_start,
       payload.data_end
     );
@@ -293,6 +295,7 @@ function persistRun(commodityKey, payload) {
 
 module.exports = {
   run,
+  persistRun,
   MIN_POINTS,
   _test: { clean, featuresFor, buildRows, splitRows, fitRidge, metrics, baselinePredict, nextBusinessDates },
 };

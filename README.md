@@ -89,7 +89,7 @@ SQLite em `data/saden.db` (WAL: `saden.db-wal`/`saden.db-shm` em execução). A 
 ## Testes (estado real, executado em 2026-09-21)
 
 ```powershell
-cd backend; npm test                  # 69/69 (12 suítes; inclui 2 testes live + cache/TTL + 422 + AR challenger)
+cd backend; npm test                  # 77/77 (13 suítes; inclui 2 testes live + cache/TTL + 422 + AR challenger + opt-in D38)
 cd ..; node scripts\smoke-test.js     # 8/8 contra servidor em execução
 node scripts\e2e-round2.js            # 53/53 verificações com navegador real
 ```
@@ -112,7 +112,7 @@ docker compose down   # o banco em ./data é preservado; nada além disso persis
 
 ## Principais endpoints
 
-Autenticação: `POST /api/auth/register|/login`, `POST /api/auth/forgot|/reset`, `GET /api/auth/me` · Commodities: `GET /api/commodities`, `/commodities/:key/series?range=`, `/commodities/:key/latest` · Preços: `GET /api/prices/reference` · Clima: `GET /api/weather/forecast|/history` · Geo: `GET /api/geo/search|/reverse|/estados|/estados/:uf/municipios` · Previsão: `GET /api/forecast/:key?horizon=7|14|30` · Relatórios: `GET /api/reports/:key|/reports/:key/csv` · Land Cover: `GET /api/landcover/tile/:z/:x/:y.png|/info` (públicos) · Alertas: `/api/alerts`, `/api/alerts/check` · Locais: `/api/places` · Sistema: `GET /api/health`, `GET /api/sources`. Rotas públicas do app: `/`, `/login`, `/register`, `/reset`, `/dashboard`.
+Autenticação: `POST /api/auth/register|/login`, `POST /api/auth/forgot|/reset`, `GET /api/auth/me` · Commodities: `GET /api/commodities`, `/commodities/:key/series?range=`, `/commodities/:key/latest` · Preços: `GET /api/prices/reference` · Clima: `GET /api/weather/forecast|/history` · Geo: `GET /api/geo/search|/reverse|/estados|/estados/:uf/municipios` · Previsão: `GET /api/forecast/:key?horizon=7|14|30` (Ridge, padrão) ou `&model=ar` (challenger AR experimental) · Relatórios: `GET /api/reports/:key|/reports/:key/csv` · Land Cover: `GET /api/landcover/tile/:z/:x/:y.png|/info` (públicos) · Alertas: `/api/alerts`, `/api/alerts/check` · Locais: `/api/places` · Sistema: `GET /api/health`, `GET /api/sources`. Rotas públicas do app: `/`, `/login`, `/register`, `/reset`, `/dashboard`.
 
 ## Limitações e escopo atual
 
@@ -129,4 +129,4 @@ Na árvore canônica: `docs/ARCHITECTURE.md` (arquitetura e endpoints), `docs/AP
 
 ## Status do projeto
 
-**Release Candidate / feature freeze**: funcional, com suíte verde (69/69 + smoke 8/8 + E2E 53/53 na última validação registrada). Novas funcionalidades fora do escopo; correções de bugs/regressões e segurança continuam possíveis. Não avaliado formalmente para produção.
+**Release Candidate / feature freeze**: funcional, com suíte verde (77/77 + smoke 8/8 + E2E 53/53 na última validação registrada). Novas funcionalidades fora do escopo; correções de bugs/regressões e segurança continuam possíveis. Não avaliado formalmente para produção.

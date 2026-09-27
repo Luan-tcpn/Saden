@@ -148,6 +148,16 @@ describe('AR challenger — estabilidade e erros honestos', () => {
   });
 });
 
+describe('AR challenger — runFor (D38)', () => {
+  it('model inválido → 400 sem rede e sem fallback', async () => {
+    await assert.rejects(() => ar.runFor('arima', 'soja', 7), (e) => {
+      assert.equal(e.status, 400);
+      assert.match(e.message, /model/i);
+      return true;
+    });
+  });
+});
+
 describe('AR challenger — paridade com a Ridge', () => {
   it('mesmos alvos de val/teste que o split da Ridge', () => {
     const v = arSeries(100, 5, [0.5], 0.5, 3);

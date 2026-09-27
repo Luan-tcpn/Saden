@@ -8,7 +8,7 @@
 
 | Sugestão | Problema | Evidência | Viabilidade | Esforço | Risco | Teste | Resultado | Decisão | Status |
 |---|---|---|---|---|---|---|---|---|---|
-| ARIMA como challenger | Ridge pode não captar autocorrelação | **E2+E3 mediram: AR(p)+AIC vence Ridge na val one-step 5/5 e no recursivo H=7/14/30 5/5; JS×Python idênticos; 69/69 testes** | Alta (implementado em JS puro, sem deps) | Médio | Baixo (isolado, Ridge intacta, sem rota) | E3 feito | **APROVADO como challenger; Ridge segue champion** | **D37** | Feito (E3); D38 decidiu exposição opt-in `?model=ar` (implementação pendente) |
+| ARIMA como challenger | Ridge pode não captar autocorrelação | **E2+E3 mediram: AR(p)+AIC vence Ridge na val one-step 5/5 e no recursivo H=7/14/30 5/5; JS×Python idênticos; 69/69 testes** | Alta (implementado em JS puro, sem deps) | Médio | Baixo (isolado, Ridge intacta, sem rota) | E3 feito | **APROVADO como challenger; Ridge segue champion** | **D37** | Feito (E3); D38 decidiu exposição opt-in `?model=ar` (implementada em E4, 77/77) |
 | SARIMA/ETS | Sazonalidade explícita | Sazonalidade não demonstrada na série | Média | Médio | Médio (complexidade) | Idem + análise ACF/estacionariedade | — | INVESTIGAR | Aberto, após ARIMA |
 | Regressão multivariada (clima/PTAX) | Features exógenas podem ajudar | Clima/PTAX hoje são contexto, não features; risco de leakage | Média | Alto (pareamento temporal/espacial) | Alto (leakage) | Gate: "estaria disponível na origem?" | — | INVESTIGAR | Aberto, com gate D35 |
 | Prophet | Sazonalidade pronta | Dependência nova, benefício não demonstrado | Baixa | Médio | Médio (manutenção) | Só se ARIMA/ETS falharem | — | ADIAR | Adiado |

@@ -11,7 +11,7 @@
 | Cobertura (c8 efêmero via npx, sem dependência nova) | **88,51% linhas · 74,75% branches · 86,91% funcs** (suíte completa) |
 | E2E navegador (53/53) | Não reexecutado (requer harness CDP + Edge; última validação registrada vale) |
 | Docker build/up | Não executável aqui (daemon inativo); `COPY docs` consistente (docs versionado) |
-| Git | `main` limpo, 3 commits (`v1.0.0` + 2 de docs locais ainda não enviados ao remoto), sem segredos |
+| Git | `main` limpo e sincronizado com `origin/main`, sem segredos |
 
 ## A2. Cobertura por área (c8, suíte completa)
 
@@ -67,6 +67,15 @@ ausente/ridge/ar/inválido(400), payload, CSV por modelo, persistência,
 regressão do default. E2E só quando houver UI. Veredito: **EXPOR via B**;
 implementação no próximo ciclo. Framing futuro: "Ridge (principal)" /
 "AR (experimental)", com caveat H30.
+
+## A10. E4 — D38 implementada (2026-09-27, sem D nova)
+
+`runFor` (default Ridge, `?model=ar` opt-in, inválido→400); `persistRun`
+partilhado (Ridge com mesmos SQL/valores; AR como `ar(order=N)`);
+CSV por modelo (`ridge (lambda=…)` / `ar (order=…)`); frontend intocado.
+Testes 77/77: default≡ridge por deep-equal, payloads, persistência
+distinguível, CSV ambos, AR-422 por rota. Auditoria §12: param em allowlist,
+auth preservada, CSV via `csvCell`, erros 400/422 pelo padrão existente.
 
 ## A4. Não-bugs (verificado, sem ação)
 

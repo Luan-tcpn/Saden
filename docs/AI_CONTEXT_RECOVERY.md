@@ -5,8 +5,8 @@
 
 ## 1. Onde estamos
 
-- **Baseline v1.0.0 congelado e VERDE** (tag lógica `9218e01 v1.0.0`; branch `main`, `origin https://github.com/Luan-tcpn/Saden.git`). Em 2026-09-27 foram empilhados 2 commits de docs locais (`dd32a30`, `f6d6040`) ainda não enviados ao remoto — push é decisão do usuário.
-- Backend **69/69 PASS** (`node --test`, 12 suítes: E3 adicionou 16 unitários AR + 2 integração) — revalidado em 2026-09-27.
+- **Baseline v1.0.0 congelado e VERDE** (tag lógica `9218e01 v1.0.0`; branch `main`, sincronizado com `origin https://github.com/Luan-tcpn/Saden.git`).
+- Backend **77/77 PASS** (`node --test`, 13 suítes: E4 adicionou 1 unitário runFor + 7 integração D38) — revalidado em 2026-09-27.
 - Smoke **8/8 PASS** contra servidor live em 2026-09-27 (soja R$ 151,18 real, clima real, previsão `modelo=ridge`, relatório OK).
 - `docs/` **PRESENTE e versionado** (8 arquivos, `git ls-tree HEAD docs/` confirma) — a nota do README que dizia "docs ausente nesta cópia" está **obsoleta** (era verdadeira numa árvore anterior, não nesta).
 - Docker **não validável neste ambiente** (daemon Docker Desktop inativo em 2026-09-27); `Dockerfile` + `compose` íntegros por inspeção, `COPY docs ./docs` agora consistente porque `docs/` existe.
@@ -77,8 +77,7 @@
 - [x] `docs/V1_1_DECISION_MATRIX.md` — feito.
 - [x] D35 Champion/Challenger — feito.
 - [x] **E3 (challenger AR)** — feito 2026-09-27: `arService.js` + `linalg.js`, 69/69, AR aprovado como challenger (one-step + recursivo H=7/14/30, 5/5); Ridge segue champion. Sem rota, sem persistência (D38).
-- [x] **D38 (investigação de exposição)** — feito 2026-09-27, sem código: veredito EXPOR via `?model=ar` opt-in (Ridge default), persistência sem migração, sem UI nesta etapa. Contrato, matriz e testes mapeados em D38/A9.
-- [ ] **E4 (próximo, implementação D38)**: `?model=ar` na rota forecast + CSV por modelo + persistência `ar(order=N)` + testes (default/regressão/400) — sem frontend.
+- [x] **E4 (D38 implementada)** — feito 2026-09-27: `runFor` (Ridge default, `?model=ar` opt-in, inválido→400) + `persistRun` partilhado + CSV por modelo + 8 testes; 77/77; default provado idêntico por deep-equal; sem frontend. Ridge champion; AR challenger opt-in.
 - [ ] Investigação regionalização (CONAB/CEPEA/acesso legítimo) — sem proxy rotulado de preço real.
 - [ ] Docker build+up+health+down/up num ambiente com daemon ativo.
 - [ ] E2E 53/53 (navegador real) quando ambiente permitir.

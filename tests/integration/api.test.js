@@ -449,4 +449,155 @@ describe('API SADEN — integração', () => {
       connect().prepare('DELETE FROM kv_cache WHERE key = ?').run('prices:soja:1y');
     }
   });
+
+  // D38 — exposição opt-in `?model=ar` (série sintética semeada; sem rede).
+  function seedD38Series() {
+    const { cacheSet } = require('../../backend/src/db');
+    const pts = [];
+    const d0 = new Date('2026-01-01T12:00:00Z');
+    for (let i = 0; i < 100; i++) {
+      const d = new Date(d0);
+      d.setUTCDate(d.getUTCDate() + i);
+      pts.push({ date: d.toISOString().slice(0, 10), price_brl: 100 + i * 0.1 + Math.sin(i / 5) * 2 });
+    }
+    cacheSet(
+      'prices:soja:1y',
+      {
+        cached: false,
+        commodity: { key: 'soja', name: 'Soja', unit_br: 'R$/saca 60kg', yahoo_symbol: 'ZS=F' },
+        unit: 'R$/saca 60kg',
+        count: pts.length,
+        data_start: pts[0].date,
+        data_end: pts[pts.length - 1].date,
+        provider: 'yahoo',
+        fx_provider: 'bcb-ptax',
+        fx_last: 5.5,
+        retrieved_at: new Date().toISOString(),
+        points: pts,
+      },
+      60 * 1000
+    );
+  }
+  function unseedD38Series() {
+    const { connect } = require('../../backend/src/db');
+    connect().prepare('DELETE FROM kv_cache WHERE key = ?').run('prices:soja:1y');
+  }
+  function countRuns(modelLike) {
+    const { connect } = require('../../backend/src/db');
+    return connect().prepare('SELECT COUNT(*) AS n FROM model_runs WHERE model LIKE ?').get(modelLike).n;
+  }
+
+  it('D38: GET sem model → Ridge (default preservado)', { timeout: 60000 }, async () => {
+    const T = process.env.SADEN_TEST_TOKEN;
+    seedD38Series();
+    try {
+      const r = await api('/api/forecast/soja?horizon=7', { token: T });
+      assert.equal(r.status, 200);
+      assert.equal(r.data.model, 'ridge');
+      assert.ok(Number.isFinite(r.data.lambda));
+      assert.equal(r.data.forecast.length, 7);
+      assert.ok(r.data.metrics && r.data.metrics.train && r.data.metrics.val && r.data.metrics.test);
+      assert.ok(Number.isFinite(r.data.interval_sigma));
+      assert.ok(Array.isArray(r.data.limitations) && r.data.limitations.length === 4);
+    } finally {
+      unseedD38Series();
+    }
+  });
+
+  it('D38: model=ridge ≡ ausência (não-regressão do default)', { timeout: 60000 }, async () => {
+    const T = process.env.SADEN_TEST_TOKEN;
+    seedD38Series();
+    try {
+      const a = await api('/api/forecast/soja?horizon=7', { token: T });
+      const b = await api('/api/forecast/soja?horizon=7&model=ridge', { token: T });
+      assert.equal(b.status, 200);
+      assert.equal(b.data.model, 'ridge');
+      assert.deepEqual(b.data.forecast, a.data.forecast);
+      assert.deepEqual(b.data.metrics, a.data.metrics);
+    } finally {
+      unseedD38Series();
+    }
+  });
+
+  it('D38: model=ar → challenger com payload compatível', { timeout: 60000 }, async () => {
+    const T = process.env.SADEN_TEST_TOKEN;
+    seedD38Series();
+    try {
+      const r = await api('/api/forecast/soja?horizon=7&model=ar', { token: T });
+      assert.equal(r.status, 200);
+      assert.equal(r.data.model, 'ar');
+      assert.ok(r.data.ar_order >= 1 && r.data.ar_order <= 8);
+      assert.equal(r.data.forecast.length, 7);
+      assert.ok(r.data.metrics && r.data.metrics.train && r.data.metrics.val && r.data.metrics.test);
+      assert.ok(Number.isFinite(r.data.interval_sigma));
+      assert.equal(r.data.limitations.length, 5);
+    } finally {
+      unseedD38Series();
+    }
+  });
+
+  it('D38: model inválido → 400 honesto (sem fallback silencioso)', async () => {
+    const T = process.env.SADEN_TEST_TOKEN;
+    for (const bad of ['AR', 'arima', 'x', '']) {
+      const r = await api(`/api/forecast/soja?model=${bad}`, { token: T });
+      assert.equal(r.status, 400, `model=${bad}`);
+      assert.match(r.data.error, /model/i);
+    }
+  });
+
+  it('D38: persistência distinguível Ridge × AR', { timeout: 60000 }, async () => {
+    const T = process.env.SADEN_TEST_TOKEN;
+    seedD38Series();
+    try {
+      const r0 = countRuns('ridge%');
+      const a0 = countRuns('ar(%');
+      await api('/api/forecast/soja?horizon=7', { token: T });
+      await api('/api/forecast/soja?horizon=7&model=ar', { token: T });
+      assert.equal(countRuns('ridge%'), r0 + 1);
+      assert.equal(countRuns('ar(%'), a0 + 1);
+      const { connect } = require('../../backend/src/db');
+      const row = connect()
+        .prepare("SELECT model, params_json FROM model_runs WHERE model LIKE 'ar(%' ORDER BY id DESC LIMIT 1")
+        .get();
+      assert.match(row.model, /^ar\(order=[1-8]\)$/);
+      assert.equal(JSON.parse(row.params_json).ar_order, Number(row.model.match(/\d+/)[0]));
+    } finally {
+      unseedD38Series();
+    }
+  });
+
+  it('D38: CSV identifica o modelo (Ridge lambda × AR order)', { timeout: 60000 }, async () => {
+    const T = process.env.SADEN_TEST_TOKEN;
+    const headers = { Authorization: `Bearer ${T}` };
+    seedD38Series();
+    try {
+      const rr = await fetch(`${base}/api/reports/soja/csv?horizon=7`, { headers });
+      assert.equal(rr.status, 200);
+      const ridgeCsv = await rr.text();
+      assert.match(ridgeCsv, /# modelo: ridge \(lambda=[\d.]+\)/);
+      const ra = await fetch(`${base}/api/reports/soja/csv?horizon=7&model=ar`, { headers });
+      assert.equal(ra.status, 200);
+      const arCsv = await ra.text();
+      assert.match(arCsv, /# modelo: ar \(order=[1-8]\)/);
+      assert.ok(!arCsv.includes('lambda=undefined'), 'sem cabeçalho incorreto');
+      const bad = await fetch(`${base}/api/reports/soja/csv?model=xxx`, { headers });
+      assert.equal(bad.status, 400);
+    } finally {
+      unseedD38Series();
+    }
+  });
+
+  it('D38: rota AR propaga 422 com série curta', async () => {
+    const T = process.env.SADEN_TEST_TOKEN;
+    const { cacheSet } = require('../../backend/src/db');
+    const pts = [];
+    for (let i = 0; i < 10; i++) pts.push({ date: `2026-01-${String(i + 1).padStart(2, '0')}`, price_brl: 100 + i });
+    cacheSet('prices:soja:1y', { points: pts }, 60 * 1000);
+    try {
+      const r = await api('/api/forecast/soja?model=ar', { token: T });
+      assert.equal(r.status, 422);
+    } finally {
+      unseedD38Series();
+    }
+  });
 });

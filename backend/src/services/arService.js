@@ -230,11 +230,27 @@ async function run(commodityKey, horizonDays = 14) {
   const payload = evaluate(values, dates, horizonDays);
   payload.commodity = series.commodity;
   payload.unit = series.unit;
+  forecast.persistRun(
+    commodityKey,
+    `ar(order=${payload.ar_order})`,
+    { winner: payload.model_selected, interval_sigma: payload.interval_sigma, ar_order: payload.ar_order },
+    payload
+  );
   return payload;
+}
+
+// Seleção honesta de modelo (D38, fonte única para as rotas): ausência ou
+// 'ridge' → champion (comportamento anterior); 'ar' → challenger opt-in;
+// qualquer outro valor → 400, sem fallback silencioso.
+async function runFor(model, commodityKey, horizonDays) {
+  if (model === undefined || model === 'ridge') return forecast.run(commodityKey, horizonDays);
+  if (model === 'ar') return run(commodityKey, horizonDays);
+  throw Object.assign(new Error(`Parâmetro model inválido: use 'ridge' ou 'ar'`), { status: 400 });
 }
 
 module.exports = {
   run,
+  runFor,
   evaluate,
   fitAR,
   selectOrder,

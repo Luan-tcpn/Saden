@@ -5,7 +5,7 @@ const { connect } = require('../db');
 const { requireAuth } = require('../middleware/auth');
 const priceService = require('../services/priceService');
 const weatherService = require('../services/weatherService');
-const forecastService = require('../services/forecastService');
+const arService = require('../services/arService');
 
 const router = express.Router();
 
@@ -13,10 +13,10 @@ const router = express.Router();
 router.get('/:key', requireAuth, async (req, res, next) => {
   try {
     const { key } = req.params;
-    const { lat, lon, horizon } = req.query;
+    const { lat, lon, horizon, model } = req.query;
     const [series, forecast, weather] = await Promise.all([
       priceService.getSeries(key, '1y'),
-      forecastService.run(key, horizon || 14),
+      arService.runFor(model, key, horizon || 14),
       lat && lon
         ? weatherService.getForecast(lat, lon).catch(() => null)
         : Promise.resolve(null),
@@ -73,10 +73,10 @@ function csvCell(v) {
 router.get('/:key/csv', requireAuth, async (req, res, next) => {
   try {
     const { key } = req.params;
-    const { lat, lon, horizon } = req.query;
+    const { lat, lon, horizon, model } = req.query;
     const [series, forecast] = await Promise.all([
       priceService.getSeries(key, '1y'),
-      forecastService.run(key, horizon || 14),
+      arService.runFor(model, key, horizon || 14),
     ]);
     void lat;
     void lon;
@@ -85,7 +85,7 @@ router.get('/:key/csv', requireAuth, async (req, res, next) => {
       `# commodity: ${csvCell(`${series.commodity.name} (${series.commodity.key})`)}`,
       `# unidade: ${csvCell(series.unit)}`,
       `# gerado_em: ${new Date().toISOString()}`,
-      `# modelo: ${csvCell(forecast.model)} (lambda=${forecast.lambda}); metricas_test_rmse=${forecast.metrics.test.rmse}`,
+      `# modelo: ${csvCell(modelTag(forecast))}; metricas_test_rmse=${forecast.metrics.test.rmse}`,
       'secao;data;preco_brl;limite_inferior;limite_superior;fonte',
     ];
     for (const p of series.points) {
@@ -107,5 +107,12 @@ function sourceList() {
   return connect().prepare('SELECT key, name, base_url, docs_url, kind, status FROM data_sources').all();
 }
 
+// Identificação do modelo no CSV (D38): Ridge mantém `lambda`; AR usa `order`.
+// Nunca emite `lambda=undefined`.
+function modelTag(fc) {
+  if (fc && fc.model === 'ar') return `ar (order=${fc.ar_order})`;
+  return `${fc ? fc.model : 'ridge'} (lambda=${fc ? fc.lambda : '?'})`;
+}
+
 module.exports = router;
-module.exports._test = { csvCell };
+module.exports._test = { csvCell, modelTag };
