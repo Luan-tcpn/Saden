@@ -10,7 +10,7 @@
 | `scripts/smoke-test.js` (live) | 8/8 PASS (soja R$ 151,18 real, clima real, `modelo=ridge`) |
 | Cobertura (c8 efêmero via npx, sem dependência nova) | **88,51% linhas · 74,75% branches · 86,91% funcs** (suíte completa) |
 | E2E navegador (53/53) | Não reexecutado (requer harness CDP + Edge; última validação registrada vale). **Atualização 2026-09-27: revalidado — E2E-R2 OK em Edge headless (pós-E3/E4).** |
-| Docker build/up | Não executável aqui (daemon inativo); `COPY docs` consistente (docs versionado) |
+| Docker build/up | **VALIDADO 2026-09-27**: build `saden:rc`, up healthy, health/frontend/auth/Ridge/AR/400, persistência down/up, smoke 8/8 no container; backup efêmero no container (host suportado) |
 | Git | `main` limpo e sincronizado com `origin/main`, sem segredos |
 
 ## A2. Cobertura por área (c8, suíte completa)
@@ -32,7 +32,7 @@
 
 ## A6. Validações NOT RUN (explicitamente não executadas)
 - E2E navegador 53/53: **revalidado em 2026-09-27 (E2E-R2 OK, Edge headless + CDP 9333)**. Nota: em Edge headed, o check de geolocalização negada falha (prompt de permissão em vez de negação) — artefato de ambiente, não regressão.
-- Docker build/up/health: daemon inativo — como executar: `docker compose build && docker compose up` com `JWT_SECRET` no ambiente.
+- Docker build/up/health: **validado em 2026-09-27** (todos os gates + smoke no container). Backup em container: efêmero sem volume dedicado — suportado via host CLI.
 - 502 de rota com upstream morto: sem seam de injeção (proposital, sem DI em produção); coberto em nível unitário (http.test).
 
 ## A7. E2 — investigação AR challenger (2026-09-27, D37)

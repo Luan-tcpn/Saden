@@ -72,9 +72,15 @@ geolocalização (prompt vs negação — ambiente, não regressão).
 
 ## 13. Docker
 
-Build/up/health **NOT RUN** (daemon inativo em todas as verificações de
-2026-09-27). `Dockerfile`/`compose` íntegros por inspeção; `COPY docs`
-consistente. Sem TLS/backup/monitoramento — nunca alegado como produção.
+**VALIDADO em 2026-09-27** (daemon iniciado na hora; imagem `saden:rc` 394 MB):
+build PASS → up PASS → healthcheck `healthy` → `/api/health` ok → frontend
+26887 bytes com seletor → auth → forecast Ridge (milho, 7 pts) → `?model=ar`
+(order=1 na janela ao vivo) → `model=xxx` 400 → down/up com recriação:
+login persistiu (volume `./data`) → smoke 8/8 contra o container.
+Backup: host CLI durante runtime ok (4,44 MB); `/app/tmp/backups` é efêmero
+(probe sumiu na recriação) — backup suportado via host, não no container sem
+volume dedicado. Outbox persiste (montado); `docs/` dentro da imagem.
+Sem TLS/backup/monitoramento — nunca alegado como produção.
 
 ## 14. Limitações (vigentes)
 
@@ -90,8 +96,8 @@ microsserviços, Nginx/TLS, badges/CI, SEO/social, UI comparativa além do selet
 
 ## 16. Estado final
 
-**V1.1 STATUS: FUNCTIONALLY COMPLETE** (validação Docker pendente de ambiente —
-registrada separadamente, não bloqueia o restante).
+**V1.1 STATUS: FUNCTIONALLY COMPLETE** (Docker validado em 2026-09-27 —
+todos os gates, incluindo smoke 8/8 no container).
 
 ## 17. Evidências
 

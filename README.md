@@ -110,7 +110,7 @@ docker compose up
 docker compose down   # o banco em ./data é preservado; nada além disso persiste
 ```
 
-> Situação em 2026-09-27: `docs/` faz parte da árvore canônica e está versionado (ver `git ls-tree HEAD docs/`); com o daemon Docker ativo, o fluxo acima se aplica. Nesta máquina o daemon estava inativo, então o build não pôde ser executado aqui — pendente de ambiente com Docker. Docker não torna o sistema automaticamente pronto para produção (sem TLS, backup ou monitoramento).
+> Validado em 2026-09-27: build, healthcheck, auth, forecast Ridge e AR, erro 400, persistência down/up e smoke 8/8 — todos contra o container. Backups gerados dentro do container (`/app/tmp/backups`) são efêmeros; use `node scripts/backup.js` no host. Docker não torna o sistema automaticamente pronto para produção (sem TLS, backup ou monitoramento).
 
 ## Principais endpoints
 

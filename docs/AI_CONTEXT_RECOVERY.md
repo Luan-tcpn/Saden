@@ -82,7 +82,8 @@
 - [x] **Backup** — feito 2026-09-27: `scripts/backup.js` + 3 testes + rotina no README; CLI real validado. Sem D-number (tooling).
 - [x] **D39 (seletor Ridge/AR)** — feito 2026-09-27: select opt-in mínimo + E2E 57/57; Ridge default; sem D40.
 - [x] **Consolidação v1.1** — 2026-09-27: `V1_1_RESULT.md`, `V1_1_TCC_IMPACT.md`, `CHANGELOG.md` criados; README sem "feature freeze" obsoleto; STATUS: FUNCTIONALLY COMPLETE (Docker NOT RUN separado).
-- [ ] Docker build+up+health+down/up num ambiente com daemon ativo (única validação pendente).
+- [x] **Docker validado** — 2026-09-27: build+up+health+auth+Ridge+AR+400+persistência+smoke 8/8 no container; backup de container efêmero (host suportado). Sem D nova (validação).
+- [ ] Futura v1.2 só por nova investigação (convênio CEPEA/autorização IMEA, novos challengers, ou UI comparativa).
 
 ## 10. Decisões ativas / hipóteses em investigação
 
