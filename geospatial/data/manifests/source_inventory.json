@@ -1,0 +1,390 @@
+{
+  "generated_at": "2026-11-11T19:22:37.883805+00:00",
+  "git_commit": "e1d7f3054206d4b04868003df41b24b868a2241d",
+  "versions": {
+    "python": "3.12.10",
+    "processing": "V2.2/0.1",
+    "openpyxl": "3.1.5",
+    "xlrd": "2.0.1",
+    "pandas": "2.2.3"
+  },
+  "municipality": {
+    "requested": {
+      "ibge_code": "5107925",
+      "name": "Sorriso",
+      "uf_code": "51",
+      "uf_name": "Mato Grosso",
+      "uf_sigla": "MT",
+      "immediate_region": "Sorriso",
+      "intermediate_region": "Sinop",
+      "mesoregion": "Norte Mato-grossense",
+      "region": "Centro-Oeste",
+      "region_sigla": "CO",
+      "source": "IBGE — API de Localidades (servicodados.ibge.gov.br/api/v1/localidades)"
+    },
+    "official": {
+      "id": 5107925,
+      "nome": "Sorriso",
+      "microrregiao": {
+        "id": 51006,
+        "nome": "Alto Teles Pires",
+        "mesorregiao": {
+          "id": 5101,
+          "nome": "Norte Mato-grossense",
+          "UF": {
+            "id": 51,
+            "sigla": "MT",
+            "nome": "Mato Grosso",
+            "regiao": {
+              "id": 5,
+              "sigla": "CO",
+              "nome": "Centro-Oeste"
+            }
+          }
+        }
+      },
+      "regiao-imediata": {
+        "id": 510008,
+        "nome": "Sorriso",
+        "regiao-intermediaria": {
+          "id": 5103,
+          "nome": "Sinop",
+          "UF": {
+            "id": 51,
+            "sigla": "MT",
+            "nome": "Mato Grosso",
+            "regiao": {
+              "id": 5,
+              "sigla": "CO",
+              "nome": "Centro-Oeste"
+            }
+          }
+        }
+      }
+    },
+    "confirmed": true
+  },
+  "sources": [
+    {
+      "institution": "IBGE",
+      "dataset": "Produção Agrícola Municipal (PAM)",
+      "official_id": "5457",
+      "documentation": "https://sidra.ibge.gov.br/tabela/5457",
+      "metadata_url": "https://servicodados.ibge.gov.br/api/v3/agregados/5457/metadados",
+      "access": "API pública, sem chave, sem custo (HTTP GET)",
+      "granularity": "municipio (N6) e níveis superiores",
+      "periodicity": {
+        "frequencia": "anual",
+        "inicio": 1974,
+        "fim": 2025
+      },
+      "variables": [
+        {
+          "id": 8331,
+          "nome": "Área plantada ou destinada à colheita",
+          "unidade": "Hectares",
+          "sumarizacao": [
+            "periodo",
+            "nivelTerritorial"
+          ]
+        },
+        {
+          "id": 1008331,
+          "nome": "Área plantada ou destinada à colheita - percentual do total geral",
+          "unidade": "%",
+          "sumarizacao": []
+        },
+        {
+          "id": 216,
+          "nome": "Área colhida",
+          "unidade": "Hectares",
+          "sumarizacao": [
+            "periodo",
+            "nivelTerritorial"
+          ]
+        },
+        {
+          "id": 1000216,
+          "nome": "Área colhida - percentual do total geral",
+          "unidade": "%",
+          "sumarizacao": []
+        },
+        {
+          "id": 214,
+          "nome": "Quantidade produzida",
+          "unidade": "Toneladas",
+          "sumarizacao": [
+            "periodo",
+            "nivelTerritorial"
+          ]
+        },
+        {
+          "id": 112,
+          "nome": "Rendimento médio da produção",
+          "unidade": "Quilogramas por Hectare",
+          "sumarizacao": []
+        },
+        {
+          "id": 215,
+          "nome": "Valor da produção",
+          "unidade": "Mil Cruzeiros [1974 a 1985, 1990 a 1992], Mil Cruzados [1986 a 1988], Mil Cruzados Novos [1989], Mil Cruzeiros Reais [1993], Mil Reais [1994 a 2025]",
+          "sumarizacao": [
+            "periodo",
+            "nivelTerritorial"
+          ]
+        },
+        {
+          "id": 1000215,
+          "nome": "Valor da produção - percentual do total geral",
+          "unidade": "%",
+          "sumarizacao": []
+        }
+      ],
+      "classifications": [
+        {
+          "id": 782,
+          "name": "Produto das lavouras temporárias e permanentes"
+        }
+      ],
+      "license": {
+        "institution": "IBGE",
+        "status": "public_domain_open",
+        "terms_url": "https://www.ibge.gov.br/acesso-informacao/licenca-de-uso/",
+        "note": "Dados estatísticos oficiais de acesso público, sem chave e sem custo; reutilização permitida com atribuição à fonte (IBGE/SIDRA)."
+      },
+      "status": "acessivel"
+    },
+    {
+      "institution": "CONAB",
+      "dataset": "Boletim de Safras (grãos) e Boletim da Safra de Café",
+      "documentation": "https://www.gov.br/conab/pt-br/atuacao/informacoes-agropecuarias",
+      "access": "download HTTP de planilhas oficiais (.xlsx/.xls)",
+      "granularity": "uf (estadual) e nacional — sem dado municipal nos arquivos",
+      "variables": [
+        "area (mil ha)",
+        "produtividade (kg/ha)",
+        "producao (mil t)"
+      ],
+      "license": {
+        "institution": "CONAB",
+        "status": "open_but_restricted_by_publication_terms",
+        "terms_url": "https://www.gov.br/conab/pt-br/acesso-a-informacao/termos-de-uso",
+        "note": "Planilhas oficiais de livre acesso no portal, sem API pública automatizável (dados.gov.br exige autenticação; SIGS não resolve DNS neste ambiente). republicação/redistribuição depende dos termos de uso vigentes — não declarada aqui como livre."
+      },
+      "blocked_endpoints": [
+        {
+          "endpoint": "https://sigs.conab.gov.br/producao/",
+          "issue": "DNS não resolve neste ambiente (dados por município)",
+          "evidence": "socket.gethostbyname -> gaierror"
+        },
+        {
+          "endpoint": "https://dados.gov.br/api/3/action/package_search",
+          "issue": "HTTP 401 (exige autenticação) — catálogo CKAN",
+          "evidence": "resposta HTTP 401 nas consultas de catálogo"
+        },
+        {
+          "endpoint": "https://api.conab.gov.br",
+          "issue": "DNS não resolve",
+          "evidence": "socket.gethostbyname -> gaierror"
+        }
+      ],
+      "spreadsheets_grains": [
+        {
+          "name": "site_previsao_de_safra-por_produto-out-2026.xlsx",
+          "url": "https://www.gov.br/conab/pt-br/atuacao/informacoes-agropecuarias/safras/safra-de-graos/boletim-da-safra-de-graos/1o-levantamento-safra-2026-27/site_previsao_de_safra-por_produto-out-2026.xlsx",
+          "levantamento": "1o-levantamento-safra-2026/27",
+          "reference_year": "2026"
+        },
+        {
+          "name": "site_previsao_de_safra-por_produto-set-2026.xlsx",
+          "url": "https://www.gov.br/conab/pt-br/atuacao/informacoes-agropecuarias/safras/safra-de-graos/boletim-da-safra-de-graos/12o-levantamento-safra-2025-26/site_previsao_de_safra-por_produto-set-2026.xlsx",
+          "levantamento": "12o-levantamento-safra-2025/26",
+          "reference_year": "2026"
+        },
+        {
+          "name": "site_previsao_de_safra-por_produto-ago-2026.xlsx",
+          "url": "https://www.gov.br/conab/pt-br/atuacao/informacoes-agropecuarias/safras/safra-de-graos/boletim-da-safra-de-graos/11o-levantamento-safra-2025-26/site_previsao_de_safra-por_produto-ago-2026.xlsx",
+          "levantamento": "11o-levantamento-safra-2025/26",
+          "reference_year": "2026"
+        },
+        {
+          "name": "site_previsao_de_safra-por_produto-jul-2026.xlsx",
+          "url": "https://www.gov.br/conab/pt-br/atuacao/informacoes-agropecuarias/safras/safra-de-graos/boletim-da-safra-de-graos/10o-levantamento-safra-2025-26/site_previsao_de_safra-por_produto-jul-2026.xlsx",
+          "levantamento": "10o-levantamento-safra-2025/26",
+          "reference_year": "2026"
+        },
+        {
+          "name": "site_previsao_de_safra-por_produto-jun-2026.xlsx",
+          "url": "https://www.gov.br/conab/pt-br/atuacao/informacoes-agropecuarias/safras/safra-de-graos/boletim-da-safra-de-graos/9o-levantamento-safra-2025-26/site_previsao_de_safra-por_produto-jun-2026.xlsx",
+          "levantamento": "9o-levantamento-safra-2025/26",
+          "reference_year": "2026"
+        },
+        {
+          "name": "site_previsao_de_safra-por_produto-mai-2026.xlsx",
+          "url": "https://www.gov.br/conab/pt-br/atuacao/informacoes-agropecuarias/safras/safra-de-graos/boletim-da-safra-de-graos/8o-levantamento-safra-2025-26/site_previsao_de_safra-por_produto-mai-2026.xlsx",
+          "levantamento": "8o-levantamento-safra-2025/26",
+          "reference_year": "2026"
+        },
+        {
+          "name": "site_previsao_de_safra-por_produto-abr-2026.xlsx",
+          "url": "https://www.gov.br/conab/pt-br/atuacao/informacoes-agropecuarias/safras/safra-de-graos/boletim-da-safra-de-graos/7o-levantamento-safra-2025-26/site_previsao_de_safra-por_produto-abr-2026.xlsx",
+          "levantamento": "7o-levantamento-safra-2025/26",
+          "reference_year": "2026"
+        },
+        {
+          "name": "site_previsao_de_safra-por_produto-mar-2026.xlsx",
+          "url": "https://www.gov.br/conab/pt-br/atuacao/informacoes-agropecuarias/safras/safra-de-graos/boletim-da-safra-de-graos/6o-levantamento-safra-2025-26/site_previsao_de_safra-por_produto-mar-2026.xlsx",
+          "levantamento": "6o-levantamento-safra-2025/26",
+          "reference_year": "2026"
+        },
+        {
+          "name": "site_previsao_de_safra-por_produto-fev-2026.xlsx",
+          "url": "https://www.gov.br/conab/pt-br/atuacao/informacoes-agropecuarias/safras/safra-de-graos/boletim-da-safra-de-graos/5o-levantamento-safra-2025-26/site_previsao_de_safra-por_produto-fev-2026.xlsx",
+          "levantamento": "5o-levantamento-safra-2025/26",
+          "reference_year": "2026"
+        },
+        {
+          "name": "site_previsao_de_safra-por_produto-dez-2025.xlsx",
+          "url": "https://www.gov.br/conab/pt-br/atuacao/informacoes-agropecuarias/safras/safra-de-graos/boletim-da-safra-de-graos/3o-levantamento-safra-2025-26/site_previsao_de_safra-por_produto-dez-2025.xlsx",
+          "levantamento": "3o-levantamento-safra-2025/26",
+          "reference_year": "2025"
+        },
+        {
+          "name": "site_previsao_de_safra-por_produto-nov-2025.xlsx",
+          "url": "https://www.gov.br/conab/pt-br/atuacao/informacoes-agropecuarias/safras/safra-de-graos/boletim-da-safra-de-graos/2o-levantamento-safra-2025-26/site_previsao_de_safra-por_produto-nov-2025.xlsx",
+          "levantamento": "2o-levantamento-safra-2025/26",
+          "reference_year": "2025"
+        },
+        {
+          "name": "site_previsao_de_safra-por_produto-out-2025.xlsx",
+          "url": "https://www.gov.br/conab/pt-br/atuacao/informacoes-agropecuarias/safras/safra-de-graos/boletim-da-safra-de-graos/1o-levantamento-safra-2025-26/site_previsao_de_safra-por_produto-out-2025.xlsx",
+          "levantamento": "1o-levantamento-safra-2025/26",
+          "reference_year": "2025"
+        },
+        {
+          "name": "site_previsao_de_safra-por_produto-set-2025.xlsx",
+          "url": "https://www.gov.br/conab/pt-br/atuacao/informacoes-agropecuarias/safras/safra-de-graos/boletim-da-safra-de-graos/12o-levantamento-safra-2024-25/site_previsao_de_safra-por_produto-set-2025.xlsx",
+          "levantamento": "12o-levantamento-safra-2024/25",
+          "reference_year": "2025"
+        },
+        {
+          "name": "site_previsao_de_safra-por_produto-ago-2025.xlsx",
+          "url": "https://www.gov.br/conab/pt-br/atuacao/informacoes-agropecuarias/safras/safra-de-graos/boletim-da-safra-de-graos/11o-levantamento-safra-2024-25/site_previsao_de_safra-por_produto-ago-2025.xlsx",
+          "levantamento": "11o-levantamento-safra-2024/25",
+          "reference_year": "2025"
+        },
+        {
+          "name": "site_previsao_de_safra-por_produto-jul-2025.xlsx",
+          "url": "https://www.gov.br/conab/pt-br/atuacao/informacoes-agropecuarias/safras/safra-de-graos/boletim-da-safra-de-graos/10o-levantamento-safra-2024-25/site_previsao_de_safra-por_produto-jul-2025.xlsx",
+          "levantamento": "10o-levantamento-safra-2024/25",
+          "reference_year": "2025"
+        },
+        {
+          "name": "site_previsao_de_safra-por_produto-fev-2025.xlsx",
+          "url": "https://www.gov.br/conab/pt-br/atuacao/informacoes-agropecuarias/safras/safra-de-graos/boletim-da-safra-de-graos/5o-levantamento-safra-2024-25/site_previsao_de_safra-por_produto-fev-2025.xlsx",
+          "levantamento": "5o-levantamento-safra-2024/25",
+          "reference_year": "2025"
+        }
+      ],
+      "status": "acessivel"
+    }
+  ],
+  "saden_commodities": [
+    {
+      "key": "soja",
+      "name": "Soja",
+      "yahoo_symbol": "ZS=F"
+    },
+    {
+      "key": "milho",
+      "name": "Milho",
+      "yahoo_symbol": "ZC=F"
+    },
+    {
+      "key": "cafe",
+      "name": "Café arábica",
+      "yahoo_symbol": "KC=F"
+    },
+    {
+      "key": "trigo",
+      "name": "Trigo",
+      "yahoo_symbol": "ZW=F"
+    },
+    {
+      "key": "algodao",
+      "name": "Algodão",
+      "yahoo_symbol": "CT=F"
+    }
+  ],
+  "crosswalk": [
+    {
+      "saden_key": "soja",
+      "saden_name": "Soja",
+      "yahoo_symbol": "ZS=F",
+      "ibge_code": "40124",
+      "ibge_name": "Soja (em grão)",
+      "ibge_match": "exact",
+      "conab_labels": [
+        "SOJA"
+      ],
+      "conab_match": "exact",
+      "notes": "Soja em grão: mesma commodity do futuro CBOT (ZS=F) e mesma base produtiva (grão).; Rótulo 'SOJA' na aba da UF; mesma commodity."
+    },
+    {
+      "saden_key": "milho",
+      "saden_name": "Milho",
+      "yahoo_symbol": "ZC=F",
+      "ibge_code": "40122",
+      "ibge_name": "Milho (em grão)",
+      "ibge_match": "exact",
+      "conab_labels": [
+        "MILHO"
+      ],
+      "conab_match": "exact",
+      "notes": "Milho em grão: mesma commodity do futuro CBOT (ZC=F).; Rótulo 'MILHO' (1ª e 2ª safra somadas) na aba da UF."
+    },
+    {
+      "saden_key": "cafe",
+      "saden_name": "Café arábica",
+      "yahoo_symbol": "KC=F",
+      "ibge_code": "40140",
+      "ibge_name": "Café (em grão) Arábica",
+      "ibge_match": "equivalent_with_caveats",
+      "conab_labels": [
+        "CAFÉ ARÁBICA",
+        "CAFÉ ARABICA",
+        "CAFÉ"
+      ],
+      "conab_match": "equivalent_with_caveats",
+      "notes": "Café arábica em grão (não torrado): corresponde ao futuro ICE KC=F, mas a base física (grão seco não torrado) difere da referência de mercado (grão torrado). Em Sorriso a produção é zero (não há lavoura de café no município).; Boletim de café em '.xls' legado; base física (grão não torrado) difere da referência de mercado."
+    },
+    {
+      "saden_key": "trigo",
+      "saden_name": "Trigo",
+      "yahoo_symbol": "ZW=F",
+      "ibge_code": "40127",
+      "ibge_name": "Trigo (em grão)",
+      "ibge_match": "exact",
+      "conab_labels": [
+        "TRIGO"
+      ],
+      "conab_match": "exact",
+      "notes": "Trigo em grão: mesma commodity do futuro CBOT (ZW=F).; Rótulo 'TRIGO' na aba da UF."
+    },
+    {
+      "saden_key": "algodao",
+      "saden_name": "Algodão",
+      "yahoo_symbol": "CT=F",
+      "ibge_code": "40099",
+      "ibge_name": "Algodão herbáceo (em caroço)",
+      "ibge_match": "partial",
+      "conab_labels": [
+        "ALGODÃO - CAROÇO (1)",
+        "ALGODÃO - PLUMA",
+        "ALGODÃO - CAROÇO"
+      ],
+      "conab_match": "partial",
+      "notes": "O SADEN referencia o Algodão (futuro ICE CT=F) em pluma/l磅; a PAM divulga para Sorriso o algodão **herbáceo em caroço**. São produtos diferentes (o caroço é a semente; o pluma é a fibra). Rendimento não é comparável sem conversión documentada — não convertida nesta etapa.; A CONAB separa Caroço e Pluma; o SADEN referencia o pluma (ICE CT=F, R$/lp). Somente 'ALGODÃO - PLUMA' é comparável ao referência de mercado; o caroço não é."
+    }
+  ]
+}

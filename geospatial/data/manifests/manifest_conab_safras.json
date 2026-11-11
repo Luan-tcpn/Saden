@@ -1,0 +1,155 @@
+{
+  "institution": "CONAB",
+  "dataset_name": "Boletim de Safras (CONAB) — planilhas oficiais",
+  "official_id": "boletim-de-safras-graos",
+  "documentation": "https://www.gov.br/conab/pt-br/atuacao/informacoes-agropecuarias/safras/safra-de-graos/boletim-da-safra-de-graos",
+  "acquisition_method": "download HTTP de planilhas .xlsx publicadas no portal",
+  "acquired_at": "2026-11-11T19:23:26.493795+00:00",
+  "geographic_coverage": "UF (estadual) e Brasil",
+  "variables_included": [
+    "area_plantada_ha",
+    "rendimento_medio_kg_ha",
+    "quantidade_produzida_t"
+  ],
+  "license": {
+    "institution": "CONAB",
+    "status": "open_but_restricted_by_publication_terms",
+    "terms_url": "https://www.gov.br/conab/pt-br/acesso-a-informacao/termos-de-uso",
+    "note": "Planilhas oficiais de livre acesso no portal, sem API pública automatizável (dados.gov.br exige autenticação; SIGS não resolve DNS neste ambiente). republicação/redistribuição depende dos termos de uso vigentes — não declarada aqui como livre."
+  },
+  "license_status": "open_but_restricted_by_publication_terms",
+  "records": [],
+  "files": [
+    {
+      "url": "https://www.gov.br/conab/pt-br/atuacao/informacoes-agropecuarias/safras/safra-de-graos/boletim-da-safra-de-graos/12o-levantamento-safra-2024-25/site_previsao_de_safra-por_produto-set-2025.xlsx",
+      "path": "data/raw/conab/site_previsao_de_safra-por_produto-set-2025.xlsx",
+      "bytes": 958070,
+      "sha256": "598da651ba62e6e6f976e63e692a23f5bd024ee9cdbb6057350c694cfa2cda41",
+      "acquired_at": "2026-11-11T19:23:27.208232+00:00",
+      "levantamento": "12o-levantamento-safra-2024/25",
+      "reference_year": "2025"
+    },
+    {
+      "url": "https://www.gov.br/conab/pt-br/atuacao/informacoes-agropecuarias/safras/safra-de-graos/boletim-da-safra-de-graos/12o-levantamento-safra-2025-26/site_previsao_de_safra-por_produto-set-2026.xlsx",
+      "path": "data/raw/conab/site_previsao_de_safra-por_produto-set-2026.xlsx",
+      "bytes": 965384,
+      "sha256": "c3a9fc8dd55c4c651c055700a53bf6ea53347e7889cc80dc1f2f504187c31ec9",
+      "acquired_at": "2026-11-11T19:23:27.713245+00:00",
+      "levantamento": "12o-levantamento-safra-2025/26",
+      "reference_year": "2026"
+    }
+  ],
+  "checksums": {
+    "data/raw/conab/site_previsao_de_safra-por_produto-set-2025.xlsx": "598da651ba62e6e6f976e63e692a23f5bd024ee9cdbb6057350c694cfa2cda41",
+    "data/raw/conab/site_previsao_de_safra-por_produto-set-2026.xlsx": "c3a9fc8dd55c4c651c055700a53bf6ea53347e7889cc80dc1f2f504187c31ec9"
+  },
+  "processing_version": "V2.2/0.1",
+  "known_limitations": [
+    "Granularidade estadual: não permite atribuição municipal nem por AOI.",
+    "Valores são estimativas de levantamento, revisadas a cada boletím.",
+    "Safra não equivale a ano civil."
+  ],
+  "blocked_endpoints": [
+    "sigs.conab.gov.br (dados por município) — DNS não resolve",
+    "dados.gov.br/api/3/action — HTTP 401 (autenticação exigida)"
+  ],
+  "index_listing": [
+    {
+      "name": "site_previsao_de_safra-por_produto-out-2026.xlsx",
+      "url": "https://www.gov.br/conab/pt-br/atuacao/informacoes-agropecuarias/safras/safra-de-graos/boletim-da-safra-de-graos/1o-levantamento-safra-2026-27/site_previsao_de_safra-por_produto-out-2026.xlsx",
+      "levantamento": "1o-levantamento-safra-2026/27",
+      "reference_year": "2026"
+    },
+    {
+      "name": "site_previsao_de_safra-por_produto-set-2026.xlsx",
+      "url": "https://www.gov.br/conab/pt-br/atuacao/informacoes-agropecuarias/safras/safra-de-graos/boletim-da-safra-de-graos/12o-levantamento-safra-2025-26/site_previsao_de_safra-por_produto-set-2026.xlsx",
+      "levantamento": "12o-levantamento-safra-2025/26",
+      "reference_year": "2026"
+    },
+    {
+      "name": "site_previsao_de_safra-por_produto-ago-2026.xlsx",
+      "url": "https://www.gov.br/conab/pt-br/atuacao/informacoes-agropecuarias/safras/safra-de-graos/boletim-da-safra-de-graos/11o-levantamento-safra-2025-26/site_previsao_de_safra-por_produto-ago-2026.xlsx",
+      "levantamento": "11o-levantamento-safra-2025/26",
+      "reference_year": "2026"
+    },
+    {
+      "name": "site_previsao_de_safra-por_produto-jul-2026.xlsx",
+      "url": "https://www.gov.br/conab/pt-br/atuacao/informacoes-agropecuarias/safras/safra-de-graos/boletim-da-safra-de-graos/10o-levantamento-safra-2025-26/site_previsao_de_safra-por_produto-jul-2026.xlsx",
+      "levantamento": "10o-levantamento-safra-2025/26",
+      "reference_year": "2026"
+    },
+    {
+      "name": "site_previsao_de_safra-por_produto-jun-2026.xlsx",
+      "url": "https://www.gov.br/conab/pt-br/atuacao/informacoes-agropecuarias/safras/safra-de-graos/boletim-da-safra-de-graos/9o-levantamento-safra-2025-26/site_previsao_de_safra-por_produto-jun-2026.xlsx",
+      "levantamento": "9o-levantamento-safra-2025/26",
+      "reference_year": "2026"
+    },
+    {
+      "name": "site_previsao_de_safra-por_produto-mai-2026.xlsx",
+      "url": "https://www.gov.br/conab/pt-br/atuacao/informacoes-agropecuarias/safras/safra-de-graos/boletim-da-safra-de-graos/8o-levantamento-safra-2025-26/site_previsao_de_safra-por_produto-mai-2026.xlsx",
+      "levantamento": "8o-levantamento-safra-2025/26",
+      "reference_year": "2026"
+    },
+    {
+      "name": "site_previsao_de_safra-por_produto-abr-2026.xlsx",
+      "url": "https://www.gov.br/conab/pt-br/atuacao/informacoes-agropecuarias/safras/safra-de-graos/boletim-da-safra-de-graos/7o-levantamento-safra-2025-26/site_previsao_de_safra-por_produto-abr-2026.xlsx",
+      "levantamento": "7o-levantamento-safra-2025/26",
+      "reference_year": "2026"
+    },
+    {
+      "name": "site_previsao_de_safra-por_produto-mar-2026.xlsx",
+      "url": "https://www.gov.br/conab/pt-br/atuacao/informacoes-agropecuarias/safras/safra-de-graos/boletim-da-safra-de-graos/6o-levantamento-safra-2025-26/site_previsao_de_safra-por_produto-mar-2026.xlsx",
+      "levantamento": "6o-levantamento-safra-2025/26",
+      "reference_year": "2026"
+    },
+    {
+      "name": "site_previsao_de_safra-por_produto-fev-2026.xlsx",
+      "url": "https://www.gov.br/conab/pt-br/atuacao/informacoes-agropecuarias/safras/safra-de-graos/boletim-da-safra-de-graos/5o-levantamento-safra-2025-26/site_previsao_de_safra-por_produto-fev-2026.xlsx",
+      "levantamento": "5o-levantamento-safra-2025/26",
+      "reference_year": "2026"
+    },
+    {
+      "name": "site_previsao_de_safra-por_produto-dez-2025.xlsx",
+      "url": "https://www.gov.br/conab/pt-br/atuacao/informacoes-agropecuarias/safras/safra-de-graos/boletim-da-safra-de-graos/3o-levantamento-safra-2025-26/site_previsao_de_safra-por_produto-dez-2025.xlsx",
+      "levantamento": "3o-levantamento-safra-2025/26",
+      "reference_year": "2025"
+    },
+    {
+      "name": "site_previsao_de_safra-por_produto-nov-2025.xlsx",
+      "url": "https://www.gov.br/conab/pt-br/atuacao/informacoes-agropecuarias/safras/safra-de-graos/boletim-da-safra-de-graos/2o-levantamento-safra-2025-26/site_previsao_de_safra-por_produto-nov-2025.xlsx",
+      "levantamento": "2o-levantamento-safra-2025/26",
+      "reference_year": "2025"
+    },
+    {
+      "name": "site_previsao_de_safra-por_produto-out-2025.xlsx",
+      "url": "https://www.gov.br/conab/pt-br/atuacao/informacoes-agropecuarias/safras/safra-de-graos/boletim-da-safra-de-graos/1o-levantamento-safra-2025-26/site_previsao_de_safra-por_produto-out-2025.xlsx",
+      "levantamento": "1o-levantamento-safra-2025/26",
+      "reference_year": "2025"
+    },
+    {
+      "name": "site_previsao_de_safra-por_produto-set-2025.xlsx",
+      "url": "https://www.gov.br/conab/pt-br/atuacao/informacoes-agropecuarias/safras/safra-de-graos/boletim-da-safra-de-graos/12o-levantamento-safra-2024-25/site_previsao_de_safra-por_produto-set-2025.xlsx",
+      "levantamento": "12o-levantamento-safra-2024/25",
+      "reference_year": "2025"
+    },
+    {
+      "name": "site_previsao_de_safra-por_produto-ago-2025.xlsx",
+      "url": "https://www.gov.br/conab/pt-br/atuacao/informacoes-agropecuarias/safras/safra-de-graos/boletim-da-safra-de-graos/11o-levantamento-safra-2024-25/site_previsao_de_safra-por_produto-ago-2025.xlsx",
+      "levantamento": "11o-levantamento-safra-2024/25",
+      "reference_year": "2025"
+    },
+    {
+      "name": "site_previsao_de_safra-por_produto-jul-2025.xlsx",
+      "url": "https://www.gov.br/conab/pt-br/atuacao/informacoes-agropecuarias/safras/safra-de-graos/boletim-da-safra-de-graos/10o-levantamento-safra-2024-25/site_previsao_de_safra-por_produto-jul-2025.xlsx",
+      "levantamento": "10o-levantamento-safra-2024/25",
+      "reference_year": "2025"
+    },
+    {
+      "name": "site_previsao_de_safra-por_produto-fev-2025.xlsx",
+      "url": "https://www.gov.br/conab/pt-br/atuacao/informacoes-agropecuarias/safras/safra-de-graos/boletim-da-safra-de-graos/5o-levantamento-safra-2024-25/site_previsao_de_safra-por_produto-fev-2025.xlsx",
+      "levantamento": "5o-levantamento-safra-2024/25",
+      "reference_year": "2025"
+    }
+  ],
+  "file_count": 2
+}

@@ -1,0 +1,25 @@
+{
+  "generated_at": "2026-11-11T19:28:29.226827+00:00",
+  "records": 4916,
+  "by_institution": {
+    "IBGE": 4472,
+    "CONAB": 444
+  },
+  "by_geography_type": {
+    "municipio": 4472,
+    "uf": 444
+  },
+  "by_match_class": {
+    "none": 4560,
+    "partial": 76,
+    "equivalent_with_caveats": 52,
+    "exact": 228
+  },
+  "by_nature": {
+    "observed": 4472,
+    "estimated": 444
+  },
+  "csv": "data/processed/productivity_observations.csv",
+  "json": "data/processed/productivity_observations.json",
+  "sha256_csv": "0347500da6c3153ea77a12b22a002dabdb0d7483f149849fad67679b8ee6b902"
+}

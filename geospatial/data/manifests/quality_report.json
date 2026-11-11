@@ -1,0 +1,245 @@
+{
+  "records_checked": 4916,
+  "counts_by_check": {
+    "valor_nulo": 946,
+    "classificacao_sem_correspondencia": 4560,
+    "safra_vs_ano_civil": 360,
+    "revisao_entre_boletins": 13,
+    "dupla_contagem_agregado_componente": 6
+  },
+  "counts_by_severity": {
+    "info": 5866,
+    "warning": 19
+  },
+  "checks_executed": [
+    "duplicidade",
+    "codigo_municipal_invalido",
+    "ano_ausente",
+    "valor_nulo",
+    "unidade_inconsistente",
+    "area_zero_com_producao",
+    "produtividade_negativa",
+    "rendimento_divergente",
+    "safra_vs_ano_civil",
+    "classificacao_sem_correspondencia",
+    "codigo_municipio_desconhecido",
+    "revisao_entre_boletins",
+    "dupla_contagem_agregado_componente"
+  ],
+  "policy": "Nenhum registro foi removido: os achados apenas sinalizam. Registros sinalizados permanecem rastreáveis na base.",
+  "generated_at": "2026-11-11T19:34:47.014734+00:00",
+  "git_commit": "e1d7f3054206d4b04868003df41b24b868a2241d",
+  "findings_versioned": [
+    {
+      "check": "revisao_entre_boletins",
+      "severity": "warning",
+      "key": [
+        "51",
+        "ALGODÃO - CAROÇO (1)",
+        "24/25",
+        "rendimento_medio_kg_ha"
+      ],
+      "message": "mesma safra reestimada em 2 boletins com valores distintos: [2769.975, 2784.1800000000003]"
+    },
+    {
+      "check": "revisao_entre_boletins",
+      "severity": "warning",
+      "key": [
+        "51",
+        "ALGODÃO - CAROÇO (1)",
+        "24/25",
+        "quantidade_produzida_t"
+      ],
+      "message": "mesma safra reestimada em 2 boletins com valores distintos: [4049700.0000000005, 4070500.0000000005]"
+    },
+    {
+      "check": "revisao_entre_boletins",
+      "severity": "warning",
+      "key": [
+        "51",
+        "ALGODÃO - PLUMA",
+        "24/25",
+        "rendimento_medio_kg_ha"
+      ],
+      "message": "mesma safra reestimada em 2 boletins com valores distintos: [1950.82, 1965.0249999999999]"
+    },
+    {
+      "check": "revisao_entre_boletins",
+      "severity": "warning",
+      "key": [
+        "51",
+        "ALGODÃO - PLUMA",
+        "24/25",
+        "quantidade_produzida_t"
+      ],
+      "message": "mesma safra reestimada em 2 boletins com valores distintos: [2852100.0, 2872900.0]"
+    },
+    {
+      "check": "revisao_entre_boletins",
+      "severity": "warning",
+      "key": [
+        "51",
+        "GERGELIM",
+        "24/25",
+        "area_plantada_ha"
+      ],
+      "message": "mesma safra reestimada em 2 boletins com valores distintos: [401200.0, 695000.0]"
+    },
+    {
+      "check": "revisao_entre_boletins",
+      "severity": "warning",
+      "key": [
+        "51",
+        "GERGELIM",
+        "24/25",
+        "quantidade_produzida_t"
+      ],
+      "message": "mesma safra reestimada em 2 boletins com valores distintos: [288900.0, 500400.0]"
+    },
+    {
+      "check": "revisao_entre_boletins",
+      "severity": "warning",
+      "key": [
+        "51",
+        "MILHO TOTAL",
+        "24/25",
+        "rendimento_medio_kg_ha"
+      ],
+      "message": "mesma safra reestimada em 2 boletins com valores distintos: [7561.4497763262625, 7620.851208935972]"
+    },
+    {
+      "check": "revisao_entre_boletins",
+      "severity": "warning",
+      "key": [
+        "51",
+        "MILHO TOTAL",
+        "24/25",
+        "quantidade_produzida_t"
+      ],
+      "message": "mesma safra reestimada em 2 boletins com valores distintos: [55103300.0, 55536200.0]"
+    },
+    {
+      "check": "revisao_entre_boletins",
+      "severity": "warning",
+      "key": [
+        "51",
+        "Milho 2ª Safra",
+        "24/25",
+        "rendimento_medio_kg_ha"
+      ],
+      "message": "mesma safra reestimada em 2 boletins com valores distintos: [7553.0, 7613.0]"
+    },
+    {
+      "check": "revisao_entre_boletins",
+      "severity": "warning",
+      "key": [
+        "51",
+        "Milho 2ª Safra",
+        "24/25",
+        "quantidade_produzida_t"
+      ],
+      "message": "mesma safra reestimada em 2 boletins com valores distintos: [54492600.0, 54925500.0]"
+    },
+    {
+      "check": "revisao_entre_boletins",
+      "severity": "warning",
+      "key": [
+        "51",
+        "MATO GROSSO (2)",
+        "",
+        "area_plantada_ha"
+      ],
+      "message": "mesma safra reestimada em 2 boletins com valores distintos: [21678100.0, 22300100.0, 22593900.0, 22827000.0]"
+    },
+    {
+      "check": "revisao_entre_boletins",
+      "severity": "warning",
+      "key": [
+        "51",
+        "MATO GROSSO (2)",
+        "",
+        "rendimento_medio_kg_ha"
+      ],
+      "message": "mesma safra reestimada em 2 boletins com valores distintos: [4349.0, 4984.0, 5020.0, 5060.0]"
+    },
+    {
+      "check": "revisao_entre_boletins",
+      "severity": "warning",
+      "key": [
+        "51",
+        "MATO GROSSO (2)",
+        "",
+        "quantidade_produzida_t"
+      ],
+      "message": "mesma safra reestimada em 2 boletins com valores distintos: [94273300.00000001, 111942000.0, 112607200.00000001, 115511800.0]"
+    },
+    {
+      "check": "dupla_contagem_agregado_componente",
+      "severity": "warning",
+      "key": [
+        "CONAB",
+        "51",
+        "",
+        "23/24"
+      ],
+      "message": "registros 'Total' e componentes ('1ª/2ª Safra', tipos) do mesmo produto coexistem: somar ambos duplica a produção"
+    },
+    {
+      "check": "dupla_contagem_agregado_componente",
+      "severity": "warning",
+      "key": [
+        "CONAB",
+        "51",
+        "",
+        "24/25"
+      ],
+      "message": "registros 'Total' e componentes ('1ª/2ª Safra', tipos) do mesmo produto coexistem: somar ambos duplica a produção"
+    },
+    {
+      "check": "dupla_contagem_agregado_componente",
+      "severity": "warning",
+      "key": [
+        "CONAB",
+        "51",
+        "Milho",
+        "23/24"
+      ],
+      "message": "registros 'Total' e componentes ('1ª/2ª Safra', tipos) do mesmo produto coexistem: somar ambos duplica a produção"
+    },
+    {
+      "check": "dupla_contagem_agregado_componente",
+      "severity": "warning",
+      "key": [
+        "CONAB",
+        "51",
+        "Milho",
+        "24/25"
+      ],
+      "message": "registros 'Total' e componentes ('1ª/2ª Safra', tipos) do mesmo produto coexistem: somar ambos duplica a produção"
+    },
+    {
+      "check": "dupla_contagem_agregado_componente",
+      "severity": "warning",
+      "key": [
+        "CONAB",
+        "51",
+        "",
+        "25/26"
+      ],
+      "message": "registros 'Total' e componentes ('1ª/2ª Safra', tipos) do mesmo produto coexistem: somar ambos duplica a produção"
+    },
+    {
+      "check": "dupla_contagem_agregado_componente",
+      "severity": "warning",
+      "key": [
+        "CONAB",
+        "51",
+        "Milho",
+        "25/26"
+      ],
+      "message": "registros 'Total' e componentes ('1ª/2ª Safra', tipos) do mesmo produto coexistem: somar ambos duplica a produção"
+    }
+  ],
+  "findings_full_csv": "data/manifests/quality_findings_full.csv",
+  "findings_policy": "O relatório versionado contém os achados de severidade error/warning; o CSV completo (inclui os informativos) é regenerado pelo mesmo comando."
+}

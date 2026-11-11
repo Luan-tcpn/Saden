@@ -1,0 +1,225 @@
+{
+  "generated_at": "2026-11-11T19:28:49.679080+00:00",
+  "git_commit": "e1d7f3054206d4b04868003df41b24b868a2241d",
+  "spatial": {
+    "crs": "EPSG:4326",
+    "area_projection": "EPSG:6933",
+    "municipality_area_km2": 9293.470819242237,
+    "validation_aoi_area_km2": 43.25586860965801,
+    "intersection_area_km2": 43.25586860965801,
+    "aoi_fraction_of_municipality": 0.004654436372694714,
+    "aoi_fully_inside_municipality": true,
+    "aoi_outside_km2": 0.0,
+    "geometry_type": "Polygon",
+    "is_valid": true
+  },
+  "spatial_classification": {
+    "IBGE/SIDRA (PAM 5457)": {
+      "class": "B",
+      "justification": "Fonte municipal: contém a AOI, mas a estatística cobre todo o município (AOI = 0.47% da área municipal). Serve como contexto municipal, não como validação do pixel da AOI."
+    },
+    "CONAB (Boletim de Safras)": {
+      "class": "C",
+      "justification": "Fonte em escala estadual/nacional: contexto de escala maior, sem validade espacial para a AOI."
+    }
+  },
+  "temporal": {
+    "s2_years": [
+      "2023",
+      "2024",
+      "2025"
+    ],
+    "ibge_years_available": [
+      "2013",
+      "2014",
+      "2015",
+      "2016",
+      "2017",
+      "2018",
+      "2019",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "2025"
+    ],
+    "ibge_years_overlapping_s2": [
+      "2023",
+      "2024",
+      "2025"
+    ],
+    "ibge_observations_in_overlap": 3,
+    "conab_safras_available": [
+      "23/24",
+      "24/25",
+      "25/26"
+    ],
+    "conab_calendar_years_overlapping_s2": [
+      "2023",
+      "2024",
+      "2025"
+    ],
+    "conab_safras_in_overlap": [
+      "23/24",
+      "24/25",
+      "25/26"
+    ],
+    "note": "Ano civil (IBGE) e safra (CONAB) não são equivalentes: uma safra atravessa dois anos civis e o Sentinel-2 é mensal."
+  },
+  "sentinel2_series": {
+    "status": "ok",
+    "path": "C:\\Users\\luanf\\OneDrive\\Área de Trabalho\\Saden_AgroClima\\geospatial\\reports\\timeseries_mensal_2023-01_2025-12.csv",
+    "index": "NDVI",
+    "profile": "B_restrictive",
+    "years": {
+      "2023": {
+        "months_total": 11,
+        "months_observed": 11,
+        "months_missing": [],
+        "ndvi_mean_of_monthly_means": 0.4983739206664987,
+        "ndvi_coverage_weighted_mean": 0.4982088667509157,
+        "ndvi_min_monthly_mean": 0.27038071667655106,
+        "ndvi_max_monthly_mean": 0.8290274172195847,
+        "mean_valid_fraction": 0.9896314031235677,
+        "source": "timeseries_mensal_2023-01_2025-12.csv"
+      },
+      "2024": {
+        "months_total": 11,
+        "months_observed": 11,
+        "months_missing": [],
+        "ndvi_mean_of_monthly_means": 0.49302380935210804,
+        "ndvi_coverage_weighted_mean": 0.492182248413099,
+        "ndvi_min_monthly_mean": 0.28076218198209635,
+        "ndvi_max_monthly_mean": 0.8314325742459183,
+        "mean_valid_fraction": 0.9845790596204662,
+        "source": "timeseries_mensal_2023-01_2025-12.csv"
+      },
+      "2025": {
+        "months_total": 12,
+        "months_observed": 12,
+        "months_missing": [],
+        "ndvi_mean_of_monthly_means": 0.5586479726475,
+        "ndvi_coverage_weighted_mean": 0.5578962053090399,
+        "ndvi_min_monthly_mean": 0.2818110432785235,
+        "ndvi_max_monthly_mean": 0.8713523612193395,
+        "mean_valid_fraction": 0.9578578405499032,
+        "source": "timeseries_mensal_2023-01_2025-12.csv"
+      }
+    },
+    "note": "Agregação por ano civil a partir de médias mensais já auditadas; meses sem observação não foram interpolados."
+  },
+  "s2_calendar_note": "Não foi adotado calendário fenológico: janelas de safra próprias não foram confirmadas em fonte oficial durante esta etapa. Agregações por safra ficam como BIBLIOTECA (função disponível, não executada com janelas inventadas).",
+  "compatibility_matrix": [
+    {
+      "crop": "Soja",
+      "crop_key": "soja",
+      "source": "IBGE/SIDRA (PAM 5457)",
+      "geographic_unit": "municipio",
+      "class_for_aoi": "B",
+      "class_label": "compatibilidade contextual",
+      "justification": "Fonte municipal: contém a AOI, mas a estatística cobre todo o município (AOI = 0.47% da área municipal). Serve como contexto municipal, não como validação do pixel da AOI.",
+      "reference_period_type": "ano civil",
+      "overlap_with_s2_2023_2025": "2023-2025 (ano civil)"
+    },
+    {
+      "crop": "Soja",
+      "crop_key": "soja",
+      "source": "CONAB (Boletim de Safras)",
+      "geographic_unit": "uf",
+      "class_for_aoi": "C",
+      "class_label": "incompatibilidade espacial",
+      "justification": "Fonte em escala estadual/nacional: contexto de escala maior, sem validade espacial para a AOI.",
+      "reference_period_type": "safra",
+      "overlap_with_s2_2023_2025": "safras 2023/24, 2024/25, 2025/26 (2 anos civis cada)"
+    },
+    {
+      "crop": "Milho",
+      "crop_key": "milho",
+      "source": "IBGE/SIDRA (PAM 5457)",
+      "geographic_unit": "municipio",
+      "class_for_aoi": "B",
+      "class_label": "compatibilidade contextual",
+      "justification": "Fonte municipal: contém a AOI, mas a estatística cobre todo o município (AOI = 0.47% da área municipal). Serve como contexto municipal, não como validação do pixel da AOI.",
+      "reference_period_type": "ano civil",
+      "overlap_with_s2_2023_2025": "2023-2025 (ano civil)"
+    },
+    {
+      "crop": "Milho",
+      "crop_key": "milho",
+      "source": "CONAB (Boletim de Safras)",
+      "geographic_unit": "uf",
+      "class_for_aoi": "C",
+      "class_label": "incompatibilidade espacial",
+      "justification": "Fonte em escala estadual/nacional: contexto de escala maior, sem validade espacial para a AOI.",
+      "reference_period_type": "safra",
+      "overlap_with_s2_2023_2025": "safras 2023/24, 2024/25, 2025/26 (2 anos civis cada)"
+    },
+    {
+      "crop": "Café arábica",
+      "crop_key": "cafe",
+      "source": "IBGE/SIDRA (PAM 5457)",
+      "geographic_unit": "municipio",
+      "class_for_aoi": "B",
+      "class_label": "compatibilidade contextual",
+      "justification": "Fonte municipal: contém a AOI, mas a estatística cobre todo o município (AOI = 0.47% da área municipal). Serve como contexto municipal, não como validação do pixel da AOI.",
+      "reference_period_type": "ano civil",
+      "overlap_with_s2_2023_2025": "2023-2025 (ano civil)"
+    },
+    {
+      "crop": "Café arábica",
+      "crop_key": "cafe",
+      "source": "CONAB (Boletim de Safras)",
+      "geographic_unit": "uf",
+      "class_for_aoi": "C",
+      "class_label": "incompatibilidade espacial",
+      "justification": "Fonte em escala estadual/nacional: contexto de escala maior, sem validade espacial para a AOI.",
+      "reference_period_type": "safra",
+      "overlap_with_s2_2023_2025": "safras 2023/24, 2024/25, 2025/26 (2 anos civis cada)"
+    },
+    {
+      "crop": "Trigo",
+      "crop_key": "trigo",
+      "source": "IBGE/SIDRA (PAM 5457)",
+      "geographic_unit": "municipio",
+      "class_for_aoi": "B",
+      "class_label": "compatibilidade contextual",
+      "justification": "Fonte municipal: contém a AOI, mas a estatística cobre todo o município (AOI = 0.47% da área municipal). Serve como contexto municipal, não como validação do pixel da AOI.",
+      "reference_period_type": "ano civil",
+      "overlap_with_s2_2023_2025": "2023-2025 (ano civil)"
+    },
+    {
+      "crop": "Trigo",
+      "crop_key": "trigo",
+      "source": "CONAB (Boletim de Safras)",
+      "geographic_unit": "uf",
+      "class_for_aoi": "C",
+      "class_label": "incompatibilidade espacial",
+      "justification": "Fonte em escala estadual/nacional: contexto de escala maior, sem validade espacial para a AOI.",
+      "reference_period_type": "safra",
+      "overlap_with_s2_2023_2025": "safras 2023/24, 2024/25, 2025/26 (2 anos civis cada)"
+    },
+    {
+      "crop": "Algodão",
+      "crop_key": "algodao",
+      "source": "IBGE/SIDRA (PAM 5457)",
+      "geographic_unit": "municipio",
+      "class_for_aoi": "B",
+      "class_label": "compatibilidade contextual",
+      "justification": "Fonte municipal: contém a AOI, mas a estatística cobre todo o município (AOI = 0.47% da área municipal). Serve como contexto municipal, não como validação do pixel da AOI.",
+      "reference_period_type": "ano civil",
+      "overlap_with_s2_2023_2025": "2023-2025 (ano civil)"
+    },
+    {
+      "crop": "Algodão",
+      "crop_key": "algodao",
+      "source": "CONAB (Boletim de Safras)",
+      "geographic_unit": "uf",
+      "class_for_aoi": "C",
+      "class_label": "incompatibilidade espacial",
+      "justification": "Fonte em escala estadual/nacional: contexto de escala maior, sem validade espacial para a AOI.",
+      "reference_period_type": "safra",
+      "overlap_with_s2_2023_2025": "safras 2023/24, 2024/25, 2025/26 (2 anos civis cada)"
+    }
+  ]
+}
