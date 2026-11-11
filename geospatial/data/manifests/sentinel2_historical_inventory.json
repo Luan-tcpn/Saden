@@ -1,0 +1,186 @@
+{
+  "collection": "sentinel-2-c1-l2a",
+  "catalog": "https://earth-search.aws.element84.com/v1",
+  "bbox": [
+    -55.6309,
+    -12.7339,
+    -55.5709,
+    -12.6739
+  ],
+  "years": {
+    "2017": {
+      "items": 2,
+      "baselines": {
+        "05.00": 2
+      },
+      "tiles": {
+        "MGRS-21LXF": 1,
+        "MGRS-21LXG": 1
+      },
+      "sample_item": "S2B_T21LXF_20171218T140039_L2A",
+      "sample_datetime": "2017-12-18T14:05:58.754000Z",
+      "sample_datatake": "GS2B_20171218T140039_004097_N05.00",
+      "sample_processor": null,
+      "sample_product_uri": "S2B_MSIL2A_20171218T140039_N0500_R067_T21LXF_20230806T211600.SAFE"
+    },
+    "2018": {
+      "items": 53,
+      "baselines": {
+        "05.00": 53
+      },
+      "tiles": {
+        "MGRS-21LXF": 27,
+        "MGRS-21LXG": 26
+      },
+      "sample_item": "S2A_T21LXF_20181118T140046_L2A",
+      "sample_datetime": "2018-11-18T14:06:04.915000Z",
+      "sample_datatake": "GS2A_20181118T140051_017796_N05.00",
+      "sample_processor": null,
+      "sample_product_uri": "S2A_MSIL2A_20181118T140051_N0500_R067_T21LXF_20230817T205137.SAFE"
+    },
+    "2019": {
+      "items": 114,
+      "baselines": {
+        "05.00": 114
+      },
+      "tiles": {
+        "MGRS-21LXF": 57,
+        "MGRS-21LXG": 57
+      },
+      "sample_item": "S2B_T21LXF_20191228T140047_L2A",
+      "sample_datetime": "2019-12-28T14:06:06.347000Z",
+      "sample_datatake": "GS2B_20191228T140049_014679_N05.00",
+      "sample_processor": null,
+      "sample_product_uri": "S2B_MSIL2A_20191228T140049_N0500_R067_T21LXF_20230621T092219.SAFE"
+    },
+    "2020": {
+      "items": 140,
+      "baselines": {
+        "05.00": 140
+      },
+      "tiles": {
+        "MGRS-21LXF": 70,
+        "MGRS-21LXG": 70
+      },
+      "sample_item": "S2B_T21LXF_20201222T140049_L2A",
+      "sample_datetime": "2020-12-22T14:06:07.829000Z",
+      "sample_datatake": "GS2B_20201222T140049_019827_N05.00",
+      "sample_processor": null,
+      "sample_product_uri": "S2B_MSIL2A_20201222T140049_N0500_R067_T21LXF_20230305T120758.SAFE"
+    },
+    "2021": {
+      "items": 145,
+      "baselines": {
+        "05.00": 145
+      },
+      "tiles": {
+        "MGRS-21LXF": 72,
+        "MGRS-21LXG": 73
+      },
+      "sample_item": "S2B_T21LXF_20211227T140048_L2A",
+      "sample_datetime": "2021-12-27T14:06:06.824000Z",
+      "sample_datatake": "GS2B_20211227T140049_025118_N05.00",
+      "sample_processor": null,
+      "sample_product_uri": "S2B_MSIL2A_20211227T140049_N0500_R067_T21LXF_20221229T042942.SAFE"
+    },
+    "2022": {
+      "items": 10,
+      "baselines": {
+        "05.09": 8,
+        "05.10": 2
+      },
+      "tiles": {
+        "MGRS-21LXF": 5,
+        "MGRS-21LXG": 5
+      },
+      "sample_item": "S2A_T21LXF_20221227T135702_L2A",
+      "sample_datetime": "2022-12-27T14:06:09.789000Z",
+      "sample_datatake": "GS2A_20221227T135701_039246_N05.09",
+      "sample_processor": null,
+      "sample_product_uri": "S2A_MSIL2A_20221227T135701_N0509_R067_T21LXF_20221227T180155.SAFE"
+    },
+    "2023": {
+      "items": 144,
+      "baselines": {
+        "05.10": 6,
+        "05.09": 134,
+        "05.11": 4
+      },
+      "tiles": {
+        "MGRS-21LXF": 72,
+        "MGRS-21LXG": 72
+      },
+      "sample_item": "S2B_T21LXF_20231227T135703_L2A",
+      "sample_datetime": "2023-12-27T14:06:12.633000Z",
+      "sample_datatake": "GS2B_20231227T135709_035557_N05.10",
+      "sample_processor": null,
+      "sample_product_uri": "S2B_MSIL2A_20231227T135709_N0510_R067_T21LXF_20231227T162627.SAFE"
+    },
+    "2024": {
+      "items": 148,
+      "baselines": {
+        "05.11": 68,
+        "05.10": 80
+      },
+      "tiles": {
+        "MGRS-21LXF": 75,
+        "MGRS-21LXG": 73
+      },
+      "sample_item": "S2B_T21LXF_20241231T140340_L2A",
+      "sample_datetime": "2024-12-31T14:06:12.114000Z",
+      "sample_datatake": "GS2B_20241231T135709_040848_N05.11",
+      "sample_processor": null,
+      "sample_product_uri": "S2B_MSIL2A_20241231T135709_N0511_R067_T21LXF_20241231T192540.SAFE"
+    },
+    "2025": {
+      "items": 198,
+      "baselines": {
+        "05.11": 198
+      },
+      "tiles": {
+        "MGRS-21LXF": 100,
+        "MGRS-21LXG": 98
+      },
+      "sample_item": "S2C_T21LXF_20251231T140458_L2A",
+      "sample_datetime": "2025-12-31T14:06:18.385000Z",
+      "sample_datatake": "GS2C_20251231T135711_006901_N05.11",
+      "sample_processor": null,
+      "sample_product_uri": "S2C_MSIL2A_20251231T135711_N0511_R067_T21LXF_20251231T172611.SAFE"
+    }
+  },
+  "baselines_total": {
+    "05.00": 454,
+    "05.09": 142,
+    "05.10": 88,
+    "05.11": 270
+  },
+  "scale_offset_declared": [
+    {
+      "asset": "red",
+      "scale": 0.0001,
+      "offset": -0.1,
+      "nodata": 0,
+      "dtype": "uint16",
+      "res_m": 10,
+      "count": 954
+    },
+    {
+      "asset": "nir",
+      "scale": 0.0001,
+      "offset": -0.1,
+      "nodata": 0,
+      "dtype": "uint16",
+      "res_m": 10,
+      "count": 954
+    },
+    {
+      "asset": "swir16",
+      "scale": 0.0001,
+      "offset": -0.1,
+      "nodata": 0,
+      "dtype": "uint16",
+      "res_m": 20,
+      "count": 954
+    }
+  ]
+}

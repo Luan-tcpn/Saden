@@ -645,3 +645,142 @@ Consequências: duas culturas com observação municipal real e correspondência
 exata são o ponto de partida de qualquer estudo futuro; a exclusão de café e
 trigo fica documentada com o dado que a sustenta.
 
+## D50 — Perfil radiométrico histórico: C1 harmonizada + coleção original com convenção de DN verificada (2026-11-11)
+
+Contexto: a V2.1 usa `DN * 0.0001 - 0.1` (baseline ≥ 04.00). Para estender a
+série a 2017–2025 era preciso provar comparabilidade radiométrica entre
+produtos de baselines diferentes, **sem** inventar transformações.
+
+Fatos verificados em 2026-11-11:
+
+1. **Coleção C1** (`sentinel-2-l2a` → `sentinel-2-c1-l2a`, Earth Search):
+   reprocessamento harmonizado da ESA; **todos** os assets declaram
+   `scale = 0.0001`, `offset = -0.1`, independentemente do baseline
+   (05.00 para 2017–2021; 05.09/05.10/05.11 de 2022 em diante). Cobertura
+   2017–2025 com **lacunas de ingestão**: 2017 com 1 data e 2022 com 5 datas.
+2. **Coleção original** (`sentinel-2-l2a`): cobertura completa 2017–2025
+   (56 itens em 2017, 170 em 2018, 145 em 2022, 206 em 2025). O catálogo
+   declara `offset = -0.1` para todos, **mas** o DN armazenado é exatamente
+   **1000 unidades menor** (0,1 de reflectância) do que o offset declara —
+   inconsistência de catálogo comprovada por leitura direta dos COGs.
+3. **Experimento pareado** (6 datas, 2018–2025, mesma grade, ~109.700 pixels
+   válidos por par): aplicando `DN * 0.0001` aos produtos originais e
+   `DN * 0.0001 - 0.1` à C1, a diferença de NDVI é **0,0** e a correlação é
+   **1,0** em todos os pares.
+
+Decisão:
+
+1. O pipeline da **V2.1 permanece intocado** (Perfil A/B, máscara SCL, mosaico,
+   série 2023–2025, manifests). O tratamento histórico é um **perfil
+   separado**, com manifesto e testes próprios (`geospatial/historical/`).
+2. Perfil **C1 harmonizada**: `DN * 0.0001 - 0.1`, uniforme.
+3. Perfil **original (convenção de DN verificada)**: `DN * 0.0001`, para todo o
+   arquivo — comportamento idêntico ao da C1, comprovado pelo experimento
+   pareado. A divergência entre o offset declarado e o dado real é registrada em
+   cada linha (`offset_source`, `offset_warning`).
+4. A regra de bloqueio por baseline da V2.1 **não é removida**: ela continua
+   valendo para o pipeline da V2.1; o perfil histórico tem autorização
+   própria, com base na equivalência numérica demonstrada.
+5. **Não** se aplica regressão arbitrária, fator empírico ou correção
+   "visual" de descontinuidade: a conversão é a que o produto declara e a
+   equivalência com a coleção harmonizada é medida.
+
+Alternativas descartadas: (a) misturar produtos com offsets diferentes sem
+verificação — produziria descontinuidade de 0,1 na reflectância (medido: NDVI
+com |Δ| mediano de 0,15 e máximo de 6489 quando o offset declarado era
+aplicado aos produtos originais); (b) usar o Planetary Computer (COGs
+completos 2017–2025) — a assinatura SAS pública do endpoint retornou HTTP 429
+de forma persistente neste ambiente; (c) inventar um fator de correção — vedado.
+
+Consequências: a série histórica 2017–2025 é radiometricamente comparável com
+a série da V2.1 (valores idênticos por construção), o que torna o
+emparelhamento 2018–2025 com a PAM tecnicamente defensável.
+
+## D51 — Uso do solo: MapBiomas bloqueado, WorldCover (ESA) como camada de lavoura (2026-11-11)
+
+Contexto: a V2.2 mostrou que não existe observação oficial de
+produtividade na escala da AOI; é preciso verificar se a AOI contém área
+agrícola e, em caso positivo, calcular o NDVI sobre ela.
+
+Fatos verificados em 2026-11-11:
+
+* **MapBiomas**: a página oficial informa que *"a função de baixar mapas está
+  temporariamente suspensa"* e que o acesso passa pelos assets do Google Earth
+  Engine (exige conta). Os endereços públicos testados (GCS/S3) retornaram
+  **404**. As **legendas oficiais** são públicas e foram obtidas e conferidas
+  (Coleção 4 10 m: 3.2.1 Lavoura Temporária, 3.2.2 Lavoura Perene, 3.1
+  Pastagem, 3.4 Mosaico de Usos, 1.1 Formação Florestal, 1.3 Formação Savânica,
+  4 Área não vegetada, 5 Corpo D'água; Coleção 11 CSV: 3, 4, 15, 21, 25).
+* **ESA WorldCover 10 m** (v200/2021 e v100/2020): COGs públicos, sem chave,
+  classe oficial 40 = *Cropland* — acquisitions **realizadas** para a AOI.
+
+Decisão:
+
+1. A camada de uso do solo da V2.3 é o **WorldCover (ESA)**, com licença
+   CC BY 4.0, usado para **quantificar a fração agrícola da AOI** e para
+   calcular o indicador de NDVI sobre pixels de lavoura em 2020 e 2021.
+2. O **bloqueio do MapBiomas é registrado** (motivo, tentativas e evidência),
+   sem contorno e sem substituto silencioso.
+3. **Nomenclatura obrigatória**: o indicador é `ndvi_cropland_worldcover`
+   (ou `agricultura_temporaria` apenas com fonte que separe temporária de
+   perene). **Não** se usa `ndvi_soja`/`ndvi_milho`: WorldCover não identifica
+   cultura, e a classe SCL 5 não é identificação de lavoura.
+4. Onde não há máscara de uso do solo (2017–2019 e 2022–2025), o indicador
+   reportado é o da **AOI inteira**, com a limitação declarada — não se
+   substitui por uma máscara inventada.
+
+Consequências: a AOI pode ser avaliada quanto à sua vocação agrícola para
+2020–2021; a série de uso do solo anual completa não está disponível e isso
+fica explícito.
+
+## D52 — Sem calendário fenológico validado: agregação por ano civil (2026-11-11)
+
+Contexto: comparar NDVI mensal com rendimento anual exige janelas de
+plantio/desenvolvimento/colheita. A V2.2 não conseguiu fixá-las e o
+SISZARC/MAPA **não resolveu DNS** neste ambiente (verificado em 2026-11-11);
+a página do calendário de safras da CONAB não expõe arquivo; as páginas da
+Embrapa testadas retornaram 404.
+
+Decisão:
+
+1. **Nenhuma janela fenológica é inventada.** A agregação do indicador
+   geoespacial é por **ano civil**, e a diferença entre o ano de referência
+   da PAM (ano civil) e o ano-safra da cultura é declarada como limitação
+   explícita em cada registro e no relatório.
+2. A função de agregação por janelas safrais permanece disponível
+   (`compat.s2_season_aggregation`), mas **não é executada** sem calendário
+   validado.
+3. A série de segunda safra do milho (1ª/2ª) não é misturada com "milho total"
+   nas estatísticas: a PAM publica o total do ano, que é declarado como
+   agregação anual.
+
+Consequências: a comparação é anual e exploratória; qualquer refinamento
+exige um calendário oficial obtido em etapa própria.
+
+## D53 — Portão estatístico da V2.3: modelagem exploratória exige ≥ 9 pares anuais por cultura (2026-11-11)
+
+Contexto: a V2.2 estabeleceu (D46–D49) que o estudo só seria viável com
+amostra suficiente. Com a série histórica agora disponível, é preciso um
+critério explícito para decidir se a modelagem é executada.
+
+Decisão:
+
+1. **Critério**: são necessários **≥ 9 pares anuais válidos por cultura**
+   (rendimento municipal + indicador geoespacial do mesmo ano).
+2. Abaixo do critério: **nenhuma modelagem** (nem regressão, nem baseline
+   preditivo). São produzidos apenas descrição, comparação de distribuições e
+   correlações **exploratórias**, com tamanho de amostra, p-valor por
+   permutação e teste de tendência (resíduos) — sempre rotulados como
+   exploratórios.
+3. Acima do critério, ainda assim: modelos simples apenas (média histórica,
+   último valor, tendência linear, regressão com o indicador), validação
+   **temporal progressiva** (expanding window), sem divisão aleatória, e
+   Ridge apenas como experimento estatístico isolado — **jamais** o Ridge de
+   preços do produto.
+4. A diferença de escala (rendimento municipal × NDVI de uma sub-região de
+   0,4654% do município) consta de **todas** as saídas, mesmo quando há
+   ganho estatístico.
+
+Consequências: a V2.3 não pode "forçar" resultado; ela estabelece o que é
+sustentável com a amostra efetivamente obtida.
+

@@ -1,0 +1,197 @@
+{
+  "generated_at": "2026-11-11T20:35:40.821095+00:00",
+  "aoi_bbox": [
+    -55.6309,
+    -12.7339,
+    -55.5709,
+    -12.6739
+  ],
+  "mapbiomas": {
+    "status": "bloqueado",
+    "reason": "A página oficial informa que a função de download de mapas (GeoTIFF) está temporariamente suspensa e que o acesso passa pelos assets do Google Earth Engine (requer conta). Os endereços públicos testados retornaram 404.",
+    "legend_obtained": true,
+    "legend": {
+      "source": "MapBiomas Brasil — Cobertura 10m Coleção 4 (legenda oficial em PDF); https://brasil.mapbiomas.org/downloads/codigos-de-legenda/",
+      "level3": {
+        "1.1": "Formação Florestal",
+        "1.3": "Formação Savânica",
+        "3.1": "Pastagem",
+        "3.2.1": "Lavoura Temporária",
+        "3.2.2": "Lavoura Perene",
+        "3.4": "Mosaico de Usos",
+        "4": "Área não vegetada",
+        "5": "Corpo D'água"
+      },
+      "level1_2_collection11": {
+        "3": "Formação Florestal",
+        "4": "Formação Savânica",
+        "15": "Pastagem",
+        "21": "Mosaico de Usos",
+        "25": "Outras áreas não vegetadas"
+      },
+      "collection4_n3_temporary_crop_code": 19,
+      "note": "A Coleção 4 (10 m) usa o código 19 para 'Lavoura Temporária' (3.2.1). A camada não pôde ser adquirida neste ambiente; a legenda foi conferida e fica registrada para uso futuro."
+    }
+  },
+  "worldcover": {
+    "license": "CC BY 4.0 (ESA WorldCover)",
+    "url_template": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/",
+    "classes": {
+      "10": "Tree cover",
+      "20": "Shrubland",
+      "30": "Grassland",
+      "40": "Cropland",
+      "50": "Built-up",
+      "60": "Barren / sparse vegetation",
+      "70": "Snow and ice",
+      "80": "Open water",
+      "90": "Herbaceous wetland",
+      "95": "Mangroves",
+      "100": "Moss and lichen"
+    },
+    "note": "Cropland (40) na classe oficial; WorldCover não separa temporária de perene nem identifica soja/milho."
+  },
+  "years": [
+    {
+      "year": 2020,
+      "status": "ok",
+      "source": "ESA WorldCover 10m (v200/v100)",
+      "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v100/2020/map/ESA_WorldCover_10m_2020_v100_S15W057_Map.tif",
+      "tile": "S15W057",
+      "crs": "EPSG:4326",
+      "resolution_m": [
+        8.333333333333333e-05,
+        8.333333333333333e-05
+      ],
+      "shape": [
+        720,
+        720
+      ],
+      "total_area_km2": 43.364707566954195,
+      "classes": {
+        "10": {
+          "name": "Tree cover",
+          "pixels": 83641,
+          "area_km2": 6.996515735420576,
+          "fraction": 0.16134124102227837
+        },
+        "20": {
+          "name": "Shrubland",
+          "pixels": 69,
+          "area_km2": 0.005772370793091133,
+          "fraction": 0.00013311218077923653
+        },
+        "30": {
+          "name": "Grassland",
+          "pixels": 29993,
+          "area_km2": 2.5089620304637084,
+          "fraction": 0.05785723394052465
+        },
+        "40": {
+          "name": "Cropland",
+          "pixels": 402420,
+          "area_km2": 33.66298135465714,
+          "fraction": 0.7762759913158
+        },
+        "50": {
+          "name": "Built-up",
+          "pixels": 117,
+          "area_km2": 0.009787574903476983,
+          "fraction": 0.00022570369898990264
+        },
+        "60": {
+          "name": "Barren / sparse vegetation",
+          "pixels": 1975,
+          "area_km2": 0.1652132663445398,
+          "fraction": 0.003809855424239954
+        },
+        "80": {
+          "name": "Open water",
+          "pixels": 147,
+          "area_km2": 0.012296442018836737,
+          "fraction": 0.000283558744166585
+        },
+        "90": {
+          "name": "Herbaceous wetland",
+          "pixels": 38,
+          "area_km2": 0.003178792352819815,
+          "fraction": 7.330367322117477e-05
+        }
+      },
+      "cropland_fraction": 0.7762759913158,
+      "cropland_cells_20m": 0,
+      "cropland_fraction_grid": 0.0
+    },
+    {
+      "year": 2021,
+      "status": "ok",
+      "source": "ESA WorldCover 10m (v200/v100)",
+      "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_S15W057_Map.tif",
+      "tile": "S15W057",
+      "crs": "EPSG:4326",
+      "resolution_m": [
+        8.333333333333333e-05,
+        8.333333333333333e-05
+      ],
+      "shape": [
+        720,
+        720
+      ],
+      "total_area_km2": 43.364707566954195,
+      "classes": {
+        "10": {
+          "name": "Tree cover",
+          "pixels": 85656,
+          "area_km2": 7.165078134596098,
+          "fraction": 0.16522832820983213
+        },
+        "20": {
+          "name": "Shrubland",
+          "pixels": 126,
+          "area_km2": 0.010540493530280888,
+          "fraction": 0.00024306617343162267
+        },
+        "30": {
+          "name": "Grassland",
+          "pixels": 11196,
+          "area_km2": 0.9365737322120201,
+          "fraction": 0.021597602860943314
+        },
+        "40": {
+          "name": "Cropland",
+          "pixels": 420719,
+          "area_km2": 35.193708114689414,
+          "fraction": 0.811574897867144
+        },
+        "50": {
+          "name": "Built-up",
+          "pixels": 130,
+          "area_km2": 0.010875049327977001,
+          "fraction": 0.00025078110606848103
+        },
+        "60": {
+          "name": "Barren / sparse vegetation",
+          "pixels": 101,
+          "area_km2": 0.008449069185283035,
+          "fraction": 0.0001948374532962744
+        },
+        "80": {
+          "name": "Open water",
+          "pixels": 436,
+          "area_km2": 0.03647142751969211,
+          "fraction": 0.0008410393973804849
+        },
+        "90": {
+          "name": "Herbaceous wetland",
+          "pixels": 36,
+          "area_km2": 0.0030115458934232594,
+          "fraction": 6.944693190363375e-05
+        }
+      },
+      "cropland_fraction": 0.811574897867144,
+      "cropland_cells_20m": 0,
+      "cropland_fraction_grid": 0.0
+    }
+  ],
+  "mask_file": "artifacts/historical/worldcover_cropland_masks.npz"
+}

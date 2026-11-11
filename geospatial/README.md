@@ -65,6 +65,12 @@ geospatial/
     validate.py          # 11 verificações de qualidade
     compat.py            # classes A/B/C, agregação anual do NDVI, correspondência
     geometry_compat.py   # malha municipal reaproveitada da V2.1 (D42)
+  historical/             # série histórica e estudo exploratório (V2.3)
+    radiometry.py        # perfis radiométricos (C1 / original) + bloqueio
+    series.py            # série mensal 2017–2025 (grade, máscara, seleção)
+    landuse.py           # uso do solo (WorldCover), máscara de lavoura, áreas
+    study.py             # conjunto pareado + estatísticas exploratórias
+    pcatalog.py          # acesso ao catálogo do Planetary Computer (alternativa)
   tests/                 # suíte offline (unittest), sem internet
   tests_external/        # testes de REDE, opt-in (SADEN_EXTERNAL_TESTS=1)
   data/                  # V2.2: raw/ processed/ manifests/
@@ -155,6 +161,31 @@ Relatório: `geospatial/reports/V2_2_PRODUCTIVITY_DATA_COMPATIBILITY.md`.
 Compatibilidade espacial apurada: **IBGE = B (contextual)**, **CONAB = C**
 (ver D47). As planilhas da CONAB ficam **fora do Git** (D48); URL e SHA-256 no
 manifesto.
+
+### 5.4 Estudo exploratório municipal (V2.3)
+
+```powershell
+# experimento radiométrico (C1 × original, mesma data/grade)
+geospatial\.venv\Scripts\python.exe geospatial\run_historical.py radiometry
+
+# série histórica mensal 2017–2025 (perfil radiométrico próprio, D50)
+geospatial\.venv\Scripts\python.exe geospatial\run_historical.py series --start 2017-01 --end 2025-12
+
+# uso do solo na AOI (ESA WorldCover) e bloqueio do MapBiomas
+geospatial\.venv\Scripts\python.exe geospatial\run_historical.py landuse --years 2020 2021
+
+# conjunto pareado + estatísticas exploratórias (portão: ≥ 9 pares/cultura)
+geospatial\.venv\Scripts\python.exe geospatial\run_historical.py study
+```
+
+| Item | Valor |
+|---|---|
+| Alvo | rendimento médio **municipal** do IBGE/PAM (kg/ha), município 5107925 |
+| Indicador | NDVI da AOI de validação (sub-região de 43,26 km² = 0,4654% do município) |
+| Perfil radiométrico histórico | C1 harmonizada (`DN*1e-4 − 0.1`) e coleção original com convenção de DN verificada (`DN*1e-4`) — **equivalência numérica demonstrada** (D50) |
+| Uso do solo | ESA WorldCover 10 m (classe 40 = Cropland); MapBiomas **bloqueado** (download suspenso; via GEE) — D51 |
+| Calendário | **não validado** (SISZARC sem DNS) → agregação por ano civil — D52 |
+| Relatório | `geospatial/reports/V2_3_EXPLORATORY_PRODUCTIVITY_STUDY.md` |
 
 ## 6. Testes
 

@@ -49,7 +49,8 @@ IBGE_TO_SADEN: dict[str, dict[str, Any]] = {
         "ibge_name": "Algodão herbáceo (em caroço)",
         "match": MATCH_PARTIAL,
         "note": (
-            "O SADEN referencia o Algodão (futuro ICE CT=F) em pluma/l磅; a PAM "
+            "O SADEN referencia o Algodão (futuro ICE CT=F) em pluma (libra-peso); "
+            "a PAM "
             "divulga para Sorriso o algodão **herbáceo em caroço**. São "
             "produtos diferentes (o caroço é a semente; o pluma é a fibra). "
             "Rendimento não é comparável sem conversión documentada — não "

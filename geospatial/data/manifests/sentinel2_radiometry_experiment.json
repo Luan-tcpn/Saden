@@ -1,0 +1,192 @@
+{
+  "generated_at": "2026-11-11T20:22:34.570759+00:00",
+  "aoi_bbox": [
+    -55.6309,
+    -12.7339,
+    -55.5709,
+    -12.6739
+  ],
+  "grid": {
+    "crs": "EPSG:32721",
+    "res": 20.0,
+    "width": 329,
+    "height": 334
+  },
+  "window": {
+    "start_year": 2018,
+    "end_year": 2025
+  },
+  "paired_dates": 6,
+  "paired_comparison": [
+    {
+      "date": "2019-08-30",
+      "c1_item": "S2B_T21LXG_20190830T140226_L2A",
+      "original_item": "S2B_21LXG_20190830_1_L2A",
+      "c1_profile": "C1_harmonized",
+      "c1_baseline": "05.00",
+      "c1_formula": "reflectance = DN * 0.0001 + (-0.1)",
+      "original_profile": "original_pre_04_no_offset",
+      "original_baseline": "05.00",
+      "original_formula": "reflectance = DN * 0.0001 + (0.0)",
+      "original_offset_source": "esa_dn_convention_no_offset",
+      "c1_cloud_cover_tile_pct": 0.00064,
+      "original_cloud_cover_tile_pct": 0.00064,
+      "common_pixels": 109782,
+      "ndvi_mean_c1": 0.2886788249015808,
+      "ndvi_mean_original": 0.2886788249015808,
+      "ndvi_mean_difference": 0.0,
+      "ndvi_median_absolute_difference": 0.0,
+      "ndvi_p95_absolute_difference": 0.0,
+      "ndvi_correlation": 1.0
+    },
+    {
+      "date": "2021-06-30",
+      "c1_item": "S2B_T21LXG_20210630T140053_L2A",
+      "original_item": "S2B_21LXG_20210630_1_L2A",
+      "c1_profile": "C1_harmonized",
+      "c1_baseline": "05.00",
+      "c1_formula": "reflectance = DN * 0.0001 + (-0.1)",
+      "original_profile": "original_pre_04_no_offset",
+      "original_baseline": "05.00",
+      "original_formula": "reflectance = DN * 0.0001 + (0.0)",
+      "original_offset_source": "esa_dn_convention_no_offset",
+      "c1_cloud_cover_tile_pct": 0.000677,
+      "original_cloud_cover_tile_pct": 0.000677,
+      "common_pixels": 109720,
+      "ndvi_mean_c1": 0.38556772470474243,
+      "ndvi_mean_original": 0.38556772470474243,
+      "ndvi_mean_difference": 0.0,
+      "ndvi_median_absolute_difference": 0.0,
+      "ndvi_p95_absolute_difference": 0.0,
+      "ndvi_correlation": 1.0
+    },
+    {
+      "date": "2018-09-04",
+      "c1_item": "S2B_T21LXG_20180904T140043_L2A",
+      "original_item": "S2B_21LXG_20180904_1_L2A",
+      "c1_profile": "C1_harmonized",
+      "c1_baseline": "05.00",
+      "c1_formula": "reflectance = DN * 0.0001 + (-0.1)",
+      "original_profile": "original_pre_04_no_offset",
+      "original_baseline": "05.00",
+      "original_formula": "reflectance = DN * 0.0001 + (0.0)",
+      "original_offset_source": "esa_dn_convention_no_offset",
+      "c1_cloud_cover_tile_pct": 0.000883,
+      "original_cloud_cover_tile_pct": 0.000883,
+      "common_pixels": 109776,
+      "ndvi_mean_c1": 0.3098614513874054,
+      "ndvi_mean_original": 0.3098614513874054,
+      "ndvi_mean_difference": 0.0,
+      "ndvi_median_absolute_difference": 0.0,
+      "ndvi_p95_absolute_difference": 0.0,
+      "ndvi_correlation": 1.0
+    },
+    {
+      "date": "2023-07-30",
+      "c1_item": "S2B_T21LXG_20230730T135707_L2A",
+      "original_item": "S2B_21LXG_20230730_0_L2A",
+      "c1_profile": "C1_harmonized",
+      "c1_baseline": "05.09",
+      "c1_formula": "reflectance = DN * 0.0001 + (-0.1)",
+      "original_profile": "original_pre_04_no_offset",
+      "original_baseline": "05.09",
+      "original_formula": "reflectance = DN * 0.0001 + (0.0)",
+      "original_offset_source": "esa_dn_convention_no_offset",
+      "c1_cloud_cover_tile_pct": 0.000889,
+      "original_cloud_cover_tile_pct": 0.000889,
+      "common_pixels": 109766,
+      "ndvi_mean_c1": 0.32115697860717773,
+      "ndvi_mean_original": 0.32115697860717773,
+      "ndvi_mean_difference": 0.0,
+      "ndvi_median_absolute_difference": 0.0,
+      "ndvi_p95_absolute_difference": 0.0,
+      "ndvi_correlation": 1.0
+    },
+    {
+      "date": "2019-07-31",
+      "c1_item": "S2B_T21LXG_20190731T140426_L2A",
+      "original_item": "S2B_21LXG_20190731_1_L2A",
+      "c1_profile": "C1_harmonized",
+      "c1_baseline": "05.00",
+      "c1_formula": "reflectance = DN * 0.0001 + (-0.1)",
+      "original_profile": "original_pre_04_no_offset",
+      "original_baseline": "05.00",
+      "original_formula": "reflectance = DN * 0.0001 + (0.0)",
+      "original_offset_source": "esa_dn_convention_no_offset",
+      "c1_cloud_cover_tile_pct": 0.000926,
+      "original_cloud_cover_tile_pct": 0.000926,
+      "common_pixels": 109735,
+      "ndvi_mean_c1": 0.32302114367485046,
+      "ndvi_mean_original": 0.32302114367485046,
+      "ndvi_mean_difference": 0.0,
+      "ndvi_median_absolute_difference": 0.0,
+      "ndvi_p95_absolute_difference": 0.0,
+      "ndvi_correlation": 1.0
+    },
+    {
+      "date": "2025-07-26",
+      "c1_item": "S2A_T21LXG_20250726T140110_L2A",
+      "original_item": "S2A_21LXG_20250726_0_L2A",
+      "c1_profile": "C1_harmonized",
+      "c1_baseline": "05.11",
+      "c1_formula": "reflectance = DN * 0.0001 + (-0.1)",
+      "original_profile": "original_pre_04_no_offset",
+      "original_baseline": "05.11",
+      "original_formula": "reflectance = DN * 0.0001 + (0.0)",
+      "original_offset_source": "esa_dn_convention_no_offset",
+      "c1_cloud_cover_tile_pct": 0.000956,
+      "original_cloud_cover_tile_pct": 0.000956,
+      "common_pixels": 109734,
+      "ndvi_mean_c1": 0.34821420907974243,
+      "ndvi_mean_original": 0.34821420907974243,
+      "ndvi_mean_difference": 0.0,
+      "ndvi_median_absolute_difference": 0.0,
+      "ndvi_p95_absolute_difference": 0.0,
+      "ndvi_correlation": 1.0
+    }
+  ],
+  "file_level_checks": [
+    {
+      "item_id": "S2B_T21LXG_20190830T140226_L2A",
+      "collection": "sentinel-2-c1-l2a",
+      "datetime": "2019-08-30T14:06:00.451000Z",
+      "baseline": "05.00",
+      "declared_scale": 0.0001,
+      "declared_offset": -0.1,
+      "offset_source": "metadata",
+      "file_scales": [
+        0.0001
+      ],
+      "file_offsets": [
+        -0.1
+      ],
+      "file_dtype": "uint16",
+      "file_nodata": 0.0,
+      "read_returns_raw_dn": true
+    },
+    {
+      "item_id": "S2B_21LXG_20190830_1_L2A",
+      "collection": "sentinel-2-l2a",
+      "datetime": "2019-08-30T14:06:00.451000Z",
+      "baseline": "05.00",
+      "declared_scale": 0.0001,
+      "declared_offset": 0.0,
+      "offset_source": "esa_dn_convention_no_offset",
+      "file_scales": [
+        1.0
+      ],
+      "file_offsets": [
+        0.0
+      ],
+      "file_dtype": "uint16",
+      "file_nodata": 0.0,
+      "read_returns_raw_dn": true
+    }
+  ],
+  "profiles": {
+    "C1_harmonized": "Coleção Collection 1 (reprocessamento harmonizado da ESA): reflectância = DN * 0.0001 - 0.1, idêntico para todo o arquivo.",
+    "original_pre_04_no_offset": "Coleção original, baseline < 04.00 (sem BOA_ADD_OFFSET): reflectância = DN * 0.0001.",
+    "original_04plus_offset": "Coleção original, baseline >= 04.00 (com BOA_ADD_OFFSET): reflectância = DN * 0.0001 - 0.1."
+  },
+  "note": "A coleção C1 harmonizada (Earth Search) e os produtos originais (Planetary Computer) são comparados na mesma data e sobre a mesma grade. A conversão de cada um usa o offset declarado (C1) ou a regra oficial da ESA baseada no processing baseline (originais)."
+}
