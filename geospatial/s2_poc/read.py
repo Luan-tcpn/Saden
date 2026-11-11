@@ -119,21 +119,52 @@ def _band_meta(asset: Any) -> tuple[float, float, float]:
     )
 
 
-def read_scene_bands(item: Any, aoi_bbox: list[float], res: float = config.TARGET_RES_M) -> dict[str, Any]:
+def scene_grid(item: Any, aoi_bbox: list[float], res: float = config.TARGET_RES_M) -> dict[str, Any]:
+    """Grade alvo derivada do CRS do SCL (20 m) da cena."""
+    scl_asset = item.assets[config.ASSETS["scl"]]
+    with rasterio.Env(**GDAL_ENV):
+        with rasterio.open(scl_asset.href) as ds:
+            crs = ds.crs
+    return target_grid(crs, aoi_bbox, res)
+
+
+def read_scl(
+    item: Any,
+    aoi_bbox: list[float],
+    res: float = config.TARGET_RES_M,
+    grid: dict[str, Any] | None = None,
+) -> tuple[np.ndarray, dict[str, Any], dict[str, Any]]:
+    """Lê apenas o SCL na grade alvo (nearest), sem interpolar classes."""
+    grid = grid or scene_grid(item, aoi_bbox, res)
+    scl_asset = item.assets[config.ASSETS["scl"]]
+    scl, meta = read_resampled(scl_asset.href, grid, Resampling.nearest, 0, "uint8")
+    return scl, meta, grid
+
+
+def read_scene_bands(
+    item: Any,
+    aoi_bbox: list[float],
+    res: float = config.TARGET_RES_M,
+    grid: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     """Lê B02/B04/B08/B11/SCL e devolve arrays na mesma grade de 20 m.
 
     Contínuas: média (average) na redução de 10 m → 20 m.
     SCL: vizinho mais próximo (nunca interpolação em classes).
+
+    ``grid`` permite forçar a grade de outro tile (mosaico); sem ele, a grade é
+    derivada do CRS do SCL da própria cena.
     """
     missing = [n for n in config.ASSETS if config.ASSETS[n] not in item.assets]
     if missing:
         raise ValueError(f"cena {item.id} sem ativos: {missing}")
 
     scl_asset = item.assets[config.ASSETS["scl"]]
-    with rasterio.Env(**GDAL_ENV):
-        with rasterio.open(scl_asset.href) as ds:
-            crs = ds.crs
-    grid = target_grid(crs, aoi_bbox, res)
+    if grid is None:
+        with rasterio.Env(**GDAL_ENV):
+            with rasterio.open(scl_asset.href) as ds:
+                crs = ds.crs
+        grid = target_grid(crs, aoi_bbox, res)
 
     out: dict[str, Any] = {"bands": {}, "grid": grid, "meta": {}, "scales": {}}
     for name in ("blue", "red", "nir", "swir"):

@@ -152,6 +152,69 @@ class StatsTest(unittest.TestCase):
         self.assertEqual(stats["valid_pixels"], 0)
         self.assertIsNone(stats["p95"])
 
+    def test_interquartile_quantiles_are_reported(self):
+        arr = np.arange(1, 101, dtype="float64")
+        stats = ix.array_stats(arr)
+        self.assertAlmostEqual(stats["p25"], 25.75, places=6)
+        self.assertAlmostEqual(stats["p75"], 75.25, places=6)
+        self.assertLess(stats["p25"], stats["median"])
+        self.assertLess(stats["median"], stats["p75"])
+
+
+class ProfileBehaviourTest(unittest.TestCase):
+    """Perfis de máscara dentro do cálculo de índices (Checkpoint B)."""
+
+    def _scene(self):
+        shape = (3, 3)
+        red = np.full(shape, 2000, dtype="uint16")
+        nir = np.full(shape, 6000, dtype="uint16")
+        blue = np.full(shape, 1000, dtype="uint16")
+        swir = np.full(shape, 3000, dtype="uint16")
+        scl = np.full(shape, 4, dtype="uint8")
+        scl[0, 0] = 2  # dark area pixels
+        scl[0, 1] = 6  # água
+        scl[0, 2] = 9  # nuvem alta
+        scale = {"scale": 1e-4, "offset": -0.1, "nodata": 0.0}
+        return {
+            "bands": {"blue": blue, "red": red, "nir": nir, "swir": swir},
+            "scl": scl,
+            "scales": {k: dict(scale) for k in ("blue", "red", "nir", "swir")},
+            "grid": {"crs": "EPSG:32721", "res": 20.0, "width": 3, "height": 3,
+                     "bounds": [0, 0, 60, 60], "transform": [20, 0, 0, 0, -20, 60]},
+        }
+
+    def test_default_profile_is_the_historical_rule(self):
+        out = ix.compute_indices(self._scene())
+        self.assertEqual(out["mask_summary"]["profile"], "A_historical")
+        ndvi = out["indices"]["NDVI"]
+        self.assertTrue(np.isfinite(ndvi[0, 0]))  # classe 2 mantida no perfil A
+        self.assertTrue(np.isfinite(ndvi[0, 1]))  # água mantida no perfil A
+        self.assertTrue(np.isnan(ndvi[0, 2]))    # nuvem excluída
+
+    def test_restrictive_profile_drops_dark_area_and_water(self):
+        out = ix.compute_indices(self._scene(), profile="B_restrictive")
+        ndvi = out["indices"]["NDVI"]
+        self.assertTrue(np.isnan(ndvi[0, 0]))
+        self.assertTrue(np.isnan(ndvi[0, 1]))
+        self.assertEqual(out["mask_summary"]["profile"], "B_restrictive")
+        self.assertIn(2, out["mask_summary"]["scl_excluded_classes"])
+        self.assertIn(6, out["mask_summary"]["scl_excluded_classes"])
+
+    def test_keep_override_is_respected(self):
+        scene = self._scene()
+        keep = np.zeros(scene["scl"].shape, dtype=bool)
+        keep[1, 1] = True
+        out = ix.compute_indices(scene, keep_override=keep)
+        ndvi = out["indices"]["NDVI"]
+        self.assertTrue(np.isfinite(ndvi[1, 1]))
+        self.assertTrue(np.isnan(ndvi[0, 0]))
+        self.assertTrue(np.isnan(ndvi[2, 2]))
+
+    def test_keep_override_with_wrong_shape_raises(self):
+        scene = self._scene()
+        with self.assertRaises(ValueError):
+            ix.compute_indices(scene, keep_override=np.ones((2, 2), dtype=bool))
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -44,11 +44,11 @@ def scl_keep_mask(
     bad_classes: tuple[int, ...] = config.SCL_BAD_CLASSES,
     unclassified: int | None = config.SCL_UNCLASSIFIED,
 ) -> np.ndarray:
-    """True onde a classe SCL é aproveitável.
+    """True onde a classe SCL é aproveitável (política histórica, Perfil A).
 
-    Política conservadora: além das classes ruins da spec, a classe 7
-    (não classificado) também é excluída. Água (6) e solo (5) são mantidos:
-    máscara de qualidade **não** é interpretação agronômica.
+    Além das classes ruins da spec, a classe 7 (não classificado) também é
+    excluída. Água (6) e solo (5) são mantidos: máscara de qualidade **não** é
+    interpretação agronômica. Perfis alternativos vivem em :mod:`s2_poc.mask`.
     """
     arr = np.asarray(scl)
     keep = np.ones(arr.shape, dtype=bool)
@@ -112,6 +112,8 @@ def array_stats(arr: np.ndarray, plausible_range: tuple[float, float] = config.P
             "mean": None,
             "median": None,
             "p05": None,
+            "p25": None,
+            "p75": None,
             "p95": None,
             "std": None,
             "out_of_range_pixels": 0,
@@ -126,18 +128,28 @@ def array_stats(arr: np.ndarray, plausible_range: tuple[float, float] = config.P
         "mean": float(np.mean(flat)),
         "median": float(np.median(flat)),
         "p05": float(np.percentile(flat, 5)),
+        "p25": float(np.percentile(flat, 25)),
+        "p75": float(np.percentile(flat, 75)),
         "p95": float(np.percentile(flat, 95)),
         "std": float(np.std(flat)),
         "out_of_range_pixels": int(np.count_nonzero((flat < low) | (flat > high))),
     }
 
 
-def compute_indices(scene: dict[str, Any]) -> dict[str, Any]:
+def compute_indices(
+    scene: dict[str, Any],
+    profile: str = "A_historical",
+    keep_override: np.ndarray | None = None,
+) -> dict[str, Any]:
     """Calcula NDVI/EVI/NDMI e as máscaras de uma cena já lida.
 
     ``scene`` deve conter ``bands`` (blue/red/nir/swir em DN), ``scl`` e
     ``scales`` (scale/offset/nodata por banda), como devolvido por
     :func:`s2_poc.read.read_scene_bands`.
+
+    ``profile`` seleciona o perfil SCL em :data:`config.SCL_PROFILES`
+    (padrão = máscara histórica da PoC). ``keep_override`` permite aplicar uma
+    máscara já calculada — usado para comparar A/B sobre a mesma leitura.
     """
     bands = scene["bands"]
     scl = scene["scl"]
@@ -159,7 +171,16 @@ def compute_indices(scene: dict[str, Any]) -> dict[str, Any]:
             nodata_invalid |= np.asarray(dn) == nodata
         nodata_invalid |= ~np.isfinite(np.asarray(dn))
 
-    scl_ok = scl_keep_mask(scl)
+    if keep_override is not None:
+        scl_ok = np.asarray(keep_override, dtype=bool)
+        if scl_ok.shape != scl.shape:
+            raise ValueError(f"keep_override {scl_ok.shape} difere do SCL {scl.shape}")
+        excluded = sorted(set(config.SCL_PROFILES[profile]))
+    else:
+        from . import mask as mask_mod
+
+        scl_ok = mask_mod.keep_mask(scl, profile)
+        excluded = list(mask_mod.profile_classes(profile))
     # Pixels com qualquer banda contínua inválida não entram em nenhum índice.
     continuous_ok = np.ones(scl.shape, dtype=bool)
     for arr in refl.values():
@@ -180,12 +201,13 @@ def compute_indices(scene: dict[str, Any]) -> dict[str, Any]:
         value["degenerate_pixels"] = int(keep.sum() - np.count_nonzero(np.isfinite(indices[name])))
 
     mask_summary = {
+        "profile": profile,
         "total_pixels": total,
         "scl_masked_pixels": int(np.count_nonzero(~scl_ok)),
         "nodata_masked_pixels": int(np.count_nonzero(nodata_invalid)),
         "kept_pixels": int(np.count_nonzero(keep)),
         "kept_fraction": float(np.count_nonzero(keep) / total) if total else 0.0,
-        "scl_excluded_classes": list(config.SCL_BAD_CLASSES) + [config.SCL_UNCLASSIFIED],
+        "scl_excluded_classes": excluded,
     }
 
     return {

@@ -47,7 +47,7 @@ def library_versions() -> dict[str, str]:
     import pystac_client
     import rasterio
 
-    return {
+    versions = {
         "python": platform.python_version(),
         "pystac-client": pystac_client.__version__,
         "rasterio": rasterio.__version__,
@@ -55,6 +55,15 @@ def library_versions() -> dict[str, str]:
         "numpy": numpy.__version__,
         "matplotlib": matplotlib.__version__,
     }
+    try:  # presentes apenas a partir da V2.1 (geometria oficial)
+        import pyproj
+        import shapely
+
+        versions["shapely"] = shapely.__version__
+        versions["pyproj"] = pyproj.__version__
+    except Exception:  # pragma: no cover - ambiente sem geometria
+        pass
+    return versions
 
 
 def resolve_aoi() -> dict[str, Any]:
