@@ -206,35 +206,46 @@ function sleep(ms) {
   await ev(`document.querySelector('#btn-apply').click()`);
   check('coords viram localidade', await waitFor(`/Ribeir/.test(document.querySelector('#place-label').textContent)`, 90000));
 
-  // 6b) período altera a série do histórico
+  // 6b) período altera a série do histórico (check independente de data:
+  // compara com o estado anterior em vez de fixar um mês no calendário)
+  const rangeBefore = await ev(`document.querySelector('#hist-sub').textContent`);
   await ev(`document.querySelector('#sel-range').value = '3mo'`);
   await ev(`document.querySelector('#sel-range').dispatchEvent(new Event('change', {bubbles:true}))`);
   await ev(`document.querySelector('#btn-apply').click()`);
-  check('período 3m aplica', await waitFor(`document.querySelector('#hist-sub').textContent.includes('2026-06')`, 90000));
+  check(
+    'período 3m aplica',
+    await waitFor(
+      `(() => { const t = document.querySelector('#hist-sub').textContent;
+        return t !== ${JSON.stringify(rangeBefore)} && /pontos/.test(t); })()`,
+      90000
+    )
+  );
 
-  // 6b2) D39: seletor Ridge (padrão) / AR (experimental)
-  check('modelo padrão é Ridge', await ev(`document.querySelector('#sel-model').value === 'ridge'`));
-  await ev(`document.querySelector('#sel-model').value = 'ar'`);
-  await ev(`document.querySelector('#sel-model').dispatchEvent(new Event('change', {bubbles:true}))`);
-  await ev(`document.querySelector('#btn-apply').click()`);
-  check('AR experimental aplica', await waitFor(`/ar \\(ordem/.test(document.querySelector('#fc-sub').textContent)`, 180000));
-  check('nota experimental visível', await ev(`document.querySelector('#forecast-meta').textContent.includes('experimental')`));
-  await ev(`document.querySelector('#sel-model').value = 'ridge'`);
-  await ev(`document.querySelector('#sel-model').dispatchEvent(new Event('change', {bubbles:true}))`);
-  await ev(`document.querySelector('#btn-apply').click()`);
-  check('volta a Ridge', await waitFor(`/ridge/.test(document.querySelector('#fc-sub').textContent)`, 180000));
+  // 6b2) V1 final: sem seletor de modelo; previsão única Ridge
+  check('sem seletor de modelo (V1 única)', await ev(`!document.querySelector('#sel-model')`));
+  check(
+    'previsão única Ridge',
+    await ev(
+      `/Ridge/.test(document.querySelector('#fc-sub').textContent) && !document.querySelector('#forecast-meta').textContent.includes('experimental')`
+    )
+  );
 
-  // 6c) locais salvos: salvar ponto, usar, excluir
+  // 6c) locais salvos: salvar ponto, usar, excluir (com payload XSS controlado)
+  const XSS_PLACE = '<img src=x onerror=window.__placeXss=1>';
   await ev(`document.querySelector('[data-nav="mapa"]').click()`);
   check('página mapa', await waitFor(`!document.querySelector('#page-mapa').classList.contains('hidden')`, 15000));
-  await ev(`document.querySelector('#inp-place-label').value = 'e2e-fazenda'`);
+  await ev(`document.querySelector('#inp-place-label').value = ${JSON.stringify(XSS_PLACE)}`);
   await ev(`document.querySelector('#btn-place-save').click()`);
-  check('local salvo', await waitFor(`document.querySelector('#places-list').textContent.includes('e2e-fazenda')`, 20000));
+  check('local salvo', await waitFor(`document.querySelector('#places-list').textContent.includes('<img')`, 20000));
+  check(
+    'XSS neutralizado em local salvo',
+    await ev(`!document.querySelector('#places-list img') && window.__placeXss !== 1`)
+  );
   await ev(`document.querySelector('#places-list [data-place-go]').click()`);
   await sleep(800);
-  check('local aplicado', await ev(`document.querySelector('#place-label').textContent.includes('e2e-fazenda')`));
+  check('local aplicado', await ev(`document.querySelector('#place-label').textContent.includes('<img')`));
   await ev(`document.querySelector('#places-list [data-place-del]').click()`);
-  check('local excluído', await waitFor(`!document.querySelector('#places-list').textContent.includes('e2e-fazenda')`, 20000));
+  check('local excluído', await waitFor(`!document.querySelector('#places-list').textContent.includes('<img')`, 20000));
   check(
     'mapa com contexto completo',
     await ev(`!document.querySelector('#page-mapa').classList.contains('hidden') && document.querySelector('.topbar') && getComputedStyle(document.querySelector('.topbar')).display !== 'none' && !!document.querySelector('#sel-commodity')`)
@@ -269,6 +280,10 @@ function sleep(ms) {
   check(
     'relatório com localidade',
     await waitFor(`/—/.test(document.querySelector('#report-body h1').textContent)`, 180000)
+  );
+  check(
+    'XSS neutralizado no relatório',
+    await ev(`!document.querySelector('#report-body img') && document.querySelector('#report-body h1').textContent.includes('<img')`)
   );
 
   // 7) Minha localização (headless nega -> mensagem amigável, sem fatal)

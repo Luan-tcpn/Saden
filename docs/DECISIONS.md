@@ -271,3 +271,33 @@ relatórios inalterados). E2E 57/57 (53 + 4 checks D39) em Edge headless.
 Incidente: servidor órfão pré-edit sobrevivendo entre sessões serviu HTML
 obsoleto e quebrou 3 checks — causa identificada (Start-Process sobrevive a
 `Remove-Job`; doravante verificar versão servida + matar por PID). Sem D40.
+
+## D40 — V1 congelada: metodologia única (Ridge) e AR retirado do produto (2026-11-11)
+
+Contexto: a v1.1 expôs o challenger AR(p)+AIC por `?model=ar` (D38) e um
+seletor Ridge/AR no dashboard (D39). A avaliação experimental permanece
+registrada em `docs/FORECAST_EVALUATION.md`, mas o produto não deve oferecer
+duas metodologias com suporte implícito nem sugerir que o AR é uma opção
+estável de operação.
+
+Decisão (escopo congelado da V1):
+- A única metodologia operacional de previsão é a **Ridge original**, com o
+  mesmo pipeline, split temporal, baselines e métricas já validados. Nenhum
+  parâmetro novo de modelo.
+- `?model=ridge` é aceito apenas como **alias legado explícito**; qualquer
+  outro valor (`ar`, `AR`, `arima`, vazio, desconhecido) retorna **HTTP 400**
+  com mensagem honesta, sem fallback silencioso.
+- `arService.js`, `olsBeta` e o select `#sel-model` foram removidos;
+  `backend/src/utils/linalg.js` mantém apenas `solve` (usado pela Ridge).
+- O histórico persistido **não é apagado, renomeado nem reinterpretado**:
+  linhas `model_runs.model='ar(order=N)'` continuam legíveis como registro
+  histórico do experimento; novos runs gravam apenas `ridge(lambda=…)`.
+- UI, relatórios JSON/CSV, smoke e E2E refletem a metodologia única.
+- Segurança: gate fail-fast de `JWT_SECRET` em produção extraído para função
+  testável (`_test.assertProductionSecret`); escapes adicionais em campos de
+  data/ID; `fx_fallback_days` exposto em `getLatest` para declarar repetição
+  de PTAX na UI.
+
+Consequências: superfície menor (uma metodologia), contrato explícito para
+parâmetros legados e histórico auditável preservado. **D38 e D39 passam a ser
+registros históricos superados por esta decisão; não são apagados.**

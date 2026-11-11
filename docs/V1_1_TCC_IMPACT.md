@@ -18,9 +18,15 @@
 - NÃO AFIRMAR: "AR é melhor que Ridge em geral", "ARIMA foi implementado",
   MAPEs futuros, superioridade multi-passo além do medido.
 
-### 1.2 Exposição opt-in (D38/D39)
-- FATO: `?model=ar` + seletor Ridge (principal) / AR (experimental); default Ridge.
-- POSSÍVEL IMPACTO: demonstra transparência metodológica no produto (banca pode testar ao vivo).
+### 1.2 Exposição opt-in (D38/D39) — SUPERADA pela V1 final (D40)
+- FATO HISTÓRICO: `?model=ar` + seletor Ridge (principal) / AR (experimental)
+  existiram na v1.1 de 2026-09-27.
+- FATO ATUAL (2026-11-11): o AR foi **retirado do produto**; a V1 entrega
+  somente Ridge e qualquer `?model` diferente de `ridge` retorna 400.
+- POSSÍVEL IMPACTO: descrever o AR como **investigação experimental encerrada**
+  (comparação metodológica), nunca como funcionalidade disponível ao usuário.
+  Se o autor quiser demonstrar transparência, o argumento honesto é o registro
+  de que o challenger foi avaliado e conscientemente não incorporado.
 
 ### 1.3 G6 regional
 - FATO: nenhuma fonte regional integrável (CONAB CAPTCHA, CEPEA R$ 11–22 mil,
@@ -29,8 +35,10 @@
   evidências datadas e portas concretas (convênio, autorização).
 
 ### 1.4 Qualidade
-- FATO: 80/80, E2E 57/57, cobertura 88,5% linhas, backup operacional, smoke ao vivo.
-- POSSÍVEL IMPACTO: seção de testes/validação com números comprovados.
+- FATO (2026-11-11): 65/65, E2E 57/57, smoke 9/9 (local e container), cobertura
+  88,5% linhas (medida em 2026-09-27), backup operacional, Docker validado.
+- POSSÍVEL IMPACTO: seção de testes/validação com números comprovados e
+  escopo explicitamente congelado (metodologia única Ridge).
 
 ## 2. O que NÃO muda no TCC sem decisão do autor
 
@@ -39,11 +47,13 @@ da v1.0 (252 pregões, café-naive), escopo e limitações já declaradas.
 
 ## 3. Evidências a preservar para a banca
 
-`docs/FORECAST_EVALUATION.md` (números E2/E3), `docs/REGIONAL_INVESTIGATION.md`,
-logs de suíte, `model_runs` (713+ runs com métricas), commits D35–D39.
+`docs/FORECAST_EVALUATION.md` (números E2/E3 + encerramento E5),
+`docs/REGIONAL_INVESTIGATION.md`, logs de suíte, `model_runs` (runs com
+métricas, incluindo o histórico AR preservado), commits D35–D40.
 
 ## 4. Riscos acadêmicos a evitar
 
 Apresentar proxy como preço real; alegar conformidade WCAG; alegar
 "production-ready"; transformar hipótese (MAPE futuro, ARIMA) em resultado;
-usar test set como argumento de seleção (usado só para relato).
+usar test set como argumento de seleção (usado só para relato); **afirmar que
+o AR(p) está disponível no produto** (foi retirado na V1 final, D40).

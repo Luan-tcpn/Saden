@@ -11,7 +11,7 @@ Sobre CEPEA/CONAB: o CEPEA disponibiliza API mediante contratação e licenciame
 ## Principais funcionalidades
 
 - Landing pública + cadastro, login, recuperação de senha (token único de 1 h, outbox local sem SMTP)
-- Dashboard: 5 commodities (soja, milho, café, trigo, algodão), série histórica, KPIs, previsão 7/14/30 dias com intervalo, seletor de modelo Ridge (principal) / AR (experimental, opt-in), métricas treino/val/teste, clima 7 dias, comparativo
+- Dashboard: 5 commodities (soja, milho, café, trigo, algodão), série histórica, KPIs, previsão 7/14/30 dias com intervalo e metodologia única (Ridge), métricas treino/val/teste, clima 7 dias, comparativo
 - Mapa do Brasil (Leaflet + OSM/Esri, clique → preço e clima) + camada Sentinel-2 Land Cover (visual, com legenda)
 - Busca por cidade/rua/coordenadas, reverse geocoding, "minha localização", locais salvos
 - Relatórios consolidados (JSON + CSV com BOM + impressão/PDF via navegador), com fontes e limitações
@@ -88,15 +88,15 @@ SQLite em `data/saden.db` (WAL: `saden.db-wal`/`saden.db-shm` em execução). A 
 
 Backup: `node scripts/backup.js [destino]` (padrão `tmp/backups/`, ignorado no git) gera cópia online consistente (`saden-AAAAMMDDTHHMMSS.db`, mantém as 7 mais recentes, respeita `DATABASE_PATH`). Restauração: com o backend parado, copie o arquivo de volta para `data/saden.db`.
 
-## Testes (estado real, executado em 2026-09-21)
+## Testes (estado real, executado em 2026-11-11)
 
 ```powershell
-cd backend; npm test                  # 80/80 (14 suítes; inclui 2 testes live + cache/TTL + 422 + AR challenger + opt-in D38 + backup)
-cd ..; node scripts\smoke-test.js     # 8/8 contra servidor em execução
-node scripts\e2e-round2.js            # 57/57 verificações com navegador real (53 + 4 do seletor D39)
+cd backend; npm test                  # 65/65 (9 suítes; inclui 2 testes live + cache/TTL + 422 + segurança + backup)
+cd ..; node scripts\smoke-test.js     # 9/9 contra servidor em execução
+node scripts\e2e-round2.js            # 57/57 verificações com navegador real (Edge headless + CDP)
 ```
 
-Suíte `node --test` sem frameworks: 7 arquivos unitários (conversão, validação, matemática da previsão, HTTP/retry, coordenadas, CSV, AR challenger) + integração (auth, rotas, token, rate-limit, recuperação, fontes vivas, alertas, locais, cache KV, 422, AR service). Cobertura medida: 88,5% linhas via c8 (E1; ver `docs/V1_1_AUDIT.md`). Sem teste formal de carga — há apenas medições exploratórias locais.
+Suíte `node --test` sem frameworks: 8 arquivos unitários (conversão, validação, matemática da previsão, HTTP/retry, coordenadas, CSV, config/JWT, backup) + integração (auth, rotas, token, rate-limit, recuperação, fontes vivas, alertas, locais, cache KV, 422, metodologia única Ridge). Cobertura medida: 88,5% linhas via c8 (E1; ver `docs/V1_1_AUDIT.md`). Sem teste formal de carga — há apenas medições exploratórias locais.
 
 ## Docker
 
@@ -110,11 +110,11 @@ docker compose up
 docker compose down   # o banco em ./data é preservado; nada além disso persiste
 ```
 
-> Validado em 2026-09-27: build, healthcheck, auth, forecast Ridge e AR, erro 400, persistência down/up e smoke 8/8 — todos contra o container. Backups gerados dentro do container (`/app/tmp/backups`) são efêmeros; use `node scripts/backup.js` no host. Docker não torna o sistema automaticamente pronto para produção (sem TLS, backup ou monitoramento).
+> Validado em 2026-11-11: build, healthcheck, auth, previsão Ridge, `model=ar`→400, persistência down/up e smoke 9/9 — todos contra o container. Imagem efêmera (sem `.env`, `data/` vazio), processo não-root (`node`). Backups gerados dentro do container (`/app/tmp/backups`) são efêmeros; use `node scripts/backup.js` no host. Docker não torna o sistema automaticamente pronto para produção (sem TLS, backup ou monitoramento).
 
 ## Principais endpoints
 
-Autenticação: `POST /api/auth/register|/login`, `POST /api/auth/forgot|/reset`, `GET /api/auth/me` · Commodities: `GET /api/commodities`, `/commodities/:key/series?range=`, `/commodities/:key/latest` · Preços: `GET /api/prices/reference` · Clima: `GET /api/weather/forecast|/history` · Geo: `GET /api/geo/search|/reverse|/estados|/estados/:uf/municipios` · Previsão: `GET /api/forecast/:key?horizon=7|14|30` (Ridge, padrão) ou `&model=ar` (challenger AR experimental) · Relatórios: `GET /api/reports/:key|/reports/:key/csv` · Land Cover: `GET /api/landcover/tile/:z/:x/:y.png|/info` (públicos) · Alertas: `/api/alerts`, `/api/alerts/check` · Locais: `/api/places` · Sistema: `GET /api/health`, `GET /api/sources`. Rotas públicas do app: `/`, `/login`, `/register`, `/reset`, `/dashboard`.
+Autenticação: `POST /api/auth/register|/login`, `POST /api/auth/forgot|/reset`, `GET /api/auth/me` · Commodities: `GET /api/commodities`, `/commodities/:key/series?range=`, `/commodities/:key/latest` · Preços: `GET /api/prices/reference` · Clima: `GET /api/weather/forecast|/history` · Geo: `GET /api/geo/search|/reverse|/estados|/estados/:uf/municipios` · Previsão: `GET /api/forecast/:key?horizon=7|14|30` (Ridge, metodologia única; `model=ridge` é alias legado e qualquer outro valor retorna 400) · Relatórios: `GET /api/reports/:key|/reports/:key/csv` · Land Cover: `GET /api/landcover/tile/:z/:x/:y.png|/info` (públicos) · Alertas: `/api/alerts`, `/api/alerts/check` · Locais: `/api/places` · Sistema: `GET /api/health`, `GET /api/sources`. Rotas públicas do app: `/`, `/login`, `/register`, `/reset`, `/dashboard`.
 
 ## Limitações e escopo atual
 
@@ -125,10 +125,10 @@ Autenticação: `POST /api/auth/register|/login`, `POST /api/auth/forgot|/reset`
 
 ## Estrutura do projeto
 
-`backend/` (Express: `src/{index,config,db,middleware,routes,services,integrations,utils}`) · `frontend/` (`index.html`, `css/`, `js/{api,auth,app,theme}.js`, `img/`) · `tests/` (`unit/` 6 arquivos, `integration/api.test.js`, `e2e/` vazio) · `scripts/` (seed, smoke, E2E, verificações) · `docs/` (ARCHITECTURE, API_SOURCES, PROJECT_STATUS, PROJECT_ROADMAP, DECISIONS, NDVI_STUDY, TCC, AI_CONTEXT_RECOVERY, FORECAST_EVALUATION) · `data/` (banco runtime, ignorado no git) · `tmp/` (outbox, evidências; ignorado) · `logs/` (ignorados).
+`backend/` (Express: `src/{index,config,db,middleware,routes,services,integrations,utils}`) · `frontend/` (`index.html`, `css/`, `js/{api,auth,app,theme}.js`, `img/`) · `tests/` (`unit/` 8 arquivos, `integration/api.test.js`, `e2e/` vazio) · `scripts/` (seed, smoke, E2E, verificações) · `docs/` (ARCHITECTURE, API_SOURCES, PROJECT_STATUS, PROJECT_ROADMAP, DECISIONS, NDVI_STUDY, TCC, AI_CONTEXT_RECOVERY, FORECAST_EVALUATION, CONTEXTO_V2) · `data/` (banco runtime, ignorado no git) · `tmp/` (outbox, evidências; ignorado) · `logs/` (ignorados).
 
-Na árvore canônica: `docs/ARCHITECTURE.md` (arquitetura e endpoints), `docs/API_SOURCES.md` (fontes), `docs/PROJECT_STATUS.md` (estado), `docs/PROJECT_ROADMAP.md` (plano oficial), `docs/DECISIONS.md` (D1–D37), `docs/NDVI_STUDY.md` (viabilidade NDVI), `docs/TCC.md` (material técnico do TCC), `docs/AI_CONTEXT_RECOVERY.md` (recuperação de contexto v1.0.0 → v1.1.x), `docs/FORECAST_EVALUATION.md` (experimentos de forecast).
+Na árvore canônica: `docs/ARCHITECTURE.md` (arquitetura e endpoints), `docs/API_SOURCES.md` (fontes), `docs/PROJECT_STATUS.md` (estado), `docs/PROJECT_ROADMAP.md` (plano oficial), `docs/DECISIONS.md` (D1–D40), `docs/NDVI_STUDY.md` (viabilidade NDVI), `docs/TCC.md` (material técnico do TCC), `docs/AI_CONTEXT_RECOVERY.md` (recuperação de contexto da V1 congelada), `docs/FORECAST_EVALUATION.md` (experimentos de forecast, incluindo o encerramento do AR), `docs/CONTEXTO_V2.md` (roadmap documental da V2, não implementado).
 
 ## Status do projeto
 
-**v1.1 consolidada (2026-09-27)**: v1.0 preservada + challenger AR(p) opt-in (`?model=ar`, seletor Ridge/AR no dashboard) + backup operacional. Suíte verde (80/80 + smoke 8/8 + E2E 57/57). Ridge continua champion/default; AR é experimental. Docker não validado neste ambiente (daemon indisponível). Não avaliado formalmente para produção.
+**V1 congelada (2026-11-11, tag `v1-final`)**: previsão com metodologia única Ridge; challenger AR(p) retirado do produto (histórico experimental preservado em banco e documentação) + backup operacional. Suíte verde (65/65 + smoke 9/9 + E2E 57/57). Docker validado em 2026-11-11 (build, healthcheck, auth, Ridge, `model=ar`→400, persistência down/up, smoke 9/9 no container). Não avaliado formalmente para produção (sem TLS, carga, SMTP real ou monitoramento).

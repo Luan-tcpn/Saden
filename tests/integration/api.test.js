@@ -57,6 +57,19 @@ describe('API SADEN — integração', () => {
     assert.equal(data.status, 'ok');
   });
 
+  it('cabeçalhos de segurança e CSP ativos', async () => {
+    const res = await fetch(`${base}/api/health`);
+    assert.equal(res.headers.get('x-powered-by'), null);
+    assert.equal(res.headers.get('x-content-type-options'), 'nosniff');
+    assert.equal(res.headers.get('x-frame-options'), 'SAMEORIGIN');
+    assert.equal(res.headers.get('referrer-policy'), 'strict-origin-when-cross-origin');
+    const csp = res.headers.get('content-security-policy') || '';
+    assert.match(csp, /default-src 'self'/);
+    assert.match(csp, /object-src 'none'/);
+    assert.match(csp, /frame-ancestors 'self'/);
+    assert.match(csp, /base-uri 'self'/);
+  });
+
   it('registro + login + /me (fluxo auth completo)', async () => {
     const reg = await api('/api/auth/register', {
       method: 'POST',
@@ -407,51 +420,8 @@ describe('API SADEN — integração', () => {
     }
   });
 
-  it('arService.run 422 com série curta (cache semeado)', async () => {
-    const { connect, cacheSet } = require('../../backend/src/db');
-    const arService = require('../../backend/src/services/arService');
-    const pts = [];
-    for (let i = 0; i < 10; i++) pts.push({ date: `2026-01-${String(i + 1).padStart(2, '0')}`, price_brl: 100 + i });
-    cacheSet('prices:soja:1y', { points: pts }, 60 * 1000);
-    try {
-      await assert.rejects(() => arService.run('soja', 7), (e) => {
-        assert.equal(e.status, 422);
-        assert.match(e.message, /insuficiente/i);
-        return true;
-      });
-    } finally {
-      connect().prepare('DELETE FROM kv_cache WHERE key = ?').run('prices:soja:1y');
-    }
-  });
-
-  it('arService.run em série sintética semeada (payload completo)', { timeout: 60000 }, async () => {
-    const { connect, cacheSet } = require('../../backend/src/db');
-    const arService = require('../../backend/src/services/arService');
-    const pts = [];
-    const d0 = new Date('2026-01-01T12:00:00Z');
-    for (let i = 0; i < 100; i++) {
-      const d = new Date(d0);
-      d.setUTCDate(d.getUTCDate() + i);
-      pts.push({ date: d.toISOString().slice(0, 10), price_brl: 100 + i * 0.1 + Math.sin(i / 5) * 2 });
-    }
-    cacheSet('prices:soja:1y', { points: pts }, 60 * 1000);
-    try {
-      const out = await arService.run('soja', 14);
-      assert.equal(out.model, 'ar');
-      assert.ok(out.ar_order >= 1 && out.ar_order <= 8);
-      assert.equal(out.horizon_days, 14);
-      assert.equal(out.forecast.length, 14);
-      assert.ok(['ar', 'baseline'].includes(out.model_selected));
-      for (const H of ['h7', 'h14', 'h30']) assert.ok(out.recursive_eval[H].origins >= 0);
-      assert.equal(out.limitations.length, 5);
-      assert.ok(Number.isFinite(out.interval_sigma) && out.interval_sigma >= 0);
-    } finally {
-      connect().prepare('DELETE FROM kv_cache WHERE key = ?').run('prices:soja:1y');
-    }
-  });
-
-  // D38 — exposição opt-in `?model=ar` (série sintética semeada; sem rede).
-  function seedD38Series() {
+  // V1 final (D40) — única metodologia: Ridge. Série sintética semeada; sem rede.
+  function seedForecastSeries() {
     const { cacheSet } = require('../../backend/src/db');
     const pts = [];
     const d0 = new Date('2026-01-01T12:00:00Z');
@@ -478,7 +448,7 @@ describe('API SADEN — integração', () => {
       60 * 1000
     );
   }
-  function unseedD38Series() {
+  function unseedForecastSeries() {
     const { connect } = require('../../backend/src/db');
     connect().prepare('DELETE FROM kv_cache WHERE key = ?').run('prices:soja:1y');
   }
@@ -487,9 +457,9 @@ describe('API SADEN — integração', () => {
     return connect().prepare('SELECT COUNT(*) AS n FROM model_runs WHERE model LIKE ?').get(modelLike).n;
   }
 
-  it('D38: GET sem model → Ridge (default preservado)', { timeout: 60000 }, async () => {
+  it('V1: GET sem model → Ridge (metodologia única)', { timeout: 60000 }, async () => {
     const T = process.env.SADEN_TEST_TOKEN;
-    seedD38Series();
+    seedForecastSeries();
     try {
       const r = await api('/api/forecast/soja?horizon=7', { token: T });
       assert.equal(r.status, 200);
@@ -500,13 +470,13 @@ describe('API SADEN — integração', () => {
       assert.ok(Number.isFinite(r.data.interval_sigma));
       assert.ok(Array.isArray(r.data.limitations) && r.data.limitations.length === 4);
     } finally {
-      unseedD38Series();
+      unseedForecastSeries();
     }
   });
 
-  it('D38: model=ridge ≡ ausência (não-regressão do default)', { timeout: 60000 }, async () => {
+  it('V1: model=ridge ≡ ausência (alias legado preservado)', { timeout: 60000 }, async () => {
     const T = process.env.SADEN_TEST_TOKEN;
-    seedD38Series();
+    seedForecastSeries();
     try {
       const a = await api('/api/forecast/soja?horizon=7', { token: T });
       const b = await api('/api/forecast/soja?horizon=7&model=ridge', { token: T });
@@ -515,28 +485,19 @@ describe('API SADEN — integração', () => {
       assert.deepEqual(b.data.forecast, a.data.forecast);
       assert.deepEqual(b.data.metrics, a.data.metrics);
     } finally {
-      unseedD38Series();
+      unseedForecastSeries();
     }
   });
 
-  it('D38: model=ar → challenger com payload compatível', { timeout: 60000 }, async () => {
+  it('V1: model=ar → 400 (AR retirado do produto)', async () => {
     const T = process.env.SADEN_TEST_TOKEN;
-    seedD38Series();
-    try {
-      const r = await api('/api/forecast/soja?horizon=7&model=ar', { token: T });
-      assert.equal(r.status, 200);
-      assert.equal(r.data.model, 'ar');
-      assert.ok(r.data.ar_order >= 1 && r.data.ar_order <= 8);
-      assert.equal(r.data.forecast.length, 7);
-      assert.ok(r.data.metrics && r.data.metrics.train && r.data.metrics.val && r.data.metrics.test);
-      assert.ok(Number.isFinite(r.data.interval_sigma));
-      assert.equal(r.data.limitations.length, 5);
-    } finally {
-      unseedD38Series();
-    }
+    const r = await api('/api/forecast/soja?horizon=7&model=ar', { token: T });
+    assert.equal(r.status, 400);
+    assert.match(r.data.error, /model/i);
+    assert.match(r.data.error, /Ridge/i);
   });
 
-  it('D38: model inválido → 400 honesto (sem fallback silencioso)', async () => {
+  it('V1: model inválido/vazio → 400 honesto (sem fallback silencioso)', async () => {
     const T = process.env.SADEN_TEST_TOKEN;
     for (const bad of ['AR', 'arima', 'x', '']) {
       const r = await api(`/api/forecast/soja?model=${bad}`, { token: T });
@@ -545,59 +506,55 @@ describe('API SADEN — integração', () => {
     }
   });
 
-  it('D38: persistência distinguível Ridge × AR', { timeout: 60000 }, async () => {
+  it('V1: persistência grava Ridge e preserva histórico AR', { timeout: 60000 }, async () => {
     const T = process.env.SADEN_TEST_TOKEN;
-    seedD38Series();
+    seedForecastSeries();
+    const { connect } = require('../../backend/src/db');
+    const hist = connect()
+      .prepare(
+        `INSERT INTO model_runs(commodity_key, model, horizon_days, metrics_json, params_json, data_start, data_end)
+         VALUES('soja', 'ar(order=1)', 7, '{}', '{}', '2026-01-01', '2026-01-10')`
+      )
+      .run();
     try {
       const r0 = countRuns('ridge%');
-      const a0 = countRuns('ar(%');
-      await api('/api/forecast/soja?horizon=7', { token: T });
-      await api('/api/forecast/soja?horizon=7&model=ar', { token: T });
-      assert.equal(countRuns('ridge%'), r0 + 1);
-      assert.equal(countRuns('ar(%'), a0 + 1);
-      const { connect } = require('../../backend/src/db');
-      const row = connect()
-        .prepare("SELECT model, params_json FROM model_runs WHERE model LIKE 'ar(%' ORDER BY id DESC LIMIT 1")
-        .get();
-      assert.match(row.model, /^ar\(order=[1-8]\)$/);
-      assert.equal(JSON.parse(row.params_json).ar_order, Number(row.model.match(/\d+/)[0]));
+      const r = await api('/api/forecast/soja?horizon=7', { token: T });
+      assert.equal(r.status, 200);
+      assert.equal(countRuns('ridge%'), r0 + 1, 'cada previsão grava uma linha Ridge');
+      const still = connect()
+        .prepare('SELECT model, params_json FROM model_runs WHERE id = ?')
+        .get(hist.lastInsertRowid);
+      assert.equal(still.model, 'ar(order=1)', 'histórico AR não é reinterpretado como Ridge');
+      assert.equal(still.params_json, '{}', 'histórico AR não é alterado');
     } finally {
-      unseedD38Series();
+      connect().prepare('DELETE FROM model_runs WHERE id = ?').run(hist.lastInsertRowid);
+      unseedForecastSeries();
     }
   });
 
-  it('D38: CSV identifica o modelo (Ridge lambda × AR order)', { timeout: 60000 }, async () => {
+  it('V1: CSV identifica Ridge e rejeita model=ar', { timeout: 60000 }, async () => {
     const T = process.env.SADEN_TEST_TOKEN;
     const headers = { Authorization: `Bearer ${T}` };
-    seedD38Series();
+    seedForecastSeries();
     try {
       const rr = await fetch(`${base}/api/reports/soja/csv?horizon=7`, { headers });
       assert.equal(rr.status, 200);
       const ridgeCsv = await rr.text();
       assert.match(ridgeCsv, /# modelo: ridge \(lambda=[\d.]+\)/);
+      assert.ok(!ridgeCsv.includes('lambda=undefined'), 'sem cabeçalho incorreto');
       const ra = await fetch(`${base}/api/reports/soja/csv?horizon=7&model=ar`, { headers });
-      assert.equal(ra.status, 200);
-      const arCsv = await ra.text();
-      assert.match(arCsv, /# modelo: ar \(order=[1-8]\)/);
-      assert.ok(!arCsv.includes('lambda=undefined'), 'sem cabeçalho incorreto');
+      assert.equal(ra.status, 400);
       const bad = await fetch(`${base}/api/reports/soja/csv?model=xxx`, { headers });
       assert.equal(bad.status, 400);
     } finally {
-      unseedD38Series();
+      unseedForecastSeries();
     }
   });
 
-  it('D38: rota AR propaga 422 com série curta', async () => {
+  it('V1: relatório JSON rejeita model=ar', async () => {
     const T = process.env.SADEN_TEST_TOKEN;
-    const { cacheSet } = require('../../backend/src/db');
-    const pts = [];
-    for (let i = 0; i < 10; i++) pts.push({ date: `2026-01-${String(i + 1).padStart(2, '0')}`, price_brl: 100 + i });
-    cacheSet('prices:soja:1y', { points: pts }, 60 * 1000);
-    try {
-      const r = await api('/api/forecast/soja?model=ar', { token: T });
-      assert.equal(r.status, 422);
-    } finally {
-      unseedD38Series();
-    }
+    const r = await api('/api/reports/soja?horizon=7&model=ar', { token: T });
+    assert.equal(r.status, 400);
+    assert.match(r.data.error, /model/i);
   });
 });

@@ -1,9 +1,9 @@
 'use strict';
 
-// Álgebra linear mínima compartilhada (sem dependências):
-// eliminação de Gauss com pivoteamento parcial + OLS via equações normais.
-// Movido verbatim de forecastService.js (E3) para evitar duplicação;
-// comportamento numérico idêntico, coberto pela suíte existente.
+// Álgebra linear mínima usada pela Ridge (sem dependências):
+// eliminação de Gauss com pivoteamento parcial.
+// Originalmente movido de forecastService.js para compartilhamento durante o
+// experimento AR(p); após a retirada do AR (D40), permanece apenas `solve`.
 function solve(A, b) {
   const n = A.length;
   const M = A.map((row, i) => [...row, b[i]]);
@@ -23,20 +23,4 @@ function solve(A, b) {
   return M.map((row, i) => row[n] / M[i][i]);
 }
 
-// OLS: beta para X (n×k, já com coluna de intercepto se desejado) e y.
-// Lança Error em matriz singular (chamador decide o fallback honesto).
-function olsBeta(X, y) {
-  const n = X.length;
-  const k = X[0].length;
-  const XtX = Array.from({ length: k }, () => new Array(k).fill(0));
-  const Xty = new Array(k).fill(0);
-  for (let i = 0; i < n; i++) {
-    for (let a = 0; a < k; a++) {
-      Xty[a] += X[i][a] * y[i];
-      for (let b = 0; b < k; b++) XtX[a][b] += X[i][a] * X[i][b];
-    }
-  }
-  return solve(XtX, Xty);
-}
-
-module.exports = { solve, olsBeta };
+module.exports = { solve };

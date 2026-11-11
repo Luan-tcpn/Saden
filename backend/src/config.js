@@ -9,9 +9,13 @@ function num(name, fallback) {
 }
 
 // Produção nunca inicializa silenciosamente com segredo público de exemplo.
-if (process.env.NODE_ENV === 'production' && !process.env.JWT_SECRET) {
-  throw new Error('JWT_SECRET ausente: defina um segredo forte no .env antes de iniciar em produção');
+// Função exportada para teste unitário do gate (o app chama com process.env).
+function assertProductionSecret(env) {
+  if (env.NODE_ENV === 'production' && !env.JWT_SECRET) {
+    throw new Error('JWT_SECRET ausente: defina um segredo forte no .env antes de iniciar em produção');
+  }
 }
+assertProductionSecret(process.env);
 
 // Raiz do projeto (independe do cwd de quem iniciou o processo).
 const ROOT = path.join(__dirname, '..', '..');
@@ -33,4 +37,5 @@ module.exports = {
   cacheWeatherTtlMin: num('CACHE_WEATHER_TTL_MIN', 60),
   cacheGeoTtlDays: num('CACHE_GEO_TTL_DAYS', 30),
   isProd: process.env.NODE_ENV === 'production',
+  _test: { assertProductionSecret },
 };

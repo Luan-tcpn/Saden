@@ -3,6 +3,10 @@
 > Origem das sugestões: `segunda opnião.txt` (pasta Área de Trabalho, 940 linhas) = FONTE DE HIPÓTESES, não especificação.
 > Vereditos possíveis: IMPLEMENTAR · INVESTIGAR · ADIAR · REJEITAR · JÁ IMPLEMENTADO · JÁ RESOLVIDO.
 > Data da classificação: 2026-09-27. Reclassificar só com evidência nova.
+>
+> **NOTA 2026-11-11**: documento histórico. A V1 final (D40) retirou o AR do
+> produto; a linha abaixo descreve o ciclo v1.1, não o estado atual. Ver
+> `docs/DECISIONS.md` D40 e `docs/FORECAST_EVALUATION.md` E5.
 
 ## Forecast / modelos
 

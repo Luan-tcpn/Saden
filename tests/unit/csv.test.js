@@ -20,6 +20,12 @@ describe('csvCell — anti formula-injection sem alterar conteúdo legítimo', (
     assert.equal(csvCell('@x'), '\t@x');
   });
 
+  it('trata tab, CR e LF no início da célula', () => {
+    assert.equal(csvCell('\tx'), '\t\tx');
+    assert.equal(csvCell('\rx'), '"\t\rx"');
+    assert.equal(csvCell('\nx'), '"\t\nx"');
+  });
+
   it('envolve em aspas campos com separador e dobra aspas internas', () => {
     assert.equal(csvCell('a;b'), '"a;b"');
     assert.equal(csvCell('diz "oi"'), '"diz ""oi"""');

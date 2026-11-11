@@ -101,3 +101,37 @@ recursivo, nos 3 horizontes, nas 5 commodities. **Ridge CONTINUA champion**:
 nenhuma troca sem decisão explícita (D38); H30 absoluto é fraco nos dois
 modelos (erro acumulado — registrado, não escondido). Sem ensemble. ARIMA
 propriamente dito (MA/sazonalidade) continua NÃO implementado e NÃO avaliado.
+
+---
+
+# E5 — AR retirado do produto; V1 congela a Ridge (2026-11-11, D40)
+
+## O que mudou
+
+- `?model=ar` deixou de existir como funcionalidade: agora retorna **HTTP 400**
+  (assim como `AR`, `arima`, vazio e qualquer valor desconhecido). `?model=ridge`
+  permanece aceito somente como alias legado, equivalente à ausência do parâmetro.
+- `backend/src/services/arService.js` e `tests/unit/ar.test.js` foram removidos;
+  `backend/src/utils/linalg.js` mantém apenas `solve` (Ridge).
+- O select `#sel-model` e o estado `saden_model` do frontend foram removidos.
+- Relatórios JSON/CSV seguem a metodologia única; o CSV identifica
+  `ridge (lambda=…)` e rejeita `model=ar` com 400.
+- O histórico em `model_runs` **permanece intacto**: `ar(order=3)` (5 linhas) e
+  `ar(order=1)` (4 linhas) continuam no banco como registro do experimento,
+  sem migração e sem reinterpretação.
+
+## O que os resultados E2–E4 continuam significando
+
+Os números desta página **continuam válidos como investigação experimental**
+(mesma série, mesmo split, mesmas métricas, réplica Python independente). Eles
+NÃO descrevem o comportamento do produto V1: o produto entrega apenas Ridge.
+Qualquer trabalho futuro que reabilite o AR precisa de decisão explícita nova,
+reavaliação e cobertura de testes próprios.
+
+## Limites que permanecem
+
+- Comparação one-step e recursiva limitada a ~1 ano de série e `val_n` 33–35.
+- H30 absoluto fraco nos dois modelos.
+- ARIMA (MA/sazonalidade) nunca foi implementado nem avaliado.
+- Previsão do produto continua em dias corridos, com intervalo gaussiano sem
+  cobertura empírica (limitações declaradas na UI e nos relatórios).

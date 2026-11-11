@@ -266,8 +266,9 @@ async function run(commodityKey, horizonDays = 14) {
   return payload;
 }
 
-// Persistência genérica de runs (E4, D38): mesma tabela/linhas para Ridge e AR;
-// só `model` e `params` distinguem. Sem migração, sem mudança de semântica.
+// Persistência do modelo único da V1 (D40). A tabela `model_runs` continua
+// genérica para preservar o histórico experimental; linhas antigas de outros
+// modelos permanecem intactas e não são reinterpretadas como Ridge.
 function persistRun(commodityKey, modelLabel, paramsObj, payload) {
   const db = connect();
   const info = db
@@ -293,8 +294,22 @@ function persistRun(commodityKey, modelLabel, paramsObj, payload) {
   tx(payload.forecast);
 }
 
+// V1 final (D40): única metodologia de previsão é a Ridge original.
+// `model=ridge` é aceito apenas como alias legado explícito; qualquer outro
+// valor (inclusive `ar`) retorna 400, sem fallback silencioso.
+async function runFor(model, commodityKey, horizonDays) {
+  if (model !== undefined && model !== 'ridge') {
+    throw Object.assign(
+      new Error("Parâmetro model não suportado na V1: apenas a metodologia Ridge está disponível"),
+      { status: 400 }
+    );
+  }
+  return run(commodityKey, horizonDays);
+}
+
 module.exports = {
   run,
+  runFor,
   persistRun,
   MIN_POINTS,
   _test: { clean, featuresFor, buildRows, splitRows, fitRidge, metrics, baselinePredict, nextBusinessDates },

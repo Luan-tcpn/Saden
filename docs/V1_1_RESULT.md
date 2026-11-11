@@ -99,6 +99,10 @@ microsserviços, Nginx/TLS, badges/CI, SEO/social, UI comparativa além do selet
 **V1.1 STATUS: FUNCTIONALLY COMPLETE** (Docker validado em 2026-09-27 —
 todos os gates, incluindo smoke 8/8 no container).
 
+> Atualização 2026-11-11: este registro descreve a v1.1 histórica. A **V1
+> final** congela a Ridge como metodologia única e retira o AR do produto
+> (D40); ver seção 19.
+
 ## 17. Evidências
 
 Commits `9218e01`→`4a859f8` (+ este ciclo); `docs/FORECAST_EVALUATION.md`;
@@ -109,3 +113,41 @@ Commits `9218e01`→`4a859f8` (+ este ciclo); `docs/FORECAST_EVALUATION.md`;
 Validação Docker; UI comparativa além do seletor; challengers SARIMA/ETS;
 convênio CEPEA / autorização IMEA se surgirem; `V1_1_TCC_IMPACT.md` como ponte
 para o autor atualizar o SADEN-TCC.
+
+---
+
+# V1 FINAL — encerramento (2026-11-11, D40)
+
+## 19. Escopo congelado
+
+- Metodologia de previsão: **Ridge única** (pipeline, split 70/15/15, baselines,
+  λ por validação e métricas inalterados).
+- AR(p) **fora do produto**: `arService.js`, `olsBeta`, `#sel-model` e o
+  parâmetro de modelo no frontend removidos. `?model=ridge` é alias legado;
+  qualquer outro valor → **HTTP 400**.
+- Histórico experimental preservado em `model_runs` (`ar(order=3)` n=5,
+  `ar(order=1)` n=4), sem migração nem reinterpretação.
+
+## 20. Evidência executada nesta árvore
+
+| Verificação | Resultado |
+|---|---|
+| `npm test` | **65/65 PASS**, 9 suítes, 0 falhas, 7,06 s |
+| smoke local | **9/9 PASS** (Ridge; `model=ar`→400) |
+| E2E Edge headless/CDP | **57/57 PASS**, `pageErrors: []` |
+| Docker | build OK; up `healthy`; auth; Ridge 200; `model=ar`→400; persistência down/up; smoke **9/9** no container |
+| Backup | `tmp/backups/saden-20261111T170124.db`, 4.472.832 bytes |
+
+## 21. O que NÃO foi feito (honestidade de escopo)
+
+- Nenhuma funcionalidade de V2 implementada; `docs/CONTEXTO_V2.md` é apenas
+  documental.
+- Sem TLS, sem SMTP real, sem teste de carga, sem monitoramento, sem cobertura
+  empírica do intervalo — nada disso foi alegado como pronto para produção.
+- ARIMA (MA/sazonalidade), ensemble e fontes regionais seguem não implementados.
+
+## 22. Situação
+
+**V1 CONGELADA E VALIDADA NO AMBIENTE LOCAL** (tag `v1-final`), com escopo
+declarado, testes verdes e Docker executado de fato. Produção real continua
+exigindo TLS, backup operacional, monitoramento e avaliação de carga.

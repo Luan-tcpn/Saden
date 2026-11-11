@@ -5,7 +5,7 @@ const { connect } = require('../db');
 const { requireAuth } = require('../middleware/auth');
 const priceService = require('../services/priceService');
 const weatherService = require('../services/weatherService');
-const arService = require('../services/arService');
+const forecastService = require('../services/forecastService');
 
 const router = express.Router();
 
@@ -16,7 +16,7 @@ router.get('/:key', requireAuth, async (req, res, next) => {
     const { lat, lon, horizon, model } = req.query;
     const [series, forecast, weather] = await Promise.all([
       priceService.getSeries(key, '1y'),
-      arService.runFor(model, key, horizon || 14),
+      forecastService.runFor(model, key, horizon || 14),
       lat && lon
         ? weatherService.getForecast(lat, lon).catch(() => null)
         : Promise.resolve(null),
@@ -76,7 +76,7 @@ router.get('/:key/csv', requireAuth, async (req, res, next) => {
     const { lat, lon, horizon, model } = req.query;
     const [series, forecast] = await Promise.all([
       priceService.getSeries(key, '1y'),
-      arService.runFor(model, key, horizon || 14),
+      forecastService.runFor(model, key, horizon || 14),
     ]);
     void lat;
     void lon;
@@ -107,10 +107,9 @@ function sourceList() {
   return connect().prepare('SELECT key, name, base_url, docs_url, kind, status FROM data_sources').all();
 }
 
-// Identificação do modelo no CSV (D38): Ridge mantém `lambda`; AR usa `order`.
-// Nunca emite `lambda=undefined`.
+// Identificação da metodologia no CSV: a V1 usa exclusivamente Ridge e
+// registra o λ selecionado na validação. Nunca emite `lambda=undefined`.
 function modelTag(fc) {
-  if (fc && fc.model === 'ar') return `ar (order=${fc.ar_order})`;
   return `${fc ? fc.model : 'ridge'} (lambda=${fc ? fc.lambda : '?'})`;
 }
 

@@ -498,3 +498,20 @@ P13→testes; P14→visual; P15/P16/P17→refino; P18/P19→docs.
 - SEGURANÇA: secrets, bcrypt/JWT, CORS, validação, rate-limit, audit com risco aceito (D10). OK.
 - PERFORMANCE: medições warm ≤10ms; sem otimização especulativa (D12). OK.
 - DOCUMENTAÇÃO: STATUS, ROADMAP, DECISIONS (D1–D12), API_SOURCES, ARCHITECTURE, README, TCC.md. OK.
+
+---
+
+## V1 FINAL — congelamento (2026-11-11, D40)
+
+- Escopo: previsão com **metodologia única Ridge**; AR(p) retirado do produto
+  (`arService.js`, `olsBeta`, `#sel-model` removidos). `?model=ridge` é alias
+  legado; qualquer outro valor → HTTP 400. Histórico em `model_runs` preservado
+  sem migração.
+- Evidência: `npm test` **65/65** (9 suítes), smoke **9/9** local e no container,
+  E2E **57/57** (`pageErrors: []`), Docker build/up/persistência/backup
+  revalidados; histórico `ar(order=3)`=5 e `ar(order=1)`=4 intacto.
+- Documentos: `DECISIONS.md` D40; `FORECAST_EVALUATION.md` E5;
+  `V1_1_AUDIT.md` A14; `V1_1_RESULT.md` §19–22; `AI_CONTEXT_RECOVERY.md`
+  reescrito para a V1 congelada; `CONTEXTO_V2.md` (roadmap documental).
+- **V1 ENCERRADA.** Nenhuma funcionalidade de V2 implementada. Produção real
+  continua exigindo TLS, SMTP, backup automatizado, monitoramento e carga.

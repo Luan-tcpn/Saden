@@ -1,35 +1,76 @@
-# SADEN — AI Context Recovery (v1.0.0 → v1.1.x, CONSOLIDADA 2026-09-27)
+# SADEN — AI Context Recovery (V1 FINAL congelada, 2026-11-11)
 
-> Gerado em 2026-09-27 pelo agente de continuidade, após auditoria completa da árvore real.
-> Fonte canônica: implementação + testes + schema + docs. SADEN-TCC = somente leitura.
+> Documento canônico de retomada. Fonte de verdade: implementação + testes +
+> schema + docs desta árvore. `SADEN-TCC` é somente leitura; nada nele foi alterado.
+> Registro histórico da v1.1 continua em `docs/V1_1_*.md` e `docs/DECISIONS.md`.
 
 ## 1. Onde estamos
 
-- **Baseline v1.0.0 congelado e VERDE** (tag lógica `9218e01 v1.0.0`; branch `main`, sincronizado com `origin https://github.com/Luan-tcpn/Saden.git`).
-- Backend **80/80 PASS** (`node --test`, 14 suítes: backup adicionou 3 unitários) — revalidado em 2026-09-27.
-- Smoke **8/8 PASS** contra servidor live em 2026-09-27 (soja R$ 151,18 real, clima real, previsão `modelo=ridge`, relatório OK).
-- `docs/` **PRESENTE e versionado** (8 arquivos, `git ls-tree HEAD docs/` confirma) — a nota do README que dizia "docs ausente nesta cópia" está **obsoleta** (era verdadeira numa árvore anterior, não nesta).
-- Docker **não validável neste ambiente** (daemon Docker Desktop inativo em 2026-09-27); `Dockerfile` + `compose` íntegros por inspeção, `COPY docs ./docs` agora consistente porque `docs/` existe.
-- `data/saden.db` = runtime (4,1 MB, WAL ativo), ignorado no git (`data/*.db*`). `.env` ignorado. Segredos não commitados.
+- **V1 congelada** na branch `main`, tag anotada `v1-final` (ver `git tag`).
+- Backend **65/65 PASS**, 9 suítes (`cd backend; npm test`, ~7 s).
+- Smoke **9/9 PASS** local e no container.
+- E2E **57/57 PASS** em Edge headless + CDP 9333, `pageErrors: []`.
+- Docker **validado em 2026-11-11**: build, up healthy, auth, Ridge,
+  `model=ar`→400, persistência down/up, smoke 9/9, backup 4,47 MB, imagem
+  efêmera/não-root e fail-fast sem `JWT_SECRET`.
+- `data/saden.db` = runtime (ignorado no git); `.env` ignorado; segredos não
+  versionados. Histórico AR preservado no banco (ver §3).
 
-## 2. Arquitetura real (confirmada no código)
+## 2. Escopo congelado da V1 (D40)
 
-- Backend Express porta única 3001: `rotas → serviços → integrações → utils`, middleware `auth JWT + rateLimit`.
-  32 arquivos em `backend/src`: core (config, db, index), 2 middleware, 6 integrações (yahoo, bcb/PTAX, openmeteo, nominatim, ibge, landcover), 7 serviços (fx, price, priceReference, weather, geo, forecast, mail), 10 rotas, 4 utils.
-- Frontend estático puro (HTML/CSS/JS + Leaflet 1.9.4 + Chart.js 4.4.1 via CDN), servido pelo backend. 10 arquivos.
-- Banco SQLite `better-sqlite3`, WAL+FK, **14 tabelas** (users, data_sources, commodities, regions, price_observations, weather_observations, model_runs, forecasts, reports, password_resets, kv_cache, alerts, alert_events, user_places). Seed idempotente: 5 commodities + usuário demo `demo@saden.local / saden123` (local/acadêmico).
-- Cache: preços/clima 60 min, geo 30 dias (`kv_cache`); landcover memória 100 + 30d. HTTP: timeout 12 s (landcover até 25 s), retry 3× linear 600 ms só em 502/429, Nominatim throttle 1,1 s.
-- Preço = futuro CBOT/ICE (cents) × PTAX venda × fator (saca 60 kg = 2,20462 bu; café = 132,277 lb; algodão direto). Sem câmbio → ponto descartado. Fonte fora do ar → 502 honesto.
+- **Previsão = Ridge única** (pipeline, split 70/15/15, baselines, λ por
+  validação e métricas inalterados).
+- `?model=ridge` é **alias legado**; qualquer outro valor (`ar`, `AR`, `arima`,
+  vazio) → **HTTP 400**, sem fallback. Vale para `/api/forecast/:key` e
+  `/api/reports/:key[/csv]`.
+- Removidos do produto: `backend/src/services/arService.js`, `olsBeta`,
+  select `#sel-model`, estado `saden_model` e parâmetro de modelo no frontend.
+- `backend/src/utils/linalg.js` contém apenas `solve` (usado pela Ridge).
+- **Nada de V2 implementado**; `docs/CONTEXTO_V2.md` é somente roadmap.
 
-## 3. Forecast real (confirmado em `forecastService.js`)
+## 3. Histórico experimental preservado
 
-- **Champion = Ridge própria** (sem deps, Gauss+pivô, padronização, intercepto não penalizado).
-- Features só do passado (sem leakage): lag1, lag2, lag5, MM7, MM30, vol14 (dp log-returns 14d), índice t. `WARMUP=30`, `MIN_POINTS=60`, série 1a Yahoo×PTAX.
-- Divisão temporal **70/15/15**, métricas MAE/RMSE/MAPE. Baselines val one-step: naive, seasonal_naive_5, ma7. Grade λ {0.1,1,10,100}, seleção por menor RMSE val. Previsão recursiva H 7|14|30 (default 14, dias corridos), intervalo ±1,96·σ_val·√h, lower truncado em 0.
-- Resultado TCC (n=252 pregões, 5 commodities): Ridge vence val em 4/5; **café = naive vence no teste** (choque 1,7→2,5→1,9 mil) — patrimônio metodológico, não apagar.
-- Clima e PTAX são **contexto, não features** do modelo. Land Cover é **camada visual**, não NDVI.
+`model_runs` é write-only em produção e permanece intacta:
 
-## 4. Fontes (classificação real)
+| model | linhas (2026-11-11) |
+|---|---|
+| `ridge(lambda=0.1)` | 861 |
+| `ridge(lambda=1)` | 12 |
+| `ridge(lambda=10)` | 5 |
+| `ar(order=3)` | 5 |
+| `ar(order=1)` | 4 |
+
+Os números crescem a cada previsão Ridge; o histórico AR não é migrado,
+renomeado nem reinterpretado. Leitura de `model_runs` não existe em produção.
+
+## 4. Arquitetura real
+
+- Express porta única 3001: `rotas → serviços → integrações → utils`;
+  middleware `auth JWT` + `rateLimit`.
+- Frontend estático puro (HTML/CSS/JS + Leaflet 1.9.4 + Chart.js 4.4.1 via
+  CDN), servido pelo backend.
+- SQLite `better-sqlite3`, WAL+FK, **14 tabelas**. Seed idempotente: 5
+  commodities + usuário demo `demo@saden.local / saden123` (local/acadêmico).
+- Cache: preços/clima 60 min, geo 30 dias (`kv_cache`); HTTP timeout 12 s
+  (landcover até 25 s), retry 3× em 502/429, Nominatim throttle 1,1 s.
+- Preço = futuro CBOT/ICE × PTAX venda × fator. Sem câmbio → ponto descartado;
+  fonte fora do ar → 502 honesto. `fx_fallback_days` declara repetição de PTAX.
+
+## 5. Forecast real
+
+- Ridge própria (Gauss+pivô, padronização, intercepto não penalizado).
+- Features só do passado: lag1, lag2, lag5, MM7, MM30, vol14, índice t.
+  `WARMUP=30`, `MIN_POINTS=60`, série ~1 ano Yahoo×PTAX.
+- Split 70/15/15; MAE/RMSE/MAPE; baselines naive, seasonal_naive_5, ma7;
+  λ ∈ {0.1,1,10,100} por RMSE de validação; previsão recursiva H 7|14|30
+  (default 14, dias corridos); intervalo ±1,96·σ_val·√h, lower truncado em 0.
+- Patrimônio metodológico: na v1.0 (n=252 pregões), Ridge venceu a validação
+  em 4/5 e o café foi vencido pelo naive no teste — registrar, não apagar.
+- Clima e PTAX são contexto, não features. Land Cover é camada visual, não NDVI.
+- **AR(p): investigação encerrada e fora do produto** (E2–E5). Resultados
+  históricos em `docs/FORECAST_EVALUATION.md`; não descrevem a V1.
+
+## 6. Fontes
 
 | Fonte | Status |
 |---|---|
@@ -39,56 +80,61 @@
 | IBGE | UTILIZADA |
 | Nominatim | UTILIZADA (throttle+atribuição) |
 | Esri/Impact Observatory Land Cover | UTILIZADA como camada visual |
-| CEPEA | BLOQUEADA (API por contratação, fora do escopo) |
-| CONAB | BLOQUEADA (portal com reCAPTCHA, sem REST pública) |
+| CEPEA | BLOQUEADA (API por contratação) |
+| CONAB | BLOQUEADA (portal com reCAPTCHA) |
 | INMET | NÃO INTEGRADA |
 | ANTT/frete | REFERÊNCIA manual |
-| NDVI/CDSE | ESTUDADA (`NDVI_STUDY.md`), bloqueada por credencial |
+| NDVI/CDSE | ESTUDADA, bloqueada por credencial |
 
-## 5. Segurança (auditada em 2026-09-27)
+## 7. Segurança
 
-- bcrypt cost 10, JWT 12h com fail-fast sem `JWT_SECRET` em produção, rate-limit 10 req/10min em auth, SQL parametrizado (`better-sqlite3`), reset token sha256 + timingSafeEqual + TTL 1h + uso único, CSV com anti-formula-injection, erro 500 sem vazamento.
-- XSS: `esc()` aplicado a strings de usuário/fonte externa antes de `innerHTML` (D20); 157 interpolações restantes são numéricas (`toFixed`/`fmtBRL`/datas) ou constantes internas — padrão aceito, sem `insertAdjacentHTML` inseguro.
-- CSRF: n/a (auth via `Authorization: Bearer`, sem cookies). CORS: `FRONTEND_ORIGIN` configurável. CSP ativa no backend.
+- bcrypt cost 10; JWT 12h; **fail-fast** sem `JWT_SECRET` em produção
+  (`config._test.assertProductionSecret`, coberto por teste); rate-limit
+  10 req/10 min em auth; SQL parametrizado; reset token sha256 +
+  timingSafeEqual + TTL 1h + uso único.
+- XSS: `esc()` em strings de usuário/fonte externa antes de `innerHTML` (D20);
+  datas/IDs também escapados; E2E cobre autocomplete, local salvo e relatório.
+- CSV: anti formula-injection com TAB/CR/LF coberto por unitário.
+- CSRF n/a (Bearer, sem cookies). CORS por `FRONTEND_ORIGIN`. CSP ativa.
+- Erros 500 sem vazamento; `X-Powered-By` desativado.
 
-## 6. Decisões recuperadas
+## 8. Decisões
 
-- `docs/DECISIONS.md`: **D1–D38** (última = D38 exposição opt-in do AR). Próxima decisão nova = **D39**.
-- Segunda opinião (`segunda opnião.txt`, 940 linhas): fonte de hipóteses, NÃO especificação. Números de MAPE futuro (8–10%, 6–8%) são hipóteses, não resultados.
+- `docs/DECISIONS.md`: **D1–D40** (D40 = congelamento V1 e retirada do AR).
+- D38/D39 são registros históricos superados por D40, preservados.
+- Segunda opinião (arquivo externo, 940 linhas): fonte de hipóteses, NÃO
+  especificação. MAPE futuro (8–10%, 6–8%) é hipótese, nunca resultado.
 
-## 7. Discrepâncias encontradas e corrigidas
+## 9. Docker (real, 2026-11-11)
 
-1. README dizia "`docs/` ausente nesta cópia" + "`docker compose build` falha nesta árvore" — **obsoleto**: docs presente e versionado; build não testável aqui por daemon inativo, mas causa citada (docs ausente) não existe mais. → corrigido no README nesta sessão.
-2. Nenhuma outra divergência entre README, docs e código (TTLs, timeouts, tabelas, endpoints, seed, credenciais demo — tudo confere).
+`docker compose build` → `saden:rc` (395 MB); `up -d` → `healthy`. Gates:
+health, frontend 26.597 bytes sem `sel-model`, auth, Ridge 200,
+`model=ar`→400, persistência down/up (861 linhas Ridge e histórico AR intactos),
+smoke 9/9 no container, backup 4.472.832 bytes via host, `/app/data` vazio na
+imagem e sem `.env`, processo `uid=1000(node)`, `NODE_ENV=production` sem
+`JWT_SECRET` lança erro explícito.
 
-## 8. O que foi feito (2026-09-27, 2 ciclos)
+Backups dentro do container são efêmeros; usar `node scripts/backup.js` no host.
 
-- [x] FASE 1: inspeção raiz + Saden_AgroClima + SADEN-TCC (leitura) + git/remoto + docs + código + testes + schema + data + README.
-- [x] Baseline executado: backend 48/48 + smoke 8/8 (live). Docker daemon inativo — build pendente de ambiente com Docker.
-- [x] Este arquivo `AI_CONTEXT_RECOVERY.md` criado e reconciliado.
-- [x] README: removidas notas obsoletas sobre docs ausente / build falhando.
-- [x] `docs/V1_1_DECISION_MATRIX.md` — 40+ sugestões da segunda opinião classificadas.
-- [x] D35 (Champion/Challenger) + D36 (correção README/docs) registradas.
-- [x] `docs/V1_1_AUDIT.md` — cobertura medida 88,51% linhas (c8 efêmero, sem dependência nova); gaps A3.1–A3.3 viram fila E1.
+## 10. Limitações e riscos aceitos (inalterados)
 
-## 9. Fila racional (impacto × risco; atualizada 2026-09-27)
+Referência internacional (não físico regional); modelo univariado; clima fora
+do modelo; série ~1 ano; val_n 33–35; intervalo gaussiano sem cobertura
+empírica; H30 fraco; Land Cover visual; sem teste de carga; sem SMTP real;
+instância única, rate-limit em memória; sem TLS, backup automatizado ou
+monitoramento. Express 4 com 3 moderadas (D10, body limit 256 kb).
 
-- [x] `docs/V1_1_AUDIT.md` — feito. Gaps A3.1–A3.3 viram fila E1.
-- [x] `docs/V1_1_DECISION_MATRIX.md` — feito.
-- [x] D35 Champion/Challenger — feito.
-- [x] **E3 (challenger AR)** — feito 2026-09-27: `arService.js` + `linalg.js`, 69/69, AR aprovado como challenger (one-step + recursivo H=7/14/30, 5/5); Ridge segue champion. Sem rota, sem persistência (D38).
-- [x] **E4 (D38 implementada)** — feito 2026-09-27: `runFor` (Ridge default, `?model=ar` opt-in, inválido→400) + `persistRun` partilhado + CSV por modelo + 8 testes; 77/77; default provado idêntico por deep-equal; sem frontend. Ridge champion; AR challenger opt-in.
-- [x] **G6 (fonte regional)** — feito 2026-09-27, sem código: nenhuma fonte integrável (CONAB CAPTCHA, CEPEA paga, IMEA parcial-MT, B3 futuros). Evidência em `REGIONAL_INVESTIGATION.md`. Sem schema, sem D39. Trilha encerrada por enquanto.
-- [x] **Backup** — feito 2026-09-27: `scripts/backup.js` + 3 testes + rotina no README; CLI real validado. Sem D-number (tooling).
-- [x] **D39 (seletor Ridge/AR)** — feito 2026-09-27: select opt-in mínimo + E2E 57/57; Ridge default; sem D40.
-- [x] **Consolidação v1.1** — 2026-09-27: `V1_1_RESULT.md`, `V1_1_TCC_IMPACT.md`, `CHANGELOG.md` criados; README sem "feature freeze" obsoleto; STATUS: FUNCTIONALLY COMPLETE (Docker NOT RUN separado).
-- [x] **Docker validado** — 2026-09-27: build+up+health+auth+Ridge+AR+400+persistência+smoke 8/8 no container; backup de container efêmero (host suportado). Sem D nova (validação).
-- [ ] Futura v1.2 só por nova investigação (convênio CEPEA/autorização IMEA, novos challengers, ou UI comparativa).
+## 11. Próxima etapa
 
-## 10. Decisões ativas / hipóteses em investigação
+V2 **não iniciada**. Critérios de entrada, escopo candidato, riscos e perguntas
+abertas estão em `docs/CONTEXTO_V2.md`. Qualquer reativação do AR ou outro
+challenger exige decisão nova, reavaliação e testes próprios.
 
-- Ativas: v1.0.0 = baseline imutável; acrescentar-não-destruir; preço = referência internacional declarada; Ridge = champion; café-naive = evidência de que baselines importam.
-- Em investigação: UI comparativa Ridge×AR (futura, D39); NDVI (bloqueado por credencial); OpenAPI; teste de carga; backup `data/saden.db`; LICENSE (decisão do autor).
-- Encerradas por enquanto: regionalização G6 (sem fonte integrável); cobertura c8 (medida).
-- Medido e encerrado: cobertura c8 88,51% linhas (sem dependência nova).
-- Rejeitado por ora: LSTM/RF/XGBoost (dados curtos, sem justificativa); ensemble (antes de validar individuais); CSRF (sem cookies); Python (sem benefício demonstrado).
+## 12. Regras de trabalho que evitam regressão
+
+1. Não apagar/renomear histórico em `model_runs` nem `forecasts`.
+2. Não usar `git reset --hard`, `git clean -fd` ou force push.
+3. Antes de E2E: confirmar PID/porta e versão servida (HTML atual).
+4. Não declarar Docker/push/release sem execução e evidência.
+5. Não inventar métricas, fontes ou prontidão de produção.
+6. `SADEN-TCC` permanece intocado.

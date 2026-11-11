@@ -60,6 +60,9 @@ function check(name, cond, extra) {
   const fc = await req('/api/forecast/soja?horizon=7', { token, timeoutMs: 120000 });
   check('previsão', fc.status === 200 && fc.data.forecast.length === 7, `http ${fc.status} modelo=${fc.data && fc.data.model}`);
 
+  const ar = await req('/api/forecast/soja?horizon=7&model=ar', { token, timeoutMs: 15000 });
+  check('AR retirado do produto (400)', ar.status === 400, `http ${ar.status}`);
+
   const rep = await req('/api/reports/soja?lat=-21.17&lon=-47.81&horizon=7', { token, timeoutMs: 120000 });
   check('relatório', rep.status === 200 && rep.data.forecast.points.length === 7, `http ${rep.status}`);
 

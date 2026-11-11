@@ -100,6 +100,7 @@ async function getLatest(commodityKey) {
     variation_pct: round2(variation),
     provider: s.provider,
     fx_provider: s.fx_provider,
+    fx_fallback_days: s.fx_fallback_days || 0,
     retrieved_at: s.retrieved_at,
     cached: s.cached,
   };

@@ -1,6 +1,11 @@
 # SADEN — Estado do projeto
 
-Atualizado em **2026-09-08**. Legenda: DONE · PARTIAL · BROKEN · BLOCKED · NOT_STARTED.
+Atualizado em **2026-11-11** (V1 congelada; seções abaixo preservam o histórico de 2026-09-08). Legenda: DONE · PARTIAL · BROKEN · BLOCKED · NOT_STARTED.
+
+> **V1 FINAL (2026-11-11)**: previsão com metodologia única **Ridge**; AR(p)
+> retirado do produto (D40), com histórico experimental preservado. Suíte
+> **65/65**, smoke **9/9** (local e container), E2E **57/57**, Docker validado.
+> Roadmap da V2 é somente documental (`docs/CONTEXTO_V2.md`), sem implementação.
 
 ## Funcionalidades
 
@@ -15,10 +20,10 @@ Atualizado em **2026-09-08**. Legenda: DONE · PARTIAL · BROKEN · BLOCKED · N
 | Localização (IBGE + geocoding + âncora IBGE) | DONE | "Ribeirão Preto" → lat/lon + ibge 3543402 |
 | Dashboard (filtros reais, histórico, métricas, comparação) | DONE | validado no navegador: KPIs, gráficos e troca de commodity funcionam |
 | Mapa do Brasil (Leaflet OSM + Esri satélite, clique → dados) | DONE | validado: marcador + popup + painel com preço e clima reais; legenda adicionada |
-| Pipeline previsão (ridge + 3 baselines, split temporal, intervalo) | DONE | soja: MAPE teste 1,95%, ridge vence baselines |
+| Pipeline previsão (Ridge única + 3 baselines, split temporal, intervalo) | DONE | soja: MAPE teste 1,95%, ridge vence baselines; `?model≠ridge`→400 (D40) |
 | Avaliação de modelos (MAE/RMSE/MAPE treino/val/teste) | DONE | tabela no dashboard + payload |
 | Relatórios (JSON + CSV + impressão/PDF) | DONE | validado via curl (265 linhas CSV milho) |
-| Testes (21 unit + 12 integração) | DONE | `npm test` verde (46/46), smoke 8/8, E2E 41/41 |
+| Testes (8 unit + integração) | DONE | `npm test` 65/65 (9 suítes), smoke 9/9, E2E 57/57 (V1 final) |
 | Segurança (bcrypt, JWT, validação, CORS, rate-limit, sem segredo no front) | DONE | 25/25 testes; audit: 3 moderadas com risco aceito (D10) |
 | Performance/cache | DONE | warm ≤10ms/endpoint, dashboard 39ms; sem otimização especulativa (D12) |
 | Refinamento visual | DONE | identidade agro validada desktop+mobile; a11y básica ok |
@@ -38,7 +43,7 @@ Atualizado em **2026-09-08**. Legenda: DONE · PARTIAL · BROKEN · BLOCKED · N
 | Alertas MVP (FASE E) | DONE | price_below/above + rain_above, CRUD, check sob demanda, histórico, isolamento; E2E |
 | Locais salvos + período + variação (F/G) | DONE | user_places no mapa, range allowlist, gráfico de variação %; E2E |
 | NDVI (FASE H) | ESTUDO | viável via Sentinel-2/CDSE, bloqueado por credencial — docs/NDVI_STUDY.md |
-| Testes | DONE | 48/48 (`npm test`), smoke 8/8, E2E navegador 44/44 |
+| Testes | DONE | 65/65 (`npm test`), smoke 9/9, E2E navegador 57/57 (V1 final; histórico 44/44→53/53 da RC) |
 | Preço territorial (engine + fallback) | DONE | hierarquia honesta (nacional populado; regional `unavailable` explícito); badge no dashboard |
 | Frete | REFERÊNCIA | sem fonte estruturada; sem cálculo automático; link/manual na tabela de fontes |
 | Mapa agrícola Land Cover | DONE | camada Sentinel-2 10m opcional + legenda PT + atribuição; sem ponto/% (identify exige credencial) |
@@ -72,3 +77,17 @@ Smoke E2E: `node scripts/smoke-test.js`.
 1. Uso real de demonstração (apresentar; coletar feedback de orientador).
 2. Endpoint único de comparação e cache de forecast somente se o uso justificar (D12).
 3. Convênio de dados para preço físico regional (CEPEA/CONAB) como trabalho futuro.
+
+## Fechamento da V1 (2026-11-11)
+
+| Gate | Resultado |
+|---|---|
+| `npm test` | 65/65, 9 suítes, 0 falhas (~7,06 s) |
+| smoke local | 9/9 (Ridge; `model=ar` → 400) |
+| E2E Edge headless/CDP | 57/57, `pageErrors: []` |
+| Docker | build, up healthy, auth, Ridge, 400, persistência down/up, smoke 9/9 |
+| Backup | `tmp/backups/saden-20261111T170124.db` (4.472.832 bytes) |
+| Histórico AR | preservado (`ar(order=3)` 5; `ar(order=1)` 4) | |
+
+Escopo congelado: uma metodologia (Ridge), sem TLS/SMTP/carga/monitoramento —
+não declarado pronto para produção. Próxima etapa possível: `docs/CONTEXTO_V2.md`.

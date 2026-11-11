@@ -6,13 +6,6 @@
     commodities: [],
     commodity: 'soja',
     horizon: 14,
-    model: (() => {
-      try {
-        return window.localStorage.getItem('saden_model') === 'ar' ? 'ar' : 'ridge';
-      } catch {
-        return 'ridge';
-      }
-    })(),
     range: '1y',
     uf: null,
     lat: -21.1775, // Ribeirão Preto (referência inicial)
@@ -166,15 +159,6 @@
     $('sel-horizon').addEventListener('change', (e) => {
       state.horizon = Number(e.target.value);
     });
-    if ($('sel-model').value !== state.model) $('sel-model').value = state.model;
-    $('sel-model').addEventListener('change', (e) => {
-      state.model = e.target.value === 'ar' ? 'ar' : 'ridge';
-      try {
-        window.localStorage.setItem('saden_model', state.model);
-      } catch {
-        /* sem persistência: segue Ridge na sessão */
-      }
-    });
     $('sel-range').addEventListener('change', (e) => {
       state.range = e.target.value;
     });
@@ -187,7 +171,7 @@
         const { municipios } = await Api().municipios(uf);
         $('sel-municipio').innerHTML =
           '<option value="">—</option>' +
-          municipios.map((m) => `<option value="${m.id}">${esc(m.nome)}</option>`).join('');
+          municipios.map((m) => `<option value="${esc(m.id)}">${esc(m.nome)}</option>`).join('');
         $('sel-municipio').dataset.uf = uf;
       } catch (err) {
         setStatus('dash-status', 'error', `Falha ao listar municípios: ${err.message}`);
@@ -306,7 +290,6 @@
     $('btn-clear').addEventListener('click', () => {
       state.commodity = 'soja';
       state.horizon = 14;
-      state.model = 'ridge';
       state.range = '1y';
       state.lat = -21.1775;
       state.lon = -47.8103;
@@ -314,12 +297,6 @@
       state.locApplied = null;
       $('sel-commodity').value = 'soja';
       $('sel-horizon').value = '14';
-      $('sel-model').value = 'ridge';
-      try {
-        window.localStorage.setItem('saden_model', 'ridge');
-      } catch {
-        /* sem persistência: segue na sessão */
-      }
       $('sel-range').value = '1y';
       $('inp-location').value = '';
       $('sel-uf').value = '';
@@ -437,7 +414,7 @@
       const [latest, series, fc, wx] = await Promise.all([
         Api().reference(state.commodity, { uf: state.uf }),
         Api().series(state.commodity, state.range),
-        Api().forecast(state.commodity, state.horizon, state.model),
+        Api().forecast(state.commodity, state.horizon),
         Api().weather(state.lat, state.lon),
       ]);
       renderPriceCards(latest, series);
@@ -463,7 +440,7 @@
       <div class="card"><h3>Data do dado</h3><div class="big" style="font-size:18px">${esc(latest.data_date)}</div>
         <div class="sub">fonte: ${esc(latest.provider)} · atualizado: ${esc(new Date(latest.retrieved_at).toLocaleString('pt-BR'))}${ageNote}</div></div>
       <div class="card"><h3>Câmbio PTAX (venda)</h3><div class="big">R$ ${fmtBRL(latest.fx_venda)}</div>
-        <div class="sub">fonte: ${esc(latest.fx_provider)} · ${series.count} pregões na série</div></div>
+        <div class="sub">fonte: ${esc(latest.fx_provider)} · ${series.count} pregões na série${latest.fx_fallback_days > 0 ? `<br/>Câmbio repetido do último dia disponível em ${latest.fx_fallback_days} pregão(ões).` : ''}</div></div>
       <div class="card"><h3>Contrato</h3><div class="big" style="font-size:18px">${esc(latest.commodity.yahoo_symbol)}</div>
         <div class="sub">nível geográfico: ${esc(latest.geographic_level || 'nacional')} · ${esc(latest.geographic_name || 'Brasil')}</div></div>
       ${latest.fallback_chain && latest.fallback_chain.length ? `<div class="card"><h3>Cobertura territorial</h3><div class="sub">${esc(latest.note || '')}</div></div>` : ''}`;
@@ -484,10 +461,7 @@
   }
 
   function renderForecast(fc) {
-    const isAR = fc.model === 'ar';
-    $('fc-sub').textContent = isAR
-      ? `· ar (ordem ${fc.ar_order}, experimental) · tendência: ${fc.trend}`
-      : `· ${fc.model} (λ=${fc.lambda}) · tendência: ${fc.trend}`;
+    $('fc-sub').textContent = `· Ridge (λ=${fc.lambda}) · tendência: ${fc.trend}`;
     const hist = fc.history_tail.slice(-30);
     destroyChart('chart-forecast');
     state.charts['chart-forecast'] = new Chart($('chart-forecast'), {
@@ -504,17 +478,14 @@
       options: { responsive: true, scales: { x: { ticks: { maxTicksLimit: 8 } } } },
     });
     const last = fc.forecast[fc.forecast.length - 1];
-    const expNote = isAR
-      ? `<br/><span>Modelo experimental (challenger): desempenho passado não garante o futuro; em horizontes longos o erro cresce nos dois modelos.</span>`
-      : '';
     $('forecast-meta').innerHTML =
       `Atual: R$ ${fmtBRL(fc.current_price_brl)} → ${fc.horizon_days}d: <strong>R$ ${fmtBRL(last.price_brl)}</strong> ` +
       `(faixa R$ ${fmtBRL(last.lower_brl)} – R$ ${fmtBRL(last.upper_brl)}) · modelo vencedor: <strong>${esc(fc.model_selected)}</strong>` +
-      `<br/><span>A faixa indica a incerteza do modelo (95%), não uma garantia: o preço real pode ficar fora dela, sobretudo em choques de mercado.</span>${expNote}`;
+      `<br/><span>A faixa indica a incerteza do modelo (95%), não uma garantia: o preço real pode ficar fora dela, sobretudo em choques de mercado.</span>`;
   }
 
   function renderMetrics(fc) {
-    const tag = fc.model === 'ar' ? 'AR' : 'Ridge';
+    const tag = 'Ridge';
     const row = (name, m) => `<tr><td>${name}</td><td>${m.mae}</td><td>${m.rmse}</td><td>${m.mape_pct}%</td><td>${m.n}</td></tr>`;
     $('metrics-table').innerHTML = `
       <table class="data"><thead><tr><th>Modelo / segmento</th><th>MAE</th><th>RMSE</th><th>MAPE</th><th>n</th></tr></thead>
@@ -534,7 +505,7 @@
     const days = wx.daily.slice(0, 7);
     $('wx-cards').innerHTML = days
       .map(
-        (d) => `<div class="card"><h3>${d.date.slice(5)}</h3>
+        (d) => `<div class="card"><h3>${esc(d.date.slice(5))}</h3>
           <div class="big" style="font-size:18px">${d.t_max != null ? d.t_max.toFixed(1) + '° / ' + d.t_min.toFixed(1) + '°' : '—'}</div>
           <div class="sub">chuva: ${d.precipitation != null ? d.precipitation.toFixed(1) + ' mm' : '—'}</div></div>`
       )
@@ -719,8 +690,8 @@
             .map(
               (p) =>
                 `<tr><td>${esc(p.label)}</td><td>${p.latitude.toFixed(4)}, ${p.longitude.toFixed(4)}</td>` +
-                `<td><button class="btn" data-place-go="${p.id}" type="button">Usar</button> ` +
-                `<button class="btn" data-place-del="${p.id}" type="button">Excluir</button></td></tr>`
+                `<td><button class="btn" data-place-go="${esc(p.id)}" type="button">Usar</button> ` +
+                `<button class="btn" data-place-del="${esc(p.id)}" type="button">Excluir</button></td></tr>`
             )
             .join('')}</tbody></table>`
         : '<p class="meta">Nenhum local salvo. Clique no mapa e salve o ponto atual.</p>';
@@ -796,8 +767,8 @@
   }
 
   function renderReport(rep) {
-    const fcPts = rep.forecast.points.map((p) => `<tr><td>${p.date}</td><td>R$ ${fmtBRL(p.price_brl)}</td><td>R$ ${fmtBRL(p.lower_brl)} – R$ ${fmtBRL(p.upper_brl)}</td></tr>`).join('');
-    const hist = rep.history_tail.slice(-15).map((p) => `<tr><td>${p.date}</td><td>R$ ${fmtBRL(p.price_brl)}</td><td>PTAX R$ ${fmtBRL(p.fx_venda)}</td></tr>`).join('');
+    const fcPts = rep.forecast.points.map((p) => `<tr><td>${esc(p.date)}</td><td>R$ ${fmtBRL(p.price_brl)}</td><td>R$ ${fmtBRL(p.lower_brl)} – R$ ${fmtBRL(p.upper_brl)}</td></tr>`).join('');
+    const hist = rep.history_tail.slice(-15).map((p) => `<tr><td>${esc(p.date)}</td><td>R$ ${fmtBRL(p.price_brl)}</td><td>PTAX R$ ${fmtBRL(p.fx_venda)}</td></tr>`).join('');
     $('report-body').innerHTML = `
       <h1>SADEN — Relatório de ${esc(rep.commodity.name)}${rep.placeLabel ? ` — ${esc(rep.placeLabel)}` : ''}</h1>
       <p class="meta">Gerado em ${esc(new Date(rep.generated_at).toLocaleString('pt-BR'))} · unidade ${esc(rep.unit)}</p>
@@ -853,7 +824,7 @@
             .map(
               (r) =>
                 `<tr><td>${esc(r.alert.label || r.alert.kind_label)}</td><td>${esc(r.alert.commodity_key)}</td>` +
-                `<td>${r.triggered ? '<strong>DISPARADO</strong>' : 'não'}</td><td>${r.value != null ? r.value : '—'}</td><td>${esc(r.detail || '')}</td></tr>`
+                `<td>${r.triggered ? '<strong>DISPARADO</strong>' : 'não'}</td><td>${r.value != null ? esc(r.value) : '—'}</td><td>${esc(r.detail || '')}</td></tr>`
             )
             .join('');
           $('al-events').innerHTML = res.results.length
@@ -880,9 +851,9 @@
             .map(
               (a) =>
                 `<tr><td>${esc(a.label || '—')}</td><td>${esc(a.commodity_key)}</td><td>${esc(a.kind_label)}</td>` +
-                `<td>${a.threshold}</td><td>${a.active ? 'sim' : 'não'}</td>` +
-                `<td><button class="btn" data-al-toggle="${a.id}" data-active="${a.active ? 0 : 1}" type="button">${a.active ? 'Desativar' : 'Ativar'}</button> ` +
-                `<button class="btn" data-al-del="${a.id}" type="button">Excluir</button></td></tr>`
+                `<td>${esc(a.threshold)}</td><td>${a.active ? 'sim' : 'não'}</td>` +
+                `<td><button class="btn" data-al-toggle="${esc(a.id)}" data-active="${a.active ? 0 : 1}" type="button">${a.active ? 'Desativar' : 'Ativar'}</button> ` +
+                `<button class="btn" data-al-del="${esc(a.id)}" type="button">Excluir</button></td></tr>`
             )
             .join('')}</tbody></table>`
         : '<p class="meta">Nenhum alerta criado.</p>';

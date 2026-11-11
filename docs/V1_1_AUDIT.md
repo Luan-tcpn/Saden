@@ -124,3 +124,23 @@ auth preservada, CSV via `csvCell`, erros 400/422 pelo padrão existente.
 - Rate-limit em memória (instância única; D11).
 - Intervalo ±1,96σ sem cobertura empírica (limitação declarada).
 - Previsão em dias corridos; descarte de pregão sem PTAX (limitações declaradas).
+
+## A14. Congelamento da V1 — auditoria final (2026-11-11, D40)
+
+| Verificação | Resultado real |
+|---|---|
+| `npm test` (backend) | **65/65 PASS, 9 suítes, 0 falhas, 7,06 s** |
+| Smoke local (`node scripts/smoke-test.js`) | **9/9 PASS** (inclui `AR retirado do produto (400)` e previsão `modelo=ridge`) |
+| E2E navegador (Edge 157 headless + CDP 9333) | **57/57 PASS**, `pageErrors: []` |
+| Docker | **VALIDADO**: `build` OK; `up` healthy; healthcheck `healthy`; auth/register/login; Ridge 200; `model=ar`→400; HTML 26.597 bytes sem `sel-model`; persistência down/up preservada; smoke 9/9 no container; backup 4,47 MB; imagem efêmera (`/app/data` vazio, sem `.env`); processo `uid=1000(node)`; fail-fast sem `JWT_SECRET` confirmado |
+| Histórico AR | Preservado: `ar(order=3)` n=5 e `ar(order=1)` n=4 no banco real, sem alteração |
+| Git | branch de trabalho `chore/finalize-v1`; `data/`, `tmp/`, `.env` e logs fora do diff |
+
+Correções de teste legítimas nesta rodada: o check E2E "período 3m aplica"
+fixava o mês `2026-06` (válido em setembro/2026); foi reescrito para comparar
+o estado anterior e o sufixo "pontos", ficando independente de calendário.
+Isso não alterou comportamento do produto nem reduziu cobertura.
+
+Superfície de segurança revalidada: cabeçalhos/CSP por teste de integração,
+gate de segredo JWT por teste unitário, escapes de XSS em autocomplete, local
+salvo e relatório cobertos pelo E2E, CSV com TAB/CR/LF coberto por unitário.
