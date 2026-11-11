@@ -1,61 +1,70 @@
-# SADEN V2.1 — PoC geoespacial Sentinel-2
+# SADEN V2.1 — Fundação geoespacial Sentinel-2
 
-Módulo **isolado** de prova de conceito: adquire imagens Sentinel-2 L2A de um
-catálogo público, calcula NDVI/EVI/NDMI localmente e grava GeoTIFFs, série
-tabular, prévias e manifesto de proveniência.
+Módulo **isolado** de prova de conceito e validação: adquire imagens Sentinel-2
+L2A de um catálogo público, calcula NDVI/EVI/NDMI localmente e grava GeoTIFFs,
+séries tabulares, prévias e manifestos de proveniência auditáveis.
 
 > Isto **não** é usado pela V1 e **não** está integrado ao produto. Não há
 > previsão de preço, modelo de produtividade, dashboard ou endpoint novo.
-> A V1 continua congelada (D40) e a V2 vive na branch
-> `v2/geospatial-foundation` (D41).
+> A V1 continua congelada (D40); a V2 vive nas branches
+> `v2/geospatial-foundation` (PoC, D41) e `v2/geospatial-validation`
+> (validação, D42–D45).
 
-## 1. O que foi executado (2026-11-11)
+## 1. Fonte de dados
 
-| Item | Resultado real |
+| Item | Valor |
 |---|---|
 | Catálogo | Earth Search / Element 84 — `https://earth-search.aws.element84.com/v1` |
 | Coleção | `sentinel-2-c1-l2a` (L2A, reflectância de superfície) |
-| Autenticação | nenhuma |
-| AOI | Sorriso-MT (IBGE `5107925`) + janela técnica `0,10° × 0,10°` |
-| BBox do AOI | `[-55.6509, -12.74385, -55.5509, -12.64385]` |
-| Janela | `2025-06-01` … `2025-09-30`, nuvem < 20% |
-| Cenas | 54 encontradas, 27 cobrindo o AOI, **4 processadas** |
-| Grade | 20 m, `EPSG:32721`, 547 × 557 px, uma única grade para todas as cenas |
-| Saída | 12 GeoTIFFs, CSV (12 linhas), 4 PNG, manifesto JSON com SHA-256 |
+| Autenticação | nenhuma (acesso público anônimo) |
+| Custo | zero |
+| Licença | a coleção declara `license: proprietary`; o Registry of Open Data on AWS declara acesso “free, full and open”. **As duas informações são registradas** (fonte #1 e fonte #2); não se afirma licença única. |
+| Ativos | `blue` (B02), `red` (B04), `nir` (B08), `swir16` (B11), `scl` |
+| Radiometria | `scale = 0.0001`, `offset = -0.1`, `nodata = 0`, `uint16` |
 
-Cenas processadas:
+## 2. AOIs (três geometrias, nunca misturadas — D42)
 
-| Item ID | Data | Nuvem (%) |
+| Geometria | Bbox | Papel |
 |---|---|---|
-| `S2B_T21LXG_20250609T140533_L2A` | 2025-06-09 | 0,002827 |
-| `S2A_T21LXG_20250726T140110_L2A` | 2025-07-26 | 0,000956 |
-| `S2B_T21LXG_20250828T135714_L2A` | 2025-08-28 | 0,001088 |
-| `S2B_T21LXG_20250927T135901_L2A` | 2025-09-27 | 0,026692 |
+| Limite municipal (IBGE `5107925`, Sorriso-MT) | `[-56.1167, -13.6661, -55.0851, -11.7216]` | referência territorial oficial (9.293,47 km²) |
+| AOI técnica histórica (PoC) | `[-55.6509, -12.74385, -55.5509, -12.64385]` | reprodução da PoC — **0,51 km² (0,42%) ficam fora do município** |
+| AOI de validação | `[-55.6309, -12.7339, -55.5709, -12.6739]` | recorte controlado (43,26 km²; ~108.140 px a 20 m) dentro do município e na sobreposição `21LXG`/`21LXF` |
+| AOI de mosaico | `[-55.70, -12.78, -55.50, -12.62]` | janela que atravessa a fronteira entre os footprints dos dois tiles |
 
-Números completos e limitações: `docs/V2_EXECUTION_STATUS.md`.
+Nenhuma delas é talhão, fazenda, lavoura ou amostra representativa da produção
+municipal.
 
-## 2. Estrutura
+## 3. Estrutura
 
 ```
 geospatial/
   requirements.txt       # versões pinadas do ambiente validado
-  run_poc.py             # CLI (descoberta / processamento)
+  run_poc.py             # CLI da PoC (reprodução da baseline histórica)
+  run_validation.py      # CLI de validação (checkpoints A–E)
   s2_poc/
-    config.py            # catálogo, AOI, bandas, máscara, janela
-    aoi.py               # malha IBGE + janela técnica + point-in-polygon
+    config.py            # catálogo, AOIs, bandas, perfis SCL, parâmetros
+    aoi.py               # malha IBGE + janela técnica (PoC) + point-in-polygon
+    geometry.py          # malha oficial, interseção bbox×município, AOIs, custo
     network.py           # correção de CA para GDAL/schannel no Windows
     stac_search.py       # busca STAC, proveniência, seleção mensal
     read.py              # grade comum, leitura remota, reamostragem, GeoTIFF
+    radiometry.py        # auditoria baseline/scale/offset + bloqueio de produto
+    mask.py              # perfis SCL A/B, contagem por classe, comparação
     indices.py           # escala, máscaras, NDVI/EVI/NDMI, estatísticas
-    render.py            # prévias PNG (matplotlib Agg)
-    pipeline.py          # orquestração + CSV + manifesto
-  tests/                 # 30 testes sintéticos, offline
+    mosaic.py            # mosaico determinístico + mapa de origem + seam
+    timeseries.py        # seleção mensal, lacunas explícitas, CSV da série
+    render.py            # prévias PNG (índices, máscaras, mosaico, série, mapa)
+    pipeline.py          # orquestração da PoC + CSV + manifesto
+  tests/                 # suíte offline (unittest), sem internet
+  tests_external/        # testes de REDE, opt-in (SADEN_EXTERNAL_TESTS=1)
+  manifests/             # manifestos de execução (JSON, versionados, leves)
+  reports/               # relatórios/tabelas de validação (CSV/JSON)
   previews/              # PNGs pequenos versionados
-  artifacts/             # rasters/CSV/JSON grandes — IGNORADO no Git
+  artifacts/             # rasters/CSV grandes — IGNORADO no Git
   .venv/                 # ambiente isolado — IGNORADO no Git
 ```
 
-## 3. Instalação (Windows, Python 3.12)
+## 4. Instalação (Windows, Python 3.12)
 
 ```powershell
 cd <raiz do repositório>
@@ -64,7 +73,7 @@ geospatial\.venv\Scripts\python.exe -m pip install -r geospatial\requirements.tx
 ```
 
 Versões validadas: Python 3.12.10, pystac-client 0.9.1, rasterio 1.4.3
-(GDAL 3.9.3), numpy 2.5.4, matplotlib 3.11.2.
+(GDAL 3.9.3), numpy 2.5.4, matplotlib 3.11.2, shapely 2.1.2, pyproj 3.7.2.
 
 ### Correção obrigatória de TLS
 
@@ -80,39 +89,58 @@ antes de abrir COGs remotos. A verificação TLS **permanece ligada**.
 Windows (`exit -1073740791`). A versão fixada é **1.4.3**. Não “atualize” sem
 testar a leitura remota de ponta a ponta.
 
-## 4. Execução
+## 5. Execução
 
-A partir da raiz do repositório:
+### 5.1 Reprodução da PoC (baseline histórica, Perfil A)
 
 ```powershell
-# 1) descoberta (rede, sem baixar raster)
 geospatial\.venv\Scripts\python.exe geospatial\run_poc.py --check-only
-
-# 2) processamento real (baixa janelas e gera produtos)
 geospatial\.venv\Scripts\python.exe geospatial\run_poc.py
-
-# janela diferente / menos cenas
-geospatial\.venv\Scripts\python.exe geospatial\run_poc.py --start 2025-06-01 --end 2025-09-30 --max-cloud 10 --max-scenes 3
-
-# sem prévia PNG
-geospatial\.venv\Scripts\python.exe geospatial\run_poc.py --no-preview
 ```
 
-O CLI imprime um JSON resumido e grava o manifesto completo em
-`geospatial/artifacts/`.
-
-## 5. Testes
+### 5.2 Validação V2.1 (checkpoints A–E)
 
 ```powershell
-geospatial\.venv\Scripts\python.exe -m unittest discover -s geospatial\tests -t geospatial -v
+# A — reexecuta a PoC em diretório separado + auditoria radiométrica
+geospatial\.venv\Scripts\python.exe geospatial\run_validation.py repro
+
+# B — comparação de máscaras SCL (A histórico × B restritivo)
+geospatial\.venv\Scripts\python.exe geospatial\run_validation.py scl --aoi historical
+
+# C — geometria municipal oficial, interseção e estimativas de custo
+geospatial\.venv\Scripts\python.exe geospatial\run_validation.py geometry
+
+# D — mosaico real de dois tiles do mesmo datatake
+geospatial\.venv\Scripts\python.exe geospatial\run_validation.py mosaic
+
+# E — série mensal exploratória 2023–2025
+geospatial\.venv\Scripts\python.exe geospatial\run_validation.py timeseries --start 2023-01 --end 2025-12
 ```
 
-30 testes, **sem internet**. Cobrem: escala/offset, nodata, fórmulas,
-denominador zero/degenerado, máscara SCL, estatísticas, alinhamento de grade,
-reamostragem `average` × `nearest`, escrita/leitura GeoTIFF, SHA-256,
-seleção mensal determinística, filtro de cobertura do AOI, JSON seguro e CSV.
+Os subcomandos `scl`, `mosaic` e `timeseries` usam a **rede** (STAC + COGs
+reais). A suíte de testes offline é independente deles.
 
-## 6. Fórmulas e decisões
+## 6. Testes
+
+```powershell
+# suíte padrão, 100% offline
+geospatial\.venv\Scripts\python.exe -m unittest discover -s geospatial\tests -t geospatial
+
+# testes externos (rede) — opt-in explícito
+$env:SADEN_EXTERNAL_TESTS = "1"
+geospatial\.venv\Scripts\python.exe -m unittest discover -s geospatial\tests_external -t geospatial
+```
+
+A suíte offline cobre: escala/offset e DN→reflectância, detecção de metadados
+ausentes/incompatíveis, bloqueio de baseline não suportado, nodata/NaN/inf e
+denominador degenerado, fórmulas NDVI/EVI/NDMI, perfis SCL A/B e contagem por
+classe, estatísticas com quantis p5/p25/p75/p95, alinhamento de grade,
+reamostragem `average` × `nearest`, recorte/intersecção com polígono municipal,
+bbox parcialmente fora do município, mosaico sintético com sobreposição
+conhecida, seamline e nodata, meses sem observação, manifesto/SHA-256 e
+reprodutibilidade dos metadados.
+
+## 7. Fórmulas e decisões metodológicas
 
 ```
 NDVI = (NIR - Red) / (NIR + Red)          # B08, B04
@@ -120,45 +148,56 @@ EVI  = 2.5*(NIR - Red) / (NIR + 6*Red - 7.5*Blue + 1)   # B08, B04, B02
 NDMI = (NIR - SWIR) / (NIR + SWIR)        # B08, B11
 ```
 
-- Reflectância física: `DN * 0.0001 + (-0.1)` (metadados reais da coleção).
+- Reflectância física: `DN * 0.0001 + (-0.1)` (metadados reais da coleção);
+  `rasterio.read()` devolve o DN bruto — a escala **não** é aplicada
+  automaticamente, e a auditoria confirma que o COG declara os mesmos
+  metadados (sem dupla aplicação).
 - `DN == 0` (nodata) vira `NaN` **antes** da escala.
 - O `+1` do EVI é aplicado em reflectância física, não em DN.
-- Contínuas: reamostragem `average` de 10 m → 20 m.
-- SCL: `nearest` (nunca interpolação em classes).
+- Contínuas: reamostragem `average` de 10 m → 20 m. SCL: `nearest`.
 - Denominador `|den| <= 1e-6` → `NaN`; nunca `inf`, nunca clamp.
-- Máscara SCL exclui `0, 1, 3, 7, 8, 9, 10, 11`. As classes `2, 4, 5, 6`
-  (incluindo solo exposto e água) são mantidas: máscara de qualidade **não** é
-  interpretação agronômica.
+- **Máscara SCL** (D43): Perfil A (histórico, reprodução da PoC) exclui
+  `0,1,3,7,8,9,10,11`; Perfil B (padrão da V2.1) exclui também `2` (dark area)
+  e `6` (água). Efeito medido: ≤ 0,18% de mudança na média do NDVI.
+- **Mosaico** (D44): `first_valid_wins`, prioridade `21LXG > 21LXF`, sem média;
+  par de tiles definido por mesmo `datatake_id` (diferença temporal medida e
+  registrada); mapa de origem por pixel gravado em GeoTIFF.
+- **Série mensal** (D45): seleção pela menor fração obstruída sobre a AOI
+  (classes SCL de nuvem/sombra/saturado/nodata); meses sem observação
+  utilizável ficam **vazios**, com o motivo registrado.
 
-## 7. Produtos
+## 8. Produtos
 
 | Produto | Caminho | Git |
 |---|---|---|
-| GeoTIFF `<item>_NDVI.tif`, `_EVI.tif`, `_NDMI.tif` | `artifacts/` | ignorado |
-| Série temporal `series_temporal.csv` (UTF-8 BOM) | `artifacts/` | ignorado |
-| Manifesto `run_<UTC>.json` e `latest.json` | `artifacts/` | ignorado |
-| Prévia `AAAA-MM-DD_<item>_indices.png` | `previews/` | versionado |
-| Código e testes | `s2_poc/`, `tests/`, `run_poc.py` | versionado |
+| GeoTIFFs da PoC (`<item>_NDVI.tif`, …) | `artifacts/` | ignorado |
+| GeoTIFFs do mosaico + mapa de origem + SCL | `artifacts/mosaic/` | ignorado |
+| GeoTIFFs mensais da série | `artifacts/timeseries/<mês>/` | ignorado |
+| Reprodução da PoC (CSV + JSON) | `artifacts/repro_poc/` | ignorado |
+| Manifestos de execução (JSON) | `manifests/` | versionado |
+| Tabelas de validação (CSV/JSON) | `reports/` | versionado |
+| Prévias PNG | `previews/` | versionado |
+| Código e testes | `s2_poc/`, `tests/`, `tests_external/`, `run_*.py` | versionado |
 
 GeoTIFFs: `float32`, 1 banda, `nodata=NaN`, compressão deflate, CRS/transform
 idênticos entre cenas. SHA-256 de cada arquivo fica no manifesto.
 
-## 8. Limitações
+## 9. Limitações
 
-- A janela de `0,10° × 0,10°` é **técnica**: não é talhão, fazenda nem amostra
-  representativa da produção municipal. Município não é talhão.
-- Quatro datas em uma estação **não** demonstram sazonalidade.
-- NDVI/EVI/NDMI **não** medem produtividade e **não** são features de preço.
-- A máscara SCL reduz nuvem/sombra, mas não elimina nuvem fina não classificada,
-  aerossol ou sombra residual.
-- Água e solo exposto entram nas estatísticas (por decisão explícita).
-- Não há correção de BRDF, topografia ou mistura espectral.
+- AOI é **geográfico**, não agrícola: nada aqui identifica cultura, talhão,
+  lavoura, produtividade ou preço.
+- A classe SCL 5 (“bare soils”) provavelmente inclui áreas cultivadas — o SCL
+  não é classificador de uso do solo.
+- Não há correção de BRDF, topografia, aerossol ou mistura espectral; não há
+  validação com campo (ground truth) nem com dado de produtividade.
+- A série 2023–2025 é exploratória: meses sem observação são lacunas reais.
+- Um único par de tiles demonstra continuidade espacial local, não global.
 
-## 9. Problemas conhecidos
+## 10. Problemas conhecidos
 
 | Sintoma | Causa | Solução |
 |---|---|---|
 | `UnicodeDecodeError: ... 0xc1` | CA em caminho com acento | usar `network.configure_tls()` antes de abrir COG |
 | crash `-1073740791` ao abrir URL | rasterio 1.5.2/GDAL 3.12 | fixar `rasterio==1.4.3` |
-| `Content-Encoding` inesperado no IBGE | API envia gzip sempre | `aoi.fetch_municipality_geojson` descomprime |
+| `Content-Encoding` inesperado no IBGE | API envia gzip sempre | descompressão explícita em `aoi.py`/`geometry.py` |
 | `DeprecationWarning` de shape no numpy | rasterio 1.4.3 + numpy 2.5 | suprimido localmente em `read.py` |

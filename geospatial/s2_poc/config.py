@@ -100,6 +100,11 @@ SCL_PROFILES = {
     "B_restrictive": tuple(sorted(set(SCL_BAD_CLASSES) | {2, 6, SCL_UNCLASSIFIED})),
 }
 
+# Perfil padrão da V2.1 (decisão D43): exclui também as classes 2 (dark area /
+# sombra) e 6 (água), que não são sinal de vegetação. O Perfil A permanece
+# disponível e é o usado pela reprodução exata da PoC (run_poc.py).
+V2_1_SCL_PROFILE = "B_restrictive"
+
 # Classes tratadas como obstrução na seleção de cenas (nuvem/sombra/inválido).
 # Classe 2 (dark area) não é nuvem; fica fora deste conjunto.
 SCL_OBSTRUCTION_CLASSES = (0, 1, 3, 7, 8, 9, 10, 11)

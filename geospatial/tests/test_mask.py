@@ -32,6 +32,14 @@ class ProfileTest(unittest.TestCase):
             set(config.SCL_PROFILES["B_restrictive"]), {0, 1, 2, 3, 6, 7, 8, 9, 10, 11}
         )
 
+    def test_v2_1_default_profile_is_the_restrictive_one(self):
+        # decisão D43: Perfil B é o padrão da V2.1; o Perfil A fica na PoC
+        self.assertEqual(config.V2_1_SCL_PROFILE, "B_restrictive")
+        self.assertEqual(
+            set(mask_mod.profile_classes(config.V2_1_SCL_PROFILE)),
+            {0, 1, 2, 3, 6, 7, 8, 9, 10, 11},
+        )
+
     def test_unknown_profile_raises(self):
         with self.assertRaises(ValueError):
             mask_mod.profile_classes("Z")

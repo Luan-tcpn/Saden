@@ -351,3 +351,135 @@ saída visual e série tabular reproduzível. Resultado real registrado em
 Consequências: V1 recuperável e congelada; V2 começa pequena, auditável e
 descartável, sem prometer produção, produtividade ou melhoria de preço.
 
+## D42 — Três geometrias separadas e limite municipal oficial (2026-11-11)
+
+Contexto: a PoC usava uma bbox técnica de `0,10° × 0,10°` e provava apenas que
+o **centroide** estava dentro de Sorriso-MT. Isso não permite afirmar que a
+área é municipal. Sem geometria oficial, qualquer número espacial da V2 seria
+ambíguo.
+
+Decisão:
+
+1. **Malha oficial do IBGE** (`5107925`, Sorriso-MT), qualidade `maxima`
+   (2.689 vértices, Polygon, topologicamente válida), CRS de origem
+   `EPSG:4326`. Área: 9.293,46 km² (geodésica WGS84) e 9.293,47 km² em
+   projeção de área igual `EPSG:6933`. Fonte, URL e data de acesso ficam no
+   manifesto de execução.
+2. **Três geometrias, três papéis** — e nunca misturados:
+   - `municipality`: limite oficial (referência territorial);
+   - `historical_aoi`: bbox `[-55.6509, -12.74385, -55.5509, -12.64385]`,
+     preservada **sem alteração** para reprodução da PoC;
+   - `validation_aoi`: recorte de `0,06°` dentro do município e da faixa de
+     sobreposição dos tiles `21LXG`/`21LXF` (43,26 km²; ~108.140 px a 20 m).
+3. **Interseção quantificada**: a bbox histórica tem 120,16 km²; 119,65 km²
+   (99,58%) estão dentro do município e **0,51 km² estão fora**. Portanto a
+   bbox histórica **não** é área municipal e passa a ser tratada como recorte
+   técnico parcial; a análise municipal usa o polígono oficial.
+4. **Custo do município inteiro é estimado, não executado**: 9.293 km² a 20 m
+   ≈ 23,2 milhões de px/banda (≈ 93 MB float32 por banda e por data; ≈ 465 MB
+   para as 5 bandas de uma data). A missão usa AOIs controladas; o município
+   inteiro fica para uma fase própria, com janelas/blocos.
+5. Nenhuma AOI é declarada como talhão, fazenda, lavoura ou amostra
+   representativa da produção municipal.
+
+Alternativas descartadas: (a) manter a bbox e chamá-la de "área municipal" —
+contradição com a medição; (b) derivar o limite por geocodificação de nome —
+proibido, perde precisão e não é oficial; (c) processar o município inteiro
+para "fechar" a área — desproporcional ao objetivo e ao custo estimado.
+
+Consequências: qualquer estatística espacial da V2 declara qual geometria
+usou; a reprodução da PoC continua bit a bit idêntica; aclaims de
+"município de Sorriso" passam a exigir recorte por polígono.
+
+## D43 — Política de máscara SCL: Perfil A preservado, Perfil B como padrão da V2.1 (2026-11-11)
+
+Contexto: o checkpoint B comparou, em 4 cenas reais (jun–set/2025, AOI
+histórica, 304.679 px/cena), a máscara histórica (**Perfil A**: exclui
+`0,1,3,7,8,9,10,11`) com uma máscara restritiva (**Perfil B**: A + classes
+`2` e `6`). O comentário antigo do código chamava a classe 2 de "vegetação
+muito baixa"; a tabela oficial (Copernicus Data Space / Sentinel Hub S2L2A,
+consultada em 2026-11-11) define `2 = Dark Area Pixels` e `6 = Water`.
+
+Fatos medidos (cena 2025-06-09, demais idênticos em tendência):
+
+| Classe | Pixels | % da cena | NDVI médio | NDVI mediana |
+|---|---|---|---|---|
+| 2 — Dark area pixels | 106 | 0,035% | 0,319 | 0,322 |
+| 4 — Vegetation | 221.105 | 72,57% | 0,726 | 0,780 |
+| 5 — Bare soils | 82.934 | 27,22% | 0,295 | 0,303 |
+| 6 — Water | 365 | 0,120% | **−0,196** | **−0,288** |
+| 7 — Clouds low prob./Unclassified | 169 | 0,055% | 0,241 | 0,238 |
+
+Efeito do Perfil B sobre o NDVI da AOI: −317 a −471 px (0,10%–0,15% do
+total), média da cena +0,00025 a +0,00107 (≤ +0,18% relativo), mediana
++0,00004 a +0,00068. Nenhum pixel passa de inválido (A) para válido (B).
+
+Decisão:
+
+1. **A semântica vence a conveniência.** Água (NDVI médio −0,196) e dark area
+   (heterogênea, p25 0,028 / p75 0,662) não são sinal de vegetação; incluí-los
+   em uma estatística de índice de vegetação mistura superfícies diferentes e
+   injeta valores negativos que podem ser lidos como "estresse" sem base.
+2. **Perfil A permanece** como regra da reprodução da PoC (`run_poc.py` e
+   `pipeline.run`), para que a baseline histórica continue exatamente
+   reproduzível (delta 0,0 em todas as estatísticas, ver
+   `docs/V2_1_VALIDATION_REPORT.md`).
+3. **Perfil B passa a ser o padrão da V2.1** (`config.V2_1_SCL_PROFILE`) nos
+   produtos novos (mosaico e série temporal), por ser semanticamente correto
+   para índices de vegetação com custo de cobertura desprezível (≤ 0,18% de
+   mudança na média).
+4. A mudança é **explícita e versionada** (esta decisão), não silenciosa; os
+   perfis permanecem parâmetros internos de processamento — não há seletor na
+   interface do produto.
+5. **Limitações que mantêm a decisão revisável**: (a) a evidência vem de 4
+   cenas sem nuvem em uma única AOI e uma estação; (b) a classe 2 pode conter
+   vegetação genuinamente escura, então excluí-la pode remover pixels
+   válidos; (c) a classe 5 ("bare soils") provavelmente inclui áreas
+   cultivadas — o SCL não é classificador de cultura —, e ela **continua
+   válida** nas duas máscaras, de modo que as médias da AOI ainda misturam
+   superfícies diferentes.
+
+Alternativas descartadas: (a) manter A por compatibilidade e registrar a
+inconclusão — a evidência quantitativa e semântica é suficiente para decidir;
+(b) adotar B também na PoC — quebraria a reprodução exata da baseline.
+
+Consequências: a máscara padrão da V2.1 é reproduzível e auditável; a PoC
+segue reproduzível; a decisão pode ser reaberta com mais cenas (inclusive
+com nuvem), onde a classe 2/3 pesa mais.
+
+## D44 — Mosaico de dois tiles: primeiro válido vence, par definido por datatake (2026-11-11)
+
+Contexto: a PoC nunca demonstrou continuidade entre tiles. Tiles adjacentes
+`21LXG` (norte) e `21LXF` (sul) têm **tempos de sensoriamento próprios**
+(diferença medida de 14,53 s na aquisição usada), embora pertençam ao mesmo
+`datatake` — agrupar por timestamp exato perderia todos os pares.
+
+Decisão:
+
+1. **Critério de par**: mesmo `s2:datatake_id` (mesma passagem de aquisição) e
+   mesmo `grid:code` distinto (`21LXG`/`21LXF`). A diferença temporal
+   medida é **registrada no manifesto**; nenhuma cena de data diferente é
+   combinada.
+2. **Regra de mosaico**: `first_valid_wins` com prioridade explícita
+   `21LXG > 21LXF`, sem média entre tiles sobrepostos. O mapa de origem por
+   pixel é gravado em GeoTIFF (`0=21LXG`, `1=21LXF`, `-1=sem dado`).
+3. **Grade única e forçada**: a grade vem do tile primário e é reaplicada ao
+   secundário, garantindo alinhamento exato de pixel; grades divergentes
+   geram erro explícito (`mosaic.mosaic_grids`).
+4. **AOI de mosaico** (`[-55.70, -12.78, -55.50, -12.62]`) foi definida para
+   conter área exclusiva de cada tile **e** a faixa de sobreposição — sem
+   isso a regra de prioridade nunca seria exercida (com 100% de sobreposição
+   o secundário nunca contribui).
+5. A diferença de reflectância na sobreposição é **quantificada antes** da
+   regra (médias, RMSE e correlação por banda e por índice) e não é
+   "diluída" por média.
+
+Alternativas descartadas: (a) média na sobreposição — mistura origens e
+esconde a diferença entre tiles; (b) pareamento por `datetime` exato — não
+existe para tiles adjacentes; (c) unir tiles de datas diferentes — proibido
+sem justificativa temporal explícita.
+
+Consequências: a continuidade espacial é demonstrável e auditável; o custo é
+uma diferença de reprocessamento entre tiles pequena e **declarada**, não
+oculta.
+

@@ -1,0 +1,537 @@
+{
+  "run_id": "20261111T181917Z",
+  "purpose": "checkpoint_D_mosaic",
+  "run_utc": "2026-11-11T18:19:42.073708+00:00",
+  "code_commit": "1c02c110631d2d902619152d946afffcaa44a6f9",
+  "versions": {
+    "python": "3.12.10",
+    "pystac-client": "0.9.1",
+    "rasterio": "1.4.3",
+    "gdal": "3.9.3",
+    "numpy": "2.5.4",
+    "matplotlib": "3.11.2",
+    "shapely": "2.1.2",
+    "pyproj": "3.7.2"
+  },
+  "catalog": {
+    "url": "https://earth-search.aws.element84.com/v1",
+    "collection": "sentinel-2-c1-l2a",
+    "access": "acesso anônimo, sem credencial, sem custo"
+  },
+  "parameters": {
+    "target_res_m": 20.0,
+    "assets": {
+      "blue": "blue",
+      "red": "red",
+      "nir": "nir",
+      "swir": "swir16",
+      "scl": "scl"
+    },
+    "scl_profiles": {
+      "A_historical": [
+        0,
+        1,
+        3,
+        8,
+        9,
+        10,
+        11,
+        7
+      ],
+      "B_restrictive": [
+        0,
+        1,
+        2,
+        3,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    "scl_class_semantics": {
+      "0": "No data",
+      "1": "Saturated or defective",
+      "2": "Dark area pixels",
+      "3": "Cloud shadows",
+      "4": "Vegetation",
+      "5": "Bare soils",
+      "6": "Water",
+      "7": "Clouds low probability / Unclassified",
+      "8": "Clouds medium probability",
+      "9": "Clouds high probability",
+      "10": "Cirrus",
+      "11": "Snow / ice"
+    },
+    "continuous_resampling": "average (10 m -> 20 m)",
+    "categorical_resampling": "nearest (SCL)",
+    "reflectance_conversion": "DN * scale + offset; DN == nodata -> NaN antes da escala",
+    "formulas": {
+      "NDVI": "(NIR - Red) / (NIR + Red)",
+      "EVI": "2.5 * (NIR - Red) / (NIR + 6*Red - 7.5*Blue + 1)",
+      "NDMI": "(NIR - SWIR) / (NIR + SWIR)"
+    },
+    "denominator_rule": "|den| <= 1e-6 -> NaN (nunca inf, nunca clamp)",
+    "nodata_output": "NaN (float32)"
+  },
+  "limitations": [
+    "A diferença entre tiles na faixa de sobreposição é da ordem de reprocessamento/orbital, não de mudança de cena.",
+    "Não é validado aqui o erro absoluto dos índices Sentinel-2."
+  ],
+  "aoi_bbox": [
+    -55.7,
+    -12.78,
+    -55.5,
+    -12.62
+  ],
+  "aoi_note": "Janela de mosaico: contém área exclusiva de 21LXF, a faixa de sobreposição 21LXF/21LXG e área exclusiva de 21LXG.",
+  "search": {
+    "datetime": "2023-01-01/2025-12-31",
+    "items_found": 492,
+    "tile_pairs_found": 238,
+    "pairs": [
+      {
+        "acquisition_key": "GS2B_20230620T135709_032840_N05.09",
+        "datetime_xg": "2023-06-20T14:06:00.946000Z",
+        "datetime_xf": "2023-06-20T14:06:15.476000Z",
+        "datetime_delta_seconds": 14.53,
+        "items": {
+          "MGRS-21LXG": "S2B_T21LXG_20230620T135711_L2A",
+          "MGRS-21LXF": "S2B_T21LXF_20230620T135711_L2A"
+        },
+        "datatake_match": true,
+        "cloud_sum_pct": 0.002027
+      },
+      {
+        "acquisition_key": "GS2A_20250726T140111_052717_N05.11",
+        "datetime_xg": "2025-07-26T14:06:15.435000Z",
+        "datetime_xf": "2025-07-26T14:06:29.980000Z",
+        "datetime_delta_seconds": 14.545,
+        "items": {
+          "MGRS-21LXG": "S2A_T21LXG_20250726T140110_L2A",
+          "MGRS-21LXF": "S2A_T21LXF_20250726T140110_L2A"
+        },
+        "datatake_match": true,
+        "cloud_sum_pct": 0.002184
+      },
+      {
+        "acquisition_key": "GS2B_20230710T135709_033126_N05.09",
+        "datetime_xg": "2023-07-10T14:06:01.777000Z",
+        "datetime_xf": "2023-07-10T14:06:16.308000Z",
+        "datetime_delta_seconds": 14.531,
+        "items": {
+          "MGRS-21LXG": "S2B_T21LXG_20230710T135712_L2A",
+          "MGRS-21LXF": "S2B_T21LXF_20230710T135712_L2A"
+        },
+        "datatake_match": true,
+        "cloud_sum_pct": 0.00223
+      },
+      {
+        "acquisition_key": "GS2B_20230730T135709_033412_N05.09",
+        "datetime_xg": "2023-07-30T14:06:02.133000Z",
+        "datetime_xf": "2023-07-30T14:06:16.664000Z",
+        "datetime_delta_seconds": 14.531,
+        "items": {
+          "MGRS-21LXG": "S2B_T21LXG_20230730T135707_L2A",
+          "MGRS-21LXF": "S2B_T21LXF_20230730T135707_L2A"
+        },
+        "datatake_match": true,
+        "cloud_sum_pct": 0.002273
+      },
+      {
+        "acquisition_key": "GS2B_20250828T135709_044280_N05.11",
+        "datetime_xg": "2025-08-28T14:05:58.047000Z",
+        "datetime_xf": "2025-08-28T14:06:12.573000Z",
+        "datetime_delta_seconds": 14.526,
+        "items": {
+          "MGRS-21LXG": "S2B_T21LXG_20250828T135714_L2A",
+          "MGRS-21LXF": "S2B_T21LXF_20250828T135714_L2A"
+        },
+        "datatake_match": true,
+        "cloud_sum_pct": 0.002385
+      },
+      {
+        "acquisition_key": "GS2A_20240530T135711_046682_N05.10",
+        "datetime_xg": "2024-05-30T14:06:03.588000Z",
+        "datetime_xf": "2024-05-30T14:06:14.022000Z",
+        "datetime_delta_seconds": 10.434,
+        "items": {
+          "MGRS-21LXG": "S2A_T21LXG_20240530T140555_L2A",
+          "MGRS-21LXF": "S2A_T21LXF_20240530T140555_L2A"
+        },
+        "datatake_match": true,
+        "cloud_sum_pct": 0.002422
+      },
+      {
+        "acquisition_key": "GS2B_20240724T135709_038560_N05.11",
+        "datetime_xg": "2024-07-24T14:05:59.745000Z",
+        "datetime_xf": "2024-07-24T14:06:14.276000Z",
+        "datetime_delta_seconds": 14.531,
+        "items": {
+          "MGRS-21LXG": "S2B_T21LXG_20240724T135955_L2A",
+          "MGRS-21LXF": "S2B_T21LXF_20240724T135955_L2A"
+        },
+        "datatake_match": true,
+        "cloud_sum_pct": 0.002422
+      },
+      {
+        "acquisition_key": "GS2A_20230516T135701_041248_N05.09",
+        "datetime_xg": "2023-05-16T14:05:57.865000Z",
+        "datetime_xf": "2023-05-16T14:06:12.401000Z",
+        "datetime_delta_seconds": 14.536,
+        "items": {
+          "MGRS-21LXG": "S2A_T21LXG_20230516T135703_L2A",
+          "MGRS-21LXF": "S2A_T21LXF_20230516T135703_L2A"
+        },
+        "datatake_match": true,
+        "cloud_sum_pct": 0.002707
+      },
+      {
+        "acquisition_key": "GS2C_20250813T135721_004899_N05.11",
+        "datetime_xg": "2025-08-13T14:06:15.902000Z",
+        "datetime_xf": "2025-08-13T14:06:30.431000Z",
+        "datetime_delta_seconds": 14.529,
+        "items": {
+          "MGRS-21LXG": "S2C_T21LXG_20250813T135721_L2A",
+          "MGRS-21LXF": "S2C_T21LXF_20250813T135721_L2A"
+        },
+        "datatake_match": true,
+        "cloud_sum_pct": 0.002887
+      },
+      {
+        "acquisition_key": "GS2B_20230630T135709_032983_N05.09",
+        "datetime_xg": "2023-06-30T14:06:01.897000Z",
+        "datetime_xf": "2023-06-30T14:06:16.428000Z",
+        "datetime_delta_seconds": 14.531,
+        "items": {
+          "MGRS-21LXG": "S2B_T21LXG_20230630T140406_L2A",
+          "MGRS-21LXF": "S2B_T21LXF_20230630T140406_L2A"
+        },
+        "datatake_match": true,
+        "cloud_sum_pct": 0.00301
+      },
+      {
+        "acquisition_key": "GS2A_20250825T140111_053146_N05.11",
+        "datetime_xg": "2025-08-25T14:06:11.192000Z",
+        "datetime_xf": "2025-08-25T14:06:25.717000Z",
+        "datetime_delta_seconds": 14.525,
+        "items": {
+          "MGRS-21LXG": "S2A_T21LXG_20250825T140106_L2A",
+          "MGRS-21LXF": "S2A_T21LXF_20250825T140106_L2A"
+        },
+        "datatake_match": true,
+        "cloud_sum_pct": 0.003019
+      },
+      {
+        "acquisition_key": "GS2A_20240917T135701_048255_N05.11",
+        "datetime_xg": "2024-09-17T14:05:56.922000Z",
+        "datetime_xf": "2024-09-17T14:06:11.462000Z",
+        "datetime_delta_seconds": 14.54,
+        "items": {
+          "MGRS-21LXG": "S2A_T21LXG_20240917T135930_L2A",
+          "MGRS-21LXF": "S2A_T21LXF_20240917T135930_L2A"
+        },
+        "datatake_match": true,
+        "cloud_sum_pct": 0.0030429999999999997
+      },
+      {
+        "acquisition_key": "GS2B_20250719T135709_043708_N05.11",
+        "datetime_xg": "2025-07-19T14:05:59.665000Z",
+        "datetime_xf": "2025-07-19T14:06:14.188000Z",
+        "datetime_delta_seconds": 14.523,
+        "items": {
+          "MGRS-21LXG": "S2B_T21LXG_20250719T140534_L2A",
+          "MGRS-21LXF": "S2B_T21LXF_20250719T140534_L2A"
+        },
+        "datatake_match": true,
+        "cloud_sum_pct": 0.003116
+      },
+      {
+        "acquisition_key": "GS2A_20240818T135701_047826_N05.11",
+        "datetime_xg": "2024-08-18T14:05:56.565000Z",
+        "datetime_xf": "2024-08-18T14:06:11.071000Z",
+        "datetime_delta_seconds": 14.506,
+        "items": {
+          "MGRS-21LXG": "S2A_T21LXG_20240818T135702_L2A",
+          "MGRS-21LXF": "S2A_T21LXF_20240818T135702_L2A"
+        },
+        "datatake_match": true,
+        "cloud_sum_pct": 0.003155
+      },
+      {
+        "acquisition_key": "GS2A_20240719T135701_047397_N05.10",
+        "datetime_xg": "2024-07-19T14:05:57.524000Z",
+        "datetime_xf": "2024-07-19T14:06:12.038000Z",
+        "datetime_delta_seconds": 14.514,
+        "items": {
+          "MGRS-21LXG": "S2A_T21LXG_20240719T135746_L2A",
+          "MGRS-21LXF": "S2A_T21LXF_20240719T135746_L2A"
+        },
+        "datatake_match": true,
+        "cloud_sum_pct": 0.0031650000000000003
+      },
+      {
+        "acquisition_key": "GS2B_20250709T135709_043565_N05.11",
+        "datetime_xg": "2025-07-09T14:06:00.305000Z",
+        "datetime_xf": "2025-07-09T14:06:14.837000Z",
+        "datetime_delta_seconds": 14.532,
+        "items": {
+          "MGRS-21LXG": "S2B_T21LXG_20250709T140114_L2A",
+          "MGRS-21LXF": "S2B_T21LXF_20250709T140114_L2A"
+        },
+        "datatake_match": true,
+        "cloud_sum_pct": 0.003192
+      },
+      {
+        "acquisition_key": "GS2A_20240619T135711_046968_N05.10",
+        "datetime_xg": "2024-06-19T14:06:01.972000Z",
+        "datetime_xf": "2024-06-19T14:06:16.514000Z",
+        "datetime_delta_seconds": 14.542,
+        "items": {
+          "MGRS-21LXG": "S2A_T21LXG_20240619T140428_L2A",
+          "MGRS-21LXF": "S2A_T21LXF_20240619T140428_L2A"
+        },
+        "datatake_match": true,
+        "cloud_sum_pct": 0.003222
+      },
+      {
+        "acquisition_key": "GS2B_20240803T135709_038703_N05.11",
+        "datetime_xg": "2024-08-03T14:05:58.155000Z",
+        "datetime_xf": "2024-08-03T14:06:12.669000Z",
+        "datetime_delta_seconds": 14.514,
+        "items": {
+          "MGRS-21LXG": "S2B_T21LXG_20240803T140514_L2A",
+          "MGRS-21LXF": "S2B_T21LXF_20240803T140514_L2A"
+        },
+        "datatake_match": true,
+        "cloud_sum_pct": 0.0032979999999999997
+      },
+      {
+        "acquisition_key": "GS2C_20250724T140111_004613_N05.11",
+        "datetime_xg": "2025-07-24T14:06:19.393000Z",
+        "datetime_xf": "2025-07-24T14:06:33.942000Z",
+        "datetime_delta_seconds": 14.549,
+        "items": {
+          "MGRS-21LXG": "S2C_T21LXG_20250724T140230_L2A",
+          "MGRS-21LXF": "S2C_T21LXF_20250724T140230_L2A"
+        },
+        "datatake_match": true,
+        "cloud_sum_pct": 0.003421
+      },
+      {
+        "acquisition_key": "GS2A_20250716T140111_052574_N05.11",
+        "datetime_xg": "2025-07-16T14:06:16.106000Z",
+        "datetime_xf": "2025-07-16T14:06:30.657000Z",
+        "datetime_delta_seconds": 14.551,
+        "items": {
+          "MGRS-21LXG": "S2A_T21LXG_20250716T140111_L2A",
+          "MGRS-21LXF": "S2A_T21LXF_20250716T140111_L2A"
+        },
+        "datatake_match": true,
+        "cloud_sum_pct": 0.0037289999999999997
+      }
+    ]
+  },
+  "items": {
+    "MGRS-21LXG": {
+      "item_id": "S2B_T21LXG_20230620T135711_L2A",
+      "collection": "sentinel-2-c1-l2a",
+      "datetime": "2023-06-20T14:06:00.946000Z",
+      "platform": "sentinel-2b",
+      "tile": "MGRS-21LXG",
+      "baseline": "05.09",
+      "datatake_id": "GS2B_20230620T135709_032840_N05.09",
+      "datastrip_id": "S2B_OPER_MSI_L2A_DS_2BPS_20230620T181708_S20230620T135711_N05.09",
+      "orbit": null,
+      "cloud_cover_tile_pct": 0.001111,
+      "proj_epsg": null,
+      "bbox": [
+        -56.082219,
+        -12.750833,
+        -55.067607,
+        -11.753016
+      ],
+      "item_href": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-c1-l2a/items/S2B_T21LXG_20230620T135711_L2A"
+    },
+    "MGRS-21LXF": {
+      "item_id": "S2B_T21LXF_20230620T135711_L2A",
+      "collection": "sentinel-2-c1-l2a",
+      "datetime": "2023-06-20T14:06:15.476000Z",
+      "platform": "sentinel-2b",
+      "tile": "MGRS-21LXF",
+      "baseline": "05.09",
+      "datatake_id": "GS2B_20230620T135709_032840_N05.09",
+      "datastrip_id": "S2B_OPER_MSI_L2A_DS_2BPS_20230620T181708_S20230620T135711_N05.09",
+      "orbit": null,
+      "cloud_cover_tile_pct": 0.000916,
+      "proj_epsg": null,
+      "bbox": [
+        -56.079098,
+        -13.655153,
+        -55.060488,
+        -12.657006
+      ],
+      "item_href": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-c1-l2a/items/S2B_T21LXF_20230620T135711_L2A"
+    }
+  },
+  "same_acquisition": {
+    "criterion": "mesmo s2:datatake_id (mesma passagem de aquisição)",
+    "datatake_id_equal": true,
+    "datetime_xg": "2023-06-20T14:06:00.946000Z",
+    "datetime_xf": "2023-06-20T14:06:15.476000Z",
+    "datetime_delta_seconds": 14.53,
+    "baseline_equal": true,
+    "note": "Os tiles têm tempos de sensoriamento próprios (diferença de alguns segundos ao longo da órbita). A tolerância aceita é a mesma passagem (datatake) e a diferença medida é registrada; nenhum valor foi combinado entre datas."
+  },
+  "grid": {
+    "crs": "EPSG:32721",
+    "res": 20.0,
+    "width": 1092,
+    "height": 891,
+    "transform": [
+      20.0,
+      0.0,
+      641100.0,
+      0.0,
+      -20.0,
+      8604540.0
+    ],
+    "bounds": [
+      641100.0,
+      8586720.0,
+      662940.0,
+      8604540.0
+    ]
+  },
+  "rule": {
+    "name": "first_valid_wins",
+    "priority": [
+      "MGRS-21LXG",
+      "MGRS-21LXF"
+    ],
+    "averaging": false,
+    "note": "não há média entre tiles sobrepostos"
+  },
+  "source_pixels": {
+    "MGRS-21LXG": 779708,
+    "MGRS-21LXF": 192073
+  },
+  "unfilled_pixels": 1191,
+  "seam_pixels": 2185,
+  "overlap_comparison": {
+    "reflectance_blue": {
+      "pixels": 535080,
+      "mean_left": 0.04240815298574837,
+      "mean_right": 0.04231845275429306,
+      "mean_difference_left_minus_right": 8.970023145531716e-05,
+      "mean_absolute_difference": 0.00014260222660814146,
+      "rmse": 0.000297262977537896,
+      "median_absolute_difference": 9.999983012676239e-05,
+      "p95_absolute_difference": 0.00042499974370002747,
+      "max_absolute_difference": 0.038749996572732925,
+      "correlation": 0.9999134112423114
+    },
+    "reflectance_red": {
+      "pixels": 535080,
+      "mean_left": 0.08308891745243924,
+      "mean_right": 0.0830689451599363,
+      "mean_difference_left_minus_right": 1.9972292502937254e-05,
+      "mean_absolute_difference": 0.00024344298808679564,
+      "rmse": 0.000606236096364401,
+      "median_absolute_difference": 0.00017499923706054688,
+      "p95_absolute_difference": 0.0006999969482421875,
+      "max_absolute_difference": 0.10399999469518661,
+      "correlation": 0.9999394585625302
+    },
+    "reflectance_nir": {
+      "pixels": 535080,
+      "mean_left": 0.22837554962032725,
+      "mean_right": 0.22814614112830192,
+      "mean_difference_left_minus_right": 0.00022940849202534745,
+      "mean_absolute_difference": 0.0004652351976273509,
+      "rmse": 0.0010628013783358552,
+      "median_absolute_difference": 0.00034999847412109375,
+      "p95_absolute_difference": 0.0011999905109405518,
+      "max_absolute_difference": 0.10490000247955322,
+      "correlation": 0.9999301670132185
+    },
+    "reflectance_swir": {
+      "pixels": 533988,
+      "mean_left": 0.27535796965352943,
+      "mean_right": 0.2753831728683586,
+      "mean_difference_left_minus_right": -2.520321482916383e-05,
+      "mean_absolute_difference": 0.0004055049613213078,
+      "rmse": 0.0006139115138245095,
+      "median_absolute_difference": 0.00020000338554382324,
+      "p95_absolute_difference": 0.0014999806880950928,
+      "max_absolute_difference": 0.004500001668930054,
+      "correlation": 0.999979882897771
+    },
+    "NDVI": {
+      "pixels": 532940,
+      "mean_left": 0.46860681197911763,
+      "mean_right": 0.468227183248289,
+      "mean_difference_left_minus_right": 0.0003796287308286498,
+      "mean_absolute_difference": 0.0009512175602756861,
+      "rmse": 0.0013754785556075182,
+      "median_absolute_difference": 0.000652611255645752,
+      "p95_absolute_difference": 0.0027583837509155273,
+      "max_absolute_difference": 0.028007827699184418,
+      "correlation": 0.9999916544739416
+    },
+    "EVI": {
+      "pixels": 532940,
+      "mean_left": 0.26688403468822963,
+      "mean_right": 0.2663884310657076,
+      "mean_difference_left_minus_right": 0.0004956036225220319,
+      "mean_absolute_difference": 0.0007530632224481132,
+      "rmse": 0.001072497497191998,
+      "median_absolute_difference": 0.00044579431414604187,
+      "p95_absolute_difference": 0.0023428797721862793,
+      "max_absolute_difference": 0.008579611778259277,
+      "correlation": 0.9999937919814974
+    },
+    "NDMI": {
+      "pixels": 532940,
+      "mean_left": -0.08618333513791095,
+      "mean_right": -0.08658960800710996,
+      "mean_difference_left_minus_right": 0.0004062728691990096,
+      "mean_absolute_difference": 0.0007881391775404686,
+      "rmse": 0.001076642929748776,
+      "median_absolute_difference": 0.0006094872951507568,
+      "p95_absolute_difference": 0.002203584089875221,
+      "max_absolute_difference": 0.03362676501274109,
+      "correlation": 0.9999928966864149
+    }
+  },
+  "files": {
+    "NDVI": {
+      "path": "C:\\Users\\luanf\\OneDrive\\Área de Trabalho\\Saden_AgroClima\\geospatial\\artifacts\\mosaic\\mosaic_NDVI.tif",
+      "bytes": 3449598,
+      "sha256": "b793051de5938faa5cc21b9ac750e84dfdb3c3cfef7be021fc5b3357c4275ae5"
+    },
+    "EVI": {
+      "path": "C:\\Users\\luanf\\OneDrive\\Área de Trabalho\\Saden_AgroClima\\geospatial\\artifacts\\mosaic\\mosaic_EVI.tif",
+      "bytes": 3493074,
+      "sha256": "395da597374979914e0456bbd679d8d8bf05d0fb793db839ad982d912df68770"
+    },
+    "NDMI": {
+      "path": "C:\\Users\\luanf\\OneDrive\\Área de Trabalho\\Saden_AgroClima\\geospatial\\artifacts\\mosaic\\mosaic_NDMI.tif",
+      "bytes": 3515992,
+      "sha256": "91295ce5d102a167132082b12d2a6cee9be475923ae07586c95b28df38d3d1f6"
+    },
+    "source_map": {
+      "path": "C:\\Users\\luanf\\OneDrive\\Área de Trabalho\\Saden_AgroClima\\geospatial\\artifacts\\mosaic\\mosaic_source.tif",
+      "bytes": 38149,
+      "sha256": "8e8d45863c06afd995b669a466374e9e4f78ef520114d05afb3bd33348fb08b9"
+    },
+    "scl": {
+      "path": "C:\\Users\\luanf\\OneDrive\\Área de Trabalho\\Saden_AgroClima\\geospatial\\artifacts\\mosaic\\mosaic_scl.tif",
+      "bytes": 81590,
+      "sha256": "679522ae8c38cd13caf336b460628bc36c7fb08f03136b25430793c5d6e31b43"
+    }
+  },
+  "preview": "C:\\Users\\luanf\\OneDrive\\Área de Trabalho\\Saden_AgroClima\\geospatial\\previews\\mosaic\\mosaic_2023-06-20.png"
+}

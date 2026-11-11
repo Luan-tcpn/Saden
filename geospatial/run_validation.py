@@ -182,9 +182,12 @@ def cmd_repro(args: argparse.Namespace) -> dict[str, Any]:
 
     # Auditoria radiométrica por item (metadado STAC x COG real).
     client = stac_search.open_catalog()
+    collection = client.get_collection(config.COLLECTION)
     audits: list[dict[str, Any]] = []
     for provenance in summary["items"]:
-        item = client.get_item(provenance["item_id"], collection=config.COLLECTION)
+        item = collection.get_item(provenance["item_id"])
+        if item is None:
+            raise RuntimeError(f"item {provenance['item_id']} não encontrado no catálogo")
         try:
             declared = radiometry.assert_supported_item(item, ("blue", "red", "nir", "swir"))
         except radiometry.UnsupportedProductError as exc:
@@ -661,25 +664,56 @@ def cmd_geometry(args: argparse.Namespace) -> dict[str, Any]:
 # --------------------------------------------------------------- checkpoint D
 
 
+def _acquisition_key(item: Any) -> str:
+    """Chave de aquisição: datatake do fornecedor ou timestamp do item ID.
+
+    Tiles adjacentes do mesmo tile adjacente têm ``datetime`` com alguns
+    segundos de diferença (tempo de varredura ao longo da órbita), mas
+    pertencem ao **mesmo datatake**. Agrupar pelo datatake é o critério
+    correto; a diferença temporal é medida e registrada, não ignorada.
+    """
+    datatake = item.properties.get("s2:datatake_id")
+    if datatake:
+        return str(datatake)
+    item_id = str(item.id)
+    parts = item_id.split("_")
+    return parts[2] if len(parts) >= 3 else item_id
+
+
+def _datetime_delta_seconds(left: Any, right: Any) -> float | None:
+    try:
+        a = datetime.fromisoformat(str(left).replace("Z", "+00:00"))
+        b = datetime.fromisoformat(str(right).replace("Z", "+00:00"))
+    except Exception:  # pragma: no cover - metadado inesperado
+        return None
+    return abs((a - b).total_seconds())
+
+
 def _find_tile_pair(items: list[Any]) -> tuple[Any, Any, list[dict[str, Any]]]:
-    """Encontra um par de tiles (21LXG/21LXF) da mesma aquisição."""
-    by_datetime: dict[str, dict[str, Any]] = {}
+    """Encontra um par de tiles (21LXG/21LXF) da mesma aquisição (mesmo datatake)."""
+    by_acquisition: dict[str, dict[str, Any]] = {}
     for item in items:
         dt = item.properties.get("datetime")
         tile = item.properties.get("grid:code")
         if not dt or not tile:
             continue
-        by_datetime.setdefault(dt, {})[tile] = item
+        by_acquisition.setdefault(_acquisition_key(item), {})[tile] = item
     candidates = []
-    for dt, tiles in by_datetime.items():
+    for key, tiles in by_acquisition.items():
         if "MGRS-21LXG" in tiles and "MGRS-21LXF" in tiles:
             xg, xf = tiles["MGRS-21LXG"], tiles["MGRS-21LXF"]
             cloud = sum(
                 float(x.properties.get("eo:cloud_cover") or 0.0) for x in (xg, xf)
             )
+            delta = _datetime_delta_seconds(
+                xg.properties.get("datetime"), xf.properties.get("datetime")
+            )
             candidates.append(
                 {
-                    "datetime": dt,
+                    "acquisition_key": key,
+                    "datetime_xg": xg.properties.get("datetime"),
+                    "datetime_xf": xf.properties.get("datetime"),
+                    "datetime_delta_seconds": delta,
                     "cloud_sum": cloud,
                     "items": {"MGRS-21LXG": xg, "MGRS-21LXF": xf},
                     "datatake_match": (
@@ -688,10 +722,10 @@ def _find_tile_pair(items: list[Any]) -> tuple[Any, Any, list[dict[str, Any]]]:
                     ),
                 }
             )
-    candidates.sort(key=lambda c: (c["cloud_sum"], c["datetime"]))
+    candidates.sort(key=lambda c: (c["cloud_sum"], c["datetime_xg"]))
     if not candidates:
         raise RuntimeError(
-            "nenhum par de tiles 21LXG/21LXF com a mesma data/hora foi encontrado"
+            "nenhum par de tiles 21LXG/21LXF com o mesmo datatake foi encontrado"
         )
     best = candidates[0]
     return best["items"]["MGRS-21LXG"], best["items"]["MGRS-21LXF"], candidates
@@ -708,7 +742,12 @@ def cmd_mosaic(args: argparse.Namespace) -> dict[str, Any]:
     )
     xg, xf, candidates = _find_tile_pair(items)
     if args.datetime:
-        matches = [c for c in candidates if c["datetime"].startswith(args.datetime)]
+        matches = [
+            c
+            for c in candidates
+            if str(c["datetime_xg"]).startswith(args.datetime)
+            or str(c["datetime_xf"]).startswith(args.datetime)
+        ]
         if not matches:
             raise RuntimeError(f"nenhum par de tiles em {args.datetime}")
         best = matches[0]
@@ -718,8 +757,8 @@ def cmd_mosaic(args: argparse.Namespace) -> dict[str, Any]:
     scene_xg = read_mod.read_scene_bands(xg, bbox, grid=grid)
     scene_xf = read_mod.read_scene_bands(xf, bbox, grid=grid)
 
-    res_xg = indices_mod.compute_indices(scene_xg)
-    res_xf = indices_mod.compute_indices(scene_xf)
+    res_xg = indices_mod.compute_indices(scene_xg, profile=config.V2_1_SCL_PROFILE)
+    res_xf = indices_mod.compute_indices(scene_xf, profile=config.V2_1_SCL_PROFILE)
 
     overlap = {}
     for name in ("blue", "red", "nir", "swir"):
@@ -818,7 +857,10 @@ def cmd_mosaic(args: argparse.Namespace) -> dict[str, Any]:
                 "tile_pairs_found": len(candidates),
                 "pairs": [
                     {
-                        "datetime": c["datetime"],
+                        "acquisition_key": c["acquisition_key"],
+                        "datetime_xg": c["datetime_xg"],
+                        "datetime_xf": c["datetime_xf"],
+                        "datetime_delta_seconds": c["datetime_delta_seconds"],
                         "items": {k: v.id for k, v in c["items"].items()},
                         "datatake_match": c["datatake_match"],
                         "cloud_sum_pct": c["cloud_sum"],
@@ -831,14 +873,25 @@ def cmd_mosaic(args: argparse.Namespace) -> dict[str, Any]:
                 "MGRS-21LXF": item_metadata(xf),
             },
             "same_acquisition": {
-                "datetime_equal": xg.properties.get("datetime") == xf.properties.get("datetime"),
+                "criterion": "mesmo s2:datatake_id (mesma passagem de aquisição)",
                 "datatake_id_equal": (
                     xg.properties.get("s2:datatake_id")
                     == xf.properties.get("s2:datatake_id")
                 ),
+                "datetime_xg": xg.properties.get("datetime"),
+                "datetime_xf": xf.properties.get("datetime"),
+                "datetime_delta_seconds": _datetime_delta_seconds(
+                    xg.properties.get("datetime"), xf.properties.get("datetime")
+                ),
                 "baseline_equal": (
                     xg.properties.get("s2:processing_baseline")
                     == xf.properties.get("s2:processing_baseline")
+                ),
+                "note": (
+                    "Os tiles têm tempos de sensoriamento próprios (diferença de "
+                    "alguns segundos ao longo da órbita). A tolerância aceita é "
+                    "a mesma passagem (datatake) e a diferença medida é "
+                    "registrada; nenhum valor foi combinado entre datas."
                 ),
             },
             "grid": grid_info,
@@ -996,7 +1049,7 @@ def cmd_timeseries(args: argparse.Namespace) -> dict[str, Any]:
             continue
 
         scene = read_mod.read_scene_bands(item, bbox)
-        result = indices_mod.compute_indices(scene)
+        result = indices_mod.compute_indices(scene, profile=config.V2_1_SCL_PROFILE)
         stats = {}
         for name, values in result["indices"].items():
             stats[name] = indices_mod.array_stats(values)
@@ -1081,6 +1134,11 @@ def cmd_timeseries(args: argparse.Namespace) -> dict[str, Any]:
                 ),
                 "max_obstruction": args.max_obstruction,
                 "max_candidates_per_month": args.max_candidates,
+                "mask_profile": config.V2_1_SCL_PROFILE,
+                "mask_profile_note": (
+                    "Perfil B (D43): exclui também classes 2 (dark area) e 6 (água). "
+                    "O Perfil A histórico permanece para reprodução da PoC."
+                ),
                 "cloud_cover_field": (
                     "eo:cloud_cover é percentual do tile inteiro (0–100), não "
                     "fração; usado apenas como critério de desempate"

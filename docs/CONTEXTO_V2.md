@@ -121,7 +121,9 @@ Uma trilha só é considerada concluída quando:
 Escolher **uma** trilha, escrever D41 com problema/alternativas/custo/critério,
 e só então abrir branch. Sem decisão registrada, a V2 permanece não iniciada.
 
-## 10. O que foi realmente feito na V2.1 (2026-11-11)
+## 10. O que foi realmente feito na V2.1
+
+### 10.1 PoC (branch `v2/geospatial-foundation`)
 
 - **Branch:** `v2/geospatial-foundation`, derivada de `v1-final` (`3f7ad33`).
   Nenhum merge em `main`; tag e branches de arquivo intactas.
@@ -135,22 +137,47 @@ e só então abrir branch. Sem decisão registrada, a V2 permanece não iniciada
   SCL conservadora, 4 cenas reais (jun–set/2025), GeoTIFFs + CSV + PNG +
   manifesto JSON com checksums.
 - **Testes:** 30/30 sintéticos offline; V1 revalidada em 65/65.
+
+### 10.2 Validação V2.1 (branch `v2/geospatial-validation`)
+
+- **Branch:** `v2/geospatial-validation` (derivada da fundação), com checkpoint
+  imutável da PoC na tag `v2-poc-sentinel2` e bundle de segurança verificado.
+- **A — reprodução/auditoria:** PoC reexecutada em diretório separado; grade
+  idêntica e diferença **0,0** em todas as estatísticas; auditoria radiométrica
+  confirma escala/offset do metadado e do COG, sem dupla aplicação.
+- **B — máscara SCL:** Perfil A (histórico) × Perfil B (exclui 2 e 6)
+  comparados quantitativa e visualmente; efeito ≤ 0,18% na média do NDVI.
+  Decisão **D43**: A na reprodução da PoC, B como padrão da V2.1.
+- **C — geometria:** limite municipal oficial do IBGE validado (9.293,47 km²);
+  bbox histórica tem **0,51 km² fora** do município; três AOIs diferenciadas;
+  custo do município inteiro estimado (23,2 M px/banda) e não executado.
+  Decisão **D42**.
+- **D — mosaico:** dois tiles do mesmo `datatake` (2023-06-20), regra
+  `first_valid_wins`, mapa de origem por pixel; diferença na sobreposição com
+  correlação 0,99999 nos índices. Decisão **D44**.
+- **E — série 2023–2025:** série mensal exploratória sobre a AOI de validação,
+  seleção por fração obstruída sobre a AOI e lacunas explícitas (D45).
+- **Testes:** 94/94 sintéticos offline; suíte de rede separada e opt-in.
 - **Fora de escopo (continua fora):** UI, dashboard, endpoint, integração de
   índices ao produto, modelo de preço/produtividade, outros satélites,
   serviços pagos.
 
-Números, arquivos, limitações e comandos estão em
-`docs/V2_EXECUTION_STATUS.md` e `geospatial/README.md`. Não há conclusão
-agronômica: os índices descrevem reflectância em uma janela pequena.
+Relatório técnico completo (com FATO/INTERPRETAÇÃO/LIMITAÇÃO por seção):
+`docs/V2_1_VALIDATION_REPORT.md`. Estado operacional:
+`docs/V2_EXECUTION_STATUS.md`. Números, arquivos, limitações e comandos
+estão também em `geospatial/README.md`. Não há conclusão agronômica: os
+índices descrevem reflectância em recortes geográficos.
 
 ## 11. Próximos passos propostos (não iniciados)
 
-1. Revisar a PoC com orientador antes de ampliar escopo.
-2. Ampliar janela temporal (2023–2025) mantendo o mesmo protocolo e AOI.
-3. Buscar **dados observados** de produtividade (ex.: IBGE PAM municipal,
-   CONAB) antes de qualquer modelo agronômico — e declarar que município não é
-   talhão.
-4. Só depois avaliar se variáveis agronômicas ajudam a previsão de preço,
-   com protocolo experimental e teste intocado.
+1. Revisar a V2.1 com orientador antes de ampliar escopo.
+2. **V2.2** — investigar compatibilidade espacial/temporal de dados oficiais
+   (IBGE/SIDRA, CONAB) com a AOI e com os indicadores Sentinel-2, para
+   construir uma base observada de produtividade. Sem modelagem antes disso.
+3. **V2.3** — só com dados observados adequados: modelos de produtividade com
+   estratégia de validação.
+4. **V2.4** — avaliar se variáveis agronômicas ajudam a previsão de preço,
+   com protocolo experimental, Ridge como baseline obrigatório e teste
+   intocado.
 5. Robustez operacional da V1 (TLS, SMTP, backup, monitoramento) segue como
    trilha independente de maior valor para produção.

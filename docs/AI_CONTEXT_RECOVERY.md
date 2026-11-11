@@ -26,6 +26,34 @@
 - Código em `geospatial/` (Python/venv isolado). Estado completo:
   `docs/V2_EXECUTION_STATUS.md`. Decisão: D41.
 
+### V2.1 validação geoespacial (branch `v2/geospatial-validation`)
+
+- Branch nova `v2/geospatial-validation`, derivada de
+  `v2/geospatial-foundation` (`2e5b3ef`); checkpoint imutável da PoC na tag
+  anotada `v2-poc-sentinel2`. Bundle de segurança verificado em
+  `..\SADEN_V2_1_RECOVERY_2026-11-11\`.
+- **A** — PoC reexecutada em diretório separado: mesma grade (547×557,
+  EPSG:32721) e **diferença 0,0** em todas as estatísticas vs. manifesto
+  anterior; auditoria radiométrica confirma `scale=0.0001`, `offset=-0.1`
+  idênticos entre metadado STAC e COG, `uint16`, `nodata=0` (sem dupla
+  aplicação).
+- **B** — Perfil A (histórico) × Perfil B (exclui também classes 2 e 6)
+  comparados em 4 cenas reais: B remove 0,10%–0,15% dos pixels e altera a
+  média do NDVI em ≤ 0,18%. Decisão **D43**: Perfil A fica na reprodução da
+  PoC; Perfil B é o padrão da V2.1.
+- **C** — Malha oficial do IBGE (`5107925`, qualidade `maxima`, 2.689
+  vértices, válida): 9.293,47 km². A bbox histórica tem **0,51 km² fora** do
+  município (99,58% dentro). Decisão **D42**.
+- **D** — Mosaico real `21LXG`+`21LXF` do mesmo `datatake` (2023-06-20,
+  diferença temporal medida 14,53 s): regra `first_valid_wins`, 779.708 px do
+  primário e 192.073 do secundário, 1.191 sem dado; NDVI na sobreposição com
+  diferença absoluta média 0,00095 e correlação 0,99999. Decisão **D44**.
+- **E** — Série mensal 2023–2025 em andamento/executada; seleção por fração
+  obstruída sobre a AOI e lacunas explícitas (decisão **D45**).
+- Suíte offline: **94/94** testes; testes de rede separados em
+  `geospatial/tests_external/` (opt-in por `SADEN_EXTERNAL_TESTS=1`).
+- Relatório técnico: `docs/V2_1_VALIDATION_REPORT.md`.
+
 ## 2. Escopo congelado da V1 (D40)
 
 - **Previsão = Ridge única** (pipeline, split 70/15/15, baselines, λ por
@@ -112,8 +140,10 @@ renomeado nem reinterpretado. Leitura de `model_runs` não existe em produção.
 
 ## 8. Decisões
 
-- `docs/DECISIONS.md`: **D1–D41** (D40 = congelamento V1 e retirada do AR;
-  D41 = V2 isolada e escopo da PoC Sentinel-2).
+- `docs/DECISIONS.md`: **D1–D45** (D40 = congelamento V1 e retirada do AR;
+  D41 = V2 isolada e escopo da PoC Sentinel-2; D42 = geometrias separadas e
+  limite municipal oficial; D43 = política de máscara SCL; D44 = regra de
+  mosaico e par de tiles por datatake; D45 = seleção mensal da série 2023–2025).
 - D38/D39 são registros históricos superados por D40, preservados.
 - Segunda opinião (arquivo externo, 940 linhas): fonte de hipóteses, NÃO
   especificação. MAPE futuro (8–10%, 6–8%) é hipótese, nunca resultado.
