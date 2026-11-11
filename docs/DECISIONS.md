@@ -301,3 +301,53 @@ Decisão (escopo congelado da V1):
 Consequências: superfície menor (uma metodologia), contrato explícito para
 parâmetros legados e histórico auditável preservado. **D38 e D39 passam a ser
 registros históricos superados por esta decisão; não são apagados.**
+
+## D41 — V1 congelada e V2 geoespacial isolada; escopo da PoC Sentinel-2 (2026-11-11)
+
+Contexto: a V1 está encerrada (D40) e precisa continuar recuperável enquanto a
+V2 explora uma nova dimensão agronômica/geoespacial. Misturar as duas na mesma
+branch/tag tornaria a V1 refém de experimentos e dificultaria auditoria.
+
+Decisão:
+
+1. **Fronteira de código e histórico.** `main`, a tag `v1-final` e a branch
+   `archive/v1-final` permanecem em `3f7ad33`. Todo o trabalho da V2 vive na
+   branch `v2/geospatial-foundation`, derivada de `v1-final`, e **não** é
+   integrado à V1 nesta missão.
+2. **A V1 não muda de comportamento.** Nenhum arquivo de backend/frontend,
+   endpoint, método de previsão ou schema é alterado pela V2. A Ridge continua
+   sendo a única metodologia operacional.
+3. **PoC V2.1 = Sentinel-2 L2A apenas.** Escopo: descoberta STAC, leitura de
+   COG remoto com recorte, cálculo local de NDVI/EVI/NDMI, máscara SCL,
+   GeoTIFFs, série tabular, prévia PNG, testes sintéticos e manifesto de
+   proveniência. Ficam fora: UI/dashboard, integração ao produto, modelo de
+   preço, modelo de produtividade, outros satélites e serviços pagos.
+4. **Fontes.** Somente dados públicos e gratuitos, sem cartão, trial ou
+   credencial privada. Fonte escolhida e verificada em execução real: Earth
+   Search (Element 84), coleção `sentinel-2-c1-l2a`, acesso anônimo.
+5. **AOI.** Malha municipal oficial do IBGE (Sorriso-MT, `5107925`) e uma
+   janela técnica de `0,10° × 0,10°` dentro do município. A janela **não** é
+   talhão, fazenda ou amostra representativa; o município não é tratado como
+   uma lavoura única.
+6. **Honestidade de resultado.** Índices não são produtividade nem preço.
+   Nenhuma inferência agronômica/econômica será feita sem dados observados e
+   protocolo próprio. Ausência de dados reais não será preenchida com valores
+   sintéticos apresentados como reais.
+7. **Reprodutibilidade.** Ambiente Python isolado (`geospatial/.venv`) com
+   versões pinadas; suíte padrão offline com rasters sintéticos; teste de rede
+   separado; artefatos grandes fora do Git.
+
+Alternativas descartadas: (a) implementar V2 em `main` — risco direto à V1
+congelada; (b) usar CDSE/Sentinel Hub — exige credencial; (c) usar serviço
+comercial (ex.: EOSDA) — custo/cartão e dependência externa; (d) partir para
+série longa e múltiplas fontes — escopo excessivo para a primeira prova.
+
+Critério de aceite da V2.1: fonte pública acessível, AOI com origem
+documentada, ≥1 cena real processada, três índices com bandas/escala/CRS
+documentados, máscara verificável, estatísticas plausíveis, testes sintéticos,
+saída visual e série tabular reproduzível. Resultado real registrado em
+`docs/V2_EXECUTION_STATUS.md`.
+
+Consequências: V1 recuperável e congelada; V2 começa pequena, auditável e
+descartável, sem prometer produção, produtividade ou melhoria de preço.
+

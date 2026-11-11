@@ -16,6 +16,16 @@
 - `data/saden.db` = runtime (ignorado no git); `.env` ignorado; segredos não
   versionados. Histórico AR preservado no banco (ver §3).
 
+### V2 geoespacial (2026-11-11)
+
+- Branch isolada **`v2/geospatial-foundation`** (de `v1-final`); **sem merge**
+  em `main`. Tag/branch de arquivo intactas.
+- PoC Sentinel-2 **executada**: 4 cenas L2A reais (jun–set/2025), NDVI/EVI/NDMI
+  em grade 20 m, GeoTIFFs + CSV + PNG + manifesto.
+- Fonte: Earth Search (Element 84), coleção `sentinel-2-c1-l2a`, anônima.
+- Código em `geospatial/` (Python/venv isolado). Estado completo:
+  `docs/V2_EXECUTION_STATUS.md`. Decisão: D41.
+
 ## 2. Escopo congelado da V1 (D40)
 
 - **Previsão = Ridge única** (pipeline, split 70/15/15, baselines, λ por
@@ -26,7 +36,8 @@
 - Removidos do produto: `backend/src/services/arService.js`, `olsBeta`,
   select `#sel-model`, estado `saden_model` e parâmetro de modelo no frontend.
 - `backend/src/utils/linalg.js` contém apenas `solve` (usado pela Ridge).
-- **Nada de V2 implementado**; `docs/CONTEXTO_V2.md` é somente roadmap.
+- **Nada da V2 toca a V1**: código geoespacial vive em `geospatial/` (Python,
+  não é importado pelo Node) e só existe na branch `v2/geospatial-foundation`.
 
 ## 3. Histórico experimental preservado
 
@@ -85,6 +96,7 @@ renomeado nem reinterpretado. Leitura de `model_runs` não existe em produção.
 | INMET | NÃO INTEGRADA |
 | ANTT/frete | REFERÊNCIA manual |
 | NDVI/CDSE | ESTUDADA, bloqueada por credencial |
+| Sentinel-2 L2A / Earth Search | UTILIZADA na PoC V2 (branch `v2/geospatial-foundation`) |
 
 ## 7. Segurança
 
@@ -100,7 +112,8 @@ renomeado nem reinterpretado. Leitura de `model_runs` não existe em produção.
 
 ## 8. Decisões
 
-- `docs/DECISIONS.md`: **D1–D40** (D40 = congelamento V1 e retirada do AR).
+- `docs/DECISIONS.md`: **D1–D41** (D40 = congelamento V1 e retirada do AR;
+  D41 = V2 isolada e escopo da PoC Sentinel-2).
 - D38/D39 são registros históricos superados por D40, preservados.
 - Segunda opinião (arquivo externo, 940 linhas): fonte de hipóteses, NÃO
   especificação. MAPE futuro (8–10%, 6–8%) é hipótese, nunca resultado.
@@ -126,9 +139,19 @@ monitoramento. Express 4 com 3 moderadas (D10, body limit 256 kb).
 
 ## 11. Próxima etapa
 
-V2 **não iniciada**. Critérios de entrada, escopo candidato, riscos e perguntas
-abertas estão em `docs/CONTEXTO_V2.md`. Qualquer reativação do AR ou outro
-challenger exige decisão nova, reavaliação e testes próprios.
+**V2.1 concluída** no escopo de pipeline (4 cenas, 4 datas). Estado operacional,
+números e pendências em `docs/V2_EXECUTION_STATUS.md`. A V2 **não** está
+integrada ao produto e não produz inferência agronômica/econômica.
+
+Próximas ações possíveis (nenhuma iniciada): ampliar janela temporal, buscar
+dados observados de produtividade, revisar a PoC com orientador. Qualquer
+reativação do AR ou outro challenger de preço continua exigindo decisão nova,
+reavaliação e testes próprios.
+
+Pendência externa: GitHub Release `v1-final` bloqueado por falta de
+autenticação `gh` (sem token e sem login por navegador). Notas prontas em
+`docs/releases/v1-final.md`; tag, `main`, `archive/v1-final` e bundle já
+publicados e verificados.
 
 ## 12. Regras de trabalho que evitam regressão
 

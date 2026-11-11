@@ -515,3 +515,47 @@ P13→testes; P14→visual; P15/P16/P17→refino; P18/P19→docs.
   reescrito para a V1 congelada; `CONTEXTO_V2.md` (roadmap documental).
 - **V1 ENCERRADA.** Nenhuma funcionalidade de V2 implementada. Produção real
   continua exigindo TLS, SMTP, backup automatizado, monitoramento e carga.
+
+---
+
+## V2.1 — PoC Sentinel-2 (2026-11-11, D41)
+
+Branch isolada `v2/geospatial-foundation`, derivada de `v1-final`. Sem merge em
+`main`; sem alteração no código da V1.
+
+### Concluído e verificado
+
+- [x] Fronteira V1/V2 e redundância de recuperação da V1
+      (`docs/V1_RECOVERY.md`, bundle + backup + branch de arquivo)
+- [x] Catálogo público verificado sem credencial: Earth Search
+      (`https://earth-search.aws.element84.com/v1`), coleção
+      `sentinel-2-c1-l2a`
+- [x] AOI com origem oficial: malha IBGE de Sorriso-MT (`5107925`) + janela
+      técnica de `0,10° × 0,10°`
+- [x] Busca real: 54 cenas na janela 2025-06-01…2025-09-30; 27 cobrindo o AOI;
+      4 selecionadas (1 por mês, menor nuvem)
+- [x] Leitura de COG remoto por janela, reprojeção para grade comum de 20 m
+      (`EPSG:32721`, 547×557), `average` para contínuas e `nearest` para SCL
+- [x] NDVI/EVI/NDMI com escala/offset reais (`1e-4`, `-0.1`), `DN=0 → NaN`
+- [x] Máscara SCL conservadora (`0,1,3,7,8,9,10,11` excluídos)
+- [x] 12 GeoTIFFs, CSV de série temporal, 4 prévias PNG e manifesto JSON
+- [x] Testes sintéticos offline **30/30**; V1 revalidada **65/65**
+- [x] Verificação independente: uma única grade e estatísticas conferem
+
+### Não iniciado (exige decisão/escopo novo)
+
+- [ ] Janela temporal longa (2023–2025) e/ou segundo tile
+- [ ] Dados observados de produtividade (município não é talhão)
+- [ ] Avaliação de variáveis agronômicas na previsão de preço
+- [ ] Integração de índices ao produto/UI (proibida antes de revisão da PoC)
+- [ ] Modelo de produtividade ou de preço com features de satélite
+
+### Pendência externa
+
+- [!] GitHub Release `v1-final`: bloqueado por falta de autenticação `gh`
+  (sem token; login por navegador não autorizado). Notas prontas em
+  `docs/releases/v1-final.md`. Tag, `main`, `archive/v1-final` e bundle
+  publicados/verificados.
+
+Detalhes operacionais: `docs/V2_EXECUTION_STATUS.md`. Reprodução:
+`geospatial/README.md`.

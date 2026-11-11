@@ -5,7 +5,9 @@ Atualizado em **2026-11-11** (V1 congelada; seções abaixo preservam o históri
 > **V1 FINAL (2026-11-11)**: previsão com metodologia única **Ridge**; AR(p)
 > retirado do produto (D40), com histórico experimental preservado. Suíte
 > **65/65**, smoke **9/9** (local e container), E2E **57/57**, Docker validado.
-> Roadmap da V2 é somente documental (`docs/CONTEXTO_V2.md`), sem implementação.
+> A V2 geoespacial começou em **branch isolada** (`v2/geospatial-foundation`),
+> sem alterar `main` nem a tag `v1-final`. Estado real em
+> `docs/V2_EXECUTION_STATUS.md`.
 
 ## Funcionalidades
 
@@ -43,6 +45,8 @@ Atualizado em **2026-11-11** (V1 congelada; seções abaixo preservam o históri
 | Alertas MVP (FASE E) | DONE | price_below/above + rain_above, CRUD, check sob demanda, histórico, isolamento; E2E |
 | Locais salvos + período + variação (F/G) | DONE | user_places no mapa, range allowlist, gráfico de variação %; E2E |
 | NDVI (FASE H) | ESTUDO | viável via Sentinel-2/CDSE, bloqueado por credencial — docs/NDVI_STUDY.md |
+| V1 recuperável (tag + branch + bundle + backup) | DONE | `docs/V1_RECOVERY.md`; bundle SHA-256 `DB2D8858…`; banco `integrity_check=ok` |
+| V2.1 PoC Sentinel-2 (branch isolada) | DONE | 4 cenas L2A reais, NDVI/EVI/NDMI 20 m, 30/30 testes sintéticos — `docs/V2_EXECUTION_STATUS.md` |
 | Testes | DONE | 65/65 (`npm test`), smoke 9/9, E2E navegador 57/57 (V1 final; histórico 44/44→53/53 da RC) |
 | Preço territorial (engine + fallback) | DONE | hierarquia honesta (nacional populado; regional `unavailable` explícito); badge no dashboard |
 | Frete | REFERÊNCIA | sem fonte estruturada; sem cálculo automático; link/manual na tabela de fontes |
@@ -91,3 +95,20 @@ Smoke E2E: `node scripts/smoke-test.js`.
 
 Escopo congelado: uma metodologia (Ridge), sem TLS/SMTP/carga/monitoramento —
 não declarado pronto para produção. Próxima etapa possível: `docs/CONTEXTO_V2.md`.
+
+## V2 geoespacial — branch isolada (2026-11-11, D41)
+
+| Item | Estado | Evidência |
+|---|---|---|
+| Fonte pública Sentinel-2 L2A | DONE | Earth Search `sentinel-2-c1-l2a`, acesso anônimo |
+| AOI com origem oficial | DONE | malha IBGE Sorriso-MT + janela técnica 0,10° |
+| Aquisição/processamento real | DONE | 4 cenas (jun–set/2025), 12 GeoTIFFs, 1 grade 20 m |
+| Máscara de nuvem/nodata | DONE | SCL conservadora; 99,94–99,96% válidos; 0 degenerados |
+| Testes sintéticos offline | DONE | 30/30 (`unittest`, sem rede) |
+| Série tabular + prévias + manifesto | DONE | CSV 12 linhas, 4 PNG, JSON com SHA-256 |
+| Integração ao produto/UI | NOT_STARTED | fora do escopo desta missão |
+| Modelo de produtividade/preço | NOT_STARTED | exige dados observados e protocolo próprio |
+
+A V2.1 **não** conclui análise sazonal, produtividade ou melhoria de previsão.
+Detalhes, números e limitações: `docs/V2_EXECUTION_STATUS.md` e
+`geospatial/README.md`.

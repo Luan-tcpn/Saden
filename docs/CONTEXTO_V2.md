@@ -1,8 +1,10 @@
-# SADEN — Contexto e roadmap da V2 (documento, não implementação)
+# SADEN — Contexto e roadmap da V2
 
-> Status: **PLANEJAMENTO DOCUMENTAL**. Nada descrito aqui foi implementado,
-> medido ou validado. Este arquivo existe para registrar critérios, riscos e
-> perguntas antes de qualquer código. A V1 permanece congelada (D40).
+> Status: **V2.1 EXECUTADA EM BRANCH ISOLADA** (2026-11-11). A PoC Sentinel-2
+> rodou com 4 cenas reais L2A e está documentada em
+> `docs/V2_EXECUTION_STATUS.md`. A V1 permanece congelada (D40) e intocada.
+> Este documento mantém o roteiro, os riscos e os critérios; decisões formais
+> ficam em `docs/DECISIONS.md` (D41).
 > Data: 2026-11-11.
 
 ## 1. Ponto de partida real (V1)
@@ -118,3 +120,37 @@ Uma trilha só é considerada concluída quando:
 
 Escolher **uma** trilha, escrever D41 com problema/alternativas/custo/critério,
 e só então abrir branch. Sem decisão registrada, a V2 permanece não iniciada.
+
+## 10. O que foi realmente feito na V2.1 (2026-11-11)
+
+- **Branch:** `v2/geospatial-foundation`, derivada de `v1-final` (`3f7ad33`).
+  Nenhum merge em `main`; tag e branches de arquivo intactas.
+- **Trilha escolhida:** dados geoespaciais (T3), escopo mínimo — Sentinel-2
+  L2A, uma janela técnica, um pipeline local.
+- **Fonte:** Earth Search / Element 84, coleção `sentinel-2-c1-l2a`, acesso
+  anônimo e gratuito.
+- **AOI:** Sorriso-MT (IBGE `5107925`) + janela de `0,10° × 0,10°`. Recorte
+  técnico, não talhão.
+- **Produto:** NDVI/EVI/NDMI em grade comum de 20 m (`EPSG:32721`), máscara
+  SCL conservadora, 4 cenas reais (jun–set/2025), GeoTIFFs + CSV + PNG +
+  manifesto JSON com checksums.
+- **Testes:** 30/30 sintéticos offline; V1 revalidada em 65/65.
+- **Fora de escopo (continua fora):** UI, dashboard, endpoint, integração de
+  índices ao produto, modelo de preço/produtividade, outros satélites,
+  serviços pagos.
+
+Números, arquivos, limitações e comandos estão em
+`docs/V2_EXECUTION_STATUS.md` e `geospatial/README.md`. Não há conclusão
+agronômica: os índices descrevem reflectância em uma janela pequena.
+
+## 11. Próximos passos propostos (não iniciados)
+
+1. Revisar a PoC com orientador antes de ampliar escopo.
+2. Ampliar janela temporal (2023–2025) mantendo o mesmo protocolo e AOI.
+3. Buscar **dados observados** de produtividade (ex.: IBGE PAM municipal,
+   CONAB) antes de qualquer modelo agronômico — e declarar que município não é
+   talhão.
+4. Só depois avaliar se variáveis agronômicas ajudam a previsão de preço,
+   com protocolo experimental e teste intocado.
+5. Robustez operacional da V1 (TLS, SMTP, backup, monitoramento) segue como
+   trilha independente de maior valor para produção.
