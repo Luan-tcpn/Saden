@@ -10,3 +10,7 @@ python-dateutil==4.0.0
 # V2.1 — geometria oficial (malha IBGE) e métricas de área/projeção
 shapely==2.1.2
 pyproj==3.7.2
+# V2.2 — leitura das planilhas oficiais da CONAB (.xlsx/.xls)
+openpyxl==3.1.5
+xlrd==2.0.1
+pandas==2.2.3

@@ -3,3 +3,11 @@ artifacts/
 __pycache__/
 *.pyc
 .pytest_cache/
+# V2.2 — dados brutos e derivados locais
+# Planilhas da CONAB: acesso público, mas termos de uso ambíguos para
+# redistribuição (decisão D48) — ficam fora do Git; URL + SHA-256 no manifesto.
+data/raw/conab/
+# Base normalizada em JSON: duplicata do CSV versionado (regenerável).
+data/processed/*.json
+# Achados completos de qualidade: CSV versionado guarda error/warning.
+data/manifests/quality_findings_full.csv
