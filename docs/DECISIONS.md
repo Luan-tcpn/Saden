@@ -527,3 +527,121 @@ meses — quebraria a comparabilidade radiométrica e espacial da série.
 Consequências: a série 2023–2025 é reproduzível, auditável e honesta nas suas
 lacunas; ela ainda **não** sustenta nenhuma afirmação agronômica.
 
+## D46 — IBGE/SIDRA (PAM 5457) como base observada de referência; CONAB como contexto (2026-11-11)
+
+Contexto: a V2.2 precisava de dados **observados** de produtividade para
+relacionar com os indicadores Sentinel-2 da V2.1. Duas instituições foram
+investigadas diretamente (sem serviço pago, sem credencial, sem contorno de
+bloqueio).
+
+Fatos verificados em 2026-11-11:
+
+| | IBGE/SIDRA (PAM 5457) | CONAB (Boletim de Safras) |
+|---|---|---|
+| Acesso | API pública, sem chave, HTTP GET | planilhas oficiais no portal; sem API |
+| Granularidade | **município** (N6) | **UF** e nacional |
+| Periodicidade | anual, **1974–2025** | por **safra**, ~2 safras por boletim |
+| Variáveis | área plantada/colhida, quantidade, rendimento médio, valor | área, produtividade, produção |
+| Natureza | **observada** (coleta municipal) | **estimada** (levantamento, revisada) |
+| Cobertura municipal de Sorriso | soja, milho, algodão (café e trigo = 0) | — (estadual) |
+
+Decisão:
+
+1. **A base observada de referência é o IBGE/SIDRA**, tabela 5457 (PAM),
+   acquired por consulta reproduzível, com resposta bruta versionada,
+   manifesto com URL/parâmetros/checksum e convenções de valor do IBGE
+   (`..` ausente, `-` zero, `...` não aplicável, `x` suprimido).
+2. **A CONAB entra como camada de contexto estadual e safras**, com origem
+   (levantamento) e revisão registradas em cada linha. Ela **não** substitui
+   o IBGE: mesma variável com Periodicidade, método e natureza diferentes.
+3. Nenhuma fonte foi rasterizada, interpolada ou reescalada para a AOI.
+
+Alternativas descartadas: (a) usar CONAB como base principal — granularidade
+estadual e estimativas revisadas; (b) usar a base do IBGE/SIDRA em outro
+nível geográfico — municipal é o mais fino disponível e é o que contém a AOI;
+(c) comprar base privada com resolução de talhão — proibido nesta missão.
+
+Consequências: existe uma base real, observada, rastreável e reproduzível;
+suas limitações são de **escala e tempo**, não de acesso.
+
+## D47 — Compatibilidade espacial classificada em A/B/C; proibido atribuir produtividade municipal à AOI (2026-11-11)
+
+Contexto: a AOI de validação tem 43,26 km² e está 100% dentro do município de
+Sorriso (9.293,47 km²), ou seja, **0,4654%** da área municipal (medido com
+geometria real e projeção `EPSG:6933`, como na V2.1/D42).
+
+Decisão:
+
+1. Classificação de compatibilidade espacial, aplicada a **cada combinação**
+   (fonte × cultura × período × unidade territorial):
+   - **A — direta**: observação na mesma unidade espacial do indicador
+     geoespacial (propriedade/talhão);
+   - **B — contextual**: unidade territorial maior que contém a AOI (município),
+     útil como contexto municipal;
+   - **C — incompatível**: escala que impede associação válida na AOI.
+2. Resultado aplicado: **IBGE/PAM = B** (municipal) e **CONAB = C** (estadual)
+   para a AOI. **Nenhuma fonte oficial investigada atinge a classe A.**
+3. É **proibido** rasterizar a produtividade municipal para a AOI, "distribuir"
+   o valor municipal pelos pixels da AOI ou apresentar estatística municipal
+   como *ground truth* da AOI.
+4. A geometria oficial do município e a AOI de validação permanecem as da
+   V2.1 (D42); a compatibilidade é calculada por interseção real, não por
+   bounding box.
+
+Consequências: o estudo futuro, se autorizado, é na escala que os dados
+suportam; a escala fina (AOI/talhão) permanece explicitamente em aberto.
+
+## D48 — Licenciamento: planilhas da CONAB fora do Git; dados do IBGE versionados (2026-11-11)
+
+Contexto: os termos de uso da CONAB não foram obtidos em forma verificável
+nesta etapa, e o acesso oficial é por planilha publicada no portal (sem API
+automatizável). A pendência anterior sobre a divergência entre o `license:
+proprietary` do catálogo STAC da Earth Search e o "free, full and open" do
+Registry of Open Data on AWS **continua aberta** e não é tratada como
+resolvida.
+
+Decisão:
+
+1. Dados do **IBGE/SIDRA** (domínio público, sem chave) são **versionados**:
+   resposta bruta da API, base normalizada e manifestos.
+2. **Planilhas da CONAB não são versionadas**: ficam em `data/raw/conab/`
+   (ignorado pelo Git). O manifesto registra **URL exata, tamanho e SHA-256**
+   de cada arquivo, garantindo reprodução e verificação de integridade sem
+   redistribuir o material sob termos não verificados.
+3. A pendência de licenciamento é registrada como **aberta**; nenhuma
+   afirmação de "livre para redistribuir" é feita para CONAB ou Sentinel-2.
+
+Consequências: reprodutibilidade preservada sem redistribuição indevida; a
+questão de termos de uso permanece na lista de pendências.
+
+## D49 — Culturas-piloto: soja e milho; algodão condicionado; café e trigo descartados (2026-11-11)
+
+Contexto: o catálogo do SADEN tem cinco commodities (soja, milho, café arábica,
+trigo, algodão). A escolha da cultura-piloto precisa de disponibilidade real,
+não de semelhança de nome.
+
+Decisão:
+
+| Commodity | Correspondência IBGE | Correspondência CONAB | Decisão |
+|---|---|---|---|
+| Soja | **exata** (40124 Soja em grão) | exata (`SOJA`) | **piloto** |
+| Milho | **exata** (40122 Milho em grão) | exata (`MILHO TOTAL`) | **piloto** |
+| Algodão | **parcial** (40099 em **caroço**) | **parcial** (pluma e caroço) | piloto **condicionado**: só com o pluma (referência do SADEN) ou conversão documentada |
+| Café arábica | equivalente c/ ressalvas (grão não torrado) | equivalente c/ ressalvas | **descartado**: produção municipal zero em 2013–2025 |
+| Trigo | exata | exata | **descartado**: produção municipal zero em 2013–2025 |
+
+Regras aplicadas:
+
+1. Correspondência declarada por **código oficial** (IBGE) e por **rótulo
+   exato** (CONAB) — nunca por semelhança textual.
+2. Cada vínculo carrega a classe (`exact`, `equivalent_with_caveats`,
+   `partial`, `none`) e a ressalva técnica.
+3. Culturas sem produção municipal observada não entram como piloto, ainda
+   que constem do catálogo do SADEN.
+4. Produtos fora do catálogo do SADEN permanecem na base com
+   `match_class = none` (não são eliminados).
+
+Consequências: duas culturas com observação municipal real e correspondência
+exata são o ponto de partida de qualquer estudo futuro; a exclusão de café e
+trigo fica documentada com o dado que a sustenta.
+

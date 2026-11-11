@@ -134,17 +134,27 @@ def s2_yearly_aggregation(csv_path: str = config.S2_SERIES_CSV) -> dict[str, Any
         return {"status": "serie_ausente", "path": csv_path, "years": {}}
 
     by_year: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    months_by_year: dict[str, set[str]] = defaultdict(set)
     with open(csv_path, newline="", encoding="utf-8-sig") as handle:
         for row in csv.DictReader(handle):
-            if row.get("index") != config.S2_INDEX:
-                continue
             year = str(row.get("month"))[:4]
-            by_year[year].append(row)
+            months_by_year[year].add(str(row.get("month")))
+            if row.get("index") == config.S2_INDEX:
+                by_year[year].append(row)
 
     years: dict[str, Any] = {}
-    for year, rows in sorted(by_year.items()):
+    for year in sorted(set(by_year) | set(months_by_year)):
+        rows = by_year.get(year, [])
         observed = [r for r in rows if r.get("status") == "observed" and r.get("mean")]
-        missing = [r for r in rows if r.get("status") != "observed"]
+        all_months = sorted(months_by_year.get(year, set()))
+        missing = [
+            month
+            for month in all_months
+            if month
+            and not any(
+                r.get("month") == month and r.get("status") == "observed" for r in rows
+            )
+        ]
         means = [float(r["mean"]) for r in observed]
         weights = [float(r.get("valid_fraction") or 0.0) for r in observed]
         total_weight = sum(weights)
@@ -154,9 +164,9 @@ def s2_yearly_aggregation(csv_path: str = config.S2_SERIES_CSV) -> dict[str, Any
             else None
         )
         years[year] = {
-            "months_total": len(rows),
+            "months_total": len(all_months),
             "months_observed": len(observed),
-            "months_missing": [str(r.get("month")) for r in missing],
+            "months_missing": missing,
             "ndvi_mean_of_monthly_means": sum(means) / len(means) if means else None,
             "ndvi_coverage_weighted_mean": weighted,
             "ndvi_min_monthly_mean": min(means) if means else None,

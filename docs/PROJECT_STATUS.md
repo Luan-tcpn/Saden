@@ -128,3 +128,21 @@ Detalhes, números e limitações: `docs/V2_EXECUTION_STATUS.md` e
 | Modelo de produtividade/preço | NOT_STARTED | exige dados observados e protocolo próprio (V2.2+) |
 
 Relatório técnico: `docs/V2_1_VALIDATION_REPORT.md`.
+
+## V2.2 base observada de produtividade — branch `v2/agricultural-productivity-data` (2026-11-11, D46–D49)
+
+| Item | Estado | Evidência |
+|---|---|---|
+| IBGE/SIDRA (PAM 5457) | DONE | 4.472 registros reais do município 5107925 (2013–2025), sem chave |
+| CONAB (Boletim de Safras) | DONE (estadual) | 444 registros de MT, safras 23/24–25/26; estimativas revisadas |
+| Bloqueios de acesso | DOCUMENTED | SIGS/`api.conab.gov.br` sem DNS; `dados.gov.br` HTTP 401 — não contornados |
+| Base normalizada | DONE | 4.916 registros, 26 campos, valor/unidade originais preservados |
+| Crosswalk de culturas | DONE | 5 commodities do SADEN mapeadas com classe (exact/equivalent/partial) |
+| Qualidade | DONE | 0 erros, 19 avisos (revisões entre boletins; dupla contagem) |
+| Compatibilidade espacial | DONE | AOI = 0,4654% do município → IBGE = B, CONAB = C; nenhuma fonte na escala da AOI |
+| Compatibilidade temporal | DONE | IBGE n = 3 (2023–2025), CONAB 3 safras, Sentinel-2 34/36 meses |
+| Testes | DONE | **137/137** offline; **10/10** externos opt-in |
+| Modelo de produtividade / integração | NOT_STARTED | fora de escopo; exige autorização do portão de decisão |
+
+Relatório: `geospatial/reports/V2_2_PRODUCTIVITY_DATA_COMPATIBILITY.md`.
+Veredito do portão: **CAMINHO 2** (dados reais, escala municipal/estadual).

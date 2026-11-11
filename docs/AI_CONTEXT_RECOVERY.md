@@ -54,6 +54,37 @@
   `geospatial/tests_external/` (opt-in por `SADEN_EXTERNAL_TESTS=1`).
 - Relatório técnico: `docs/V2_1_VALIDATION_REPORT.md`.
 
+### V2.2 base observada de produtividade (branch `v2/agricultural-productivity-data`)
+
+- Branch nova `v2/agricultural-productivity-data`, derivada de
+  `v2/geospatial-validation` (`e1d7f30`); V1 e V2.1 intocadas.
+- **IBGE/SIDRA (PAM 5457)**: 4.472 registros reais do município 5107925
+  (2013–2025), API pública sem chave; resposta bruta versionada em
+  `geospatial/data/raw/sidra/`.
+- **CONAB (Boletim de Safras)**: 444 registros de **Mato Grosso**, safras
+  23/24, 24/25 e 25/26 (estimativas de levantamento); planilhas **fora do
+  Git** (D48), com URL e SHA-256 no manifesto. SIGS/`api.conab.gov.br` não
+  resolvem DNS e `dados.gov.br` responde 401 — bloqueios registrados, não
+  contornados.
+- **Base normalizada**: 4.916 registros (`geospatial/data/processed/
+  productivity_observations.csv`), valor/unidade originais preservados,
+  natureza (observado/estimado) e escopo de produto explícitos.
+- **Qualidade**: 0 erros, 19 avisos (13 revisões entre boletins CONAB, 6 dupla
+  contagem agregado × componente).
+- **Compatibilidade espacial** (geometria real): AOI = 0,4654% do município →
+  IBGE = **B (contextual)**, CONAB = **C**; nenhuma fonte oficial alcança a
+  escala da AOI.
+- **Temporal**: IBGE 2023–2025 (n = 3), CONAB 3 safras, Sentinel-2 mensal com
+  2 lacunas preservadas; sem calendário fenológico validado (nenhuma janela
+  inventada).
+- **Culturas-piloto**: soja e milho (exatas); algodão condicionado (caroço ×
+  pluma); café e trigo descartados (produção municipal zero).
+- **Testes**: 137/137 offline; 10/10 externos opt-in.
+- Relatório: `geospatial/reports/V2_2_PRODUCTIVITY_DATA_COMPATIBILITY.md`.
+- **Veredito do portão**: CAMINHO 2 — há base real e auditável, porém apenas
+  municipal/estadual; a V2.3 só deve avançar como estudo exploratório
+  municipal, com n ≥ 10 anos (ampliar a série Sentinel-2) e calendário validado.
+
 ## 2. Escopo congelado da V1 (D40)
 
 - **Previsão = Ridge única** (pipeline, split 70/15/15, baselines, λ por
@@ -140,10 +171,12 @@ renomeado nem reinterpretado. Leitura de `model_runs` não existe em produção.
 
 ## 8. Decisões
 
-- `docs/DECISIONS.md`: **D1–D45** (D40 = congelamento V1 e retirada do AR;
+- `docs/DECISIONS.md`: **D1–D49** (D40 = congelamento V1 e retirada do AR;
   D41 = V2 isolada e escopo da PoC Sentinel-2; D42 = geometrias separadas e
   limite municipal oficial; D43 = política de máscara SCL; D44 = regra de
-  mosaico e par de tiles por datatake; D45 = seleção mensal da série 2023–2025).
+  mosaico e par de tiles por datatake; D45 = seleção mensal da série 2023–2025;
+  D46 = fonte de referência (IBGE/PAM); D47 = classes de compatibilidade
+  espacial A/B/C; D48 = licenciamento (CONAB fora do Git); D49 = culturas-piloto).
 - D38/D39 são registros históricos superados por D40, preservados.
 - Segunda opinião (arquivo externo, 940 linhas): fonte de hipóteses, NÃO
   especificação. MAPE futuro (8–10%, 6–8%) é hipótese, nunca resultado.
@@ -169,25 +202,29 @@ monitoramento. Express 4 com 3 moderadas (D10, body limit 256 kb).
 
 ## 11. Próxima etapa
 
-**V2.1 validada** no escopo geoespacial: checkpoints A–E executados com dados
-reais (reprodução bit a bit da PoC, auditoria radiométrica, comparação de
-máscaras SCL, geometria municipal oficial, mosaico real de dois tiles e série
-mensal 2023–2025 com lacunas honestas). Estado operacional, números e
-pendências em `docs/V2_EXECUTION_STATUS.md`; relatório técnico em
-`docs/V2_1_VALIDATION_REPORT.md`. A V2 **não** está integrada ao produto e não
-produz inferência agronômica/econômica.
+**V2.1 validada** (checkpoints A–E com dados reais) e **V2.2 executada**
+(base observada de produtividade com classificação de compatibilidade).
 
-Branch de validação publicada: `v2/geospatial-validation` (`c7842d6`).
+**Veredito registrado: CAMINHO 2** — existem dados oficiais reais, auditáveis
+e de qualidade verificada (IBGE/SIDRA, municipal), mas **não** na escala da
+AOI; a CONAB é estadual e estimada. A V2.3, se autorizada, deve ser delimitada
+como **estudo exploratório na escala municipal**, com o NDVI da AOI tratado
+como indicador de sub-região de valor espacial limitado.
 
-Próxima ação única recomendada: **V2.2 — investigar a compatibilidade
-espacial/temporal de dados oficiais de produtividade (IBGE/SIDRA, CONAB) com a
-AOI de validação e com os indicadores Sentinel-2**, para construir a base
-observada antes de qualquer modelagem. As trilhas de robustez operacional da
-V1 (TLS, SMTP, backup, monitoramento) seguem como trilha independente de
-maior valor para produção.
+Pré-requisitos para a V2.3: (a) ampliar a série Sentinel-2 para 2017–2025
+(n ≥ 9–10 anos); (b) validar o calendário fenológico em fonte oficial;
+(c) identificar o uso do solo na AOI por classificador validado; (d) fixar a
+variável-alvo (rendimento médio municipal, kg/ha) e o protocolo de splitting.
 
-Qualquer reativação do AR ou outro challenger de preço continua exigindo
-decisão nova, reavaliação e testes próprios.
+Relatórios: `docs/V2_1_VALIDATION_REPORT.md` e
+`geospatial/reports/V2_2_PRODUCTIVITY_DATA_COMPATIBILITY.md`. Estado
+operacional: `docs/V2_EXECUTION_STATUS.md`. Branches publicadas:
+`v2/geospatial-validation` (V2.1) e `v2/agricultural-productivity-data` (V2.2).
+
+Robustez operacional da V1 (TLS, SMTP, backup, monitoramento) segue como
+trilha independente de maior valor para produção. Qualquer reativação do AR ou
+outro challenger de preço continua exigindo decisão nova, reavaliação e
+testes próprios.
 
 Pendência externa: GitHub Release `v1-final` bloqueado por falta de
 autenticação `gh` (sem token e sem login por navegador). Notas prontas em

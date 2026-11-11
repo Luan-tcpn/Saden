@@ -168,14 +168,45 @@ Relatório técnico completo (com FATO/INTERPRETAÇÃO/LIMITAÇÃO por seção):
 estão também em `geospatial/README.md`. Não há conclusão agronômica: os
 índices descrevem reflectância em recortes geográficos.
 
+### 10.3 V2.2 — base observada de produtividade (branch `v2/agricultural-productivity-data`)
+
+- **Branch:** `v2/agricultural-productivity-data` (derivada de
+  `v2/geospatial-validation` / `e1d7f30`); V1 e V2.1 intocadas.
+- **Fontes investigar:** IBGE/SIDRA (PAM, tabela 5457 — municipal, 1974–2025,
+  observada, sem chave) e CONAB (Boletim de Safras — **estadual**, estimada e
+  revisada). SIGS/`api.conab.gov.br` (DNS) e `dados.gov.br` (401) bloqueados
+  e registrados.
+- **Dados obtidos:** 4.472 registros PAM de Sorriso (2013–2025) + 444 da
+  CONAB (MT, safras 23/24–25/26) = **4.916 observações normalizadas**,
+  com valor/unidade originais preservados, natureza e escopo explícitos.
+- **Qualidade:** 0 erros, 19 avisos (revisões entre boletins; dupla contagem
+  agregado × componente), 5.866 achados informativos.
+- **Compatibilidade espacial:** AOI = **0,4654%** do município → IBGE = **B
+  (contextual)**, CONAB = **C**; nenhuma fonte oficial na escala da AOI.
+- **Compatibilidade temporal:** IBGE 2023–2025 (**n = 3**), CONAB 3 safras,
+  Sentinel-2 mensal com 2 lacunas preservadas; sem calendário validado.
+- **Culturas-piloto:** soja e milho (exatas); algodão condicionado (caroço ×
+  pluma); café e trigo descartados (produção municipal zero). Decisões
+  **D46–D49**.
+- **Veredito do portão:** **CAMINHO 2** — há base real e auditável, mas só em
+  escala municipal/estadual; a V2.3, se autorizada, deve ser exploratória e
+  municipal, com n ≥ 10 anos.
+- **Fora de escopo (continua fora):** modelo de produtividade, integração ao
+  Ridge, UI/dashboard, API pública de produtividade.
+
+Relatório: `geospatial/reports/V2_2_PRODUCTIVITY_DATA_COMPATIBILITY.md`.
+
 ## 11. Próximos passos propostos (não iniciados)
 
 1. Revisar a V2.1 com orientador antes de ampliar escopo.
-2. **V2.2** — investigar compatibilidade espacial/temporal de dados oficiais
-   (IBGE/SIDRA, CONAB) com a AOI e com os indicadores Sentinel-2, para
-   construir uma base observada de produtividade. Sem modelagem antes disso.
-3. **V2.3** — só com dados observados adequados: modelos de produtividade com
-   estratégia de validação.
+2. **V2.2 — feita** (base observada de produtividade + compatibilidade):
+   ver §10.3 e o relatório
+   `geospatial/reports/V2_2_PRODUCTIVITY_DATA_COMPATIBILITY.md`.
+3. **V2.3 (condicional)** — só com os pré-requisitos do portão de decisão:
+   ampliar a série Sentinel-2 para 2017–2025 (n ≥ 9–10), validar o calendário
+   fenológico em fonte oficial, identificar o uso do solo na AOI e fixar a
+   variável-alvo (rendimento médio municipal). Escopo: estudo **exploratório
+   na escala municipal**; não é validação da AOI.
 4. **V2.4** — avaliar se variáveis agronômicas ajudam a previsão de preço,
    com protocolo experimental, Ridge como baseline obrigatório e teste
    intocado.

@@ -609,3 +609,67 @@ segurança verificado. Sem merge em `main`; V1 intocada.
 
 Relatório técnico: `docs/V2_1_VALIDATION_REPORT.md`. Decisões: `docs/DECISIONS.md`
 (D42–D45). Estado operacional: `docs/V2_EXECUTION_STATUS.md`.
+
+---
+
+## V2.2 — Base observada de produtividade (2026-11-11, D46–D49)
+
+Branch isolada `v2/agricultural-productivity-data`, derivada de
+`v2/geospatial-validation` (`e1d7f30`). Sem merge em `main`; V1 e V2.1
+intocadas; sem alteração no produto.
+
+### Concluído e verificado
+
+- [x] **Fontes investigadas diretamente** — IBGE/SIDRA (PAM, tabela 5457:
+      municipal, anual, 1974–2025, observada, sem chave) e CONAB (Boletim de
+      Safras: estadual, por safra, estimada e revisada)
+- [x] **Bloqueios reais registrados e não contornados** — `sigs.conab.gov.br`
+      e `api.conab.gov.br` sem DNS; `dados.gov.br/api/3/action` HTTP 401
+- [x] **Município 5107925 confirmado** na API oficial (Sorriso/MT; região
+      imediata Sorriso, intermediária Sinop)
+- [x] **Dados reais adquiridos** — 4.472 registros PAM (2013–2025) + 444 da
+      CONAB (safras 23/24–25/26), com resposta bruta versionada, manifestos
+      (URL, parâmetros, checksum) e licença registrada
+- [x] **Base normalizada** — 4.916 observações, 26 campos, valor/unidade
+      originais preservados, natureza (observado/estimado) e escopo de produto
+- [x] **Crosswalk de culturas** — 5 commodities do SADEN com classe de
+      correspondência e ressalva; produtos fora do catálogo mantidos como
+      `none`
+- [x] **Validação automatizada** — 11 verificações (duplicidade, unidade,
+      área × produção, rendimento publicado × calculado, revisões entre
+      boletins, dupla contagem): 0 erros, 19 avisos
+- [x] **Compatibilidade espacial** com geometria real: AOI = 0,4654% do
+      município → IBGE = **B (contextual)**, CONAB = **C (incompatível)**
+- [x] **Compatibilidade temporal** — IBGE n = 3 (2023–2025), CONAB 3 safras,
+      Sentinel-2 34/36 meses com lacunas preservadas; nenhum calendário
+      fenológico inventado
+- [x] **Testes** — 137/137 offline; 10/10 externos opt-in
+- [x] **Relatório técnico** — `geospatial/reports/V2_2_PRODUCTIVITY_DATA_COMPATIBILITY.md`
+
+### Portão de decisão
+
+- [x] **Veredito: CAMINHO 2** — existem dados oficiais reais e auditáveis,
+      mas apenas em escala municipal (IBGE) ou estadual (CONAB); nenhuma
+      observação oficial na escala da AOI.
+
+### Não iniciado (exige decisão/escopo novo)
+
+- [ ] **V2.3 (condicional)** — estudo exploratório **municipal**, apenas
+      com: série Sentinel-2 ampliada (2017–2025, n ≥ 9–10), calendário
+      fenológico validado, uso do solo identificado na AOI e variável-alvo
+      fixada (rendimento médio municipal, kg/ha)
+- [ ] **V2.4** — integração ao Ridge, com Ridge como baseline obrigatório
+- [ ] Integração de índices/produtividade ao produto/UI e ao dashboard
+
+### Pendências
+
+- [!] Licenciamento em aberto: `proprietary` (STAC) × “free, full and open”
+      (AWS) para o Sentinel-2; termos da CONAB não obtidos — planilhas fora do
+      Git (D48)
+- [!] Escala espacial mais fina que a municipal para a AOI: inexistente nas
+      fontes oficiais investigate
+- [!] Calendário fenológico oficial para Sorriso: não confirmado nesta etapa
+- [!] GitHub Release `v1-final` (bloqueio de autenticação) — idem V2.1
+
+Antes de modelar, revisar o relatório da V2.2 com o orientador e decidir se o
+escopo municipal exploratório responde à pergunta do TCC.

@@ -1,21 +1,24 @@
 # SADEN V2 — estado de execução (memória operacional)
 
-> Atualizado em **2026-11-11**. Branch de trabalho: `v2/geospatial-validation`
-> (derivada de `v2/geospatial-foundation` / `2e5b3ef`). A V1 permanece
+> Atualizado em **2026-11-11**. Branch de trabalho: `v2/agricultural-productivity-data`
+> (derivada de `v2/geospatial-validation` / `e1d7f30`). A V1 permanece
 > congelada: `main`, `v1-final` e `archive/v1-final` continuam em `3f7ad33`.
-> Relatório técnico da validação: `docs/V2_1_VALIDATION_REPORT.md`.
-> Plano: `docs/V2_1_VALIDATION_PLAN.md`. Decisões: `docs/DECISIONS.md` (D42–D45).
+> Relatório técnico da validação V2.1: `docs/V2_1_VALIDATION_REPORT.md`.
+> Relatório técnico da V2.2: `geospatial/reports/V2_2_PRODUCTIVITY_DATA_COMPATIBILITY.md`.
+> Plano: `docs/V2_1_VALIDATION_PLAN.md`. Decisões: `docs/DECISIONS.md` (D42–D49).
 
 ## 1. Etapa atual
 
-**V2.1 — validação geoespacial EXECUTADA** na branch
-`v2/geospatial-validation`: checkpoints A, B, C, D e E rodados sobre dados
-reais (STAC + COGs do catálogo Earth Search), com manifesto, relatório e
-série temporal versionados. Escopo deliberadamente geoespacial: sem UI, sem
-integração ao produto, sem modelo de preço, sem alteração na Ridge e sem
-modelo de produtividade.
+**V2.2 — base observada de produtividade agrícola executada** na branch
+`v2/agricultural-productivity-data`: aquisição real de dados oficiais
+(IBGE/SIDRA PAM e CONAB), normalização, validação de qualidade, crosswalk de
+culturas e classificação de compatibilidade espacial/temporal com o Sentinel-2
+da V2.1. Sem integração ao produto, sem modelo, sem alteração na V1.
 
-Relatório técnico: `docs/V2_1_VALIDATION_REPORT.md`.
+Veredito do portão de decisão: **CAMINHO 2** — existem dados oficiais reais e
+de qualidade verificada, mas **apenas em escala municipal (IBGE)** ou
+estadual (CONAB); não há observação oficial na escala da AOI (43,26 km² =
+0,4654% do município de Sorriso).
 
 ## 2. Fronteira V1 × V2
 
@@ -190,14 +193,54 @@ Problemas reais encontrados e contornados:
 4. Nada de UI/dashboard/endpoint novo, integração dos índices ao Ridge ou
    modelo de produtividade enquanto a V2.1 não for revisada.
 
-## 13. Comandos de retomada
+## 13. Checkpoint V2.2 — base observada de produtividade (D46–D49)
+
+Branch: `v2/agricultural-productivity-data` (derivada de `v2/geospatial-validation`).
+
+| Fonte | Estado | Evidência |
+|---|---|---|
+| IBGE/SIDRA (PAM 5457) | **acessível** | 4.472 registros reais do município 5107925 (2013–2025), `data/raw/sidra/` versionado |
+| CONAB (Boletim de Safras) | **acessível** (estadual) | 444 registros de MT, safras 23/24, 24/25 e 25/26; planilhas fora do Git (D48) |
+| CONAB SIGS / API / dados.gov.br | **bloqueados** | DNS não resolve / HTTP 401 — registrados, não contornados |
+| Município 5107925 | **confirmado** | API oficial: Sorriso/MT, região imediata Sorriso, intermediária Sinop |
+
+Base normalizada: **4.916 registros** (IBGE 4.472 observados + CONAB 444
+estimados), 26 campos, com valor e unidade originais preservados.
+Qualidade: **0 erros, 19 avisos** (13 revisões entre boletins CONAB, 6
+dupla contagem agregado × componente), 5.866 achados informativos.
+
+Compatibilidade espacial (geometria real, `EPSG:6933`): AOI 43,26 km² =
+**0,4654%** do município de Sorriso (9.293,47 km²) → **IBGE = B
+(contextual)**, **CONAB = C (incompatível)**; nenhuma fonte oficial alcança a
+classe A (propriedade/talhão).
+
+Compatibilidade temporal: IBGE 2023–2025 (**n = 3** observações anuais),
+CONAB safras 23/24–25/26, Sentinel-2 mensal com 2 lacunas reais (2023-01,
+2024-12) preservadas. Sem calendário fenológico validado: nenhuma janela
+de safra foi inventada.
+
+Culturas-piloto: **soja e milho** (correspondência exata, com produção
+municipal real); **algodão** condicionado (IBGE publica caroço, SADEN
+referencia pluma); **café e trigo descartados** (produção municipal zero).
+
+Testes: **137/137 offline** (95 da V2.1 + 42 novos) e **10/10 externos**
+(opt-in). Relatório: `geospatial/reports/V2_2_PRODUCTIVITY_DATA_COMPATIBILITY.md`.
+
+## 14. Comandos de retomada
 
 ```powershell
-git switch v2/geospatial-validation
+git switch v2/agricultural-productivity-data
 geospatial\.venv\Scripts\python.exe -m unittest discover -s geospatial\tests -t geospatial
 geospatial\.venv\Scripts\python.exe geospatial\run_validation.py geometry
 geospatial\.venv\Scripts\python.exe geospatial\run_validation.py mosaic
 geospatial\.venv\Scripts\python.exe geospatial\run_validation.py timeseries --start 2023-01 --end 2025-12
+
+# V2.2 — base observada de produtividade (rede)
+geospatial\.venv\Scripts\python.exe geospatial\run_productivity.py inventory
+geospatial\.venv\Scripts\python.exe geospatial\run_productivity.py acquire --year-start 2013 --year-end 2025 --conab-safras "2024/25,2025/26"
+geospatial\.venv\Scripts\python.exe geospatial\run_productivity.py normalize
+geospatial\.venv\Scripts\python.exe geospatial\run_productivity.py validate
+geospatial\.venv\Scripts\python.exe geospatial\run_productivity.py compat
 ```
 
 Antes de qualquer coisa em nova sessão: ler este arquivo,

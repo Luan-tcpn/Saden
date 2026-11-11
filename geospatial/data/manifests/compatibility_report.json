@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-11-11T19:28:49.679080+00:00",
-  "git_commit": "e1d7f3054206d4b04868003df41b24b868a2241d",
+  "generated_at": "2026-11-11T19:36:44.971418+00:00",
+  "git_commit": "94d3d193c7c1751317c69d3b1e085e579c71c73c",
   "spatial": {
     "crs": "EPSG:4326",
     "area_projection": "EPSG:6933",
@@ -74,9 +74,11 @@
     "profile": "B_restrictive",
     "years": {
       "2023": {
-        "months_total": 11,
+        "months_total": 12,
         "months_observed": 11,
-        "months_missing": [],
+        "months_missing": [
+          "2023-01"
+        ],
         "ndvi_mean_of_monthly_means": 0.4983739206664987,
         "ndvi_coverage_weighted_mean": 0.4982088667509157,
         "ndvi_min_monthly_mean": 0.27038071667655106,
@@ -85,9 +87,11 @@
         "source": "timeseries_mensal_2023-01_2025-12.csv"
       },
       "2024": {
-        "months_total": 11,
+        "months_total": 12,
         "months_observed": 11,
-        "months_missing": [],
+        "months_missing": [
+          "2024-12"
+        ],
         "ndvi_mean_of_monthly_means": 0.49302380935210804,
         "ndvi_coverage_weighted_mean": 0.492182248413099,
         "ndvi_min_monthly_mean": 0.28076218198209635,

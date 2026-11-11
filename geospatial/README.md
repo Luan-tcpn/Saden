@@ -41,6 +41,7 @@ geospatial/
   requirements.txt       # versões pinadas do ambiente validado
   run_poc.py             # CLI da PoC (reprodução da baseline histórica)
   run_validation.py      # CLI de validação (checkpoints A–E)
+  run_productivity.py    # CLI da base observada de produtividade (V2.2)
   s2_poc/
     config.py            # catálogo, AOIs, bandas, perfis SCL, parâmetros
     aoi.py               # malha IBGE + janela técnica (PoC) + point-in-polygon
@@ -55,8 +56,18 @@ geospatial/
     timeseries.py        # seleção mensal, lacunas explícitas, CSV da série
     render.py            # prévias PNG (índices, máscaras, mosaico, série, mapa)
     pipeline.py          # orquestração da PoC + CSV + manifesto
+  agri/                  # base observada de produtividade (V2.2)
+    config.py            # URLs oficiais, variáveis, licença, commodities
+    sidra.py             # cliente da API SIDRA (PAM 5457) + convenções de valor
+    conab.py             # listagem/download/parser das planilhas de safras
+    crosswalk.py         # vínculos SADEN ↔ IBGE ↔ CONAB com classe
+    normalize.py         # base normalizada (CSV/JSON), conversões de unidade
+    validate.py          # 11 verificações de qualidade
+    compat.py            # classes A/B/C, agregação anual do NDVI, correspondência
+    geometry_compat.py   # malha municipal reaproveitada da V2.1 (D42)
   tests/                 # suíte offline (unittest), sem internet
   tests_external/        # testes de REDE, opt-in (SADEN_EXTERNAL_TESTS=1)
+  data/                  # V2.2: raw/ processed/ manifests/
   manifests/             # manifestos de execução (JSON, versionados, leves)
   reports/               # relatórios/tabelas de validação (CSV/JSON)
   previews/              # PNGs pequenos versionados
@@ -119,6 +130,31 @@ geospatial\.venv\Scripts\python.exe geospatial\run_validation.py timeseries --st
 
 Os subcomandos `scl`, `mosaic` e `timeseries` usam a **rede** (STAC + COGs
 reais). A suíte de testes offline é independente deles.
+
+### 5.3 Base observada de produtividade (V2.2)
+
+```powershell
+# inventário das fontes oficiais (metadados, catálogo, acessos bloqueados)
+geospatial\.venv\Scripts\python.exe geospatial\run_productivity.py inventory
+
+# aquisição real (SIDRA municipal + planilhas da CONAB)
+geospatial\.venv\Scripts\python.exe geospatial\run_productivity.py acquire --year-start 2013 --year-end 2025 --conab-safras "2024/25,2025/26"
+
+# base normalizada, validação de qualidade e compatibilidade com o Sentinel-2
+geospatial\.venv\Scripts\python.exe geospatial\run_productivity.py normalize
+geospatial\.venv\Scripts\python.exe geospatial\run_productivity.py validate
+geospatial\.venv\Scripts\python.exe geospatial\run_productivity.py compat
+```
+
+| Fonte | Conjunto | Granularidade | Natureza |
+|---|---|---|---|
+| IBGE/SIDRA | PAM, tabela 5457 (1974–2025) | **município** | observada |
+| CONAB | Boletim de Safras (planilhas) | **UF** | estimada (revisada por levantamento) |
+
+Relatório: `geospatial/reports/V2_2_PRODUCTIVITY_DATA_COMPATIBILITY.md`.
+Compatibilidade espacial apurada: **IBGE = B (contextual)**, **CONAB = C**
+(ver D47). As planilhas da CONAB ficam **fora do Git** (D48); URL e SHA-256 no
+manifesto.
 
 ## 6. Testes
 
