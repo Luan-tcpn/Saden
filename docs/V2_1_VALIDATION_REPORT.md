@@ -352,4 +352,227 @@ Artefatos: `geospatial/manifests/mosaic_*.json`,
 `geospatial/artifacts/mosaic/*.tif` (índices, mapa de origem, SCL) e
 `geospatial/previews/mosaic/mosaic_2023-06-20.png`.
 
-<!-- SECAO-E -->
+## 7. Checkpoint E — série temporal 2023–2025
+
+**FATO.** Comando:
+
+```powershell
+geospatial\.venv\Scripts\python.exe geospatial\run_validation.py timeseries --start 2023-01 --end 2025-12
+```
+
+### 7.1 Desenho
+
+| Parâmetro | Valor |
+|---|---|
+| AOI | de validação (`[-55.6309, -12.7339, -55.5709, -12.6739]`), 43,26 km² |
+| Grade | EPSG:32721, 20 m, 329 × 334 px (109.886 px), transform `(20, 0, 648620, 0, −20, 8598540)` |
+| Período | 36 meses (2023-01 … 2025-12) |
+| Máscara | Perfil B (D43) |
+| Radiometria | `DN * 0.0001 − 0.1` em todos os meses (baselines 05.09, 05.10, 05.11) |
+| Tile | `MGRS-21LXG` em toda a série (comparabilidade temporal) |
+| Critério de seleção | menor **fração obstruída sobre a AOI** entre até 4 candidatas do mês; desempate por nuvem do tile e depois por `item_id` |
+| Limite de obstrução | 0,50 (acima disso o mês é `no_usable_observation`) |
+| Nº de cenas | 1 por mês (cena única, não composição) |
+
+### 7.2 Cobertura mensal e lacunas
+
+**FATO.** 36 meses pesquisados; **34 com observação utilizável** e **2 sem**
+(motivo registrado, sem preenchimento):
+
+| Mês | Itens no catálogo | Itens cobrindo a AOI | Itens no tile | Melhor candidata (obstrução sobre a AOI) | Resultado |
+|---|---|---|---|---|---|
+| 2023-01 | 14 | 14 | 7 | `S2B_T21LXG_20230131T140226_L2A` — 84,7% obstruído | `no_usable_observation` |
+| 2024-12 | 18 | 18 | 9 | `S2C_T21LXG_20241216T135729_L2A` — 86,5% obstruído | `no_usable_observation` |
+
+Nos dois casos havia cenas no catálogo: a qualidade sobre a AOI é que era
+inaceitável. Os valores de NDVI/EVI/NDMI desses meses estão **vazios** no CSV
+(`status = no_usable_observation`), sem interpolação, cópia ou média.
+
+### 7.3 Qualidade por mês (AOI de validação)
+
+| Mês | Item | Data | Baseline | Nuvem do tile (%) | Obstrução na AOI | Cobertura válida | NDVI médio |
+|---|---|---|---|---|---|---|---|
+| 2023-01 | — | — | — | — | — | — | — (lacuna) |
+| 2023-02 | `S2B_T21LXG_20230210T140531_L2A` | 2023-02-10 | 05.09 | 32,89 | 3,73% | 96,25% | 0,420 |
+| 2023-04 | `S2A_T21LXG_20230421T140527_L2A` | 2023-04-21 | 05.09 | 65,23 | 3,16% | 96,84% | 0,829 |
+| 2023-06 | `S2A_T21LXG_20230605T140010_L2A` | 2023-06-05 | 05.09 | 0,01 | 0,12% | 99,88% | 0,547 |
+| 2023-08 | `S2B_T21LXG_20230819T135707_L2A` | 2023-08-19 | 05.09 | 6,55 | 0,05% | 99,95% | 0,286 |
+| 2023-10 | `S2A_T21LXG_20231003T135802_L2A` | 2023-10-03 | 05.09 | 17,25 | 0,11% | 99,89% | 0,293 |
+| 2023-12 | `S2A_T21LXG_20231202T135654_L2A` | 2023-12-02 | 05.09 | 49,96 | 0,09% | 99,91% | 0,789 |
+| 2024-03 | `S2A_T21LXG_20240301T135702_L2A` | 2024-03-01 | 05.10 | 34,78 | 15,60% | 84,36% | 0,548 |
+| 2024-06 | `S2A_T21LXG_20240609T140526_L2A` | 2024-06-09 | 05.10 | 2,39 | 0,08% | 99,88% | 0,475 |
+| 2024-09 | `S2A_T21LXG_20240917T135930_L2A` | 2024-09-17 | 05.11 | 0,00 | 0,00% | 100,00% | 0,299 |
+| 2024-12 | — | — | — | — | — | — | — (lacuna) |
+| 2025-03 | `S2B_T21LXG_20250301T140548_L2A` | 2025-03-01 | 05.11 | 55,36 | 27,64% | 72,25% | 0,415 |
+| 2025-06 | `S2B_T21LXG_20250609T140533_L2A` | 2025-06-09 | 05.11 | 0,00 | 0,07% | 99,87% | 0,560 |
+| 2025-09 | `S2C_T21LXG_20250902T140110_L2A` | 2025-09-02 | 05.11 | 1,09 | 0,02% | 99,93% | 0,282 |
+| 2025-12 | `S2C_T21LXG_20251211T140459_L2A` | 2025-12-11 | 05.11 | 52,13 | 3,97% | 96,01% | 0,827 |
+
+(A tabela mostra meses alternados; os 34 meses completos estão em
+`geospatial/reports/timeseries_mensal_2023-01_2025-12.csv` — uma linha por
+mês × índice, com média, mediana, desvio, quantis p5/p25/p75/p95, pixels
+válidos, cobertura, área válida, item, data, baseline, nuvem do tile,
+obstrução na AOI e política SCL.)
+
+**FATO.** A nuvem do **tile inteiro** e a obstrução sobre a **AOI** divergem
+fortemente: em 2023-04 o tile tinha 65,23% de nuvem e a AOI apenas 3,16% de
+obstrução; em 2024-11 o tile tinha 73,87% de nuvem e a AOI 0,06%. Isso
+demonstra que `eo:cloud_cover` do tile não é critério de qualidade para a área
+de interesse.
+
+**FATO.** Cobertura válida por mês: de 72,25% (2025-03) a 100% (2024-09);
+NDVI médio de 0,270 (2023-09) a 0,871 (2025-04).
+
+### 7.4 Comparabilidade temporal
+
+**FATO.** Mesma máscara, mesma grade, mesma conversão radiométrica e mesmo tile
+em todos os 34 meses. Os baselines mudam ao longo do período
+(**05.09** em 2023, **05.10** no primeiro semestre de 2024, **05.11** de
+2024-07 em diante), mas **todos** ≥ 04.00 e todos com `scale = 0.0001` /
+`offset = −0.1`: não há quebra de método dentro da série. A série é de
+**cena única por mês** (não é composição temporal).
+
+**INTERPRETAÇÃO.** O gráfico da série mostra um ciclo anual repetido
+(valores mais altos entre abril–maio e dezembro, mais baixos entre
+agosto–outubro). Isso é um padrão de **reflectância de vegetação na AOI**.
+
+**LIMITAÇÃO.** O ciclo **não** pode ser lido como produtividade, ciclo de
+cultura, saúde de lavoura ou previsão de safra: a AOI não tem uso do solo
+identificado, a classe SCL 5 provavelmente inclui áreas cultivadas, e não há
+dado independente de produção. A qualidade da série é **espacial-temporal**,
+não agronômica.
+
+Artefatos: `geospatial/reports/timeseries_mensal_2023-01_2025-12.csv`,
+`geospatial/manifests/timeseries_20261111T182443Z.json`,
+`geospatial/previews/timeseries/series_2023-01_2025-12.png` (lacunas visíveis
+como quebra de linha e barra de cobertura zerada) e
+`geospatial/artifacts/timeseries/<mês>/*.tif` (não versionados).
+
+**FATO.** A série foi executada **duas vezes** (18:18 e 18:24 UTC) com o mesmo
+resultado: mesmos 34 meses observados, mesmas 2 lacunas e **estatísticas
+idênticas** — a seleção é determinística.
+
+## 8. Metodologia radiométrica e espacial
+
+### 8.1 Radiometria
+
+1. Leitura direta do COG (sem cache local): `rasterio.open` sobre HTTP com
+   `GDAL_DISABLE_READDIR_ON_OPEN=EMPTY_DIR`.
+2. `rasterio.read()` devolve o **DN uint16 bruto**; `ds.scales`/`ds.offsets`
+   são metadados e **não** são aplicados pelo driver.
+3. Conversão aplicada **uma única vez**: `reflectance = DN * 0.0001 + (−0.1)`,
+   com `DN == 0` (nodata) convertido em `NaN` **antes** da escala.
+4. Auditoria por item: baseline ≥ 04.00 obrigatório; escala/offset obrigatórios
+   e idênticos entre B02/B04/B08/B11; o que o COG declara é conferido contra o
+   metadado STAC (evita dupla aplicação e conversão inventada).
+5. Fórmulas aplicadas sobre `float64`, na mesma grade, sem clipping.
+
+### 8.2 Spatial
+
+1. Grade de trabalho: 20 m, `EPSG:32721` (UTM 21S), alinhada a múltiplos de
+   20 m, transform idêntico entre cenas e produtos.
+2. Contínuas (10 m → 20 m): `Resampling.average`; categórica (SCL, 20 m):
+   `Resampling.nearest`.
+3. Recorte pela AOI em EPSG:4326, convertido para o CRS do tile com
+   `transform_bounds(densify_pts=21)`.
+4. Mosaico: mesma grade forçada a partir do tile primário, `first_valid_wins`,
+   mapa de origem por pixel.
+5. Áreas: projeção de área igual `EPSG:6933` e área geodésica WGS84
+   (`pyproj.Geod`).
+
+## 9. Métricas de qualidade
+
+| Métrica | Resultado |
+|---|---|
+| Reprodução da PoC | grade idêntica; **delta 0,0** em todas as estatísticas comparadas |
+| Auditoria radiométrica | 4/4 itens com metadado STAC e COG concordantes (escala/offset/dtype/nodata) |
+| Pixels degenerados | 0 em todas as cenas e meses (denominador protegido) |
+| Pixels fora da faixa plausível (`[-1.5, 1.5]`) | 0 |
+| Cobertura válida da AOI de validação | 72,25%–100% por mês (34 meses) |
+| Meses com observação | 34/36 (2 lacunas justificadas por obstrução) |
+| Consistência entre tiles (sobreposição) | NDVI/EVI/NDMI com correlação ≥ 0,99999 e |Δ| médio ≤ 0,001 |
+| Pixels sem dado no mosaico | 1.191 de 971.781 (0,12%) — bordas dos footprints |
+| Testes offline | **95/95 OK** |
+| Testes externos | **4/4 OK**, separados e opt-in (`SADEN_EXTERNAL_TESTS=1`) |
+| V1 | intocada; ponteiros Git e testes da V1 não alterados |
+
+## 10. Limitações e itens não validados
+
+1. **Não há validação com dado de campo.** Os índices não têm comparação
+   independente (ground truth, reflectância de campo ou produção observada).
+2. **Não há classificação de uso do solo.** A AOI não tem cultura,
+   propriedade ou cobertura de solo identificada; a classe SCL 5 provavelmente
+   inclui áreas cultivadas.
+3. **Série curta e exploratória.** 36 meses, 34 observados, uma AOI, um tile.
+   Não sustenta tendência, modelo ou previsão.
+4. **Sem correção radiométrica atmosférica** (BRDF, aerossol, topografia) e
+   sem diferença de mixed pixels.
+5. **Máscara SCL é um classificador de cena**, não de cultura; a decisão D43
+   usa evidência de 4 cenas sem nuvem e é revisável.
+6. **Não processado**: município inteiro em 10/20 m (estimado, não executado),
+   composição temporal multi-cena, mosaico de mais de dois tiles.
+7. **Coordenadas sem datum geodésico explícito** nos rótulos dos mapas (o
+   CRS está nos metadados dos rasters).
+8. **QGIS**: nenhum projeto QGIS foi gerado nem revisado — a inspeção visual
+   foi feita pelos PNGs gerados pelo matplotlib.
+9. **Termos de uso a confirmar antes de publicação acadêmica**: a licença do
+   conjunto de dados é registrada por duas fontes divergentes (STAC
+   `proprietary` × AWS “free, full and open”).
+10. **Pendência externa**: o objeto *GitHub Release* `v1-final` continua
+    bloqueado por falta de autenticação `gh` (sem token; login por navegador
+    proibido). Tag, branches e bundle estão verificados.
+
+## 11. Como reproduzir
+
+```powershell
+# 0) ambiente (Windows, Python 3.12)
+python -m venv geospatial\.venv
+geospatial\.venv\Scripts\python.exe -m pip install -r geospatial\requirements.txt
+
+# 1) suíte offline (sem internet)
+geospatial\.venv\Scripts\python.exe -m unittest discover -s geospatial\tests -t geospatial
+
+# 2) checkpoints A–E (rede)
+geospatial\.venv\Scripts\python.exe geospatial\run_validation.py repro
+geospatial\.venv\Scripts\python.exe geospatial\run_validation.py scl --aoi historical
+geospatial\.venv\Scripts\python.exe geospatial\run_validation.py geometry
+geospatial\.venv\Scripts\python.exe geospatial\run_validation.py mosaic
+geospatial\.venv\Scripts\python.exe geospatial\run_validation.py timeseries --start 2023-01 --end 2025-12
+
+# 3) reprodução da PoC original (Perfil A, para baseline histórica)
+geospatial\.venv\Scripts\python.exe geospatial\run_poc.py
+```
+
+Cada execução real grava um manifesto em `geospatial/manifests/` com: id da
+execução, data/hora UTC, commit do código, versões das dependências, catálogo
+e coleção, data de acesso, IDs STAC e metadados essenciais de cada item, AOI
+(fonte/versão/CRS/bbox), bandas e assets, fórmula de escala/offset com a
+evidência de origem, CRS/resolução/transform/dimensões/reamostragem, regra
+SCL, fórmulas e tratamento de denominador/nodata, regra de mosaico e origem
+por pixel, estatísticas e cobertura, arquivos gerados com tamanho e SHA-256,
+erros, avisos, lacunas e limitações.
+
+## 12. Estado Git e integridade
+
+| Item | Valor |
+|---|---|
+| Branch da missão | `v2/geospatial-validation` (derivada de `v2/geospatial-foundation` / `2e5b3ef`) |
+| Commits da missão | ver `git log --oneline v2/geospatial-foundation..v2/geospatial-validation` |
+| `main` / `v1-final` / `archive/v1-final` | `3f7ad33` — **inalterados** (local e remoto) |
+| Tag `v1-final` | objeto `e62a5372e8bc69a87f642398681ed4df13d4fc54` — inalterada |
+| Tag `v2-poc-sentinel2` | checkpoint imutável da PoC em `2e5b3ef` |
+| Bundle | `..\SADEN_V2_1_RECOVERY_2026-11-11\saden-v2-1-start-2026-11-11.bundle` — 2.435.845 bytes, SHA-256 `74727C339F8A2E0D01D077E43D2551993B757D6B40D084C68C7385763F7B1274`, `git bundle verify` OK |
+| Push | apenas da branch de validação; sem `--force`, sem merge em `main` |
+| V1 (backend/frontend/schema/Ridge) | nenhuma alteração |
+
+## 13. Critérios de aceite — situação
+
+| Bloco | Situação |
+|---|---|
+| Integridade e segurança | **ATENDIDO** — V1 intacta, PoC recuperável (tag + bundle), branch derivada, sem segredo/banco/cache/raster pesado versionado, nenhuma alteração no produto |
+| Reprodutibilidade e radiometria | **ATENDIDO** — PoC reexecutada (delta 0,0), coleção/assets/baseline/unidades verificados, escala/offset confirmados sem dupla aplicação, fórmulas e nodata testados, grades/CRS/transforms/reamostragem auditados |
+| Máscara e geometria | **ATENDIDO** — A × B comparados quantitativa e visualmente, efeito das classes 2 e 6 demonstrado, decisão documentada (D43), limite municipal oficial com versão/CRS, interseção quantificada, três AOIs diferenciadas |
+| Mosaico e tempo | **ATENDIDO** — caso real de dois tiles do mesmo datatake demonstrado com rasters e mapa de origem, regra documentada/testada (D44), série 2023–2025 com 2 lacunas justificadas, meses ausentes continuam ausentes, comparabilidade e baselines avaliados |
+| Qualidade e entrega | **ATENDIDO** — 95/95 testes offline, testes externos separados, manifestos com metadados e hashes, relatório e instruções de reprodução atualizados, estado Git registrado, próxima missão proposta sem implementação |
+| Fora de escopo (não iniciado) | V2.2 (dados observados de produtividade), V2.3 (modelagem agronômica), V2.4 (integração ao Ridge), UI/dashboard, clima no modelo |
+| **BLOQUEADO** | GitHub Release `v1-final` — sem autenticação `gh`; não afeta a V2.1 |

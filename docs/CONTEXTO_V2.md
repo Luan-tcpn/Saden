@@ -157,7 +157,7 @@ e só então abrir branch. Sem decisão registrada, a V2 permanece não iniciada
   correlação 0,99999 nos índices. Decisão **D44**.
 - **E — série 2023–2025:** série mensal exploratória sobre a AOI de validação,
   seleção por fração obstruída sobre a AOI e lacunas explícitas (D45).
-- **Testes:** 94/94 sintéticos offline; suíte de rede separada e opt-in.
+- **Testes:** 95/95 sintéticos offline; suíte de rede separada e opt-in (4/4 OK).
 - **Fora de escopo (continua fora):** UI, dashboard, endpoint, integração de
   índices ao produto, modelo de preço/produtividade, outros satélites,
   serviços pagos.

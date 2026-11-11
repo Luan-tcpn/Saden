@@ -42,20 +42,26 @@ class CatalogTest(unittest.TestCase):
         covering = stac_search.filter_covering(items, bbox)
         self.assertGreater(len(covering), 0)
 
-    def test_two_tiles_share_the_same_datetime(self):
+    def test_two_tiles_share_the_same_acquisition(self):
+        # Tiles adjacentes têm `datetime` próprios (~15 s de diferença) mas
+        # pertencem ao mesmo datatake — ver decisão D44.
         network.configure_tls()
         client = stac_search.open_catalog()
         bbox = list(config.MOSAIC_AOI["bbox"])
         items = stac_search.search_items(
             client, bbox, start="2025-01-01", end="2025-12-31", max_cloud=100.0
         )
-        by_dt: dict[str, set[str]] = {}
+        by_datatake: dict[str, set[str]] = {}
         for item in items:
-            dt = item.properties.get("datetime")
+            datatake = item.properties.get("s2:datatake_id")
             tile = item.properties.get("grid:code")
-            if dt and tile:
-                by_dt.setdefault(dt, set()).add(tile)
-        pairs = [dt for dt, tiles in by_dt.items() if {"MGRS-21LXG", "MGRS-21LXF"} <= tiles]
+            if datatake and tile:
+                by_datatake.setdefault(str(datatake), set()).add(tile)
+        pairs = [
+            key
+            for key, tiles in by_datatake.items()
+            if {"MGRS-21LXG", "MGRS-21LXF"} <= tiles
+        ]
         self.assertGreater(len(pairs), 0)
 
 

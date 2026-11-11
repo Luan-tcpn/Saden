@@ -483,3 +483,47 @@ Consequências: a continuidade espacial é demonstrável e auditável; o custo �
 uma diferença de reprocessamento entre tiles pequena e **declarada**, não
 oculta.
 
+## D45 — Série mensal 2023–2025: seleção por qualidade sobre a AOI e lacunas explícitas (2026-11-11)
+
+Contexto: a PoC tinha 4 datas de uma estação. Uma série exploratória de 36
+meses exige critério de seleção explícito; `eo:cloud_cover` descreve o **tile
+inteiro** e não a área de interesse. Meses sem observação não podem ser
+preenchidos (seria fabricar dado científico).
+
+Decisão:
+
+1. **Unidade e escopo**: 1 cena por mês sobre a AOI de validação
+   (`0,06°`, 43,26 km²), grade única de 20 m em `EPSG:32721`
+   (329 × 334 px), tile `MGRS-21LXG` em toda a série (comparabilidade), Perfil B
+   de máscara (D43) e conversão radiométrica idêntica em todos os meses.
+2. **Critério de seleção**: menor **fração obstruída sobre a AOI** (classes SCL
+   de nuvem/sombra/saturado/nodata — 0, 1, 3, 7, 8, 9, 10, 11), avaliada
+   lendo o SCL real da cena; desempate por `eo:cloud_cover` do tile e depois
+   por `item_id` (seleção determinística). Até 4 candidatas por mês são
+   avaliadas.
+3. **Limite de qualidade**: obstrução > 0,50 → mês marcado
+   `no_usable_observation` **com o motivo e a melhor candidata registrada**.
+4. **Sem preenchimento**: meses sem observação ficam vazios no CSV e no
+   gráfico (quebra de linha e cobertura zerada). Não há interpolação, cópia
+   do mês anterior, média nem composição rotulada como aquisição única.
+5. **Registro por mês**: item STAC, data/hora real, baseline, nuvem do tile,
+   obstrução na AOI, pixels válidos, cobertura, área válida, média, mediana,
+   desvio e quantis p5/p25/p75/p95 por índice.
+6. **Comparabilidade**: a série registra a mudança de baseline
+   (05.09 → 05.10 → 05.11). Todos os baselines têm `scale = 0.0001` e
+   `offset = −0.1`, portanto **não há quebra de método**; se um baseline
+   incompatível aparecer, o item é bloqueado e o mês vira lacuna.
+7. **Sem leitura agronômica**: a série é espacial-temporal. Sazonalidade de
+   índice não é produtividade, saúde de lavoura ou previsão de safra sem uso
+   do solo identificado e dado independente.
+
+Alternativas descartadas: (a) selecionar só por `eo:cloud_cover` do tile —
+demonstradamente inadequado (em 2023-04 o tile tinha 65% de nuvem e a AOI
+apenas 3% de obstrução); (b) preencher meses com médias/análise harmônica —
+fabricaria observações; (c) composição multi-cena por mês — aumenta a
+complexidade e mascara a data real da observação; (d) variar de tile entre
+meses — quebraria a comparabilidade radiométrica e espacial da série.
+
+Consequências: a série 2023–2025 é reproduzível, auditável e honesta nas suas
+lacunas; ela ainda **não** sustenta nenhuma afirmação agronômica.
+

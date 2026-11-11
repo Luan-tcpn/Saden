@@ -8,11 +8,14 @@
 
 ## 1. Etapa atual
 
-**V2.1 — validação geoespacial em execução** na branch
-`v2/geospatial-validation`, com os checkpoints A–E executados sobre dados
-reais (STAC + COGs do catálogo Earth Search). Escopo deliberadamente
-geoespacial: sem UI, sem integração ao produto, sem modelo de preço, sem
-alteração na Ridge e sem modelo de produtividade.
+**V2.1 — validação geoespacial EXECUTADA** na branch
+`v2/geospatial-validation`: checkpoints A, B, C, D e E rodados sobre dados
+reais (STAC + COGs do catálogo Earth Search), com manifesto, relatório e
+série temporal versionados. Escopo deliberadamente geoespacial: sem UI, sem
+integração ao produto, sem modelo de preço, sem alteração na Ridge e sem
+modelo de produtividade.
+
+Relatório técnico: `docs/V2_1_VALIDATION_REPORT.md`.
 
 ## 2. Fronteira V1 × V2
 
@@ -105,18 +108,44 @@ Regra `first_valid_wins` (`21LXG > 21LXF`, sem média): 779.708 px do primário,
 Diferença na sobreposição: NDVI |Δ| médio 0,00095, RMSE 0,00138,
 correlação 0,99999; reflectâncias com |Δ| médio ≤ 0,00047.
 
-## 9. Testes
+## 9. Checkpoint E — série temporal 2023–2025 (D45)
+
+AOI de validação (43,26 km²), grade 20 m `EPSG:32721` (329 × 334 px), tile
+`MGRS-21LXG` em toda a série, Perfil B, 1 cena por mês.
+
+**36 meses pesquisados → 34 observados, 2 lacunas** (`2023-01` e `2024-12`),
+ambas por obstrução > 50% sobre a AOI (84,7% e 86,5% na melhor candidata) —
+com cenas presentes no catálogo. Nenhum mês foi preenchido.
+
+Baselines: 05.09 (2023), 05.10 (1º semestre/2024), 05.11 (2º semestre/2024 em
+diante) — todos com `scale = 0.0001` e `offset = −0.1`: **sem quebra de
+método**. Cobertura válida por mês: 72,25% a 100%. NDVI médio: 0,270
+(2023-09) a 0,871 (2025-04).
+
+Evidência do critério de seleção: a nuvem do tile e a obstrução sobre a AOI
+divergem fortemente (2023-04: tile 65,23% de nuvem, AOI 3,16% obstruído;
+2024-11: tile 73,87%, AOI 0,06%).
+
+Série executada **duas vezes** com resultados idênticos (seleção
+determinística).
+
+Artefatos: `reports/timeseries_mensal_2023-01_2025-12.csv`,
+`manifests/timeseries_20261111T182443Z.json`,
+`previews/timeseries/series_2023-01_2025-12.png`,
+`artifacts/timeseries/<mês>/*.tif` (não versionados).
+
+## 10. Testes
 
 | Suíte | Comando | Resultado |
 |---|---|---|
-| Geoespacial offline | `geospatial\.venv\Scripts\python.exe -m unittest discover -s geospatial\tests -t geospatial` | **94/94 OK** |
-| Externos (rede, opt-in) | `$env:SADEN_EXTERNAL_TESTS="1"; … -m unittest discover -s geospatial\tests_external -t geospatial` | separados da suíte padrão |
-| V1 backend (regressão) | `cd backend; npm test` | 65/65 (validado na missão anterior, V1 intocada) |
+| Geoespacial offline | `geospatial\.venv\Scripts\python.exe -m unittest discover -s geospatial\tests -t geospatial` | **95/95 OK** |
+| Externos (rede, opt-in) | `$env:SADEN_EXTERNAL_TESTS="1"; … -m unittest discover -s geospatial\tests_external -t geospatial` | **4/4 OK** (separados da suíte padrão) |
+| V1 backend (regressão) | `cd backend; npm test` | 65/65 (validado na missão anterior; V1 intocada) |
 
 A suíte padrão **não depende de internet**: todos os testes usam arrays e
 GeoTIFFs sintéticos.
 
-## 10. Ambiente
+## 11. Ambiente
 
 | Item | Versão |
 |---|---|
@@ -146,7 +175,7 @@ Problemas reais encontrados e contornados:
 6. Tiles adjacentes têm `datetime` distintos (~15 s) apesar do mesmo
    `datatake_id`: pareamento por timestamp exato não encontra pares (D44).
 
-## 11. Pendências e próxima ação
+## 12. Pendências e próxima ação
 
 1. **GitHub Release `v1-final`**: bloqueado por falta de autenticação `gh`
    (sem token; login por navegador proibido). Notas prontas em
@@ -160,7 +189,7 @@ Problemas reais encontrados e contornados:
 4. Nada de UI/dashboard/endpoint novo, integração dos índices ao Ridge ou
    modelo de produtividade enquanto a V2.1 não for revisada.
 
-## 12. Comandos de retomada
+## 13. Comandos de retomada
 
 ```powershell
 git switch v2/geospatial-validation

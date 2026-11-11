@@ -112,3 +112,19 @@ não declarado pronto para produção. Próxima etapa possível: `docs/CONTEXTO_
 A V2.1 **não** conclui análise sazonal, produtividade ou melhoria de previsão.
 Detalhes, números e limitações: `docs/V2_EXECUTION_STATUS.md` e
 `geospatial/README.md`.
+
+## V2.1 validação geoespacial — branch `v2/geospatial-validation` (2026-11-11, D42–D45)
+
+| Item | Estado | Evidência |
+|---|---|---|
+| Reprodução da PoC | DONE | reexecutada em diretório separado; grade idêntica e delta 0,0 em todas as estatísticas |
+| Auditoria radiométrica | DONE | baseline 05.09/05.10/05.11, `scale=0.0001`, `offset=-0.1` idênticos entre STAC e COG; sem dupla aplicação; baseline < 4.0 bloqueia o item |
+| Comparação de máscaras SCL | DONE | Perfil A × B em 4 cenas reais + diagnóstico por classe; efeito ≤ 0,18% na média do NDVI; decisão D43 |
+| Limite municipal oficial | DONE | IBGE `5107925` (qualidade `maxima`, 2.689 vértices, válida); 9.293,47 km²; bbox histórica com 0,51 km² **fora** do município |
+| Mosaico de dois tiles | DONE | `21LXG`+`21LXF` do mesmo `datatake` (2023-06-20), regra `first_valid_wins`, mapa de origem por pixel; correlação ≥ 0,99999 |
+| Série mensal 2023–2025 | DONE | 36 meses pesquisados, 34 observados, 2 lacunas justificadas; sem preenchimento; CSV + PNG com lacunas visíveis |
+| Testes | DONE | **95/95** offline; testes de rede separados e opt-in (4/4 OK) |
+| Integração ao produto/UI | NOT_STARTED | fora do escopo da missão |
+| Modelo de produtividade/preço | NOT_STARTED | exige dados observados e protocolo próprio (V2.2+) |
+
+Relatório técnico: `docs/V2_1_VALIDATION_REPORT.md`.

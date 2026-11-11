@@ -1,0 +1,4997 @@
+{
+  "run_id": "20261111T182443Z",
+  "purpose": "checkpoint_E_timeseries",
+  "run_utc": "2026-11-11T18:30:30.395485+00:00",
+  "code_commit": "d5d2ffb178a6bd3f28baf93f3057a665f6ddc7c7",
+  "versions": {
+    "python": "3.12.10",
+    "pystac-client": "0.9.1",
+    "rasterio": "1.4.3",
+    "gdal": "3.9.3",
+    "numpy": "2.5.4",
+    "matplotlib": "3.11.2",
+    "shapely": "2.1.2",
+    "pyproj": "3.7.2"
+  },
+  "catalog": {
+    "url": "https://earth-search.aws.element84.com/v1",
+    "collection": "sentinel-2-c1-l2a",
+    "access": "acesso anônimo, sem credencial, sem custo"
+  },
+  "parameters": {
+    "target_res_m": 20.0,
+    "assets": {
+      "blue": "blue",
+      "red": "red",
+      "nir": "nir",
+      "swir": "swir16",
+      "scl": "scl"
+    },
+    "scl_profiles": {
+      "A_historical": [
+        0,
+        1,
+        3,
+        8,
+        9,
+        10,
+        11,
+        7
+      ],
+      "B_restrictive": [
+        0,
+        1,
+        2,
+        3,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    "scl_class_semantics": {
+      "0": "No data",
+      "1": "Saturated or defective",
+      "2": "Dark area pixels",
+      "3": "Cloud shadows",
+      "4": "Vegetation",
+      "5": "Bare soils",
+      "6": "Water",
+      "7": "Clouds low probability / Unclassified",
+      "8": "Clouds medium probability",
+      "9": "Clouds high probability",
+      "10": "Cirrus",
+      "11": "Snow / ice"
+    },
+    "continuous_resampling": "average (10 m -> 20 m)",
+    "categorical_resampling": "nearest (SCL)",
+    "reflectance_conversion": "DN * scale + offset; DN == nodata -> NaN antes da escala",
+    "formulas": {
+      "NDVI": "(NIR - Red) / (NIR + Red)",
+      "EVI": "2.5 * (NIR - Red) / (NIR + 6*Red - 7.5*Blue + 1)",
+      "NDMI": "(NIR - SWIR) / (NIR + SWIR)"
+    },
+    "denominator_rule": "|den| <= 1e-6 -> NaN (nunca inf, nunca clamp)",
+    "nodata_output": "NaN (float32)"
+  },
+  "limitations": [
+    "Índices de vegetação não medem produtividade, uso do solo nem preço.",
+    "AOI é recorte geográfico de validação, não talhão agrícola.",
+    "Sem correção de BRDF, topografia ou mistura espectral."
+  ],
+  "aoi": {
+    "kind": "validation_aoi",
+    "bbox": [
+      -55.630900000000004,
+      -12.7339,
+      -55.5709,
+      -12.673900000000001
+    ],
+    "note": "AOI de validação geoespacial: recorte controlado dentro do município, na sobreposição dos tiles 21LXG/21LXF. Não é talhão nem área agrícola identificada."
+  },
+  "period": {
+    "start": "2023-01",
+    "end": "2025-12",
+    "months": 36
+  },
+  "selection": {
+    "tile_preference": "MGRS-21LXG",
+    "criterion": "menor fração obstruída sobre a AOI (classes SCL de nuvem/sombra/saturado/nodata); desempate por nuvem do tile e depois por item_id",
+    "max_obstruction": 0.5,
+    "max_candidates_per_month": 4,
+    "mask_profile": "B_restrictive",
+    "mask_profile_note": "Perfil B (D43): exclui também classes 2 (dark area) e 6 (água). O Perfil A histórico permanece para reprodução da PoC.",
+    "cloud_cover_field": "eo:cloud_cover é percentual do tile inteiro (0–100), não fração; usado apenas como critério de desempate"
+  },
+  "monthly_search": [
+    {
+      "month": "2023-01",
+      "items_found": 14,
+      "items_covering_aoi": 14,
+      "items_in_tile": 7,
+      "candidate_item_ids": [
+        "S2B_T21LXG_20230101T135702_L2A",
+        "S2B_T21LXG_20230121T135701_L2A",
+        "S2B_T21LXG_20230131T140226_L2A",
+        "S2B_T21LXG_20230111T135659_L2A"
+      ],
+      "candidates": [
+        {
+          "item_id": "S2B_T21LXG_20230101T135702_L2A",
+          "obstruction_fraction": 0.999982,
+          "cloud_cover_tile_pct": 53.288436
+        },
+        {
+          "item_id": "S2B_T21LXG_20230121T135701_L2A",
+          "obstruction_fraction": 1.0,
+          "cloud_cover_tile_pct": 65.729088
+        },
+        {
+          "item_id": "S2B_T21LXG_20230131T140226_L2A",
+          "obstruction_fraction": 0.847078,
+          "cloud_cover_tile_pct": 69.476277
+        },
+        {
+          "item_id": "S2B_T21LXG_20230111T135659_L2A",
+          "obstruction_fraction": 0.999891,
+          "cloud_cover_tile_pct": 82.286179
+        }
+      ]
+    },
+    {
+      "month": "2023-02",
+      "items_found": 10,
+      "items_covering_aoi": 10,
+      "items_in_tile": 5,
+      "candidate_item_ids": [
+        "S2B_T21LXG_20230210T140531_L2A",
+        "S2A_T21LXG_20230205T140553_L2A",
+        "S2A_T21LXG_20230225T140150_L2A",
+        "S2A_T21LXG_20230215T140359_L2A"
+      ],
+      "candidates": [
+        {
+          "item_id": "S2B_T21LXG_20230210T140531_L2A",
+          "obstruction_fraction": 0.037348,
+          "cloud_cover_tile_pct": 32.88694
+        },
+        {
+          "item_id": "S2A_T21LXG_20230205T140553_L2A",
+          "obstruction_fraction": 0.153887,
+          "cloud_cover_tile_pct": 33.618325
+        },
+        {
+          "item_id": "S2A_T21LXG_20230225T140150_L2A",
+          "obstruction_fraction": 0.862712,
+          "cloud_cover_tile_pct": 82.621861
+        },
+        {
+          "item_id": "S2A_T21LXG_20230215T140359_L2A",
+          "obstruction_fraction": 1.0,
+          "cloud_cover_tile_pct": 99.89444
+        }
+      ]
+    },
+    {
+      "month": "2023-03",
+      "items_found": 12,
+      "items_covering_aoi": 12,
+      "items_in_tile": 6,
+      "candidate_item_ids": [
+        "S2B_T21LXG_20230302T140048_L2A",
+        "S2A_T21LXG_20230327T140212_L2A",
+        "S2A_T21LXG_20230307T135808_L2A",
+        "S2B_T21LXG_20230322T135706_L2A"
+      ],
+      "candidates": [
+        {
+          "item_id": "S2B_T21LXG_20230302T140048_L2A",
+          "obstruction_fraction": 0.027201,
+          "cloud_cover_tile_pct": 13.30325
+        },
+        {
+          "item_id": "S2A_T21LXG_20230327T140212_L2A",
+          "obstruction_fraction": 0.6228,
+          "cloud_cover_tile_pct": 56.750017
+        },
+        {
+          "item_id": "S2A_T21LXG_20230307T135808_L2A",
+          "obstruction_fraction": 1.0,
+          "cloud_cover_tile_pct": 92.54784
+        },
+        {
+          "item_id": "S2B_T21LXG_20230322T135706_L2A",
+          "obstruction_fraction": 1.0,
+          "cloud_cover_tile_pct": 98.496628
+        }
+      ]
+    },
+    {
+      "month": "2023-04",
+      "items_found": 12,
+      "items_covering_aoi": 12,
+      "items_in_tile": 6,
+      "candidate_item_ids": [
+        "S2A_T21LXG_20230426T140422_L2A",
+        "S2A_T21LXG_20230416T135905_L2A",
+        "S2B_T21LXG_20230421T140527_L2A",
+        "S2B_T21LXG_20230401T140246_L2A"
+      ],
+      "candidates": [
+        {
+          "item_id": "S2A_T21LXG_20230426T140422_L2A",
+          "obstruction_fraction": 0.251597,
+          "cloud_cover_tile_pct": 9.813172
+        },
+        {
+          "item_id": "S2A_T21LXG_20230416T135905_L2A",
+          "obstruction_fraction": 0.068198,
+          "cloud_cover_tile_pct": 24.566923
+        },
+        {
+          "item_id": "S2B_T21LXG_20230421T140527_L2A",
+          "obstruction_fraction": 0.031587,
+          "cloud_cover_tile_pct": 65.225369
+        },
+        {
+          "item_id": "S2B_T21LXG_20230401T140246_L2A",
+          "obstruction_fraction": 0.448547,
+          "cloud_cover_tile_pct": 71.293062
+        }
+      ]
+    },
+    {
+      "month": "2023-05",
+      "items_found": 14,
+      "items_covering_aoi": 14,
+      "items_in_tile": 7,
+      "candidate_item_ids": [
+        "S2A_T21LXG_20230516T135703_L2A",
+        "S2A_T21LXG_20230526T140021_L2A",
+        "S2B_T21LXG_20230521T135718_L2A",
+        "S2B_T21LXG_20230501T135706_L2A"
+      ],
+      "candidates": [
+        {
+          "item_id": "S2A_T21LXG_20230516T135703_L2A",
+          "obstruction_fraction": 0.001047,
+          "cloud_cover_tile_pct": 0.001443
+        },
+        {
+          "item_id": "S2A_T21LXG_20230526T140021_L2A",
+          "obstruction_fraction": 0.001411,
+          "cloud_cover_tile_pct": 0.001447
+        },
+        {
+          "item_id": "S2B_T21LXG_20230521T135718_L2A",
+          "obstruction_fraction": 0.001174,
+          "cloud_cover_tile_pct": 10.28399
+        },
+        {
+          "item_id": "S2B_T21LXG_20230501T135706_L2A",
+          "obstruction_fraction": 0.268779,
+          "cloud_cover_tile_pct": 18.087237
+        }
+      ]
+    },
+    {
+      "month": "2023-06",
+      "items_found": 12,
+      "items_covering_aoi": 12,
+      "items_in_tile": 6,
+      "candidate_item_ids": [
+        "S2B_T21LXG_20230630T140406_L2A",
+        "S2B_T21LXG_20230620T135711_L2A",
+        "S2A_T21LXG_20230605T140010_L2A",
+        "S2B_T21LXG_20230610T135715_L2A"
+      ],
+      "candidates": [
+        {
+          "item_id": "S2B_T21LXG_20230630T140406_L2A",
+          "obstruction_fraction": 0.001383,
+          "cloud_cover_tile_pct": 0.001052
+        },
+        {
+          "item_id": "S2B_T21LXG_20230620T135711_L2A",
+          "obstruction_fraction": 0.001174,
+          "cloud_cover_tile_pct": 0.001111
+        },
+        {
+          "item_id": "S2A_T21LXG_20230605T140010_L2A",
+          "obstruction_fraction": 0.001165,
+          "cloud_cover_tile_pct": 0.01074
+        },
+        {
+          "item_id": "S2B_T21LXG_20230610T135715_L2A",
+          "obstruction_fraction": 0.001219,
+          "cloud_cover_tile_pct": 2.056831
+        }
+      ]
+    },
+    {
+      "month": "2023-07",
+      "items_found": 12,
+      "items_covering_aoi": 12,
+      "items_in_tile": 6,
+      "candidate_item_ids": [
+        "S2B_T21LXG_20230730T135707_L2A",
+        "S2B_T21LXG_20230710T135712_L2A",
+        "S2A_T21LXG_20230715T140007_L2A",
+        "S2A_T21LXG_20230725T135707_L2A"
+      ],
+      "candidates": [
+        {
+          "item_id": "S2B_T21LXG_20230730T135707_L2A",
+          "obstruction_fraction": 0.001028,
+          "cloud_cover_tile_pct": 0.000889
+        },
+        {
+          "item_id": "S2B_T21LXG_20230710T135712_L2A",
+          "obstruction_fraction": 0.001028,
+          "cloud_cover_tile_pct": 0.001221
+        },
+        {
+          "item_id": "S2A_T21LXG_20230715T140007_L2A",
+          "obstruction_fraction": 0.001047,
+          "cloud_cover_tile_pct": 0.001453
+        },
+        {
+          "item_id": "S2A_T21LXG_20230725T135707_L2A",
+          "obstruction_fraction": 0.000965,
+          "cloud_cover_tile_pct": 0.001914
+        }
+      ]
+    },
+    {
+      "month": "2023-08",
+      "items_found": 12,
+      "items_covering_aoi": 12,
+      "items_in_tile": 6,
+      "candidate_item_ids": [
+        "S2B_T21LXG_20230809T135707_L2A",
+        "S2A_T21LXG_20230824T135708_L2A",
+        "S2B_T21LXG_20230829T135706_L2A",
+        "S2B_T21LXG_20230819T135707_L2A"
+      ],
+      "candidates": [
+        {
+          "item_id": "S2B_T21LXG_20230809T135707_L2A",
+          "obstruction_fraction": 0.001438,
+          "cloud_cover_tile_pct": 1.328592
+        },
+        {
+          "item_id": "S2A_T21LXG_20230824T135708_L2A",
+          "obstruction_fraction": 0.000946,
+          "cloud_cover_tile_pct": 1.353794
+        },
+        {
+          "item_id": "S2B_T21LXG_20230829T135706_L2A",
+          "obstruction_fraction": 0.003349,
+          "cloud_cover_tile_pct": 2.741179
+        },
+        {
+          "item_id": "S2B_T21LXG_20230819T135707_L2A",
+          "obstruction_fraction": 0.000519,
+          "cloud_cover_tile_pct": 6.549736
+        }
+      ]
+    },
+    {
+      "month": "2023-09",
+      "items_found": 12,
+      "items_covering_aoi": 12,
+      "items_in_tile": 6,
+      "candidate_item_ids": [
+        "S2A_T21LXG_20230913T140235_L2A",
+        "S2A_T21LXG_20230923T135704_L2A",
+        "S2A_T21LXG_20230903T140112_L2A",
+        "S2B_T21LXG_20230928T135704_L2A"
+      ],
+      "candidates": [
+        {
+          "item_id": "S2A_T21LXG_20230913T140235_L2A",
+          "obstruction_fraction": 0.015616,
+          "cloud_cover_tile_pct": 1.540284
+        },
+        {
+          "item_id": "S2A_T21LXG_20230923T135704_L2A",
+          "obstruction_fraction": 0.679076,
+          "cloud_cover_tile_pct": 6.688598
+        },
+        {
+          "item_id": "S2A_T21LXG_20230903T140112_L2A",
+          "obstruction_fraction": 0.010829,
+          "cloud_cover_tile_pct": 8.049267
+        },
+        {
+          "item_id": "S2B_T21LXG_20230928T135704_L2A",
+          "obstruction_fraction": 0.02145,
+          "cloud_cover_tile_pct": 14.413755
+        }
+      ]
+    },
+    {
+      "month": "2023-10",
+      "items_found": 12,
+      "items_covering_aoi": 12,
+      "items_in_tile": 6,
+      "candidate_item_ids": [
+        "S2B_T21LXG_20231018T140301_L2A",
+        "S2A_T21LXG_20231013T140102_L2A",
+        "S2A_T21LXG_20231003T135802_L2A",
+        "S2B_T21LXG_20231008T135753_L2A"
+      ],
+      "candidates": [
+        {
+          "item_id": "S2B_T21LXG_20231018T140301_L2A",
+          "obstruction_fraction": 0.41867,
+          "cloud_cover_tile_pct": 4.736673
+        },
+        {
+          "item_id": "S2A_T21LXG_20231013T140102_L2A",
+          "obstruction_fraction": 0.07233,
+          "cloud_cover_tile_pct": 9.889887
+        },
+        {
+          "item_id": "S2A_T21LXG_20231003T135802_L2A",
+          "obstruction_fraction": 0.001128,
+          "cloud_cover_tile_pct": 17.252876
+        },
+        {
+          "item_id": "S2B_T21LXG_20231008T135753_L2A",
+          "obstruction_fraction": 0.999991,
+          "cloud_cover_tile_pct": 93.888229
+        }
+      ]
+    },
+    {
+      "month": "2023-11",
+      "items_found": 12,
+      "items_covering_aoi": 12,
+      "items_in_tile": 6,
+      "candidate_item_ids": [
+        "S2A_T21LXG_20231112T135701_L2A",
+        "S2B_T21LXG_20231107T140131_L2A",
+        "S2A_T21LXG_20231102T135701_L2A",
+        "S2B_T21LXG_20231127T135658_L2A"
+      ],
+      "candidates": [
+        {
+          "item_id": "S2A_T21LXG_20231112T135701_L2A",
+          "obstruction_fraction": 0.227053,
+          "cloud_cover_tile_pct": 41.815102
+        },
+        {
+          "item_id": "S2B_T21LXG_20231107T140131_L2A",
+          "obstruction_fraction": 0.000928,
+          "cloud_cover_tile_pct": 64.730388
+        },
+        {
+          "item_id": "S2A_T21LXG_20231102T135701_L2A",
+          "obstruction_fraction": 0.259514,
+          "cloud_cover_tile_pct": 68.262732
+        },
+        {
+          "item_id": "S2B_T21LXG_20231127T135658_L2A",
+          "obstruction_fraction": 0.261598,
+          "cloud_cover_tile_pct": 83.837831
+        }
+      ]
+    },
+    {
+      "month": "2023-12",
+      "items_found": 12,
+      "items_covering_aoi": 12,
+      "items_in_tile": 6,
+      "candidate_item_ids": [
+        "S2B_T21LXG_20231207T140024_L2A",
+        "S2B_T21LXG_20231217T135702_L2A",
+        "S2A_T21LXG_20231202T135654_L2A",
+        "S2B_T21LXG_20231227T135703_L2A"
+      ],
+      "candidates": [
+        {
+          "item_id": "S2B_T21LXG_20231207T140024_L2A",
+          "obstruction_fraction": 0.000883,
+          "cloud_cover_tile_pct": 1.457178
+        },
+        {
+          "item_id": "S2B_T21LXG_20231217T135702_L2A",
+          "obstruction_fraction": 0.170386,
+          "cloud_cover_tile_pct": 13.977014
+        },
+        {
+          "item_id": "S2A_T21LXG_20231202T135654_L2A",
+          "obstruction_fraction": 0.000865,
+          "cloud_cover_tile_pct": 49.957031
+        },
+        {
+          "item_id": "S2B_T21LXG_20231227T135703_L2A",
+          "obstruction_fraction": 0.002057,
+          "cloud_cover_tile_pct": 56.889141
+        }
+      ]
+    },
+    {
+      "month": "2024-01",
+      "items_found": 14,
+      "items_covering_aoi": 14,
+      "items_in_tile": 7,
+      "candidate_item_ids": [
+        "S2B_T21LXG_20240116T135701_L2A",
+        "S2B_T21LXG_20240126T135700_L2A",
+        "S2A_T21LXG_20240121T135654_L2A",
+        "S2A_T21LXG_20240101T135659_L2A"
+      ],
+      "candidates": [
+        {
+          "item_id": "S2B_T21LXG_20240116T135701_L2A",
+          "obstruction_fraction": 0.000555,
+          "cloud_cover_tile_pct": 15.275799
+        },
+        {
+          "item_id": "S2B_T21LXG_20240126T135700_L2A",
+          "obstruction_fraction": 0.506252,
+          "cloud_cover_tile_pct": 74.355018
+        },
+        {
+          "item_id": "S2A_T21LXG_20240121T135654_L2A",
+          "obstruction_fraction": 0.469705,
+          "cloud_cover_tile_pct": 75.688905
+        },
+        {
+          "item_id": "S2A_T21LXG_20240101T135659_L2A",
+          "obstruction_fraction": 0.998935,
+          "cloud_cover_tile_pct": 78.789163
+        }
+      ]
+    },
+    {
+      "month": "2024-02",
+      "items_found": 10,
+      "items_covering_aoi": 10,
+      "items_in_tile": 5,
+      "candidate_item_ids": [
+        "S2B_T21LXG_20240215T140503_L2A",
+        "S2B_T21LXG_20240225T135701_L2A",
+        "S2A_T21LXG_20240210T135659_L2A",
+        "S2B_T21LXG_20240205T135700_L2A"
+      ],
+      "candidates": [
+        {
+          "item_id": "S2B_T21LXG_20240215T140503_L2A",
+          "obstruction_fraction": 0.148108,
+          "cloud_cover_tile_pct": 5.68013
+        },
+        {
+          "item_id": "S2B_T21LXG_20240225T135701_L2A",
+          "obstruction_fraction": 0.001674,
+          "cloud_cover_tile_pct": 5.950355
+        },
+        {
+          "item_id": "S2A_T21LXG_20240210T135659_L2A",
+          "obstruction_fraction": 1.0,
+          "cloud_cover_tile_pct": 91.568601
+        },
+        {
+          "item_id": "S2B_T21LXG_20240205T135700_L2A",
+          "obstruction_fraction": 1.0,
+          "cloud_cover_tile_pct": 95.297533
+        }
+      ]
+    },
+    {
+      "month": "2024-03",
+      "items_found": 14,
+      "items_covering_aoi": 14,
+      "items_in_tile": 7,
+      "candidate_item_ids": [
+        "S2B_T21LXG_20240306T140438_L2A",
+        "S2A_T21LXG_20240301T135702_L2A",
+        "S2A_T21LXG_20240311T135702_L2A",
+        "S2B_T21LXG_20240316T140358_L2A"
+      ],
+      "candidates": [
+        {
+          "item_id": "S2B_T21LXG_20240306T140438_L2A",
+          "obstruction_fraction": 0.527174,
+          "cloud_cover_tile_pct": 31.387904
+        },
+        {
+          "item_id": "S2A_T21LXG_20240301T135702_L2A",
+          "obstruction_fraction": 0.155962,
+          "cloud_cover_tile_pct": 34.775206
+        },
+        {
+          "item_id": "S2A_T21LXG_20240311T135702_L2A",
+          "obstruction_fraction": 1.0,
+          "cloud_cover_tile_pct": 56.952155
+        },
+        {
+          "item_id": "S2B_T21LXG_20240316T140358_L2A",
+          "obstruction_fraction": 1.0,
+          "cloud_cover_tile_pct": 71.554387
+        }
+      ]
+    },
+    {
+      "month": "2024-04",
+      "items_found": 12,
+      "items_covering_aoi": 12,
+      "items_in_tile": 6,
+      "candidate_item_ids": [
+        "S2A_T21LXG_20240430T140056_L2A",
+        "S2B_T21LXG_20240425T135819_L2A",
+        "S2A_T21LXG_20240420T135705_L2A",
+        "S2B_T21LXG_20240405T140011_L2A"
+      ],
+      "candidates": [
+        {
+          "item_id": "S2A_T21LXG_20240430T140056_L2A",
+          "obstruction_fraction": 0.136005,
+          "cloud_cover_tile_pct": 10.766726
+        },
+        {
+          "item_id": "S2B_T21LXG_20240425T135819_L2A",
+          "obstruction_fraction": 0.174972,
+          "cloud_cover_tile_pct": 22.138114
+        },
+        {
+          "item_id": "S2A_T21LXG_20240420T135705_L2A",
+          "obstruction_fraction": 0.001593,
+          "cloud_cover_tile_pct": 43.74778
+        },
+        {
+          "item_id": "S2B_T21LXG_20240405T140011_L2A",
+          "obstruction_fraction": 0.483537,
+          "cloud_cover_tile_pct": 59.990001
+        }
+      ]
+    },
+    {
+      "month": "2024-05",
+      "items_found": 12,
+      "items_covering_aoi": 12,
+      "items_in_tile": 6,
+      "candidate_item_ids": [
+        "S2A_T21LXG_20240530T140555_L2A",
+        "S2A_T21LXG_20240510T135940_L2A",
+        "S2A_T21LXG_20240520T135703_L2A",
+        "S2B_T21LXG_20240505T135702_L2A"
+      ],
+      "candidates": [
+        {
+          "item_id": "S2A_T21LXG_20240530T140555_L2A",
+          "obstruction_fraction": 0.000801,
+          "cloud_cover_tile_pct": 0.000992
+        },
+        {
+          "item_id": "S2A_T21LXG_20240510T135940_L2A",
+          "obstruction_fraction": 0.00587,
+          "cloud_cover_tile_pct": 0.42123
+        },
+        {
+          "item_id": "S2A_T21LXG_20240520T135703_L2A",
+          "obstruction_fraction": 0.000764,
+          "cloud_cover_tile_pct": 3.817612
+        },
+        {
+          "item_id": "S2B_T21LXG_20240505T135702_L2A",
+          "obstruction_fraction": 0.000846,
+          "cloud_cover_tile_pct": 9.59973
+        }
+      ]
+    },
+    {
+      "month": "2024-06",
+      "items_found": 12,
+      "items_covering_aoi": 12,
+      "items_in_tile": 6,
+      "candidate_item_ids": [
+        "S2A_T21LXG_20240619T140428_L2A",
+        "S2A_T21LXG_20240629T140517_L2A",
+        "S2B_T21LXG_20240624T135706_L2A",
+        "S2A_T21LXG_20240609T140526_L2A"
+      ],
+      "candidates": [
+        {
+          "item_id": "S2A_T21LXG_20240619T140428_L2A",
+          "obstruction_fraction": 0.000855,
+          "cloud_cover_tile_pct": 0.00151
+        },
+        {
+          "item_id": "S2A_T21LXG_20240629T140517_L2A",
+          "obstruction_fraction": 0.091013,
+          "cloud_cover_tile_pct": 0.106118
+        },
+        {
+          "item_id": "S2B_T21LXG_20240624T135706_L2A",
+          "obstruction_fraction": 0.000855,
+          "cloud_cover_tile_pct": 0.713425
+        },
+        {
+          "item_id": "S2A_T21LXG_20240609T140526_L2A",
+          "obstruction_fraction": 0.000828,
+          "cloud_cover_tile_pct": 2.393721
+        }
+      ]
+    },
+    {
+      "month": "2024-07",
+      "items_found": 12,
+      "items_covering_aoi": 12,
+      "items_in_tile": 6,
+      "candidate_item_ids": [
+        "S2B_T21LXG_20240724T135955_L2A",
+        "S2A_T21LXG_20240719T135746_L2A",
+        "S2B_T21LXG_20240704T135706_L2A",
+        "S2A_T21LXG_20240729T140134_L2A"
+      ],
+      "candidates": [
+        {
+          "item_id": "S2B_T21LXG_20240724T135955_L2A",
+          "obstruction_fraction": 0.00071,
+          "cloud_cover_tile_pct": 0.001038
+        },
+        {
+          "item_id": "S2A_T21LXG_20240719T135746_L2A",
+          "obstruction_fraction": 0.000828,
+          "cloud_cover_tile_pct": 0.001579
+        },
+        {
+          "item_id": "S2B_T21LXG_20240704T135706_L2A",
+          "obstruction_fraction": 0.000819,
+          "cloud_cover_tile_pct": 0.001878
+        },
+        {
+          "item_id": "S2A_T21LXG_20240729T140134_L2A",
+          "obstruction_fraction": 0.000737,
+          "cloud_cover_tile_pct": 0.001924
+        }
+      ]
+    },
+    {
+      "month": "2024-08",
+      "items_found": 12,
+      "items_covering_aoi": 12,
+      "items_in_tile": 6,
+      "candidate_item_ids": [
+        "S2B_T21LXG_20240803T140514_L2A",
+        "S2A_T21LXG_20240808T140052_L2A",
+        "S2A_T21LXG_20240818T135702_L2A",
+        "S2A_T21LXG_20240828T135924_L2A"
+      ],
+      "candidates": [
+        {
+          "item_id": "S2B_T21LXG_20240803T140514_L2A",
+          "obstruction_fraction": 0.000646,
+          "cloud_cover_tile_pct": 0.001228
+        },
+        {
+          "item_id": "S2A_T21LXG_20240808T140052_L2A",
+          "obstruction_fraction": 0.000601,
+          "cloud_cover_tile_pct": 0.00147
+        },
+        {
+          "item_id": "S2A_T21LXG_20240818T135702_L2A",
+          "obstruction_fraction": 0.000646,
+          "cloud_cover_tile_pct": 0.001523
+        },
+        {
+          "item_id": "S2A_T21LXG_20240828T135924_L2A",
+          "obstruction_fraction": 0.000637,
+          "cloud_cover_tile_pct": 0.022903
+        }
+      ]
+    },
+    {
+      "month": "2024-09",
+      "items_found": 12,
+      "items_covering_aoi": 12,
+      "items_in_tile": 6,
+      "candidate_item_ids": [
+        "S2B_T21LXG_20240902T140121_L2A",
+        "S2A_T21LXG_20240917T135930_L2A",
+        "S2A_T21LXG_20240907T135702_L2A",
+        "S2B_T21LXG_20240922T135724_L2A"
+      ],
+      "candidates": [
+        {
+          "item_id": "S2B_T21LXG_20240902T140121_L2A",
+          "obstruction_fraction": 0.000501,
+          "cloud_cover_tile_pct": 0.001314
+        },
+        {
+          "item_id": "S2A_T21LXG_20240917T135930_L2A",
+          "obstruction_fraction": 0.0,
+          "cloud_cover_tile_pct": 0.001447
+        },
+        {
+          "item_id": "S2A_T21LXG_20240907T135702_L2A",
+          "obstruction_fraction": 0.000228,
+          "cloud_cover_tile_pct": 0.011871
+        },
+        {
+          "item_id": "S2B_T21LXG_20240922T135724_L2A",
+          "obstruction_fraction": 8.2e-05,
+          "cloud_cover_tile_pct": 0.514547
+        }
+      ]
+    },
+    {
+      "month": "2024-10",
+      "items_found": 12,
+      "items_covering_aoi": 12,
+      "items_in_tile": 6,
+      "candidate_item_ids": [
+        "S2B_T21LXG_20241002T135956_L2A",
+        "S2B_T21LXG_20241022T135703_L2A",
+        "S2A_T21LXG_20241027T135703_L2A",
+        "S2B_T21LXG_20241012T140243_L2A"
+      ],
+      "candidates": [
+        {
+          "item_id": "S2B_T21LXG_20241002T135956_L2A",
+          "obstruction_fraction": 0.008855,
+          "cloud_cover_tile_pct": 0.773813
+        },
+        {
+          "item_id": "S2B_T21LXG_20241022T135703_L2A",
+          "obstruction_fraction": 0.000255,
+          "cloud_cover_tile_pct": 33.865821
+        },
+        {
+          "item_id": "S2A_T21LXG_20241027T135703_L2A",
+          "obstruction_fraction": 0.34311,
+          "cloud_cover_tile_pct": 51.716131
+        },
+        {
+          "item_id": "S2B_T21LXG_20241012T140243_L2A",
+          "obstruction_fraction": 0.204257,
+          "cloud_cover_tile_pct": 64.337689
+        }
+      ]
+    },
+    {
+      "month": "2024-11",
+      "items_found": 12,
+      "items_covering_aoi": 12,
+      "items_in_tile": 6,
+      "candidate_item_ids": [
+        "S2B_T21LXG_20241121T135702_L2A",
+        "S2A_T21LXG_20241126T135700_L2A",
+        "S2A_T21LXG_20241116T135702_L2A",
+        "S2A_T21LXG_20241106T135658_L2A"
+      ],
+      "candidates": [
+        {
+          "item_id": "S2B_T21LXG_20241121T135702_L2A",
+          "obstruction_fraction": 0.000601,
+          "cloud_cover_tile_pct": 73.865581
+        },
+        {
+          "item_id": "S2A_T21LXG_20241126T135700_L2A",
+          "obstruction_fraction": 0.785996,
+          "cloud_cover_tile_pct": 83.668178
+        },
+        {
+          "item_id": "S2A_T21LXG_20241116T135702_L2A",
+          "obstruction_fraction": 0.970069,
+          "cloud_cover_tile_pct": 89.682359
+        },
+        {
+          "item_id": "S2A_T21LXG_20241106T135658_L2A",
+          "obstruction_fraction": 1.0,
+          "cloud_cover_tile_pct": 93.430412
+        }
+      ]
+    },
+    {
+      "month": "2024-12",
+      "items_found": 18,
+      "items_covering_aoi": 18,
+      "items_in_tile": 9,
+      "candidate_item_ids": [
+        "S2B_T21LXG_20241231T140340_L2A",
+        "S2A_T21LXG_20241216T135702_L2A",
+        "S2C_T21LXG_20241216T135729_L2A",
+        "S2B_T21LXG_20241211T135833_L2A"
+      ],
+      "candidates": [
+        {
+          "item_id": "S2B_T21LXG_20241231T140340_L2A",
+          "obstruction_fraction": 0.999954,
+          "cloud_cover_tile_pct": 42.121539
+        },
+        {
+          "item_id": "S2A_T21LXG_20241216T135702_L2A",
+          "obstruction_fraction": 0.871785,
+          "cloud_cover_tile_pct": 57.571423
+        },
+        {
+          "item_id": "S2C_T21LXG_20241216T135729_L2A",
+          "obstruction_fraction": 0.865142,
+          "cloud_cover_tile_pct": 58.481079
+        },
+        {
+          "item_id": "S2B_T21LXG_20241211T135833_L2A",
+          "obstruction_fraction": 1.0,
+          "cloud_cover_tile_pct": 63.0436
+        }
+      ]
+    },
+    {
+      "month": "2025-01",
+      "items_found": 12,
+      "items_covering_aoi": 12,
+      "items_in_tile": 6,
+      "candidate_item_ids": [
+        "S2A_T21LXG_20250105T135700_L2A",
+        "S2B_T21LXG_20250120T140147_L2A",
+        "S2C_T21LXG_20250125T140519_L2A",
+        "S2B_T21LXG_20250130T140330_L2A"
+      ],
+      "candidates": [
+        {
+          "item_id": "S2A_T21LXG_20250105T135700_L2A",
+          "obstruction_fraction": 0.063056,
+          "cloud_cover_tile_pct": 39.981255
+        },
+        {
+          "item_id": "S2B_T21LXG_20250120T140147_L2A",
+          "obstruction_fraction": 0.999809,
+          "cloud_cover_tile_pct": 82.924527
+        },
+        {
+          "item_id": "S2C_T21LXG_20250125T140519_L2A",
+          "obstruction_fraction": 1.0,
+          "cloud_cover_tile_pct": 95.304984
+        },
+        {
+          "item_id": "S2B_T21LXG_20250130T140330_L2A",
+          "obstruction_fraction": 0.998735,
+          "cloud_cover_tile_pct": 99.468362
+        }
+      ]
+    },
+    {
+      "month": "2025-02",
+      "items_found": 10,
+      "items_covering_aoi": 10,
+      "items_in_tile": 5,
+      "candidate_item_ids": [
+        "S2B_T21LXG_20250209T140348_L2A",
+        "S2C_T21LXG_20250224T140330_L2A",
+        "S2C_T21LXG_20250204T140518_L2A",
+        "S2B_T21LXG_20250219T140112_L2A"
+      ],
+      "candidates": [
+        {
+          "item_id": "S2B_T21LXG_20250209T140348_L2A",
+          "obstruction_fraction": 0.000883,
+          "cloud_cover_tile_pct": 40.754768
+        },
+        {
+          "item_id": "S2C_T21LXG_20250224T140330_L2A",
+          "obstruction_fraction": 0.895819,
+          "cloud_cover_tile_pct": 86.799139
+        },
+        {
+          "item_id": "S2C_T21LXG_20250204T140518_L2A",
+          "obstruction_fraction": 0.957329,
+          "cloud_cover_tile_pct": 88.23368
+        },
+        {
+          "item_id": "S2B_T21LXG_20250219T140112_L2A",
+          "obstruction_fraction": 0.97542,
+          "cloud_cover_tile_pct": 93.448067
+        }
+      ]
+    },
+    {
+      "month": "2025-03",
+      "items_found": 20,
+      "items_covering_aoi": 20,
+      "items_in_tile": 10,
+      "candidate_item_ids": [
+        "S2A_T21LXG_20250328T140059_L2A",
+        "S2A_T21LXG_20250318T140303_L2A",
+        "S2B_T21LXG_20250301T140548_L2A",
+        "S2B_T21LXG_20250311T135704_L2A"
+      ],
+      "candidates": [
+        {
+          "item_id": "S2A_T21LXG_20250328T140059_L2A",
+          "obstruction_fraction": 0.999481,
+          "cloud_cover_tile_pct": 34.996888
+        },
+        {
+          "item_id": "S2A_T21LXG_20250318T140303_L2A",
+          "obstruction_fraction": 0.808238,
+          "cloud_cover_tile_pct": 49.393645
+        },
+        {
+          "item_id": "S2B_T21LXG_20250301T140548_L2A",
+          "obstruction_fraction": 0.276405,
+          "cloud_cover_tile_pct": 55.357957
+        },
+        {
+          "item_id": "S2B_T21LXG_20250311T135704_L2A",
+          "obstruction_fraction": 1.0,
+          "cloud_cover_tile_pct": 75.829118
+        }
+      ]
+    },
+    {
+      "month": "2025-04",
+      "items_found": 18,
+      "items_covering_aoi": 18,
+      "items_in_tile": 9,
+      "candidate_item_ids": [
+        "S2A_T21LXG_20250417T140103_L2A",
+        "S2B_T21LXG_20250420T135736_L2A",
+        "S2B_T21LXG_20250410T140558_L2A",
+        "S2C_T21LXG_20250425T140430_L2A"
+      ],
+      "candidates": [
+        {
+          "item_id": "S2A_T21LXG_20250417T140103_L2A",
+          "obstruction_fraction": 0.006671,
+          "cloud_cover_tile_pct": 2.191904
+        },
+        {
+          "item_id": "S2B_T21LXG_20250420T135736_L2A",
+          "obstruction_fraction": 0.000637,
+          "cloud_cover_tile_pct": 4.796344
+        },
+        {
+          "item_id": "S2B_T21LXG_20250410T140558_L2A",
+          "obstruction_fraction": 0.110105,
+          "cloud_cover_tile_pct": 25.567979
+        },
+        {
+          "item_id": "S2C_T21LXG_20250425T140430_L2A",
+          "obstruction_fraction": 0.02772,
+          "cloud_cover_tile_pct": 30.151179
+        }
+      ]
+    },
+    {
+      "month": "2025-05",
+      "items_found": 18,
+      "items_covering_aoi": 18,
+      "items_in_tile": 9,
+      "candidate_item_ids": [
+        "S2B_T21LXG_20250510T140220_L2A",
+        "S2A_T21LXG_20250517T140425_L2A",
+        "S2A_T21LXG_20250527T140108_L2A",
+        "S2A_T21LXG_20250507T140103_L2A"
+      ],
+      "candidates": [
+        {
+          "item_id": "S2B_T21LXG_20250510T140220_L2A",
+          "obstruction_fraction": 0.007053,
+          "cloud_cover_tile_pct": 0.601226
+        },
+        {
+          "item_id": "S2A_T21LXG_20250517T140425_L2A",
+          "obstruction_fraction": 0.001174,
+          "cloud_cover_tile_pct": 0.981891
+        },
+        {
+          "item_id": "S2A_T21LXG_20250527T140108_L2A",
+          "obstruction_fraction": 0.00081,
+          "cloud_cover_tile_pct": 5.170292
+        },
+        {
+          "item_id": "S2A_T21LXG_20250507T140103_L2A",
+          "obstruction_fraction": 0.023142,
+          "cloud_cover_tile_pct": 9.06721
+        }
+      ]
+    },
+    {
+      "month": "2025-06",
+      "items_found": 18,
+      "items_covering_aoi": 18,
+      "items_in_tile": 9,
+      "candidate_item_ids": [
+        "S2B_T21LXG_20250609T140533_L2A",
+        "S2A_T21LXG_20250626T140106_L2A",
+        "S2A_T21LXG_20250606T140217_L2A",
+        "S2C_T21LXG_20250614T135722_L2A"
+      ],
+      "candidates": [
+        {
+          "item_id": "S2B_T21LXG_20250609T140533_L2A",
+          "obstruction_fraction": 0.000746,
+          "cloud_cover_tile_pct": 0.002827
+        },
+        {
+          "item_id": "S2A_T21LXG_20250626T140106_L2A",
+          "obstruction_fraction": 0.010866,
+          "cloud_cover_tile_pct": 0.0836
+        },
+        {
+          "item_id": "S2A_T21LXG_20250606T140217_L2A",
+          "obstruction_fraction": 0.000892,
+          "cloud_cover_tile_pct": 0.138244
+        },
+        {
+          "item_id": "S2C_T21LXG_20250614T135722_L2A",
+          "obstruction_fraction": 0.000928,
+          "cloud_cover_tile_pct": 0.611727
+        }
+      ]
+    },
+    {
+      "month": "2025-07",
+      "items_found": 18,
+      "items_covering_aoi": 18,
+      "items_in_tile": 9,
+      "candidate_item_ids": [
+        "S2A_T21LXG_20250726T140110_L2A",
+        "S2C_T21LXG_20250724T140230_L2A",
+        "S2B_T21LXG_20250709T140114_L2A",
+        "S2B_T21LXG_20250719T140534_L2A"
+      ],
+      "candidates": [
+        {
+          "item_id": "S2A_T21LXG_20250726T140110_L2A",
+          "obstruction_fraction": 0.000701,
+          "cloud_cover_tile_pct": 0.000956
+        },
+        {
+          "item_id": "S2C_T21LXG_20250724T140230_L2A",
+          "obstruction_fraction": 0.000801,
+          "cloud_cover_tile_pct": 0.001042
+        },
+        {
+          "item_id": "S2B_T21LXG_20250709T140114_L2A",
+          "obstruction_fraction": 0.000728,
+          "cloud_cover_tile_pct": 0.001553
+        },
+        {
+          "item_id": "S2B_T21LXG_20250719T140534_L2A",
+          "obstruction_fraction": 0.000692,
+          "cloud_cover_tile_pct": 0.001636
+        }
+      ]
+    },
+    {
+      "month": "2025-08",
+      "items_found": 18,
+      "items_covering_aoi": 18,
+      "items_in_tile": 9,
+      "candidate_item_ids": [
+        "S2B_T21LXG_20250828T135714_L2A",
+        "S2A_T21LXG_20250825T140106_L2A",
+        "S2C_T21LXG_20250813T135721_L2A",
+        "S2C_T21LXG_20250823T140201_L2A"
+      ],
+      "candidates": [
+        {
+          "item_id": "S2B_T21LXG_20250828T135714_L2A",
+          "obstruction_fraction": 0.000555,
+          "cloud_cover_tile_pct": 0.001088
+        },
+        {
+          "item_id": "S2A_T21LXG_20250825T140106_L2A",
+          "obstruction_fraction": 0.000528,
+          "cloud_cover_tile_pct": 0.001274
+        },
+        {
+          "item_id": "S2C_T21LXG_20250813T135721_L2A",
+          "obstruction_fraction": 0.000646,
+          "cloud_cover_tile_pct": 0.001606
+        },
+        {
+          "item_id": "S2C_T21LXG_20250823T140201_L2A",
+          "obstruction_fraction": 0.000555,
+          "cloud_cover_tile_pct": 0.04
+        }
+      ]
+    },
+    {
+      "month": "2025-09",
+      "items_found": 20,
+      "items_covering_aoi": 20,
+      "items_in_tile": 10,
+      "candidate_item_ids": [
+        "S2B_T21LXG_20250927T135901_L2A",
+        "S2B_T21LXG_20250907T135701_L2A",
+        "S2C_T21LXG_20250902T140110_L2A",
+        "S2C_T21LXG_20250912T140519_L2A"
+      ],
+      "candidates": [
+        {
+          "item_id": "S2B_T21LXG_20250927T135901_L2A",
+          "obstruction_fraction": 0.000555,
+          "cloud_cover_tile_pct": 0.026692
+        },
+        {
+          "item_id": "S2B_T21LXG_20250907T135701_L2A",
+          "obstruction_fraction": 0.000473,
+          "cloud_cover_tile_pct": 0.863381
+        },
+        {
+          "item_id": "S2C_T21LXG_20250902T140110_L2A",
+          "obstruction_fraction": 0.000228,
+          "cloud_cover_tile_pct": 1.094575
+        },
+        {
+          "item_id": "S2C_T21LXG_20250912T140519_L2A",
+          "obstruction_fraction": 0.00041,
+          "cloud_cover_tile_pct": 2.048311
+        }
+      ]
+    },
+    {
+      "month": "2025-10",
+      "items_found": 18,
+      "items_covering_aoi": 18,
+      "items_in_tile": 9,
+      "candidate_item_ids": [
+        "S2B_T21LXG_20251007T140124_L2A",
+        "S2A_T21LXG_20251004T140107_L2A",
+        "S2B_T21LXG_20251027T140153_L2A",
+        "S2B_T21LXG_20251017T140328_L2A"
+      ],
+      "candidates": [
+        {
+          "item_id": "S2B_T21LXG_20251007T140124_L2A",
+          "obstruction_fraction": 0.001138,
+          "cloud_cover_tile_pct": 0.20125
+        },
+        {
+          "item_id": "S2A_T21LXG_20251004T140107_L2A",
+          "obstruction_fraction": 0.000437,
+          "cloud_cover_tile_pct": 5.06772
+        },
+        {
+          "item_id": "S2B_T21LXG_20251027T140153_L2A",
+          "obstruction_fraction": 0.000419,
+          "cloud_cover_tile_pct": 21.253596
+        },
+        {
+          "item_id": "S2B_T21LXG_20251017T140328_L2A",
+          "obstruction_fraction": 1.0,
+          "cloud_cover_tile_pct": 30.678457
+        }
+      ]
+    },
+    {
+      "month": "2025-11",
+      "items_found": 16,
+      "items_covering_aoi": 16,
+      "items_in_tile": 8,
+      "candidate_item_ids": [
+        "S2A_T21LXG_20251113T140106_L2A",
+        "S2B_T21LXG_20251116T135658_L2A",
+        "S2B_T21LXG_20251126T135904_L2A",
+        "S2A_T21LXG_20251123T140108_L2A"
+      ],
+      "candidates": [
+        {
+          "item_id": "S2A_T21LXG_20251113T140106_L2A",
+          "obstruction_fraction": 0.120843,
+          "cloud_cover_tile_pct": 19.855338
+        },
+        {
+          "item_id": "S2B_T21LXG_20251116T135658_L2A",
+          "obstruction_fraction": 0.114792,
+          "cloud_cover_tile_pct": 34.795919
+        },
+        {
+          "item_id": "S2B_T21LXG_20251126T135904_L2A",
+          "obstruction_fraction": 0.889021,
+          "cloud_cover_tile_pct": 64.129299
+        },
+        {
+          "item_id": "S2A_T21LXG_20251123T140108_L2A",
+          "obstruction_fraction": 0.796971,
+          "cloud_cover_tile_pct": 84.1353
+        }
+      ]
+    },
+    {
+      "month": "2025-12",
+      "items_found": 20,
+      "items_covering_aoi": 20,
+      "items_in_tile": 10,
+      "candidate_item_ids": [
+        "S2C_T21LXG_20251211T140459_L2A",
+        "S2C_T21LXG_20251231T140458_L2A",
+        "S2B_T21LXG_20251226T135737_L2A",
+        "S2C_T21LXG_20251221T140458_L2A"
+      ],
+      "candidates": [
+        {
+          "item_id": "S2C_T21LXG_20251211T140459_L2A",
+          "obstruction_fraction": 0.039659,
+          "cloud_cover_tile_pct": 52.131385
+        },
+        {
+          "item_id": "S2C_T21LXG_20251231T140458_L2A",
+          "obstruction_fraction": 0.113026,
+          "cloud_cover_tile_pct": 53.212065
+        },
+        {
+          "item_id": "S2B_T21LXG_20251226T135737_L2A",
+          "obstruction_fraction": 0.999827,
+          "cloud_cover_tile_pct": 78.45934
+        },
+        {
+          "item_id": "S2C_T21LXG_20251221T140458_L2A",
+          "obstruction_fraction": 1.0,
+          "cloud_cover_tile_pct": 88.449121
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "months_total": 36,
+    "months_observed": 34,
+    "months_missing": 2,
+    "missing_months": [
+      "2023-01",
+      "2024-12"
+    ],
+    "missing_reasons": {
+      "all_candidates_exceed_max_obstruction": [
+        "2023-01",
+        "2024-12"
+      ]
+    },
+    "observed_items": [
+      {
+        "month": "2023-02",
+        "item_id": "S2B_T21LXG_20230210T140531_L2A",
+        "datetime": "2023-02-10T14:05:55.275000Z"
+      },
+      {
+        "month": "2023-03",
+        "item_id": "S2B_T21LXG_20230302T140048_L2A",
+        "datetime": "2023-03-02T14:05:57.670000Z"
+      },
+      {
+        "month": "2023-04",
+        "item_id": "S2B_T21LXG_20230421T140527_L2A",
+        "datetime": "2023-04-21T14:05:58.742000Z"
+      },
+      {
+        "month": "2023-05",
+        "item_id": "S2A_T21LXG_20230516T135703_L2A",
+        "datetime": "2023-05-16T14:05:57.865000Z"
+      },
+      {
+        "month": "2023-06",
+        "item_id": "S2A_T21LXG_20230605T140010_L2A",
+        "datetime": "2023-06-05T14:06:00.386000Z"
+      },
+      {
+        "month": "2023-07",
+        "item_id": "S2A_T21LXG_20230725T135707_L2A",
+        "datetime": "2023-07-25T14:06:01.611000Z"
+      },
+      {
+        "month": "2023-08",
+        "item_id": "S2B_T21LXG_20230819T135707_L2A",
+        "datetime": "2023-08-19T14:06:01.838000Z"
+      },
+      {
+        "month": "2023-09",
+        "item_id": "S2A_T21LXG_20230903T140112_L2A",
+        "datetime": "2023-09-03T14:06:02.010000Z"
+      },
+      {
+        "month": "2023-10",
+        "item_id": "S2A_T21LXG_20231003T135802_L2A",
+        "datetime": "2023-10-03T14:05:58.373000Z"
+      },
+      {
+        "month": "2023-11",
+        "item_id": "S2B_T21LXG_20231107T140131_L2A",
+        "datetime": "2023-11-07T14:05:59.185000Z"
+      },
+      {
+        "month": "2023-12",
+        "item_id": "S2A_T21LXG_20231202T135654_L2A",
+        "datetime": "2023-12-02T14:05:48.925000Z"
+      },
+      {
+        "month": "2024-01",
+        "item_id": "S2B_T21LXG_20240116T135701_L2A",
+        "datetime": "2024-01-16T14:05:55.697000Z"
+      },
+      {
+        "month": "2024-02",
+        "item_id": "S2B_T21LXG_20240225T135701_L2A",
+        "datetime": "2024-02-25T14:05:56.249000Z"
+      },
+      {
+        "month": "2024-03",
+        "item_id": "S2A_T21LXG_20240301T135702_L2A",
+        "datetime": "2024-03-01T14:05:56.778000Z"
+      },
+      {
+        "month": "2024-04",
+        "item_id": "S2A_T21LXG_20240420T135705_L2A",
+        "datetime": "2024-04-20T14:06:00.043000Z"
+      },
+      {
+        "month": "2024-05",
+        "item_id": "S2A_T21LXG_20240520T135703_L2A",
+        "datetime": "2024-05-20T14:05:57.422000Z"
+      },
+      {
+        "month": "2024-06",
+        "item_id": "S2A_T21LXG_20240609T140526_L2A",
+        "datetime": "2024-06-09T14:06:02.653000Z"
+      },
+      {
+        "month": "2024-07",
+        "item_id": "S2B_T21LXG_20240724T135955_L2A",
+        "datetime": "2024-07-24T14:05:59.745000Z"
+      },
+      {
+        "month": "2024-08",
+        "item_id": "S2A_T21LXG_20240808T140052_L2A",
+        "datetime": "2024-08-08T14:05:57.391000Z"
+      },
+      {
+        "month": "2024-09",
+        "item_id": "S2A_T21LXG_20240917T135930_L2A",
+        "datetime": "2024-09-17T14:05:56.922000Z"
+      },
+      {
+        "month": "2024-10",
+        "item_id": "S2B_T21LXG_20241022T135703_L2A",
+        "datetime": "2024-10-22T14:05:57.619000Z"
+      },
+      {
+        "month": "2024-11",
+        "item_id": "S2B_T21LXG_20241121T135702_L2A",
+        "datetime": "2024-11-21T14:05:56.778000Z"
+      },
+      {
+        "month": "2025-01",
+        "item_id": "S2A_T21LXG_20250105T135700_L2A",
+        "datetime": "2025-01-05T14:05:54.601000Z"
+      },
+      {
+        "month": "2025-02",
+        "item_id": "S2B_T21LXG_20250209T140348_L2A",
+        "datetime": "2025-02-09T14:05:59.402000Z"
+      },
+      {
+        "month": "2025-03",
+        "item_id": "S2B_T21LXG_20250301T140548_L2A",
+        "datetime": "2025-03-01T14:06:00.219000Z"
+      },
+      {
+        "month": "2025-04",
+        "item_id": "S2B_T21LXG_20250420T135736_L2A",
+        "datetime": "2025-04-20T14:05:58.528000Z"
+      },
+      {
+        "month": "2025-05",
+        "item_id": "S2A_T21LXG_20250527T140108_L2A",
+        "datetime": "2025-05-27T14:06:13.506000Z"
+      },
+      {
+        "month": "2025-06",
+        "item_id": "S2B_T21LXG_20250609T140533_L2A",
+        "datetime": "2025-06-09T14:05:55.599000Z"
+      },
+      {
+        "month": "2025-07",
+        "item_id": "S2B_T21LXG_20250719T140534_L2A",
+        "datetime": "2025-07-19T14:05:59.665000Z"
+      },
+      {
+        "month": "2025-08",
+        "item_id": "S2A_T21LXG_20250825T140106_L2A",
+        "datetime": "2025-08-25T14:06:11.192000Z"
+      },
+      {
+        "month": "2025-09",
+        "item_id": "S2C_T21LXG_20250902T140110_L2A",
+        "datetime": "2025-09-02T14:06:14.674000Z"
+      },
+      {
+        "month": "2025-10",
+        "item_id": "S2B_T21LXG_20251027T140153_L2A",
+        "datetime": "2025-10-27T14:05:55.939000Z"
+      },
+      {
+        "month": "2025-11",
+        "item_id": "S2B_T21LXG_20251116T135658_L2A",
+        "datetime": "2025-11-16T14:05:52.675000Z"
+      },
+      {
+        "month": "2025-12",
+        "item_id": "S2C_T21LXG_20251211T140459_L2A",
+        "datetime": "2025-12-11T14:06:04.931000Z"
+      }
+    ],
+    "baselines": [
+      "05.09",
+      "05.10",
+      "05.11"
+    ],
+    "note": "Meses ausentes não foram preenchidos, interpolados ou repetidos; as lacunas são reais do catálogo/qualidade."
+  },
+  "records": [
+    {
+      "month": "2023-01",
+      "status": "no_usable_observation",
+      "reason": "all_candidates_exceed_max_obstruction",
+      "candidate_scenes": 4,
+      "item_id": null,
+      "datetime": null,
+      "indices": {},
+      "best_candidate": {
+        "item_id": "S2B_T21LXG_20230131T140226_L2A",
+        "obstruction_fraction": 0.8470778807127387
+      }
+    },
+    {
+      "month": "2023-02",
+      "status": "observed",
+      "reason": null,
+      "candidate_scenes": 1,
+      "item_id": "S2B_T21LXG_20230210T140531_L2A",
+      "datetime": "2023-02-10T14:05:55.275000Z",
+      "tile": "MGRS-21LXG",
+      "baseline": "05.09",
+      "cloud_cover": 32.88694,
+      "obstruction_fraction": 0.03734779680760061,
+      "scl_profile": "A_historical",
+      "indices": {
+        "NDVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 105762,
+          "valid_fraction": 0.9624701963853448,
+          "min": -0.1495238095521927,
+          "max": 0.9066144227981567,
+          "mean": 0.41979105265329664,
+          "median": 0.32402120530605316,
+          "p05": 0.1351931646466255,
+          "p25": 0.16627421975135803,
+          "p75": 0.7245677411556244,
+          "p95": 0.8266220808029174,
+          "std": 0.2656515222167433,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "EVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 105762,
+          "valid_fraction": 0.9624701963853448,
+          "min": -0.025119083002209663,
+          "max": 0.8746134042739868,
+          "mean": 0.2517089702654095,
+          "median": 0.1759815663099289,
+          "p05": 0.06832089796662331,
+          "p25": 0.10033523477613926,
+          "p75": 0.42205431312322617,
+          "p95": 0.5549811452627181,
+          "std": 0.17538159530670172,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "NDMI": {
+          "total_pixels": 109886,
+          "valid_pixels": 105762,
+          "valid_fraction": 0.9624701963853448,
+          "min": -0.4671623408794403,
+          "max": 0.42573651671409607,
+          "mean": -0.14729074426659533,
+          "median": -0.2671508938074112,
+          "p05": -0.3958126440644264,
+          "p25": -0.3433821201324463,
+          "p75": 0.11289591901004314,
+          "p95": 0.2166015289723873,
+          "std": 0.2313138175138172,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        }
+      },
+      "scene_count": 1,
+      "extra": {
+        "grid": {
+          "crs": "EPSG:32721",
+          "res": 20.0,
+          "width": 329,
+          "height": 334,
+          "transform": [
+            20.0,
+            0.0,
+            648620.0,
+            0.0,
+            -20.0,
+            8598540.0
+          ]
+        },
+        "mask_summary": {
+          "profile": "B_restrictive",
+          "total_pixels": 109886,
+          "scl_masked_pixels": 4124,
+          "nodata_masked_pixels": 0,
+          "kept_pixels": 105762,
+          "kept_fraction": 0.9624701963853448,
+          "scl_excluded_classes": [
+            0,
+            1,
+            2,
+            3,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        "tile_chosen": "MGRS-21LXG"
+      }
+    },
+    {
+      "month": "2023-03",
+      "status": "observed",
+      "reason": null,
+      "candidate_scenes": 1,
+      "item_id": "S2B_T21LXG_20230302T140048_L2A",
+      "datetime": "2023-03-02T14:05:57.670000Z",
+      "tile": "MGRS-21LXG",
+      "baseline": "05.09",
+      "cloud_cover": 13.30325,
+      "obstruction_fraction": 0.027200917314307554,
+      "scl_profile": "A_historical",
+      "indices": {
+        "NDVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 106887,
+          "valid_fraction": 0.9727080792821652,
+          "min": -0.08692529052495956,
+          "max": 0.8929355144500732,
+          "mean": 0.374459422511441,
+          "median": 0.24731183052062988,
+          "p05": 0.16537391543388366,
+          "p25": 0.1923864185810089,
+          "p75": 0.49535347521305084,
+          "p95": 0.8209281980991363,
+          "std": 0.23873975625059368,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "EVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 106887,
+          "valid_fraction": 0.9727080792821652,
+          "min": -0.041650447994470596,
+          "max": 0.8618482947349548,
+          "mean": 0.23503157697030594,
+          "median": 0.1615646332502365,
+          "p05": 0.1051490731537342,
+          "p25": 0.12370410561561584,
+          "p75": 0.3218229413032532,
+          "p95": 0.5130853354930878,
+          "std": 0.14829896414937258,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "NDMI": {
+          "total_pixels": 109886,
+          "valid_pixels": 106887,
+          "valid_fraction": 0.9727080792821652,
+          "min": -0.4693540036678314,
+          "max": 0.4321358799934387,
+          "mean": -0.17260619612270703,
+          "median": -0.272095263004303,
+          "p05": -0.3432266354560852,
+          "p25": -0.3193083703517914,
+          "p75": -0.06752142310142517,
+          "p95": 0.21373613774776457,
+          "std": 0.20073627509066036,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        }
+      },
+      "scene_count": 1,
+      "extra": {
+        "grid": {
+          "crs": "EPSG:32721",
+          "res": 20.0,
+          "width": 329,
+          "height": 334,
+          "transform": [
+            20.0,
+            0.0,
+            648620.0,
+            0.0,
+            -20.0,
+            8598540.0
+          ]
+        },
+        "mask_summary": {
+          "profile": "B_restrictive",
+          "total_pixels": 109886,
+          "scl_masked_pixels": 2999,
+          "nodata_masked_pixels": 0,
+          "kept_pixels": 106887,
+          "kept_fraction": 0.9727080792821652,
+          "scl_excluded_classes": [
+            0,
+            1,
+            2,
+            3,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        "tile_chosen": "MGRS-21LXG"
+      }
+    },
+    {
+      "month": "2023-04",
+      "status": "observed",
+      "reason": null,
+      "candidate_scenes": 1,
+      "item_id": "S2B_T21LXG_20230421T140527_L2A",
+      "datetime": "2023-04-21T14:05:58.742000Z",
+      "tile": "MGRS-21LXG",
+      "baseline": "05.09",
+      "cloud_cover": 65.225369,
+      "obstruction_fraction": 0.031587281364323025,
+      "scl_profile": "A_historical",
+      "indices": {
+        "NDVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 106415,
+          "valid_fraction": 0.968412718635677,
+          "min": -0.18039372563362122,
+          "max": 0.9215459823608398,
+          "mean": 0.8290274172195847,
+          "median": 0.85545814037323,
+          "p05": 0.6290037214756012,
+          "p25": 0.8236455321311951,
+          "p75": 0.878977507352829,
+          "p95": 0.8991322934627533,
+          "std": 0.08927090023866072,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "EVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 106415,
+          "valid_fraction": 0.968412718635677,
+          "min": -0.0578337088227272,
+          "max": 1.0356546640396118,
+          "mean": 0.643140512580441,
+          "median": 0.6749897003173828,
+          "p05": 0.37080931663513184,
+          "p25": 0.5631860494613647,
+          "p75": 0.7217038571834564,
+          "p95": 0.8977033972740173,
+          "std": 0.15309758054477257,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "NDMI": {
+          "total_pixels": 109886,
+          "valid_pixels": 106415,
+          "valid_fraction": 0.968412718635677,
+          "min": -0.446660578250885,
+          "max": 0.5495728850364685,
+          "mean": 0.31755363695969074,
+          "median": 0.3500768840312958,
+          "p05": 0.11786170080304147,
+          "p25": 0.2654562145471573,
+          "p75": 0.3916403353214264,
+          "p95": 0.4285714328289032,
+          "std": 0.10440888713910944,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        }
+      },
+      "scene_count": 1,
+      "extra": {
+        "grid": {
+          "crs": "EPSG:32721",
+          "res": 20.0,
+          "width": 329,
+          "height": 334,
+          "transform": [
+            20.0,
+            0.0,
+            648620.0,
+            0.0,
+            -20.0,
+            8598540.0
+          ]
+        },
+        "mask_summary": {
+          "profile": "B_restrictive",
+          "total_pixels": 109886,
+          "scl_masked_pixels": 3471,
+          "nodata_masked_pixels": 0,
+          "kept_pixels": 106415,
+          "kept_fraction": 0.968412718635677,
+          "scl_excluded_classes": [
+            0,
+            1,
+            2,
+            3,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        "tile_chosen": "MGRS-21LXG"
+      }
+    },
+    {
+      "month": "2023-05",
+      "status": "observed",
+      "reason": null,
+      "candidate_scenes": 1,
+      "item_id": "S2A_T21LXG_20230516T135703_L2A",
+      "datetime": "2023-05-16T14:05:57.865000Z",
+      "tile": "MGRS-21LXG",
+      "baseline": "05.09",
+      "cloud_cover": 0.001443,
+      "obstruction_fraction": 0.0010465391405638572,
+      "scl_profile": "A_historical",
+      "indices": {
+        "NDVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109768,
+          "valid_fraction": 0.998926159838378,
+          "min": -0.06413521617650986,
+          "max": 0.9211695790290833,
+          "mean": 0.8051924337352283,
+          "median": 0.8302241265773773,
+          "p05": 0.5914584666490555,
+          "p25": 0.7945538610219955,
+          "p75": 0.8540818691253662,
+          "p95": 0.9038906753063202,
+          "std": 0.09265721232409385,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "EVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109768,
+          "valid_fraction": 0.998926159838378,
+          "min": -0.019062869250774384,
+          "max": 0.9503998756408691,
+          "mean": 0.5590431212759971,
+          "median": 0.5654498338699341,
+          "p05": 0.3359248474240303,
+          "p25": 0.44289273023605347,
+          "p75": 0.6409243494272232,
+          "p95": 0.8907187014818191,
+          "std": 0.1513417201947377,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "NDMI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109768,
+          "valid_fraction": 0.998926159838378,
+          "min": -0.40299078822135925,
+          "max": 0.5376983880996704,
+          "mean": 0.27996447705912764,
+          "median": 0.29154323041439056,
+          "p05": 0.05036491099745037,
+          "p25": 0.21303562447428703,
+          "p75": 0.3661070987582207,
+          "p95": 0.4731725335121154,
+          "std": 0.12221611778441721,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        }
+      },
+      "scene_count": 1,
+      "extra": {
+        "grid": {
+          "crs": "EPSG:32721",
+          "res": 20.0,
+          "width": 329,
+          "height": 334,
+          "transform": [
+            20.0,
+            0.0,
+            648620.0,
+            0.0,
+            -20.0,
+            8598540.0
+          ]
+        },
+        "mask_summary": {
+          "profile": "B_restrictive",
+          "total_pixels": 109886,
+          "scl_masked_pixels": 118,
+          "nodata_masked_pixels": 0,
+          "kept_pixels": 109768,
+          "kept_fraction": 0.998926159838378,
+          "scl_excluded_classes": [
+            0,
+            1,
+            2,
+            3,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        "tile_chosen": "MGRS-21LXG"
+      }
+    },
+    {
+      "month": "2023-06",
+      "status": "observed",
+      "reason": null,
+      "candidate_scenes": 1,
+      "item_id": "S2A_T21LXG_20230605T140010_L2A",
+      "datetime": "2023-06-05T14:06:00.386000Z",
+      "tile": "MGRS-21LXG",
+      "baseline": "05.09",
+      "cloud_cover": 0.01074,
+      "obstruction_fraction": 0.0011648435651493367,
+      "scl_profile": "A_historical",
+      "indices": {
+        "NDVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109752,
+          "valid_fraction": 0.9987805543927343,
+          "min": -0.3057442903518677,
+          "max": 0.909747302532196,
+          "mean": 0.5468721732887941,
+          "median": 0.5181378722190857,
+          "p05": 0.2732865810394287,
+          "p25": 0.3836052864789963,
+          "p75": 0.7468484938144684,
+          "p95": 0.8849601656198501,
+          "std": 0.2008738292276682,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "EVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109752,
+          "valid_fraction": 0.9987805543927343,
+          "min": -0.08913129568099976,
+          "max": 0.8625184297561646,
+          "mean": 0.30276325791759456,
+          "median": 0.2507505416870117,
+          "p05": 0.11058560460805893,
+          "p25": 0.17763885855674744,
+          "p75": 0.35812314599752426,
+          "p95": 0.8032983183860779,
+          "std": 0.1861353489359843,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "NDMI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109752,
+          "valid_fraction": 0.9987805543927343,
+          "min": -0.4307244122028351,
+          "max": 0.5003039240837097,
+          "mean": -0.04313798217621886,
+          "median": -0.10503197833895683,
+          "p05": -0.3259463936090469,
+          "p25": -0.2158653885126114,
+          "p75": 0.12719706073403358,
+          "p95": 0.4347192421555519,
+          "std": 0.22418695784942433,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        }
+      },
+      "scene_count": 1,
+      "extra": {
+        "grid": {
+          "crs": "EPSG:32721",
+          "res": 20.0,
+          "width": 329,
+          "height": 334,
+          "transform": [
+            20.0,
+            0.0,
+            648620.0,
+            0.0,
+            -20.0,
+            8598540.0
+          ]
+        },
+        "mask_summary": {
+          "profile": "B_restrictive",
+          "total_pixels": 109886,
+          "scl_masked_pixels": 134,
+          "nodata_masked_pixels": 0,
+          "kept_pixels": 109752,
+          "kept_fraction": 0.9987805543927343,
+          "scl_excluded_classes": [
+            0,
+            1,
+            2,
+            3,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        "tile_chosen": "MGRS-21LXG"
+      }
+    },
+    {
+      "month": "2023-07",
+      "status": "observed",
+      "reason": null,
+      "candidate_scenes": 1,
+      "item_id": "S2A_T21LXG_20230725T135707_L2A",
+      "datetime": "2023-07-25T14:06:01.611000Z",
+      "tile": "MGRS-21LXG",
+      "baseline": "05.09",
+      "cloud_cover": 0.001914,
+      "obstruction_fraction": 0.0009646360773892944,
+      "scl_profile": "A_historical",
+      "indices": {
+        "NDVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109767,
+          "valid_fraction": 0.9989170594980252,
+          "min": -0.3285904824733734,
+          "max": 0.9374236464500427,
+          "mean": 0.32676472482413566,
+          "median": 0.20211976766586304,
+          "p05": 0.15041748881340028,
+          "p25": 0.18737280368804932,
+          "p75": 0.34512318670749664,
+          "p95": 0.8279370844364166,
+          "std": 0.22755870905007503,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "EVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109767,
+          "valid_fraction": 0.9989170594980252,
+          "min": -0.1364324539899826,
+          "max": 0.9413208961486816,
+          "mean": 0.19572718326901684,
+          "median": 0.1338796317577362,
+          "p05": 0.09547112211585045,
+          "p25": 0.12633384764194489,
+          "p75": 0.20771515369415283,
+          "p95": 0.45341909229755395,
+          "std": 0.12774276927163183,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "NDMI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109767,
+          "valid_fraction": 0.9989170594980252,
+          "min": -0.391107439994812,
+          "max": 0.5384615659713745,
+          "mean": -0.1386538888317622,
+          "median": -0.21122026443481445,
+          "p05": -0.29072979986667635,
+          "p25": -0.24263033270835876,
+          "p75": -0.14018702507019043,
+          "p95": 0.2736634463071823,
+          "std": 0.18419181135818138,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        }
+      },
+      "scene_count": 1,
+      "extra": {
+        "grid": {
+          "crs": "EPSG:32721",
+          "res": 20.0,
+          "width": 329,
+          "height": 334,
+          "transform": [
+            20.0,
+            0.0,
+            648620.0,
+            0.0,
+            -20.0,
+            8598540.0
+          ]
+        },
+        "mask_summary": {
+          "profile": "B_restrictive",
+          "total_pixels": 109886,
+          "scl_masked_pixels": 119,
+          "nodata_masked_pixels": 0,
+          "kept_pixels": 109767,
+          "kept_fraction": 0.9989170594980252,
+          "scl_excluded_classes": [
+            0,
+            1,
+            2,
+            3,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        "tile_chosen": "MGRS-21LXG"
+      }
+    },
+    {
+      "month": "2023-08",
+      "status": "observed",
+      "reason": null,
+      "candidate_scenes": 1,
+      "item_id": "S2B_T21LXG_20230819T135707_L2A",
+      "datetime": "2023-08-19T14:06:01.838000Z",
+      "tile": "MGRS-21LXG",
+      "baseline": "05.09",
+      "cloud_cover": 6.549736,
+      "obstruction_fraction": 0.000518719400105564,
+      "scl_profile": "A_historical",
+      "indices": {
+        "NDVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109829,
+          "valid_fraction": 0.9994812805998944,
+          "min": -0.3583815097808838,
+          "max": 0.8233091831207275,
+          "mean": 0.2856954004931784,
+          "median": 0.18823853135108948,
+          "p05": 0.13554692566394805,
+          "p25": 0.17780885100364685,
+          "p75": 0.2782818377017975,
+          "p95": 0.730955445766449,
+          "std": 0.1934275683310246,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "EVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109829,
+          "valid_fraction": 0.9994812805998944,
+          "min": -0.21145975589752197,
+          "max": 0.7680441737174988,
+          "mean": 0.2114868276119757,
+          "median": 0.1436789333820343,
+          "p05": 0.09969178140163422,
+          "p25": 0.13468869030475616,
+          "p75": 0.20054593682289124,
+          "p95": 0.5431643486022948,
+          "std": 0.1449829345024317,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "NDMI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109829,
+          "valid_fraction": 0.9994812805998944,
+          "min": -0.37142857909202576,
+          "max": 0.5323449969291687,
+          "mean": -0.1353104726718826,
+          "median": -0.2136060893535614,
+          "p05": -0.27703751921653746,
+          "p25": -0.24140334129333496,
+          "p75": -0.18344441056251526,
+          "p95": 0.31754797101020804,
+          "std": 0.19513528723532017,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        }
+      },
+      "scene_count": 1,
+      "extra": {
+        "grid": {
+          "crs": "EPSG:32721",
+          "res": 20.0,
+          "width": 329,
+          "height": 334,
+          "transform": [
+            20.0,
+            0.0,
+            648620.0,
+            0.0,
+            -20.0,
+            8598540.0
+          ]
+        },
+        "mask_summary": {
+          "profile": "B_restrictive",
+          "total_pixels": 109886,
+          "scl_masked_pixels": 57,
+          "nodata_masked_pixels": 0,
+          "kept_pixels": 109829,
+          "kept_fraction": 0.9994812805998944,
+          "scl_excluded_classes": [
+            0,
+            1,
+            2,
+            3,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        "tile_chosen": "MGRS-21LXG"
+      }
+    },
+    {
+      "month": "2023-09",
+      "status": "observed",
+      "reason": null,
+      "candidate_scenes": 1,
+      "item_id": "S2A_T21LXG_20230903T140112_L2A",
+      "datetime": "2023-09-03T14:06:02.010000Z",
+      "tile": "MGRS-21LXG",
+      "baseline": "05.09",
+      "cloud_cover": 8.049267,
+      "obstruction_fraction": 0.010829405019747738,
+      "scl_profile": "A_historical",
+      "indices": {
+        "NDVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 108696,
+          "valid_fraction": 0.9891705949802523,
+          "min": -0.17426572740077972,
+          "max": 0.870042622089386,
+          "mean": 0.27038071667655106,
+          "median": 0.15172673761844635,
+          "p05": 0.10139365307986736,
+          "p25": 0.1395633928477764,
+          "p75": 0.2688210979104042,
+          "p95": 0.8019557744264603,
+          "std": 0.22821063320389273,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "EVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 108696,
+          "valid_fraction": 0.9891705949802523,
+          "min": -0.0381857194006443,
+          "max": 0.6545855402946472,
+          "mean": 0.16032232470042979,
+          "median": 0.09006671234965324,
+          "p05": 0.06705972738564014,
+          "p25": 0.08044462092220783,
+          "p75": 0.15143485739827156,
+          "p95": 0.4986153915524483,
+          "std": 0.14134457413027335,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "NDMI": {
+          "total_pixels": 109886,
+          "valid_pixels": 108696,
+          "valid_fraction": 0.9891705949802523,
+          "min": -0.508040726184845,
+          "max": 0.4391907751560211,
+          "mean": -0.25781515909471225,
+          "median": -0.35912805795669556,
+          "p05": -0.4035955220460892,
+          "p25": -0.38568519800901413,
+          "p75": -0.289124459028244,
+          "p95": 0.2787865251302719,
+          "std": 0.22558122045628773,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        }
+      },
+      "scene_count": 1,
+      "extra": {
+        "grid": {
+          "crs": "EPSG:32721",
+          "res": 20.0,
+          "width": 329,
+          "height": 334,
+          "transform": [
+            20.0,
+            0.0,
+            648620.0,
+            0.0,
+            -20.0,
+            8598540.0
+          ]
+        },
+        "mask_summary": {
+          "profile": "B_restrictive",
+          "total_pixels": 109886,
+          "scl_masked_pixels": 1190,
+          "nodata_masked_pixels": 0,
+          "kept_pixels": 108696,
+          "kept_fraction": 0.9891705949802523,
+          "scl_excluded_classes": [
+            0,
+            1,
+            2,
+            3,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        "tile_chosen": "MGRS-21LXG"
+      }
+    },
+    {
+      "month": "2023-10",
+      "status": "observed",
+      "reason": null,
+      "candidate_scenes": 1,
+      "item_id": "S2A_T21LXG_20231003T135802_L2A",
+      "datetime": "2023-10-03T14:05:58.373000Z",
+      "tile": "MGRS-21LXG",
+      "baseline": "05.09",
+      "cloud_cover": 17.252876,
+      "obstruction_fraction": 0.00112844220373842,
+      "scl_profile": "A_historical",
+      "indices": {
+        "NDVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109762,
+          "valid_fraction": 0.9988715577962616,
+          "min": -0.3307831585407257,
+          "max": 0.865409791469574,
+          "mean": 0.29311729437370254,
+          "median": 0.19650539755821228,
+          "p05": 0.14174558445811272,
+          "p25": 0.1702805757522583,
+          "p75": 0.24870655685663223,
+          "p95": 0.8024707347154617,
+          "std": 0.22241200496152905,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "EVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109762,
+          "valid_fraction": 0.9988715577962616,
+          "min": -0.1116335317492485,
+          "max": 0.6971560120582581,
+          "mean": 0.18464809774716096,
+          "median": 0.11742627993226051,
+          "p05": 0.08751080855727196,
+          "p25": 0.10419015772640705,
+          "p75": 0.15664512291550636,
+          "p95": 0.5335544466972351,
+          "std": 0.14944474542470573,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "NDMI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109762,
+          "valid_fraction": 0.9988715577962616,
+          "min": -0.46563395857810974,
+          "max": 0.4030306339263916,
+          "mean": -0.24889669285545848,
+          "median": -0.35086899995803833,
+          "p05": -0.4065934121608734,
+          "p25": -0.38107047230005264,
+          "p75": -0.2730157673358917,
+          "p95": 0.28017843216657634,
+          "std": 0.2276035691892754,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        }
+      },
+      "scene_count": 1,
+      "extra": {
+        "grid": {
+          "crs": "EPSG:32721",
+          "res": 20.0,
+          "width": 329,
+          "height": 334,
+          "transform": [
+            20.0,
+            0.0,
+            648620.0,
+            0.0,
+            -20.0,
+            8598540.0
+          ]
+        },
+        "mask_summary": {
+          "profile": "B_restrictive",
+          "total_pixels": 109886,
+          "scl_masked_pixels": 124,
+          "nodata_masked_pixels": 0,
+          "kept_pixels": 109762,
+          "kept_fraction": 0.9988715577962616,
+          "scl_excluded_classes": [
+            0,
+            1,
+            2,
+            3,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        "tile_chosen": "MGRS-21LXG"
+      }
+    },
+    {
+      "month": "2023-11",
+      "status": "observed",
+      "reason": null,
+      "candidate_scenes": 1,
+      "item_id": "S2B_T21LXG_20231107T140131_L2A",
+      "datetime": "2023-11-07T14:05:59.185000Z",
+      "tile": "MGRS-21LXG",
+      "baseline": "05.09",
+      "cloud_cover": 64.730388,
+      "obstruction_fraction": 0.0009282347159783776,
+      "scl_profile": "A_historical",
+      "indices": {
+        "NDVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109784,
+          "valid_fraction": 0.9990717652840216,
+          "min": -0.11758490651845932,
+          "max": 0.8778964281082153,
+          "mean": 0.5419586117990567,
+          "median": 0.5364423990249634,
+          "p05": 0.29400824308395385,
+          "p25": 0.41259197890758514,
+          "p75": 0.6443547606468201,
+          "p95": 0.8305279731750488,
+          "std": 0.16736658991366,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "EVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109784,
+          "valid_fraction": 0.9990717652840216,
+          "min": -0.050453368574380875,
+          "max": 0.9302802085876465,
+          "mean": 0.4035216659748065,
+          "median": 0.40334343910217285,
+          "p05": 0.20956724807620047,
+          "p25": 0.29907117038965225,
+          "p75": 0.5013251602649689,
+          "p95": 0.6000446498394011,
+          "std": 0.12922845684896053,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "NDMI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109784,
+          "valid_fraction": 0.9990717652840216,
+          "min": -0.32354339957237244,
+          "max": 0.4099826216697693,
+          "mean": -0.0399769344275537,
+          "median": -0.07396091520786285,
+          "p05": -0.22782295644283296,
+          "p25": -0.15762925520539284,
+          "p75": 0.015168030513450503,
+          "p95": 0.2859958186745643,
+          "std": 0.15898286880497892,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        }
+      },
+      "scene_count": 1,
+      "extra": {
+        "grid": {
+          "crs": "EPSG:32721",
+          "res": 20.0,
+          "width": 329,
+          "height": 334,
+          "transform": [
+            20.0,
+            0.0,
+            648620.0,
+            0.0,
+            -20.0,
+            8598540.0
+          ]
+        },
+        "mask_summary": {
+          "profile": "B_restrictive",
+          "total_pixels": 109886,
+          "scl_masked_pixels": 102,
+          "nodata_masked_pixels": 0,
+          "kept_pixels": 109784,
+          "kept_fraction": 0.9990717652840216,
+          "scl_excluded_classes": [
+            0,
+            1,
+            2,
+            3,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        "tile_chosen": "MGRS-21LXG"
+      }
+    },
+    {
+      "month": "2023-12",
+      "status": "observed",
+      "reason": null,
+      "candidate_scenes": 1,
+      "item_id": "S2A_T21LXG_20231202T135654_L2A",
+      "datetime": "2023-12-02T14:05:48.925000Z",
+      "tile": "MGRS-21LXG",
+      "baseline": "05.09",
+      "cloud_cover": 49.957031,
+      "obstruction_fraction": 0.0008645323335092733,
+      "scl_profile": "A_historical",
+      "indices": {
+        "NDVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109791,
+          "valid_fraction": 0.9991354676664908,
+          "min": 0.01388078834861517,
+          "max": 0.9133841395378113,
+          "mean": 0.788853879756517,
+          "median": 0.8105125427246094,
+          "p05": 0.5719218254089355,
+          "p25": 0.7635259926319122,
+          "p75": 0.8593180775642395,
+          "p95": 0.8961159288883209,
+          "std": 0.10850218855950218,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "EVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109791,
+          "valid_fraction": 0.9991354676664908,
+          "min": 0.01321018673479557,
+          "max": 0.9379412531852722,
+          "mean": 0.6283023719118196,
+          "median": 0.6158364415168762,
+          "p05": 0.39422230422496796,
+          "p25": 0.5324411690235138,
+          "p75": 0.7429192364215851,
+          "p95": 0.864571750164032,
+          "std": 0.14692452070146253,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "NDMI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109791,
+          "valid_fraction": 0.9991354676664908,
+          "min": -0.3388359248638153,
+          "max": 0.619981586933136,
+          "mean": 0.24547340024608721,
+          "median": 0.26969292759895325,
+          "p05": 0.021650100126862526,
+          "p25": 0.19888993352651596,
+          "p75": 0.32359881699085236,
+          "p95": 0.3768588602542877,
+          "std": 0.11577809921996615,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        }
+      },
+      "scene_count": 1,
+      "extra": {
+        "grid": {
+          "crs": "EPSG:32721",
+          "res": 20.0,
+          "width": 329,
+          "height": 334,
+          "transform": [
+            20.0,
+            0.0,
+            648620.0,
+            0.0,
+            -20.0,
+            8598540.0
+          ]
+        },
+        "mask_summary": {
+          "profile": "B_restrictive",
+          "total_pixels": 109886,
+          "scl_masked_pixels": 95,
+          "nodata_masked_pixels": 0,
+          "kept_pixels": 109791,
+          "kept_fraction": 0.9991354676664908,
+          "scl_excluded_classes": [
+            0,
+            1,
+            2,
+            3,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        "tile_chosen": "MGRS-21LXG"
+      }
+    },
+    {
+      "month": "2024-01",
+      "status": "observed",
+      "reason": null,
+      "candidate_scenes": 1,
+      "item_id": "S2B_T21LXG_20240116T135701_L2A",
+      "datetime": "2024-01-16T14:05:55.697000Z",
+      "tile": "MGRS-21LXG",
+      "baseline": "05.10",
+      "cloud_cover": 15.275799,
+      "obstruction_fraction": 0.0005551207615164807,
+      "scl_profile": "A_historical",
+      "indices": {
+        "NDVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109746,
+          "valid_fraction": 0.9987259523506179,
+          "min": -0.08501362055540085,
+          "max": 0.9195135235786438,
+          "mean": 0.5496285672536642,
+          "median": 0.6464108228683472,
+          "p05": 0.1617732159793377,
+          "p25": 0.2192978374660015,
+          "p75": 0.8285200744867325,
+          "p95": 0.8779483288526535,
+          "std": 0.28581718394709743,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "EVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109746,
+          "valid_fraction": 0.9987259523506179,
+          "min": -0.047374557703733444,
+          "max": 0.8820602297782898,
+          "mean": 0.36415865212367166,
+          "median": 0.402158185839653,
+          "p05": 0.09575364738702774,
+          "p25": 0.1215022262185812,
+          "p75": 0.5439737737178802,
+          "p95": 0.6931686848402023,
+          "std": 0.2168720616033138,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "NDMI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109746,
+          "valid_fraction": 0.9987259523506179,
+          "min": -0.4253810942173004,
+          "max": 0.4772195518016815,
+          "mean": -0.011891245192785437,
+          "median": 0.07122290506958961,
+          "p05": -0.392920583486557,
+          "p25": -0.31710460036993027,
+          "p75": 0.22930392995476723,
+          "p95": 0.305478572845459,
+          "std": 0.2619522927006001,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        }
+      },
+      "scene_count": 1,
+      "extra": {
+        "grid": {
+          "crs": "EPSG:32721",
+          "res": 20.0,
+          "width": 329,
+          "height": 334,
+          "transform": [
+            20.0,
+            0.0,
+            648620.0,
+            0.0,
+            -20.0,
+            8598540.0
+          ]
+        },
+        "mask_summary": {
+          "profile": "B_restrictive",
+          "total_pixels": 109886,
+          "scl_masked_pixels": 140,
+          "nodata_masked_pixels": 0,
+          "kept_pixels": 109746,
+          "kept_fraction": 0.9987259523506179,
+          "scl_excluded_classes": [
+            0,
+            1,
+            2,
+            3,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        "tile_chosen": "MGRS-21LXG"
+      }
+    },
+    {
+      "month": "2024-02",
+      "status": "observed",
+      "reason": null,
+      "candidate_scenes": 1,
+      "item_id": "S2B_T21LXG_20240225T135701_L2A",
+      "datetime": "2024-02-25T14:05:56.249000Z",
+      "tile": "MGRS-21LXG",
+      "baseline": "05.10",
+      "cloud_cover": 5.950355,
+      "obstruction_fraction": 0.0016744626249021713,
+      "scl_profile": "A_historical",
+      "indices": {
+        "NDVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109579,
+          "valid_fraction": 0.9972061955117122,
+          "min": -0.3616808354854584,
+          "max": 0.9008236527442932,
+          "mean": 0.5269917279180293,
+          "median": 0.4714866280555725,
+          "p05": 0.1941853106021881,
+          "p25": 0.33610475063323975,
+          "p75": 0.8140912055969238,
+          "p95": 0.8498201370239258,
+          "std": 0.23465727210418244,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "EVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109579,
+          "valid_fraction": 0.9972061955117122,
+          "min": -0.09460633993148804,
+          "max": 0.7740939855575562,
+          "mean": 0.34288553525389276,
+          "median": 0.30074557662010193,
+          "p05": 0.1190853036940098,
+          "p25": 0.20463459938764572,
+          "p75": 0.46504975855350494,
+          "p95": 0.6538438022136688,
+          "std": 0.17045047997109636,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "NDMI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109579,
+          "valid_fraction": 0.9972061955117122,
+          "min": -0.3957483470439911,
+          "max": 0.43666547536849976,
+          "mean": -0.062056312475421434,
+          "median": -0.15000437200069427,
+          "p05": -0.31250968873500823,
+          "p25": -0.2532273381948471,
+          "p75": 0.1882190704345703,
+          "p95": 0.27388575673103327,
+          "std": 0.21715448096822249,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        }
+      },
+      "scene_count": 1,
+      "extra": {
+        "grid": {
+          "crs": "EPSG:32721",
+          "res": 20.0,
+          "width": 329,
+          "height": 334,
+          "transform": [
+            20.0,
+            0.0,
+            648620.0,
+            0.0,
+            -20.0,
+            8598540.0
+          ]
+        },
+        "mask_summary": {
+          "profile": "B_restrictive",
+          "total_pixels": 109886,
+          "scl_masked_pixels": 307,
+          "nodata_masked_pixels": 0,
+          "kept_pixels": 109579,
+          "kept_fraction": 0.9972061955117122,
+          "scl_excluded_classes": [
+            0,
+            1,
+            2,
+            3,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        "tile_chosen": "MGRS-21LXG"
+      }
+    },
+    {
+      "month": "2024-03",
+      "status": "observed",
+      "reason": null,
+      "candidate_scenes": 1,
+      "item_id": "S2A_T21LXG_20240301T135702_L2A",
+      "datetime": "2024-03-01T14:05:56.778000Z",
+      "tile": "MGRS-21LXG",
+      "baseline": "05.10",
+      "cloud_cover": 34.775206,
+      "obstruction_fraction": 0.1559616329650729,
+      "scl_profile": "A_historical",
+      "indices": {
+        "NDVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 92703,
+          "valid_fraction": 0.8436288517190543,
+          "min": 0.02410566806793213,
+          "max": 0.8631457686424255,
+          "mean": 0.5480864840348558,
+          "median": 0.4970702528953552,
+          "p05": 0.24305180758237838,
+          "p25": 0.39679592847824097,
+          "p75": 0.7522634863853455,
+          "p95": 0.8312307119369506,
+          "std": 0.1976925703075302,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "EVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 92703,
+          "valid_fraction": 0.8436288517190543,
+          "min": 0.02052098885178566,
+          "max": 0.8606597185134888,
+          "mean": 0.405045784728906,
+          "median": 0.3657453954219818,
+          "p05": 0.17419161796569824,
+          "p25": 0.2759806960821152,
+          "p75": 0.5108111798763275,
+          "p95": 0.7158873915672301,
+          "std": 0.16666882640094793,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "NDMI": {
+          "total_pixels": 109886,
+          "valid_pixels": 92703,
+          "valid_fraction": 0.8436288517190543,
+          "min": -0.34480997920036316,
+          "max": 0.4125412404537201,
+          "mean": 0.0038468186933962867,
+          "median": -0.06130237877368927,
+          "p05": -0.24781490564346315,
+          "p25": -0.17467065155506134,
+          "p75": 0.1919417381286621,
+          "p95": 0.3432297110557556,
+          "std": 0.20394519294889868,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        }
+      },
+      "scene_count": 1,
+      "extra": {
+        "grid": {
+          "crs": "EPSG:32721",
+          "res": 20.0,
+          "width": 329,
+          "height": 334,
+          "transform": [
+            20.0,
+            0.0,
+            648620.0,
+            0.0,
+            -20.0,
+            8598540.0
+          ]
+        },
+        "mask_summary": {
+          "profile": "B_restrictive",
+          "total_pixels": 109886,
+          "scl_masked_pixels": 17183,
+          "nodata_masked_pixels": 0,
+          "kept_pixels": 92703,
+          "kept_fraction": 0.8436288517190543,
+          "scl_excluded_classes": [
+            0,
+            1,
+            2,
+            3,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        "tile_chosen": "MGRS-21LXG"
+      }
+    },
+    {
+      "month": "2024-04",
+      "status": "observed",
+      "reason": null,
+      "candidate_scenes": 1,
+      "item_id": "S2A_T21LXG_20240420T135705_L2A",
+      "datetime": "2024-04-20T14:06:00.043000Z",
+      "tile": "MGRS-21LXG",
+      "baseline": "05.10",
+      "cloud_cover": 43.74778,
+      "obstruction_fraction": 0.0015925595617276086,
+      "scl_profile": "A_historical",
+      "indices": {
+        "NDVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109674,
+          "valid_fraction": 0.9980707278452214,
+          "min": -0.2515409588813782,
+          "max": 0.9191736578941345,
+          "mean": 0.8314325742459183,
+          "median": 0.8449852466583252,
+          "p05": 0.6711292415857315,
+          "p25": 0.8185272365808487,
+          "p75": 0.8697085380554199,
+          "p95": 0.9119919985532761,
+          "std": 0.08572581951289725,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "EVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109674,
+          "valid_fraction": 0.9980707278452214,
+          "min": -0.052561208605766296,
+          "max": 0.9949391484260559,
+          "mean": 0.6116623977650668,
+          "median": 0.5908527970314026,
+          "p05": 0.3784683242440224,
+          "p25": 0.5256766974925995,
+          "p75": 0.6573715656995773,
+          "p95": 0.9348186939954757,
+          "std": 0.161640705696459,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "NDMI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109674,
+          "valid_fraction": 0.9980707278452214,
+          "min": -0.3689514100551605,
+          "max": 0.570712149143219,
+          "mean": 0.3107154328899435,
+          "median": 0.3150229901075363,
+          "p05": 0.14258620291948318,
+          "p25": 0.2571623995900154,
+          "p75": 0.376983217895031,
+          "p95": 0.4530943170189857,
+          "std": 0.10271866881186312,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        }
+      },
+      "scene_count": 1,
+      "extra": {
+        "grid": {
+          "crs": "EPSG:32721",
+          "res": 20.0,
+          "width": 329,
+          "height": 334,
+          "transform": [
+            20.0,
+            0.0,
+            648620.0,
+            0.0,
+            -20.0,
+            8598540.0
+          ]
+        },
+        "mask_summary": {
+          "profile": "B_restrictive",
+          "total_pixels": 109886,
+          "scl_masked_pixels": 212,
+          "nodata_masked_pixels": 0,
+          "kept_pixels": 109674,
+          "kept_fraction": 0.9980707278452214,
+          "scl_excluded_classes": [
+            0,
+            1,
+            2,
+            3,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        "tile_chosen": "MGRS-21LXG"
+      }
+    },
+    {
+      "month": "2024-05",
+      "status": "observed",
+      "reason": null,
+      "candidate_scenes": 1,
+      "item_id": "S2A_T21LXG_20240520T135703_L2A",
+      "datetime": "2024-05-20T14:05:57.422000Z",
+      "tile": "MGRS-21LXG",
+      "baseline": "05.10",
+      "cloud_cover": 3.817612,
+      "obstruction_fraction": 0.0007644285896292522,
+      "scl_profile": "A_historical",
+      "indices": {
+        "NDVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109750,
+          "valid_fraction": 0.9987623537120288,
+          "min": -0.10209789872169495,
+          "max": 0.921807587146759,
+          "mean": 0.6274444520614939,
+          "median": 0.6873320043087006,
+          "p05": 0.2740563154220581,
+          "p25": 0.3888603746891022,
+          "p75": 0.8439454138278961,
+          "p95": 0.9040455251932145,
+          "std": 0.23177540613003958,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "EVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109750,
+          "valid_fraction": 0.9987623537120288,
+          "min": -0.05740455538034439,
+          "max": 0.9039849638938904,
+          "mean": 0.40240190165369305,
+          "median": 0.3837205171585083,
+          "p05": 0.1103347271680832,
+          "p25": 0.17947187647223473,
+          "p75": 0.5126539468765259,
+          "p95": 0.8339421868324279,
+          "std": 0.2395209801439195,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "NDMI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109750,
+          "valid_fraction": 0.9987623537120288,
+          "min": -0.398742139339447,
+          "max": 0.531045138835907,
+          "mean": 0.06547321765119918,
+          "median": 0.12334461882710457,
+          "p05": -0.35774296522140503,
+          "p25": -0.20714304596185684,
+          "p75": 0.2857142984867096,
+          "p95": 0.4634213775396347,
+          "std": 0.2866894777459829,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        }
+      },
+      "scene_count": 1,
+      "extra": {
+        "grid": {
+          "crs": "EPSG:32721",
+          "res": 20.0,
+          "width": 329,
+          "height": 334,
+          "transform": [
+            20.0,
+            0.0,
+            648620.0,
+            0.0,
+            -20.0,
+            8598540.0
+          ]
+        },
+        "mask_summary": {
+          "profile": "B_restrictive",
+          "total_pixels": 109886,
+          "scl_masked_pixels": 136,
+          "nodata_masked_pixels": 0,
+          "kept_pixels": 109750,
+          "kept_fraction": 0.9987623537120288,
+          "scl_excluded_classes": [
+            0,
+            1,
+            2,
+            3,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        "tile_chosen": "MGRS-21LXG"
+      }
+    },
+    {
+      "month": "2024-06",
+      "status": "observed",
+      "reason": null,
+      "candidate_scenes": 1,
+      "item_id": "S2A_T21LXG_20240609T140526_L2A",
+      "datetime": "2024-06-09T14:06:02.653000Z",
+      "tile": "MGRS-21LXG",
+      "baseline": "05.10",
+      "cloud_cover": 2.393721,
+      "obstruction_fraction": 0.0008281309720983565,
+      "scl_profile": "A_historical",
+      "indices": {
+        "NDVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109751,
+          "valid_fraction": 0.9987714540523815,
+          "min": -0.3169965445995331,
+          "max": 0.8918556571006775,
+          "mean": 0.4747578715781878,
+          "median": 0.31374242901802063,
+          "p05": 0.19577890634536743,
+          "p25": 0.25263047218322754,
+          "p75": 0.8152969181537628,
+          "p95": 0.8685665726661682,
+          "std": 0.2735729699698737,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "EVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109751,
+          "valid_fraction": 0.9987714540523815,
+          "min": -0.0817389041185379,
+          "max": 0.8113530874252319,
+          "mean": 0.30079404283667,
+          "median": 0.16919606924057007,
+          "p05": 0.11622203513979912,
+          "p25": 0.1380171999335289,
+          "p75": 0.43482646346092224,
+          "p95": 0.7153703272342682,
+          "std": 0.21524692926862926,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "NDMI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109751,
+          "valid_fraction": 0.9987714540523815,
+          "min": -0.3858238160610199,
+          "max": 0.4869806170463562,
+          "mean": -0.03319619811130602,
+          "median": -0.174378901720047,
+          "p05": -0.34416288137435913,
+          "p25": -0.24135223776102066,
+          "p75": 0.25232096016407013,
+          "p95": 0.41165485978126526,
+          "std": 0.27052095419347183,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        }
+      },
+      "scene_count": 1,
+      "extra": {
+        "grid": {
+          "crs": "EPSG:32721",
+          "res": 20.0,
+          "width": 329,
+          "height": 334,
+          "transform": [
+            20.0,
+            0.0,
+            648620.0,
+            0.0,
+            -20.0,
+            8598540.0
+          ]
+        },
+        "mask_summary": {
+          "profile": "B_restrictive",
+          "total_pixels": 109886,
+          "scl_masked_pixels": 135,
+          "nodata_masked_pixels": 0,
+          "kept_pixels": 109751,
+          "kept_fraction": 0.9987714540523815,
+          "scl_excluded_classes": [
+            0,
+            1,
+            2,
+            3,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        "tile_chosen": "MGRS-21LXG"
+      }
+    },
+    {
+      "month": "2024-07",
+      "status": "observed",
+      "reason": null,
+      "candidate_scenes": 1,
+      "item_id": "S2B_T21LXG_20240724T135955_L2A",
+      "datetime": "2024-07-24T14:05:59.745000Z",
+      "tile": "MGRS-21LXG",
+      "baseline": "05.11",
+      "cloud_cover": 0.001038,
+      "obstruction_fraction": 0.0007098265475128769,
+      "scl_profile": "A_historical",
+      "indices": {
+        "NDVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109748,
+          "valid_fraction": 0.9987441530313234,
+          "min": -0.17503289878368378,
+          "max": 0.9288985133171082,
+          "mean": 0.35875118150641805,
+          "median": 0.21796242892742157,
+          "p05": 0.18586977943778038,
+          "p25": 0.20354890078306198,
+          "p75": 0.4249308407306671,
+          "p95": 0.8172649294137955,
+          "std": 0.2195387740743114,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "EVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109748,
+          "valid_fraction": 0.9987441530313234,
+          "min": -0.06515683978796005,
+          "max": 0.9963286519050598,
+          "mean": 0.2390603578221095,
+          "median": 0.15145029872655869,
+          "p05": 0.12559448704123496,
+          "p25": 0.13910731300711632,
+          "p75": 0.2949260175228119,
+          "p95": 0.5109253197908401,
+          "std": 0.1453927527696797,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "NDMI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109748,
+          "valid_fraction": 0.9987441530313234,
+          "min": -0.3533971607685089,
+          "max": 0.6028622388839722,
+          "mean": -0.09567021026368655,
+          "median": -0.17623908072710037,
+          "p05": -0.28175141364336015,
+          "p25": -0.23298534750938416,
+          "p75": -0.050494350492954254,
+          "p95": 0.3334105357527733,
+          "std": 0.19901239878927782,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        }
+      },
+      "scene_count": 1,
+      "extra": {
+        "grid": {
+          "crs": "EPSG:32721",
+          "res": 20.0,
+          "width": 329,
+          "height": 334,
+          "transform": [
+            20.0,
+            0.0,
+            648620.0,
+            0.0,
+            -20.0,
+            8598540.0
+          ]
+        },
+        "mask_summary": {
+          "profile": "B_restrictive",
+          "total_pixels": 109886,
+          "scl_masked_pixels": 138,
+          "nodata_masked_pixels": 0,
+          "kept_pixels": 109748,
+          "kept_fraction": 0.9987441530313234,
+          "scl_excluded_classes": [
+            0,
+            1,
+            2,
+            3,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        "tile_chosen": "MGRS-21LXG"
+      }
+    },
+    {
+      "month": "2024-08",
+      "status": "observed",
+      "reason": null,
+      "candidate_scenes": 1,
+      "item_id": "S2A_T21LXG_20240808T140052_L2A",
+      "datetime": "2024-08-08T14:05:57.391000Z",
+      "tile": "MGRS-21LXG",
+      "baseline": "05.11",
+      "cloud_cover": 0.00147,
+      "obstruction_fraction": 0.0006006224632801267,
+      "scl_profile": "A_historical",
+      "indices": {
+        "NDVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109750,
+          "valid_fraction": 0.9987623537120288,
+          "min": -0.23824311792850494,
+          "max": 0.9071321487426758,
+          "mean": 0.34662301709385884,
+          "median": 0.20864984393119812,
+          "p05": 0.17518770024180413,
+          "p25": 0.19548887014389038,
+          "p75": 0.36135952174663544,
+          "p95": 0.7930924683809281,
+          "std": 0.22342430245606215,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "EVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109750,
+          "valid_fraction": 0.9987623537120288,
+          "min": -0.0923357829451561,
+          "max": 1.3065037727355957,
+          "mean": 0.234544739747578,
+          "median": 0.14584986865520477,
+          "p05": 0.12214346081018448,
+          "p25": 0.1352868676185608,
+          "p75": 0.23559654504060745,
+          "p95": 0.5490236192941665,
+          "std": 0.15563640370013523,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "NDMI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109750,
+          "valid_fraction": 0.9987623537120288,
+          "min": -0.33810845017433167,
+          "max": 0.5511921644210815,
+          "mean": -0.10372147633222245,
+          "median": -0.19478541612625122,
+          "p05": -0.2812825500965118,
+          "p25": -0.23410040140151978,
+          "p75": -0.13512255996465683,
+          "p95": 0.3404366061091422,
+          "std": 0.21337607837066244,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        }
+      },
+      "scene_count": 1,
+      "extra": {
+        "grid": {
+          "crs": "EPSG:32721",
+          "res": 20.0,
+          "width": 329,
+          "height": 334,
+          "transform": [
+            20.0,
+            0.0,
+            648620.0,
+            0.0,
+            -20.0,
+            8598540.0
+          ]
+        },
+        "mask_summary": {
+          "profile": "B_restrictive",
+          "total_pixels": 109886,
+          "scl_masked_pixels": 136,
+          "nodata_masked_pixels": 0,
+          "kept_pixels": 109750,
+          "kept_fraction": 0.9987623537120288,
+          "scl_excluded_classes": [
+            0,
+            1,
+            2,
+            3,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        "tile_chosen": "MGRS-21LXG"
+      }
+    },
+    {
+      "month": "2024-09",
+      "status": "observed",
+      "reason": null,
+      "candidate_scenes": 1,
+      "item_id": "S2A_T21LXG_20240917T135930_L2A",
+      "datetime": "2024-09-17T14:05:56.922000Z",
+      "tile": "MGRS-21LXG",
+      "baseline": "05.11",
+      "cloud_cover": 0.001447,
+      "obstruction_fraction": 0.0,
+      "scl_profile": "A_historical",
+      "indices": {
+        "NDVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109886,
+          "valid_fraction": 1.0,
+          "min": -0.4063108563423157,
+          "max": 0.8844940662384033,
+          "mean": 0.29847975783029185,
+          "median": 0.20697923749685287,
+          "p05": 0.1616954505443573,
+          "p25": 0.18866080045700073,
+          "p75": 0.27967754006385803,
+          "p95": 0.7621284276247025,
+          "std": 0.1982598869966554,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "EVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109886,
+          "valid_fraction": 1.0,
+          "min": -0.12699122726917267,
+          "max": 0.7511155009269714,
+          "mean": 0.22193398920921442,
+          "median": 0.15716464072465897,
+          "p05": 0.12420351803302765,
+          "p25": 0.1443249210715294,
+          "p75": 0.20237116143107414,
+          "p95": 0.5537955462932587,
+          "std": 0.1417047826654421,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "NDMI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109886,
+          "valid_fraction": 1.0,
+          "min": -0.3740229606628418,
+          "max": 0.6249228715896606,
+          "mean": -0.10150279636121207,
+          "median": -0.1730969473719597,
+          "p05": -0.23858677968382835,
+          "p25": -0.2017144411802292,
+          "p75": -0.13838164135813713,
+          "p95": 0.3363739922642708,
+          "std": 0.18371500059421678,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        }
+      },
+      "scene_count": 1,
+      "extra": {
+        "grid": {
+          "crs": "EPSG:32721",
+          "res": 20.0,
+          "width": 329,
+          "height": 334,
+          "transform": [
+            20.0,
+            0.0,
+            648620.0,
+            0.0,
+            -20.0,
+            8598540.0
+          ]
+        },
+        "mask_summary": {
+          "profile": "B_restrictive",
+          "total_pixels": 109886,
+          "scl_masked_pixels": 0,
+          "nodata_masked_pixels": 0,
+          "kept_pixels": 109886,
+          "kept_fraction": 1.0,
+          "scl_excluded_classes": [
+            0,
+            1,
+            2,
+            3,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        "tile_chosen": "MGRS-21LXG"
+      }
+    },
+    {
+      "month": "2024-10",
+      "status": "observed",
+      "reason": null,
+      "candidate_scenes": 1,
+      "item_id": "S2B_T21LXG_20241022T135703_L2A",
+      "datetime": "2024-10-22T14:05:57.619000Z",
+      "tile": "MGRS-21LXG",
+      "baseline": "05.11",
+      "cloud_cover": 33.865821,
+      "obstruction_fraction": 0.00025480952987641737,
+      "scl_profile": "A_historical",
+      "indices": {
+        "NDVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109772,
+          "valid_fraction": 0.9989625611997889,
+          "min": -0.30287936329841614,
+          "max": 0.8598173260688782,
+          "mean": 0.28076218198209635,
+          "median": 0.18436381965875626,
+          "p05": 0.13543074950575829,
+          "p25": 0.15338913351297379,
+          "p75": 0.2335522659122944,
+          "p95": 0.8123304009437561,
+          "std": 0.22813536917904353,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "EVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109772,
+          "valid_fraction": 0.9989625611997889,
+          "min": -0.14294396340847015,
+          "max": 0.7438313961029053,
+          "mean": 0.18973442933329246,
+          "median": 0.11158962920308113,
+          "p05": 0.08756936714053154,
+          "p25": 0.09987689182162285,
+          "p75": 0.14899732545018196,
+          "p95": 0.5917937636375427,
+          "std": 0.16885727675633802,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "NDMI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109772,
+          "valid_fraction": 0.9989625611997889,
+          "min": -0.3991920053958893,
+          "max": 0.4191769063472748,
+          "mean": -0.2047796494814872,
+          "median": -0.29251188039779663,
+          "p05": -0.36648268401622774,
+          "p25": -0.3223071023821831,
+          "p75": -0.24055816605687141,
+          "p95": 0.30470147877931597,
+          "std": 0.2165369193009319,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        }
+      },
+      "scene_count": 1,
+      "extra": {
+        "grid": {
+          "crs": "EPSG:32721",
+          "res": 20.0,
+          "width": 329,
+          "height": 334,
+          "transform": [
+            20.0,
+            0.0,
+            648620.0,
+            0.0,
+            -20.0,
+            8598540.0
+          ]
+        },
+        "mask_summary": {
+          "profile": "B_restrictive",
+          "total_pixels": 109886,
+          "scl_masked_pixels": 114,
+          "nodata_masked_pixels": 0,
+          "kept_pixels": 109772,
+          "kept_fraction": 0.9989625611997889,
+          "scl_excluded_classes": [
+            0,
+            1,
+            2,
+            3,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        "tile_chosen": "MGRS-21LXG"
+      }
+    },
+    {
+      "month": "2024-11",
+      "status": "observed",
+      "reason": null,
+      "candidate_scenes": 1,
+      "item_id": "S2B_T21LXG_20241121T135702_L2A",
+      "datetime": "2024-11-21T14:05:56.778000Z",
+      "tile": "MGRS-21LXG",
+      "baseline": "05.11",
+      "cloud_cover": 73.865581,
+      "obstruction_fraction": 0.0006006224632801267,
+      "scl_profile": "A_historical",
+      "indices": {
+        "NDVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109747,
+          "valid_fraction": 0.9987350526909706,
+          "min": -0.08292023092508316,
+          "max": 0.9060935378074646,
+          "mean": 0.5803040873683746,
+          "median": 0.5831348299980164,
+          "p05": 0.30731056034564974,
+          "p25": 0.42216433584690094,
+          "p75": 0.7380753755569458,
+          "p95": 0.8484564781188965,
+          "std": 0.1764087225576612,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "EVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109747,
+          "valid_fraction": 0.9987350526909706,
+          "min": -0.02568361721932888,
+          "max": 0.9860327243804932,
+          "mean": 0.45032900138798476,
+          "median": 0.438752681016922,
+          "p05": 0.20968129187822343,
+          "p25": 0.31111331284046173,
+          "p75": 0.5698972940444946,
+          "p95": 0.7628605246543884,
+          "std": 0.16904883864086995,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "NDMI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109747,
+          "valid_fraction": 0.9987350526909706,
+          "min": -0.36814063787460327,
+          "max": 0.426870733499527,
+          "mean": 0.0036894794761276,
+          "median": -0.03846153989434242,
+          "p05": -0.2513791471719742,
+          "p25": -0.13162970542907715,
+          "p75": 0.13820448517799377,
+          "p95": 0.31249772012233734,
+          "std": 0.18183058971772065,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        }
+      },
+      "scene_count": 1,
+      "extra": {
+        "grid": {
+          "crs": "EPSG:32721",
+          "res": 20.0,
+          "width": 329,
+          "height": 334,
+          "transform": [
+            20.0,
+            0.0,
+            648620.0,
+            0.0,
+            -20.0,
+            8598540.0
+          ]
+        },
+        "mask_summary": {
+          "profile": "B_restrictive",
+          "total_pixels": 109886,
+          "scl_masked_pixels": 139,
+          "nodata_masked_pixels": 0,
+          "kept_pixels": 109747,
+          "kept_fraction": 0.9987350526909706,
+          "scl_excluded_classes": [
+            0,
+            1,
+            2,
+            3,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        "tile_chosen": "MGRS-21LXG"
+      }
+    },
+    {
+      "month": "2024-12",
+      "status": "no_usable_observation",
+      "reason": "all_candidates_exceed_max_obstruction",
+      "candidate_scenes": 4,
+      "item_id": null,
+      "datetime": null,
+      "indices": {},
+      "best_candidate": {
+        "item_id": "S2C_T21LXG_20241216T135729_L2A",
+        "obstruction_fraction": 0.8651420563129061
+      }
+    },
+    {
+      "month": "2025-01",
+      "status": "observed",
+      "reason": null,
+      "candidate_scenes": 1,
+      "item_id": "S2A_T21LXG_20250105T135700_L2A",
+      "datetime": "2025-01-05T14:05:54.601000Z",
+      "tile": "MGRS-21LXG",
+      "baseline": "05.11",
+      "cloud_cover": 39.981255,
+      "obstruction_fraction": 0.06305625830406057,
+      "scl_profile": "A_historical",
+      "indices": {
+        "NDVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 102932,
+          "valid_fraction": 0.9367162331871212,
+          "min": -0.02355460450053215,
+          "max": 0.9448077082633972,
+          "mean": 0.8496843846624482,
+          "median": 0.9028361737728119,
+          "p05": 0.5989658623933792,
+          "p25": 0.8139034807682037,
+          "p75": 0.9252238720655441,
+          "p95": 0.9342488199472427,
+          "std": 0.11152215125092012,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "EVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 102932,
+          "valid_fraction": 0.9367162331871212,
+          "min": -0.022101901471614838,
+          "max": 1.0830092430114746,
+          "mean": 0.7130390023966738,
+          "median": 0.774916023015976,
+          "p05": 0.4177637666463852,
+          "p25": 0.5661487430334091,
+          "p75": 0.8369729816913605,
+          "p95": 0.9175018429756164,
+          "std": 0.16860171568456717,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "NDMI": {
+          "total_pixels": 109886,
+          "valid_pixels": 102932,
+          "valid_fraction": 0.9367162331871212,
+          "min": -0.35132312774658203,
+          "max": 0.49702319502830505,
+          "mean": 0.32021474637821484,
+          "median": 0.34899725019931793,
+          "p05": 0.1695580206811428,
+          "p25": 0.2676188498735428,
+          "p75": 0.38406214118003845,
+          "p95": 0.4203312397003174,
+          "std": 0.09206048087078499,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        }
+      },
+      "scene_count": 1,
+      "extra": {
+        "grid": {
+          "crs": "EPSG:32721",
+          "res": 20.0,
+          "width": 329,
+          "height": 334,
+          "transform": [
+            20.0,
+            0.0,
+            648620.0,
+            0.0,
+            -20.0,
+            8598540.0
+          ]
+        },
+        "mask_summary": {
+          "profile": "B_restrictive",
+          "total_pixels": 109886,
+          "scl_masked_pixels": 6954,
+          "nodata_masked_pixels": 0,
+          "kept_pixels": 102932,
+          "kept_fraction": 0.9367162331871212,
+          "scl_excluded_classes": [
+            0,
+            1,
+            2,
+            3,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        "tile_chosen": "MGRS-21LXG"
+      }
+    },
+    {
+      "month": "2025-02",
+      "status": "observed",
+      "reason": null,
+      "candidate_scenes": 1,
+      "item_id": "S2B_T21LXG_20250209T140348_L2A",
+      "datetime": "2025-02-09T14:05:59.402000Z",
+      "tile": "MGRS-21LXG",
+      "baseline": "05.11",
+      "cloud_cover": 40.754768,
+      "obstruction_fraction": 0.0008827330142147316,
+      "scl_profile": "A_historical",
+      "indices": {
+        "NDVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109694,
+          "valid_fraction": 0.998252734652276,
+          "min": -0.2710631191730499,
+          "max": 0.8821911811828613,
+          "mean": 0.334172641830668,
+          "median": 0.21409150958061218,
+          "p05": 0.14462601840496064,
+          "p25": 0.16852395236492157,
+          "p75": 0.41953590512275696,
+          "p95": 0.814944389462471,
+          "std": 0.235599227593423,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "EVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109694,
+          "valid_fraction": 0.998252734652276,
+          "min": -0.07506629079580307,
+          "max": 0.8595343232154846,
+          "mean": 0.19760615916529267,
+          "median": 0.12171916663646698,
+          "p05": 0.08861920796334743,
+          "p25": 0.09978099539875984,
+          "p75": 0.23841216415166855,
+          "p95": 0.5013163477182387,
+          "std": 0.14500452336123887,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "NDMI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109694,
+          "valid_fraction": 0.998252734652276,
+          "min": -0.43425047397613525,
+          "max": 0.4211787283420563,
+          "mean": -0.20424610249956965,
+          "median": -0.3102239817380905,
+          "p05": -0.3729672282934189,
+          "p25": -0.3390648365020752,
+          "p75": -0.13712207227945328,
+          "p95": 0.2264587022364139,
+          "std": 0.20682570448144919,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        }
+      },
+      "scene_count": 1,
+      "extra": {
+        "grid": {
+          "crs": "EPSG:32721",
+          "res": 20.0,
+          "width": 329,
+          "height": 334,
+          "transform": [
+            20.0,
+            0.0,
+            648620.0,
+            0.0,
+            -20.0,
+            8598540.0
+          ]
+        },
+        "mask_summary": {
+          "profile": "B_restrictive",
+          "total_pixels": 109886,
+          "scl_masked_pixels": 192,
+          "nodata_masked_pixels": 0,
+          "kept_pixels": 109694,
+          "kept_fraction": 0.998252734652276,
+          "scl_excluded_classes": [
+            0,
+            1,
+            2,
+            3,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        "tile_chosen": "MGRS-21LXG"
+      }
+    },
+    {
+      "month": "2025-03",
+      "status": "observed",
+      "reason": null,
+      "candidate_scenes": 1,
+      "item_id": "S2B_T21LXG_20250301T140548_L2A",
+      "datetime": "2025-03-01T14:06:00.219000Z",
+      "tile": "MGRS-21LXG",
+      "baseline": "05.11",
+      "cloud_cover": 55.357957,
+      "obstruction_fraction": 0.27640463753344374,
+      "scl_profile": "A_historical",
+      "indices": {
+        "NDVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 79390,
+          "valid_fraction": 0.7224760206031705,
+          "min": -0.32601305842399597,
+          "max": 0.9167327284812927,
+          "mean": 0.41518369293786933,
+          "median": 0.3230528235435486,
+          "p05": 0.14966385066509247,
+          "p25": 0.2344011850655079,
+          "p75": 0.5799550116062164,
+          "p95": 0.8469958305358887,
+          "std": 0.23169576190233082,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "EVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 79390,
+          "valid_fraction": 0.7224760206031705,
+          "min": -0.08840209990739822,
+          "max": 0.9078517556190491,
+          "mean": 0.28375130463154796,
+          "median": 0.21933098137378693,
+          "p05": 0.09205385409295559,
+          "p25": 0.15422380715608597,
+          "p75": 0.3938656523823738,
+          "p95": 0.6434517055749894,
+          "std": 0.17199566005365555,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "NDMI": {
+          "total_pixels": 109886,
+          "valid_pixels": 79390,
+          "valid_fraction": 0.7224760206031705,
+          "min": -0.45569509267807007,
+          "max": 0.47422996163368225,
+          "mean": -0.14937551561436374,
+          "median": -0.23188646137714386,
+          "p05": -0.34177066683769225,
+          "p25": -0.3049386292695999,
+          "p75": -0.05778967496007681,
+          "p95": 0.24404405280947686,
+          "std": 0.2009241422306398,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        }
+      },
+      "scene_count": 1,
+      "extra": {
+        "grid": {
+          "crs": "EPSG:32721",
+          "res": 20.0,
+          "width": 329,
+          "height": 334,
+          "transform": [
+            20.0,
+            0.0,
+            648620.0,
+            0.0,
+            -20.0,
+            8598540.0
+          ]
+        },
+        "mask_summary": {
+          "profile": "B_restrictive",
+          "total_pixels": 109886,
+          "scl_masked_pixels": 30496,
+          "nodata_masked_pixels": 0,
+          "kept_pixels": 79390,
+          "kept_fraction": 0.7224760206031705,
+          "scl_excluded_classes": [
+            0,
+            1,
+            2,
+            3,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        "tile_chosen": "MGRS-21LXG"
+      }
+    },
+    {
+      "month": "2025-04",
+      "status": "observed",
+      "reason": null,
+      "candidate_scenes": 1,
+      "item_id": "S2B_T21LXG_20250420T135736_L2A",
+      "datetime": "2025-04-20T14:05:58.528000Z",
+      "tile": "MGRS-21LXG",
+      "baseline": "05.11",
+      "cloud_cover": 4.796344,
+      "obstruction_fraction": 0.0006370238246910434,
+      "scl_profile": "A_historical",
+      "indices": {
+        "NDVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109765,
+          "valid_fraction": 0.9988988588173198,
+          "min": -0.2636192739009857,
+          "max": 0.9260845184326172,
+          "mean": 0.8713523612193395,
+          "median": 0.8884598016738892,
+          "p05": 0.7638021469116211,
+          "p25": 0.8661238551139832,
+          "p75": 0.9032041430473328,
+          "p95": 0.915837287902832,
+          "std": 0.06605946186633942,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "EVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109765,
+          "valid_fraction": 0.9988988588173198,
+          "min": -0.047162674367427826,
+          "max": 0.9811280369758606,
+          "mean": 0.6609014531469074,
+          "median": 0.6771785616874695,
+          "p05": 0.39548689126968384,
+          "p25": 0.6121764183044434,
+          "p75": 0.709883987903595,
+          "p95": 0.9175426959991455,
+          "std": 0.14807597191124355,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "NDMI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109765,
+          "valid_fraction": 0.9988988588173198,
+          "min": -0.42218783497810364,
+          "max": 0.6269339919090271,
+          "mean": 0.34728898030309086,
+          "median": 0.39127203822135925,
+          "p05": 0.14483885765075685,
+          "p25": 0.32614007592201233,
+          "p75": 0.4132075607776642,
+          "p95": 0.42963422536849977,
+          "std": 0.10028614093247598,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        }
+      },
+      "scene_count": 1,
+      "extra": {
+        "grid": {
+          "crs": "EPSG:32721",
+          "res": 20.0,
+          "width": 329,
+          "height": 334,
+          "transform": [
+            20.0,
+            0.0,
+            648620.0,
+            0.0,
+            -20.0,
+            8598540.0
+          ]
+        },
+        "mask_summary": {
+          "profile": "B_restrictive",
+          "total_pixels": 109886,
+          "scl_masked_pixels": 121,
+          "nodata_masked_pixels": 0,
+          "kept_pixels": 109765,
+          "kept_fraction": 0.9988988588173198,
+          "scl_excluded_classes": [
+            0,
+            1,
+            2,
+            3,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        "tile_chosen": "MGRS-21LXG"
+      }
+    },
+    {
+      "month": "2025-05",
+      "status": "observed",
+      "reason": null,
+      "candidate_scenes": 1,
+      "item_id": "S2A_T21LXG_20250527T140108_L2A",
+      "datetime": "2025-05-27T14:06:13.506000Z",
+      "tile": "MGRS-21LXG",
+      "baseline": "05.11",
+      "cloud_cover": 5.170292,
+      "obstruction_fraction": 0.0008099302913928981,
+      "scl_profile": "A_historical",
+      "indices": {
+        "NDVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109748,
+          "valid_fraction": 0.9987441530313234,
+          "min": -0.14652632176876068,
+          "max": 0.9095910787582397,
+          "mean": 0.7130270253406066,
+          "median": 0.7635678648948669,
+          "p05": 0.382280233502388,
+          "p25": 0.6266343146562576,
+          "p75": 0.8227490931749344,
+          "p95": 0.8959317117929458,
+          "std": 0.15475016858831883,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "EVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109748,
+          "valid_fraction": 0.9987441530313234,
+          "min": -0.046355146914720535,
+          "max": 0.9034404754638672,
+          "mean": 0.47097312304972855,
+          "median": 0.4264468848705292,
+          "p05": 0.1853664994239807,
+          "p25": 0.3491411507129669,
+          "p75": 0.567636102437973,
+          "p95": 0.8490888923406601,
+          "std": 0.19057794318618718,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "NDMI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109748,
+          "valid_fraction": 0.9987441530313234,
+          "min": -0.41972386837005615,
+          "max": 0.6510862112045288,
+          "mean": 0.15732946634084086,
+          "median": 0.17187651991844177,
+          "p05": -0.22509942650794984,
+          "p25": 0.031565817072987556,
+          "p75": 0.2861592099070549,
+          "p95": 0.4800337553024292,
+          "std": 0.1953880673559361,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        }
+      },
+      "scene_count": 1,
+      "extra": {
+        "grid": {
+          "crs": "EPSG:32721",
+          "res": 20.0,
+          "width": 329,
+          "height": 334,
+          "transform": [
+            20.0,
+            0.0,
+            648620.0,
+            0.0,
+            -20.0,
+            8598540.0
+          ]
+        },
+        "mask_summary": {
+          "profile": "B_restrictive",
+          "total_pixels": 109886,
+          "scl_masked_pixels": 138,
+          "nodata_masked_pixels": 0,
+          "kept_pixels": 109748,
+          "kept_fraction": 0.9987441530313234,
+          "scl_excluded_classes": [
+            0,
+            1,
+            2,
+            3,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        "tile_chosen": "MGRS-21LXG"
+      }
+    },
+    {
+      "month": "2025-06",
+      "status": "observed",
+      "reason": null,
+      "candidate_scenes": 1,
+      "item_id": "S2B_T21LXG_20250609T140533_L2A",
+      "datetime": "2025-06-09T14:05:55.599000Z",
+      "tile": "MGRS-21LXG",
+      "baseline": "05.11",
+      "cloud_cover": 0.002827,
+      "obstruction_fraction": 0.0007462279089237938,
+      "scl_profile": "A_historical",
+      "indices": {
+        "NDVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109744,
+          "valid_fraction": 0.9987077516699124,
+          "min": -0.3066743314266205,
+          "max": 0.9046210646629333,
+          "mean": 0.5602139244879989,
+          "median": 0.5541568398475647,
+          "p05": 0.19392736330628396,
+          "p25": 0.3334621861577034,
+          "p75": 0.805929958820343,
+          "p95": 0.8932237237691879,
+          "std": 0.2433798294160698,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "EVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109744,
+          "valid_fraction": 0.9987077516699124,
+          "min": -0.07541350275278091,
+          "max": 0.9089956879615784,
+          "mean": 0.351362621415273,
+          "median": 0.29817071557044983,
+          "p05": 0.11151841618120671,
+          "p25": 0.15692449733614922,
+          "p75": 0.4406280741095543,
+          "p95": 0.8262662917375565,
+          "std": 0.2285352573804127,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "NDMI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109744,
+          "valid_fraction": 0.9987077516699124,
+          "min": -0.4016198217868805,
+          "max": 0.6512885689735413,
+          "mean": 0.0023097213373003606,
+          "median": -0.04417155310511589,
+          "p05": -0.33257915526628495,
+          "p25": -0.23491384088993073,
+          "p75": 0.1971929930150509,
+          "p95": 0.45985974967479704,
+          "std": 0.2611830450647362,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        }
+      },
+      "scene_count": 1,
+      "extra": {
+        "grid": {
+          "crs": "EPSG:32721",
+          "res": 20.0,
+          "width": 329,
+          "height": 334,
+          "transform": [
+            20.0,
+            0.0,
+            648620.0,
+            0.0,
+            -20.0,
+            8598540.0
+          ]
+        },
+        "mask_summary": {
+          "profile": "B_restrictive",
+          "total_pixels": 109886,
+          "scl_masked_pixels": 142,
+          "nodata_masked_pixels": 0,
+          "kept_pixels": 109744,
+          "kept_fraction": 0.9987077516699124,
+          "scl_excluded_classes": [
+            0,
+            1,
+            2,
+            3,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        "tile_chosen": "MGRS-21LXG"
+      }
+    },
+    {
+      "month": "2025-07",
+      "status": "observed",
+      "reason": null,
+      "candidate_scenes": 1,
+      "item_id": "S2B_T21LXG_20250719T140534_L2A",
+      "datetime": "2025-07-19T14:05:59.665000Z",
+      "tile": "MGRS-21LXG",
+      "baseline": "05.11",
+      "cloud_cover": 0.001636,
+      "obstruction_fraction": 0.0006916258668074186,
+      "scl_profile": "A_historical",
+      "indices": {
+        "NDVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109739,
+          "valid_fraction": 0.9986622499681488,
+          "min": -0.32301294803619385,
+          "max": 0.883937656879425,
+          "mean": 0.3557419471963556,
+          "median": 0.21425576508045197,
+          "p05": 0.17290702164173127,
+          "p25": 0.19573380053043365,
+          "p75": 0.4723012149333954,
+          "p95": 0.8134082794189453,
+          "std": 0.22822616602641896,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "EVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109739,
+          "valid_fraction": 0.9986622499681488,
+          "min": -0.10862302035093307,
+          "max": 0.8000121116638184,
+          "mean": 0.22810206346532846,
+          "median": 0.14937780797481537,
+          "p05": 0.11724640205502511,
+          "p25": 0.1280009150505066,
+          "p75": 0.3145560026168823,
+          "p95": 0.4918059259653091,
+          "std": 0.13785965328219238,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "NDMI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109739,
+          "valid_fraction": 0.9986622499681488,
+          "min": -0.40909090638160706,
+          "max": 0.6070941090583801,
+          "mean": -0.12058383185998783,
+          "median": -0.18333840370178223,
+          "p05": -0.3041040986776352,
+          "p25": -0.25704890489578247,
+          "p75": -0.021465273573994637,
+          "p95": 0.25285859405994415,
+          "std": 0.18438509744640696,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        }
+      },
+      "scene_count": 1,
+      "extra": {
+        "grid": {
+          "crs": "EPSG:32721",
+          "res": 20.0,
+          "width": 329,
+          "height": 334,
+          "transform": [
+            20.0,
+            0.0,
+            648620.0,
+            0.0,
+            -20.0,
+            8598540.0
+          ]
+        },
+        "mask_summary": {
+          "profile": "B_restrictive",
+          "total_pixels": 109886,
+          "scl_masked_pixels": 147,
+          "nodata_masked_pixels": 0,
+          "kept_pixels": 109739,
+          "kept_fraction": 0.9986622499681488,
+          "scl_excluded_classes": [
+            0,
+            1,
+            2,
+            3,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        "tile_chosen": "MGRS-21LXG"
+      }
+    },
+    {
+      "month": "2025-08",
+      "status": "observed",
+      "reason": null,
+      "candidate_scenes": 1,
+      "item_id": "S2A_T21LXG_20250825T140106_L2A",
+      "datetime": "2025-08-25T14:06:11.192000Z",
+      "tile": "MGRS-21LXG",
+      "baseline": "05.11",
+      "cloud_cover": 0.001274,
+      "obstruction_fraction": 0.0005278197404582931,
+      "scl_profile": "A_historical",
+      "indices": {
+        "NDVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109761,
+          "valid_fraction": 0.9988624574559088,
+          "min": -0.24902990460395813,
+          "max": 0.8794371485710144,
+          "mean": 0.32911385526658327,
+          "median": 0.20320048928260803,
+          "p05": 0.16975601017475128,
+          "p25": 0.18696649372577667,
+          "p75": 0.28996387124061584,
+          "p95": 0.8028994798660278,
+          "std": 0.23209895863681135,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "EVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109761,
+          "valid_fraction": 0.9988624574559088,
+          "min": -0.07567770034074783,
+          "max": 0.911952018737793,
+          "mean": 0.23012459705985086,
+          "median": 0.14555080235004425,
+          "p05": 0.12049892544746399,
+          "p25": 0.13331755995750427,
+          "p75": 0.2015058845281601,
+          "p95": 0.5769140124320984,
+          "std": 0.16854721595394162,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "NDMI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109761,
+          "valid_fraction": 0.9988624574559088,
+          "min": -0.3636363744735718,
+          "max": 0.5915457010269165,
+          "mean": -0.10660355056831086,
+          "median": -0.18913628160953522,
+          "p05": -0.27641060948371887,
+          "p25": -0.24266357719898224,
+          "p75": -0.15921850502490997,
+          "p95": 0.35741907358169556,
+          "std": 0.21605976778338418,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        }
+      },
+      "scene_count": 1,
+      "extra": {
+        "grid": {
+          "crs": "EPSG:32721",
+          "res": 20.0,
+          "width": 329,
+          "height": 334,
+          "transform": [
+            20.0,
+            0.0,
+            648620.0,
+            0.0,
+            -20.0,
+            8598540.0
+          ]
+        },
+        "mask_summary": {
+          "profile": "B_restrictive",
+          "total_pixels": 109886,
+          "scl_masked_pixels": 125,
+          "nodata_masked_pixels": 0,
+          "kept_pixels": 109761,
+          "kept_fraction": 0.9988624574559088,
+          "scl_excluded_classes": [
+            0,
+            1,
+            2,
+            3,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        "tile_chosen": "MGRS-21LXG"
+      }
+    },
+    {
+      "month": "2025-09",
+      "status": "observed",
+      "reason": null,
+      "candidate_scenes": 1,
+      "item_id": "S2C_T21LXG_20250902T140110_L2A",
+      "datetime": "2025-09-02T14:06:14.674000Z",
+      "tile": "MGRS-21LXG",
+      "baseline": "05.11",
+      "cloud_cover": 1.094575,
+      "obstruction_fraction": 0.0002275085088182298,
+      "scl_profile": "A_historical",
+      "indices": {
+        "NDVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109805,
+          "valid_fraction": 0.999262872431429,
+          "min": -0.20160213112831116,
+          "max": 0.808998703956604,
+          "mean": 0.2818110432785235,
+          "median": 0.18988445401191711,
+          "p05": 0.15423243939876558,
+          "p25": 0.174371138215065,
+          "p75": 0.2589164078235626,
+          "p95": 0.6727725744247435,
+          "std": 0.17858039013503318,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "EVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109805,
+          "valid_fraction": 0.999262872431429,
+          "min": -0.09307326376438141,
+          "max": 0.7738257646560669,
+          "mean": 0.20815986298533562,
+          "median": 0.14258109033107758,
+          "p05": 0.1133812740445137,
+          "p25": 0.12874513864517212,
+          "p75": 0.19120284914970398,
+          "p95": 0.5028033375740049,
+          "std": 0.1349913068961396,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "NDMI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109805,
+          "valid_fraction": 0.999262872431429,
+          "min": -0.35324424505233765,
+          "max": 0.5328185558319092,
+          "mean": -0.13164129076801795,
+          "median": -0.2006409466266632,
+          "p05": -0.28788758516311647,
+          "p25": -0.253090500831604,
+          "p75": -0.16931982338428497,
+          "p95": 0.2812672734260559,
+          "std": 0.1913178938561644,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        }
+      },
+      "scene_count": 1,
+      "extra": {
+        "grid": {
+          "crs": "EPSG:32721",
+          "res": 20.0,
+          "width": 329,
+          "height": 334,
+          "transform": [
+            20.0,
+            0.0,
+            648620.0,
+            0.0,
+            -20.0,
+            8598540.0
+          ]
+        },
+        "mask_summary": {
+          "profile": "B_restrictive",
+          "total_pixels": 109886,
+          "scl_masked_pixels": 81,
+          "nodata_masked_pixels": 0,
+          "kept_pixels": 109805,
+          "kept_fraction": 0.999262872431429,
+          "scl_excluded_classes": [
+            0,
+            1,
+            2,
+            3,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        "tile_chosen": "MGRS-21LXG"
+      }
+    },
+    {
+      "month": "2025-10",
+      "status": "observed",
+      "reason": null,
+      "candidate_scenes": 1,
+      "item_id": "S2B_T21LXG_20251027T140153_L2A",
+      "datetime": "2025-10-27T14:05:55.939000Z",
+      "tile": "MGRS-21LXG",
+      "baseline": "05.11",
+      "cloud_cover": 21.253596,
+      "obstruction_fraction": 0.0004186156562255428,
+      "scl_profile": "A_historical",
+      "indices": {
+        "NDVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109768,
+          "valid_fraction": 0.998926159838378,
+          "min": -0.2729853391647339,
+          "max": 0.8567509055137634,
+          "mean": 0.43395154036690425,
+          "median": 0.3908025026321411,
+          "p05": 0.16631918922066688,
+          "p25": 0.23307021334767342,
+          "p75": 0.6034659743309021,
+          "p95": 0.7982174545526504,
+          "std": 0.21351864388498815,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "EVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109768,
+          "valid_fraction": 0.998926159838378,
+          "min": -0.12795305252075195,
+          "max": 0.7984554171562195,
+          "mean": 0.31826529302217926,
+          "median": 0.2861288785934448,
+          "p05": 0.11751053407788277,
+          "p25": 0.16000160947442055,
+          "p75": 0.4539719596505165,
+          "p95": 0.6004363596439362,
+          "std": 0.1627185125392602,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "NDMI": {
+          "total_pixels": 109886,
+          "valid_pixels": 109768,
+          "valid_fraction": 0.998926159838378,
+          "min": -0.3684120178222656,
+          "max": 0.41751086711883545,
+          "mean": -0.11705870939584216,
+          "median": -0.18527250736951828,
+          "p05": -0.31887200474739075,
+          "p25": -0.2803442031145096,
+          "p75": -0.023260854184627533,
+          "p95": 0.28938736319541924,
+          "std": 0.19991482870404517,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        }
+      },
+      "scene_count": 1,
+      "extra": {
+        "grid": {
+          "crs": "EPSG:32721",
+          "res": 20.0,
+          "width": 329,
+          "height": 334,
+          "transform": [
+            20.0,
+            0.0,
+            648620.0,
+            0.0,
+            -20.0,
+            8598540.0
+          ]
+        },
+        "mask_summary": {
+          "profile": "B_restrictive",
+          "total_pixels": 109886,
+          "scl_masked_pixels": 118,
+          "nodata_masked_pixels": 0,
+          "kept_pixels": 109768,
+          "kept_fraction": 0.998926159838378,
+          "scl_excluded_classes": [
+            0,
+            1,
+            2,
+            3,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        "tile_chosen": "MGRS-21LXG"
+      }
+    },
+    {
+      "month": "2025-11",
+      "status": "observed",
+      "reason": null,
+      "candidate_scenes": 1,
+      "item_id": "S2B_T21LXG_20251116T135658_L2A",
+      "datetime": "2025-11-16T14:05:52.675000Z",
+      "tile": "MGRS-21LXG",
+      "baseline": "05.11",
+      "cloud_cover": 34.795919,
+      "obstruction_fraction": 0.11479169320932603,
+      "scl_profile": "A_historical",
+      "indices": {
+        "NDVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 97217,
+          "valid_fraction": 0.8847077880712738,
+          "min": -0.167556032538414,
+          "max": 0.9167088866233826,
+          "mean": 0.7325297998890026,
+          "median": 0.8055148720741272,
+          "p05": 0.3735296308994293,
+          "p25": 0.607961893081665,
+          "p75": 0.8750953078269958,
+          "p95": 0.9050245523452759,
+          "std": 0.17952098772074263,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "EVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 97217,
+          "valid_fraction": 0.8847077880712738,
+          "min": -0.10278905183076859,
+          "max": 1.1515966653823853,
+          "mean": 0.6946390540634874,
+          "median": 0.713639497756958,
+          "p05": 0.2949881315231323,
+          "p25": 0.511149525642395,
+          "p75": 0.9185104370117188,
+          "p95": 0.9997760653495789,
+          "std": 0.234703146788712,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "NDMI": {
+          "total_pixels": 109886,
+          "valid_pixels": 97217,
+          "valid_fraction": 0.8847077880712738,
+          "min": -0.3249167501926422,
+          "max": 0.5421027541160583,
+          "mean": 0.1932153054401647,
+          "median": 0.2611895203590393,
+          "p05": -0.17478491365909576,
+          "p25": 0.05002578720450401,
+          "p75": 0.35209551453590393,
+          "p95": 0.400917786359787,
+          "std": 0.19189692347567888,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        }
+      },
+      "scene_count": 1,
+      "extra": {
+        "grid": {
+          "crs": "EPSG:32721",
+          "res": 20.0,
+          "width": 329,
+          "height": 334,
+          "transform": [
+            20.0,
+            0.0,
+            648620.0,
+            0.0,
+            -20.0,
+            8598540.0
+          ]
+        },
+        "mask_summary": {
+          "profile": "B_restrictive",
+          "total_pixels": 109886,
+          "scl_masked_pixels": 12669,
+          "nodata_masked_pixels": 0,
+          "kept_pixels": 97217,
+          "kept_fraction": 0.8847077880712738,
+          "scl_excluded_classes": [
+            0,
+            1,
+            2,
+            3,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        "tile_chosen": "MGRS-21LXG"
+      }
+    },
+    {
+      "month": "2025-12",
+      "status": "observed",
+      "reason": null,
+      "candidate_scenes": 1,
+      "item_id": "S2C_T21LXG_20251211T140459_L2A",
+      "datetime": "2025-12-11T14:06:04.931000Z",
+      "tile": "MGRS-21LXG",
+      "baseline": "05.11",
+      "cloud_cover": 52.131385,
+      "obstruction_fraction": 0.03965928325719382,
+      "scl_profile": "A_historical",
+      "indices": {
+        "NDVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 105499,
+          "valid_fraction": 0.960076806872577,
+          "min": 0.044470373541116714,
+          "max": 0.9461380243301392,
+          "mean": 0.8269934552936997,
+          "median": 0.876218318939209,
+          "p05": 0.568166184425354,
+          "p25": 0.770787388086319,
+          "p75": 0.9205915033817291,
+          "p95": 0.9350839734077453,
+          "std": 0.12295609813116257,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "EVI": {
+          "total_pixels": 109886,
+          "valid_pixels": 105499,
+          "valid_fraction": 0.960076806872577,
+          "min": 0.023684246465563774,
+          "max": 1.2926304340362549,
+          "mean": 0.7729854327155873,
+          "median": 0.8066210150718689,
+          "p05": 0.46530874669551847,
+          "p25": 0.6658442914485931,
+          "p75": 0.9070151448249817,
+          "p95": 0.9863832473754883,
+          "std": 0.16728540436130176,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        },
+        "NDMI": {
+          "total_pixels": 109886,
+          "valid_pixels": 105499,
+          "valid_fraction": 0.960076806872577,
+          "min": -0.29995813965797424,
+          "max": 0.5398275852203369,
+          "mean": 0.33760017228170325,
+          "median": 0.3587213456630707,
+          "p05": 0.2029997080564499,
+          "p25": 0.2916553169488907,
+          "p75": 0.3967363089323044,
+          "p95": 0.4257512032985687,
+          "std": 0.08135681845119391,
+          "out_of_range_pixels": 0,
+          "degenerate_pixels": 0
+        }
+      },
+      "scene_count": 1,
+      "extra": {
+        "grid": {
+          "crs": "EPSG:32721",
+          "res": 20.0,
+          "width": 329,
+          "height": 334,
+          "transform": [
+            20.0,
+            0.0,
+            648620.0,
+            0.0,
+            -20.0,
+            8598540.0
+          ]
+        },
+        "mask_summary": {
+          "profile": "B_restrictive",
+          "total_pixels": 109886,
+          "scl_masked_pixels": 4387,
+          "nodata_masked_pixels": 0,
+          "kept_pixels": 105499,
+          "kept_fraction": 0.960076806872577,
+          "scl_excluded_classes": [
+            0,
+            1,
+            2,
+            3,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        "tile_chosen": "MGRS-21LXG"
+      }
+    }
+  ],
+  "csv": "C:\\Users\\luanf\\OneDrive\\Área de Trabalho\\Saden_AgroClima\\geospatial\\reports\\timeseries_mensal_2023-01_2025-12.csv",
+  "preview": "C:\\Users\\luanf\\OneDrive\\Área de Trabalho\\Saden_AgroClima\\geospatial\\previews\\timeseries\\series_2023-01_2025-12.png",
+  "rasters_dir": "C:\\Users\\luanf\\OneDrive\\Área de Trabalho\\Saden_AgroClima\\geospatial\\artifacts\\timeseries",
+  "notes": [
+    "Meses sem observação permanecem vazios: nenhum valor foi interpolado, repetido ou preenchido.",
+    "A cobertura da AOI é total em todas as cenas processadas (o AOI está dentro do footprint do tile);-scenes parciais não entram.",
+    "Comparabilidade: mesma máscara, mesma grade e mesma conversão radiométrica em todos os meses; baselines 05.09/05.10/05.11 com scale 0.0001 e offset -0.1."
+  ]
+}

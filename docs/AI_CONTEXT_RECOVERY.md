@@ -50,7 +50,7 @@
   diferença absoluta média 0,00095 e correlação 0,99999. Decisão **D44**.
 - **E** — Série mensal 2023–2025 em andamento/executada; seleção por fração
   obstruída sobre a AOI e lacunas explícitas (decisão **D45**).
-- Suíte offline: **94/94** testes; testes de rede separados em
+- Suíte offline: **95/95** testes; testes de rede separados (4/4 OK, opt-in) em
   `geospatial/tests_external/` (opt-in por `SADEN_EXTERNAL_TESTS=1`).
 - Relatório técnico: `docs/V2_1_VALIDATION_REPORT.md`.
 

@@ -131,7 +131,7 @@ $env:SADEN_EXTERNAL_TESTS = "1"
 geospatial\.venv\Scripts\python.exe -m unittest discover -s geospatial\tests_external -t geospatial
 ```
 
-A suíte offline cobre: escala/offset e DN→reflectância, detecção de metadados
+A suíte offline (95/95) e a suíte externa (4/4, opt-in) cobrem: escala/offset e DN→reflectância, detecção de metadados
 ausentes/incompatíveis, bloqueio de baseline não suportado, nodata/NaN/inf e
 denominador degenerado, fórmulas NDVI/EVI/NDMI, perfis SCL A/B e contagem por
 classe, estatísticas com quantis p5/p25/p75/p95, alinhamento de grade,

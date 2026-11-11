@@ -544,7 +544,8 @@ Branch isolada `v2/geospatial-foundation`, derivada de `v1-final`. Sem merge em
 
 ### Não iniciado (exige decisão/escopo novo)
 
-- [ ] Janela temporal longa (2023–2025) e/ou segundo tile
+- [ ] Janela temporal longa (2023–2025) e/ou segundo tile → **feito na V2.1 de
+      validação** (ver seção seguinte)
 - [ ] Dados observados de produtividade (município não é talhão)
 - [ ] Avaliação de variáveis agronômicas na previsão de preço
 - [ ] Integração de índices ao produto/UI (proibida antes de revisão da PoC)
@@ -559,3 +560,52 @@ Branch isolada `v2/geospatial-foundation`, derivada de `v1-final`. Sem merge em
 
 Detalhes operacionais: `docs/V2_EXECUTION_STATUS.md`. Reprodução:
 `geospatial/README.md`.
+
+---
+
+## V2.1 — Validação geoespacial (2026-11-11, D42–D45)
+
+Branch isolada `v2/geospatial-validation`, derivada de `v2/geospatial-foundation`
+(`2e5b3ef`); checkpoint imutável da PoC na tag `v2-poc-sentinel2`; bundle de
+segurança verificado. Sem merge em `main`; V1 intocada.
+
+### Concluído e verificado
+
+- [x] **A** — PoC reexecutada em diretório separado: mesma grade (547×557,
+      `EPSG:32721`) e **delta 0,0** em todas as estatísticas vs. manifesto
+      anterior
+- [x] **A** — auditoria radiométrica item a item: `scale`/`offset` do metadado
+      STAC e do COG coincidem, `read()` devolve DN bruto, `uint16`, nodata 0;
+      baseline < 04.00 bloqueia o processamento
+- [x] **B** — perfis SCL A (histórico) × B (restritivo) comparados em 4 cenas
+      reais + diagnóstico por classe; efeito das classes 2 e 6 quantificado
+      (≤ 0,18% na média do NDVI); decisão **D43**
+- [x] **C** — limite municipal oficial do IBGE validado; interseção da bbox
+      histórica quantificada (0,51 km² fora do município); três AOIs
+      diferenciadas; custo do município inteiro estimado e não executado
+      (decisão **D42**)
+- [x] **D** — mosaico real de dois tiles do mesmo `datatake` (2023-06-20),
+      regra `first_valid_wins`, mapa de origem por pixel, diferença na
+      sobreposição quantificada (decisão **D44**)
+- [x] **E** — série mensal 2023–2025: 36 meses pesquisados, 34 observados,
+      2 lacunas justificadas e **não preenchidas**; seleção por qualidade sobre
+      a AOI (decisão **D45**)
+- [x] Testes sintéticos offline **94/94**; testes de rede separados e opt-in
+- [x] Manifestos, relatórios, prévias PNG e instruções de reprodução
+
+### Não iniciado (exige decisão/escopo novo)
+
+- [ ] **V2.2** — base observada de produtividade (IBGE/SIDRA, CONAB) compatível
+      com a AOI e com os indicadores Sentinel-2
+- [ ] **V2.3** — modelos de produtividade (só com dados observados e estratégia
+      de validação)
+- [ ] **V2.4** — integração ao Ridge, com Ridge como baseline obrigatório
+- [ ] Integração de índices ao produto/UI e mudanças no dashboard
+
+### Pendência externa
+
+- [!] GitHub Release `v1-final` (bloqueio de autenticação) — idem V2.1 anterior
+- [!] Push da branch de validação depende de credencial já existente no Git
+
+Relatório técnico: `docs/V2_1_VALIDATION_REPORT.md`. Decisões: `docs/DECISIONS.md`
+(D42–D45). Estado operacional: `docs/V2_EXECUTION_STATUS.md`.

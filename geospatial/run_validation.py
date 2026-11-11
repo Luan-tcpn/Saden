@@ -1143,7 +1143,7 @@ def cmd_timeseries(args: argparse.Namespace) -> dict[str, Any]:
                     "eo:cloud_cover é percentual do tile inteiro (0–100), não "
                     "fração; usado apenas como critério de desempate"
                 ),
-                "mask_profile": "A_historical",
+                "mask_profile": config.V2_1_SCL_PROFILE,
             },
             "monthly_search": monthly_search,
             "summary": summary,
