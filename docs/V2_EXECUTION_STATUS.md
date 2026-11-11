@@ -25,7 +25,8 @@ Relatório técnico: `docs/V2_1_VALIDATION_REPORT.md`.
 | `v1-final` | tag anotada → `3f7ad33` (intacta) |
 | `archive/v1-final` | `3f7ad33` (local e remoto) |
 | `v2/geospatial-foundation` | `2e5b3ef`, base da PoC |
-| `v2/geospatial-validation` | branch da missão (derivada da fundação) |
+| `v2/geospatial-validation` | branch da missão (derivada da fundação); commits `1c02c11`, `d5d2ffb`, `5f5cf70` |
+| Push da branch | **publicada** em `origin/v2/geospatial-validation` — SHA remoto `5f5cf70c521d9d40d17a8917a9a9084e39fc9bf9` (igual ao local), sem `--force`, sem merge em `main` |
 | Tag `v2-poc-sentinel2` | checkpoint imutável da PoC → `2e5b3ef` |
 | Bundle de segurança | `..\SADEN_V2_1_RECOVERY_2026-11-11\saden-v2-1-start-2026-11-11.bundle` (2.435.845 B, SHA-256 `74727C33…B1274`, verify OK) |
 | Código V1 alterado | **nenhum**; mudanças só em `geospatial/` e `docs/` |
@@ -180,9 +181,9 @@ Problemas reais encontrados e contornados:
 1. **GitHub Release `v1-final`**: bloqueado por falta de autenticação `gh`
    (sem token; login por navegador proibido). Notas prontas em
    `docs/releases/v1-final.md`. Tag, branches e bundle já verificados.
-2. **Push da branch de validação**: depende de autenticação já existente no
-   Git; se ausente, commits ficam locais e o comando pendente é
-   `git push -u origin v2/geospatial-validation` (sem `--force`).
+2. **Push da branch de validação**: **feito** — `origin/v2/geospatial-validation`
+   em `5f5cf70` (autenticação existente no Git; nenhum token impresso ou
+   versionado).
 3. **V2.2 (não iniciada)**: compatibilidade espacial/temporal de IBGE/SIDRA e
    CONAB com a AOI e com os indicadores Sentinel-2 — antes de qualquer
    modelagem.

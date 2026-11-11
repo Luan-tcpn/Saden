@@ -169,14 +169,25 @@ monitoramento. Express 4 com 3 moderadas (D10, body limit 256 kb).
 
 ## 11. Próxima etapa
 
-**V2.1 concluída** no escopo de pipeline (4 cenas, 4 datas). Estado operacional,
-números e pendências em `docs/V2_EXECUTION_STATUS.md`. A V2 **não** está
-integrada ao produto e não produz inferência agronômica/econômica.
+**V2.1 validada** no escopo geoespacial: checkpoints A–E executados com dados
+reais (reprodução bit a bit da PoC, auditoria radiométrica, comparação de
+máscaras SCL, geometria municipal oficial, mosaico real de dois tiles e série
+mensal 2023–2025 com lacunas honestas). Estado operacional, números e
+pendências em `docs/V2_EXECUTION_STATUS.md`; relatório técnico em
+`docs/V2_1_VALIDATION_REPORT.md`. A V2 **não** está integrada ao produto e não
+produz inferência agronômica/econômica.
 
-Próximas ações possíveis (nenhuma iniciada): ampliar janela temporal, buscar
-dados observados de produtividade, revisar a PoC com orientador. Qualquer
-reativação do AR ou outro challenger de preço continua exigindo decisão nova,
-reavaliação e testes próprios.
+Branch de validação publicada: `v2/geospatial-validation` (`5f5cf70`).
+
+Próxima ação única recomendada: **V2.2 — investigar a compatibilidade
+espacial/temporal de dados oficiais de produtividade (IBGE/SIDRA, CONAB) com a
+AOI de validação e com os indicadores Sentinel-2**, para construir a base
+observada antes de qualquer modelagem. As trilhas de robustez operacional da
+V1 (TLS, SMTP, backup, monitoramento) seguem como trilha independente de
+maior valor para produção.
+
+Qualquer reativação do AR ou outro challenger de preço continua exigindo
+decisão nova, reavaliação e testes próprios.
 
 Pendência externa: GitHub Release `v1-final` bloqueado por falta de
 autenticação `gh` (sem token e sem login por navegador). Notas prontas em
