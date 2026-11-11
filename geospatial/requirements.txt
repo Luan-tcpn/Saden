@@ -1,0 +1,9 @@
+# Dependências fixadas a partir do ambiente validado em 2026-11-11.
+# Python 3.12.10 (Windows). Instalação em venv isolado: geospatial/.venv
+pystac-client==0.9.1
+rasterio==1.4.3
+numpy==2.5.4
+matplotlib==3.11.2
+certifi==2026.10.23
+requests==2.34.2
+python-dateutil==4.0.0
