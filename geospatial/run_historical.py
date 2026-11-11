@@ -224,6 +224,16 @@ def cmd_series(args: argparse.Namespace) -> dict[str, Any]:
     """Constrói a série histórica mensal 2017–2025."""
     out_dir = ARTIFACTS_DIR
     os.makedirs(out_dir, exist_ok=True)
+    csv_path = os.path.join(PROCESSED_DIR, "sentinel2_historical_monthly.csv")
+    existing: list[dict[str, Any]] = []
+    skip: set[str] = set()
+    if args.resume and os.path.exists(csv_path):
+        existing = series_mod.read_monthly_csv(csv_path)
+        skip = {
+            str(r.get("month"))
+            for r in existing
+            if r.get("status") == "observed"
+        }
     result = series_mod.build_monthly_series(
         start=args.start,
         end=args.end,
@@ -232,11 +242,16 @@ def cmd_series(args: argparse.Namespace) -> dict[str, Any]:
         max_obstruction=args.max_obstruction,
         max_candidates=args.max_candidates,
         write_rasters=not args.no_rasters,
+        skip_months=skip,
     )
-    csv_path = os.path.join(PROCESSED_DIR, "sentinel2_historical_monthly.csv")
-    series_mod.write_monthly_csv(result["rows"], csv_path)
+    rows = result["rows"]
+    if skip:
+        previous = [r for r in existing if str(r.get("month")) not in
+                    {str(x.get("month")) for x in rows}]
+        rows = sorted(previous + rows, key=lambda r: str(r.get("month")))
+    series_mod.write_monthly_csv(rows, csv_path)
     manifest = series_mod.manifest_payload(
-        result["rows"], result["grid"], args.start, args.end
+        rows, result["grid"], args.start, args.end
     )
     manifest["csv"] = os.path.relpath(csv_path, HERE).replace("\\", "/")
     manifest["rasters_dir"] = os.path.relpath(out_dir, HERE).replace("\\", "/")
@@ -249,7 +264,7 @@ def cmd_series(args: argparse.Namespace) -> dict[str, Any]:
         "manifest": manifest_path,
         "months_observed": manifest["months_observed"],
         "months_missing": manifest["months_missing"],
-        "collections_used": manifest["collections_used"],
+        "catalogs_used": manifest["catalogs_used"],
         "baselines_used": manifest["baselines_used"],
         "profiles_used": manifest["profiles_used"],
     }
@@ -374,6 +389,7 @@ def cmd_study(args: argparse.Namespace) -> dict[str, Any]:
     )
     stats = study_mod.exploratory_stats(dataset, permutations=args.permutations)
     gate = study_mod.gate_evaluation(stats, minimum_pairs=args.minimum_pairs)
+    experiments = study_mod.walk_forward_experiments(dataset, min_train=args.min_train)
     payload = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "target": "IBGE/PAM rendimento médio municipal (kg/ha) — município 5107925",
@@ -387,6 +403,7 @@ def cmd_study(args: argparse.Namespace) -> dict[str, Any]:
         ),
         "statistics": stats,
         "gate": gate,
+        "experiments": experiments,
         "limitations": [
             "Escala espacial divergente: o alvo é municipal; o indicador é de uma AOI de 43,26 km².",
             "Não há identificação de cultura na AOI: os indicadores não são 'soja'/'milho'.",
@@ -414,6 +431,10 @@ def cmd_study(args: argparse.Namespace) -> dict[str, Any]:
             for crop, entry in stats["crops"].items()
         },
         "gate": gate,
+        "experiments": {
+            crop: entry.get("metrics")
+            for crop, entry in experiments.get("crops", {}).items()
+        },
     }
 
 
@@ -439,6 +460,11 @@ def main(argv: list[str] | None = None) -> int:
     p_ser.add_argument("--max-obstruction", type=float, default=0.5)
     p_ser.add_argument("--max-candidates", type=int, default=3)
     p_ser.add_argument("--no-rasters", action="store_true")
+    p_ser.add_argument(
+        "--resume",
+        action="store_true",
+        help="mantém os meses já observados e reprocessa apenas os faltantes",
+    )
     p_ser.set_defaults(func=cmd_series)
 
     p_lu = sub.add_parser("landuse", help="uso do solo na AOI (WorldCover)")
@@ -448,6 +474,7 @@ def main(argv: list[str] | None = None) -> int:
     p_st = sub.add_parser("study", help="conjunto pareado + estatísticas exploratórias")
     p_st.add_argument("--permutations", type=int, default=5000)
     p_st.add_argument("--minimum-pairs", type=int, default=9)
+    p_st.add_argument("--min-train", type=int, default=5)
     p_st.set_defaults(func=cmd_study)
 
     args = parser.parse_args(argv)

@@ -196,6 +196,25 @@ estão também em `geospatial/README.md`. Não há conclusão agronômica: os
 
 Relatório: `geospatial/reports/V2_2_PRODUCTIVITY_DATA_COMPATIBILITY.md`.
 
+### 10.4 V2.3 — estudo exploratório municipal (branch `v2/agricultural-productivity-exploratory`)
+
+- **Branch:** derivada de `v2/agricultural-productivity-data` (`775d57b`); V1,
+  V2.1 e V2.2 intocadas; bundle da V2.3 verificado.
+- **Harmonização radiométrica (D50):** C1 e coleção original são
+  **numericamente idênticas** com as conveções de DN corretas — 6 pares de
+  datas (2018–2025) com diferença de NDVI **0,0** e correlação **1,0**. O
+  pipeline da V2.1 permanece intacto (perfil histórico separado).
+- **Série histórica 2017–2025** na grade da V2.1 (20 m, Perfil B, seleção por
+  obstrução, lacunas preservadas).
+- **Uso do solo (D51):** MapBiomas **bloqueado** (download suspenso; via GEE);
+  ESA WorldCover adquirido → AOI **77,6% (2020) / 81,2% (2021)** de lavoura.
+- **Calendário (D52):** SISZARC sem DNS; nenhuma janela fenológica inventada;
+  agregação por ano civil com ressalva.
+- **Portão (D53):** modelagem exploratória só com **≥ 9 pares anuais por
+  cultura**; abaixo disso, descrição e correlação exploratória.
+- Testes: **165/165** offline. Relatório:
+  `geospatial/reports/V2_3_EXPLORATORY_PRODUCTIVITY_STUDY.md`.
+
 ## 11. Próximos passos propostos (não iniciados)
 
 1. Revisar a V2.1 com orientador antes de ampliar escopo.

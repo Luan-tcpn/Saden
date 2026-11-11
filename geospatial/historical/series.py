@@ -229,6 +229,12 @@ def collect_candidates(
         return []
     candidates: list[dict[str, Any]] = []
     for item in items:
+        identifier = str(item.id)
+        if "_MSIL2A_" in identifier or "_MSIL1C_" in identifier:
+            # itens com nomenclatura ESA no catálogo original apontam para
+            # objetos que falham (HTTP 409) e duplicam as mesmas aquisições
+            # já presentes na coleção C1 e na nomenclatura Sentinel Hub.
+            continue
         if pcatalog.tile_code(item) != TILE:
             continue
         if not covers(item, bbox):
@@ -259,12 +265,15 @@ def build_monthly_series(
     sources: Iterable[tuple[str, str, bool]] | None = None,
     write_rasters: bool = True,
     progress: bool = True,
+    skip_months: Iterable[str] = (),
 ) -> dict[str, Any]:
     """Processa mês a mês e devolve as linhas da série histórica.
 
     ``sources`` = [(coleção, rótulo do catálogo, metadado declarado?)]. Por
     padrão: Collection 1 (Earth Search) e originais (Planetary Computer).
+    ``skip_months`` permite retomar uma série já processada.
     """
+    skip = set(skip_months)
     network.configure_tls()
     from pystac_client import Client
 
@@ -285,22 +294,45 @@ def build_monthly_series(
         os.makedirs(rasters_dir, exist_ok=True)
 
     for month in months:
+        if month in skip:
+            if progress:
+                print(f"[{month}] já processado — mantido")
+            continue
         pool: list[dict[str, Any]] = []
         for collection, label, declared in sources:
-            client = earth if collection == radio.COLLECTION_C1 else pc
-            coll_name = collection if collection != "pc" else pcatalog.COLLECTION
+            if collection == "pc":
+                client, coll_name = pc, pcatalog.COLLECTION
+            else:
+                client, coll_name = earth, collection
             pool.extend(
                 collect_candidates(
                     client, coll_name, bbox, month, label, declared_metadata=declared
                 )
             )
-        # ordena por nuvem do tile (para limitar quantas são avaliadas)
-        pool.sort(
+        # ordena por nuvem do tile (para limitar quantas são avaliadas) e
+        # intercala as coleções: a C1 tem lacunas de ingestão e não deve
+        # excluir a coleção original das vagas de avaliação.
+        by_collection: dict[str, list[dict[str, Any]]] = {}
+        for candidate in sorted(
+            pool,
             key=lambda c: (
                 float(c["cloud_cover"]) if c["cloud_cover"] is not None else 999.0,
                 c["item_id"],
-            )
-        )
+            ),
+        ):
+            by_collection.setdefault(candidate["collection"], []).append(candidate)
+        interleaved: list[dict[str, Any]] = []
+        index = 0
+        while any(by_collection.values()):
+            for collection in list(by_collection):
+                bucket = by_collection[collection]
+                if bucket:
+                    interleaved.append(bucket.pop(0))
+            index += 1
+            if index > 200:
+                break
+        pool = interleaved
+
         scored: list[dict[str, Any]] = []
         for candidate in pool[:max_candidates]:
             hrefs = _candidate_hrefs(candidate["item"], candidate["collection"])

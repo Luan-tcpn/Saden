@@ -85,8 +85,30 @@
   municipal/estadual; a V2.3 só deve avançar como estudo exploratório
   municipal, com n ≥ 10 anos (ampliar a série Sentinel-2) e calendário validado.
 
-## 2. Escopo congelado da V1 (D40)
+### V2.3 estudo exploratório municipal (branch `v2/agricultural-productivity-exploratory`)
 
+- Branch nova derivada de `v2/agricultural-productivity-data` (`775d57b`);
+  V1 e V2.1/V2.2 intocadas; bundle da V2.3 verificado.
+- **Harmonização radiométrica (D50)**: a coleção C1 (harmonizada pela ESA) e a
+  coleção original do Earth Search são **numericamente idênticas** quando cada
+  uma usa a sua convenção de DN (C1: `DN*1e-4 − 0,1`; original: `DN*1e-4`) —
+  verificado em 6 pares de datas (2018–2025): diferença de NDVI **0,0**,
+  correlação **1,0**. O offset declarado no catálogo original é inconsistente
+  com o DN armazenado (1000 unidades) e foi **medido**, não assumido.
+- **Série histórica** 2017–2025 na grade da V2.1 (20 m, `EPSG:32721`, Perfil B,
+  seleção por obstrução, lacunas preservadas) — o pipeline da V2.1 **não** foi
+  alterado (perfil separado em `geospatial/historical/`).
+- **Uso do solo (D51)**: MapBiomas **bloqueado** (download oficial suspenso;
+  via GEE, requer conta); **ESA WorldCover** adquirido → a AOI é
+  **77,6% (2020) e 81,2% (2021) de lavoura** (classe oficial 40).
+- **Calendário (D52)**: SISZARC/MAPA sem DNS; CONAB/Embrapa sem arquivo
+  acessível → **nenhuma janela fenológica foi inventada**; agregação por ano
+  civil com a ressalva declarada.
+- **Portão (D53)**: modelagem exploratória exige **≥ 9 pares anuais por
+  cultura**; abaixo disso, só descrição e correlação exploratória.
+- Testes: **165/165** offline.
+
+## 2. Escopo congelado da V1 (D40)
 - **Previsão = Ridge única** (pipeline, split 70/15/15, baselines, λ por
   validação e métricas inalterados).
 - `?model=ridge` é **alias legado**; qualquer outro valor (`ar`, `AR`, `arima`,
@@ -171,12 +193,14 @@ renomeado nem reinterpretado. Leitura de `model_runs` não existe em produção.
 
 ## 8. Decisões
 
-- `docs/DECISIONS.md`: **D1–D49** (D40 = congelamento V1 e retirada do AR;
+- `docs/DECISIONS.md`: **D1–D53** (D40 = congelamento V1 e retirada do AR;
   D41 = V2 isolada e escopo da PoC Sentinel-2; D42 = geometrias separadas e
   limite municipal oficial; D43 = política de máscara SCL; D44 = regra de
   mosaico e par de tiles por datatake; D45 = seleção mensal da série 2023–2025;
   D46 = fonte de referência (IBGE/PAM); D47 = classes de compatibilidade
-  espacial A/B/C; D48 = licenciamento (CONAB fora do Git); D49 = culturas-piloto).
+  espacial A/B/C; D48 = licenciamento (CONAB fora do Git); D49 = culturas-piloto;
+  D50 = perfil radiométrico histórico; D51 = uso do solo (WorldCover,
+  MapBiomas bloqueado); D52 = calendário não validado; D53 = portão estatístico).
 - D38/D39 são registros históricos superados por D40, preservados.
 - Segunda opinião (arquivo externo, 940 linhas): fonte de hipóteses, NÃO
   especificação. MAPE futuro (8–10%, 6–8%) é hipótese, nunca resultado.

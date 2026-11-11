@@ -146,3 +146,19 @@ Relatório técnico: `docs/V2_1_VALIDATION_REPORT.md`.
 
 Relatório: `geospatial/reports/V2_2_PRODUCTIVITY_DATA_COMPATIBILITY.md`.
 Veredito do portão: **CAMINHO 2** (dados reais, escala municipal/estadual).
+
+## V2.3 estudo exploratório municipal — branch `v2/agricultural-productivity-exploratory` (2026-11-11, D50–D53)
+
+| Item | Estado | Evidência |
+|---|---|---|
+| Série Sentinel-2 histórica | DONE | 2017–2025 na grade da V2.1 (20 m, Perfil B, seleção por obstrução, lacunas preservadas) |
+| Harmonização radiométrica | DONE | C1 × original: diferença de NDVI **0,0**, correlação **1,0** em 6 pares (2018–2025) — D50 |
+| Uso do solo na AOI | PARTIAL | MapBiomas **bloqueado** (download suspenso; via GEE); ESA WorldCover → **77,6% (2020) / 81,2% (2021)** de lavoura — D51 |
+| Calendário fenológico | BLOCKED | SISZARC/MAPA sem DNS; nenhuma janela inventada; agregação por ano civil — D52 |
+| Rendimento-alvo | DONE | IBGE/PAM `rendimento_medio_kg_ha` (kg/ha), soja e milho, valores originais preservados |
+| Conjunto pareado + estatísticas | DONE | `geospatial/data/processed/productivity_exploratory_dataset.csv` + p-valor por permutação e teste de tendência |
+| Modelagem exploratória | CONDITIONAL | portão D53: **≥ 9 pares anuais por cultura**; abaixo disso, apenas descrição e correlação exploratória |
+| Testes | DONE | **165/165** offline (70 novos da V2.3) |
+| Integração ao produto/Ridge | NOT_STARTED | fora de escopo; requer aprovação do portão |
+
+Relatório: `geospatial/reports/V2_3_EXPLORATORY_PRODUCTIVITY_STUDY.md`.

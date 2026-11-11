@@ -1,24 +1,21 @@
 # SADEN V2 — estado de execução (memória operacional)
 
-> Atualizado em **2026-11-11**. Branch de trabalho: `v2/agricultural-productivity-data`
-> (derivada de `v2/geospatial-validation` / `e1d7f30`). A V1 permanece
+> Atualizado em **2026-11-11**. Branch de trabalho: `v2/agricultural-productivity-exploratory`
+> (derivada de `v2/agricultural-productivity-data` / `775d57b`). A V1 permanece
 > congelada: `main`, `v1-final` e `archive/v1-final` continuam em `3f7ad33`.
 > Relatório técnico da validação V2.1: `docs/V2_1_VALIDATION_REPORT.md`.
 > Relatório técnico da V2.2: `geospatial/reports/V2_2_PRODUCTIVITY_DATA_COMPATIBILITY.md`.
-> Plano: `docs/V2_1_VALIDATION_PLAN.md`. Decisões: `docs/DECISIONS.md` (D42–D49).
+> Relatório técnico da V2.3: `geospatial/reports/V2_3_EXPLORATORY_PRODUCTIVITY_STUDY.md`.
+> Plano: `docs/V2_1_VALIDATION_PLAN.md`. Decisões: `docs/DECISIONS.md` (D42–D53).
 
 ## 1. Etapa atual
 
-**V2.2 — base observada de produtividade agrícola executada** na branch
-`v2/agricultural-productivity-data`: aquisição real de dados oficiais
-(IBGE/SIDRA PAM e CONAB), normalização, validação de qualidade, crosswalk de
-culturas e classificação de compatibilidade espacial/temporal com o Sentinel-2
-da V2.1. Sem integração ao produto, sem modelo, sem alteração na V1.
-
-Veredito do portão de decisão: **CAMINHO 2** — existem dados oficiais reais e
-de qualidade verificada, mas **apenas em escala municipal (IBGE)** ou
-estadual (CONAB); não há observação oficial na escala da AOI (43,26 km² =
-0,4654% do município de Sorriso).
+**V2.3 — estudo exploratório municipal de produtividade, em execução** na
+branch `v2/agricultural-productivity-exploratory`: harmonização radiométrica
+histórica (2017–2025) comprovada, uso do solo da AOI quantificado, conjunto
+temporariamente pareado com o rendimento do IBGE/PAM e estatísticas
+exploratórias sob portão amostral explícito. Sem integração ao produto, sem
+modelo em produção, sem alteração na V1.
 
 ## 2. Fronteira V1 × V2
 
@@ -227,10 +224,33 @@ referencia pluma); **café e trigo descartados** (produção municipal zero).
 Testes: **137/137 offline** (95 da V2.1 + 42 novos) e **10/10 externos**
 (opt-in). Relatório: `geospatial/reports/V2_2_PRODUCTIVITY_DATA_COMPATIBILITY.md`.
 
+## 13. Checkpoint V2.3 — estudo exploratório municipal (D50–D53)
+
+Branch: `v2/agricultural-productivity-exploratory` (derivada de
+`v2/agricultural-productivity-data` / `775d57b`); bundle da V2.3 em
+`..\SADEN_V2_3_RECOVERY_2026-11-11\saden-v2-3-start-2026-11-11.bundle`
+(3.718.796 B, SHA-256 `C3449A62…5B69`, verify OK).
+
+| Item | Estado | Evidência |
+|---|---|---|
+| Inventário histórico Sentinel-2 | DONE | C1: 954 assets 2017–2025, `scale=0.0001`/`offset=-0.1` uniformes; original: 1.733 itens 2017–2025; lacunas de ingestão da C1 (2017: 1 data; 2022: 5 datas) |
+| Harmonização radiométrica | DONE | experimento pareado C1 × original em 6 datas (2018–2025): diferença de NDVI **0,0** e correlação **1,0** (D50) |
+| Uso do solo na AOI | PARCIAL | MapBiomas **bloqueado** (download suspenso; via GEE); WorldCover (ESA) adquirido: **77,6%** (2020) e **81,2%** (2021) de lavoura na AOI (D51) |
+| Calendário fenológico | BLOQUEADO | SISZARC/MAPA sem DNS; página de safras da CONAB sem arquivo; Embrapa 404 → agregação por ano civil, sem janelas inventadas (D52) |
+| Rendimento-alvo | DONE | IBGE/PAM `rendimento_medio_kg_ha` (kg/ha) para soja (40124) e milho (40122), preservando valor/unidade originais |
+| Portão estatístico | D53 | modelagem exploratória exige **≥ 9 pares anuais por cultura**; abaixo disso, apenas descrição e correlação exploratória |
+| Série histórica | DONE | **101/108 meses** observados (9 anos completos: 2017–2025); perfis C1 (69) e original (32); baselines 00.01–05.11 |
+| Uso do solo | PARCIAL | MapBiomas **bloqueado** (download suspenso; via GEE); WorldCover (ESA): **77,6% (2020) / 81,2% (2021)** de lavoura na AOI (D51) |
+| Conjunto pareado | DONE | 26 registros (13 anos × 2 culturas); **18 pareados e utilizáveis** (2017–2025, n = 9 por cultura) |
+| Correlação exploratória | DONE | soja: r = 0,432, ρ = 0,134, **p = 0,246**; milho: r = 0,200, ρ = 0,067, **p = 0,610** (permutação, 5.000×) |
+| Experimento temporal | DONE | walk-forward (4 previsões/modelo): regressão com NDVI **não** supera os baselines (soja MAE 368 vs 254 kg/ha; milho 955 vs 684) |
+| Veredito | **CAMINHO B** | estudo executável com ressalvas; **sem** modelo preditivo validado e **sem** base para integrar ao Ridge |
+| Testes | DONE | **165/165** offline (70 novos da V2.3) |
+
 ## 14. Comandos de retomada
 
 ```powershell
-git switch v2/agricultural-productivity-data
+git switch v2/agricultural-productivity-exploratory
 geospatial\.venv\Scripts\python.exe -m unittest discover -s geospatial\tests -t geospatial
 geospatial\.venv\Scripts\python.exe geospatial\run_validation.py geometry
 geospatial\.venv\Scripts\python.exe geospatial\run_validation.py mosaic
@@ -242,6 +262,12 @@ geospatial\.venv\Scripts\python.exe geospatial\run_productivity.py acquire --yea
 geospatial\.venv\Scripts\python.exe geospatial\run_productivity.py normalize
 geospatial\.venv\Scripts\python.exe geospatial\run_productivity.py validate
 geospatial\.venv\Scripts\python.exe geospatial\run_productivity.py compat
+
+# V2.3 — estudo exploratório municipal
+geospatial\.venv\Scripts\python.exe geospatial\run_historical.py radiometry
+geospatial\.venv\Scripts\python.exe geospatial\run_historical.py series --start 2017-01 --end 2025-12
+geospatial\.venv\Scripts\python.exe geospatial\run_historical.py landuse --years 2020 2021
+geospatial\.venv\Scripts\python.exe geospatial\run_historical.py study
 ```
 
 Antes de qualquer coisa em nova sessão: ler este arquivo,

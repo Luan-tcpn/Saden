@@ -103,14 +103,23 @@ def covers(item: Any, bbox: list[float], tol: float = 1e-6) -> bool:
     )
 
 
+_MGRS_IN_ID = None
+
+
 def tile_code(item: Any) -> str | None:
-    """Código MGRS do item (o PC usa 'MGRS-21LXG')."""
+    """Código MGRS do item.
+
+    O catálogo usa duas convenções de identificador:
+    ``S2B_T21LXG_20210630T140053_L2A`` (ESA) e
+    ``S2B_21LXG_20210630_1_L2A`` (Sentinel Hub). Ambas são reconhecidas.
+    """
+    import re
+
     code = item.properties.get("grid:code")
     if code:
         return str(code)
     identifier = str(item.id)
-    if "_T21LXG" in identifier:
-        return "MGRS-21LXG"
-    if "_T21LXF" in identifier:
-        return "MGRS-21LXF"
+    match = re.search(r"_(?:T)?(\d{2}[A-Z]{3})_", identifier)
+    if match:
+        return f"MGRS-{match.group(1)}"
     return None

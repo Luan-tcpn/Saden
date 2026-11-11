@@ -359,6 +359,101 @@ def gate_evaluation(stats: dict[str, Any], minimum_pairs: int = 9) -> dict[str, 
     }
 
 
+def walk_forward_experiments(
+    dataset: Sequence[dict[str, Any]],
+    min_train: int = 5,
+) -> dict[str, Any]:
+    """Experimentos exploratórios com validação temporal progressiva.
+
+    Modelos (todos simples, nenhum altera o produto):
+    ``media_historica`` (média do treino), ``ultimo_valor``, ``tendencia``
+    (regressão linear no tempo) e ``ols_com_ndvi`` (rendimento ~ 1 + NDVI).
+
+    A divisão é **temporal**: para cada ano de teste, o treino usa apenas anos
+    anteriores. Nenhuma divisão aleatória é usada.
+    """
+    out: dict[str, Any] = {"crops": {}, "protocol": {
+        "validation": "expanding window (walk-forward), ordem cronológica",
+        "min_train_years": min_train,
+        "models": ["media_historica", "ultimo_valor", "tendencia", "ols_com_ndvi"],
+        "note": (
+            "Métricas indicativas: com poucos pontos de teste, não sustentam "
+            "capacidade preditiva generalizável."
+        ),
+    }}
+    for crop_key in PILOT_CROPS:
+        usable = sorted(
+            (
+                r
+                for r in dataset
+                if r["crop"] == crop_key and r["status"] == "paired_usable"
+            ),
+            key=lambda r: r["year"],
+        )
+        if len(usable) < min_train + 1:
+            out["crops"][crop_key] = {
+                "status": "insufficient_pairs",
+                "n_pairs": len(usable),
+                "min_train_years": min_train,
+            }
+            continue
+        predictions: dict[str, list[dict[str, Any]]] = {
+            m: [] for m in ("media_historica", "ultimo_valor", "tendencia", "ols_com_ndvi")
+        }
+        for index in range(min_train, len(usable)):
+            train = usable[:index]
+            test = usable[index]
+            years = [float(r["year"]) for r in train]
+            yields = [float(r["yield_kg_ha"]) for r in train]
+            ndvi = [float(r["ndvi_aoi_mean"]) for r in train]
+            target = float(test["yield_kg_ha"])
+            models = {
+                "media_historica": sum(yields) / len(yields),
+                "ultimo_valor": yields[-1],
+            }
+            if len(set(years)) > 1:
+                slope, intercept = np.polyfit(years, yields, 1)
+                models["tendencia"] = slope * float(test["year"]) + intercept
+            else:  # pragma: no cover - sequência mínima
+                models["tendencia"] = yields[-1]
+            if len(set(ndvi)) > 1:
+                slope, intercept = np.polyfit(ndvi, yields, 1)
+                models["ols_com_ndvi"] = slope * float(test["ndvi_aoi_mean"]) + intercept
+            else:  # pragma: no cover
+                models["ols_com_ndvi"] = yields[-1]
+            for name, prediction in models.items():
+                predictions[name].append(
+                    {
+                        "year": test["year"],
+                        "predicted": float(prediction),
+                        "observed": target,
+                        "error": float(prediction - target),
+                    }
+                )
+        metrics = {}
+        for name, rows in predictions.items():
+            if not rows:
+                continue
+            errors = [r["error"] for r in rows]
+            observed = [r["observed"] for r in rows]
+            metrics[name] = {
+                "n_predictions": len(rows),
+                "mae_kg_ha": float(np.mean(np.abs(errors))),
+                "rmse_kg_ha": float(np.sqrt(np.mean(np.square(errors)))),
+                "mape_percent": float(
+                    np.mean([abs(e / o) for e, o in zip(errors, observed)]) * 100.0
+                ),
+                "years": [r["year"] for r in rows],
+            }
+        out["crops"][crop_key] = {
+            "status": "ok",
+            "n_pairs": len(usable),
+            "metrics": metrics,
+            "predictions": predictions,
+        }
+    return out
+
+
 def write_dataset_csv(rows: Sequence[dict[str, Any]], path: str) -> str:
     if not rows:
         return path

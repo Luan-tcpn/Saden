@@ -673,3 +673,56 @@ intocadas; sem alteração no produto.
 
 Antes de modelar, revisar o relatório da V2.2 com o orientador e decidir se o
 escopo municipal exploratório responde à pergunta do TCC.
+
+---
+
+## V2.3 — Estudo exploratório municipal de produtividade (2026-11-11, D50–D53)
+
+Branch isolada `v2/agricultural-productivity-exploratory`, derivada de
+`v2/agricultural-productivity-data` (`775d57b`). Sem merge em `main`; V1,
+V2.1 e V2.2 intocadas.
+
+### Concluído e verificado
+
+- [x] **Inventário do arquivo histórico** Sentinel-2 (2017–2025): C1 harmonizada
+      (954 assets, `scale/offset` uniformes) e coleção original (1.733 itens),
+      com lacunas de ingestão documentadas
+- [x] **Experimento radiométrico** pareado (6 datas, 2018–2025): diferença de
+      NDVI **0,0** e correlação **1,0** entre as duas coleções — equivalência
+      comprovada, sem transformações inventadas (D50)
+- [x] **Série histórica 2017–2025** na grade da V2.1 (20 m, `EPSG:32721`,
+      Perfil B, seleção por obstrução, lacunas preservadas); pipeline da V2.1
+      **intacto** (perfil separado)
+- [x] **Uso do solo da AOI** quantificado com ESA WorldCover (10 m, classe
+      oficial 40): **77,6% (2020)** e **81,2% (2021)** de lavoura; bloqueio do
+      MapBiomas registrado com evidência (D51)
+- [x] **Rendimento-alvo** normalizado em kg/ha (IBGE/PAM 5457, soja 40124 e
+      milho 40122), com valores e unidades originais preservados
+- [x] **Calendário**: SISZARC/MAPA sem DNS e sem fonte alternativa acessível →
+      **nenhuma janela fenológica inventada**; agregação por ano civil com
+      ressalva declarada (D52)
+- [x] **Conjunto temporariamente pareado** + estatísticas exploratórias com
+      p-valor por permutação e teste de tendência (resíduos) (D53)
+- [x] **Testes** — 165/165 offline (70 novos da V2.3)
+
+### Portão de decisão
+
+- [x] **Veredito registrado** após a execução: ver
+      `geospatial/reports/V2_3_EXPLORATORY_PRODUCTIVITY_STUDY.md`
+
+### Não iniciado (exige decisão/escopo novo)
+
+- [ ] Modelagem exploratória (só se o portão D53 for atendido): baselines
+      simples + regressão com o indicador, validação temporal progressiva
+- [ ] Identificação de cultura na AOI (exige classificador validado; SCL 5 e
+      WorldCover não identificam soja/milho)
+- [ ] Calendário oficial (nova tentativa com acesso ao SISZARC/Embrapa)
+- [ ] **V2.4** — integração ao Ridge, com Ridge como baseline obrigatório
+
+### Pendências
+
+- [!] Licenciamento: Sentinel-2 (`proprietary` × “free, full and open”) e
+      termos da CONAB ainda abertos (D48)
+- [!] Escala espacial mais fina que a municipal para a AOI: inexistente nas
+      fontes oficiais investigate
+- [!] GitHub Release `v1-final` (bloqueio de autenticação)

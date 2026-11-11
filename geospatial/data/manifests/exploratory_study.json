@@ -1,0 +1,421 @@
+{
+  "generated_at": "2026-11-11T21:02:30.251964+00:00",
+  "target": "IBGE/PAM rendimento médio municipal (kg/ha) — município 5107925",
+  "indicator": "NDVI da AOI de validação (sub-região, 0,4654% do município)",
+  "dataset_csv": "data/processed/productivity_exploratory_dataset.csv",
+  "records": 26,
+  "paired_usable": 18,
+  "excluded": 8,
+  "exclusion_reasons": [
+    "sem observacao Sentinel-2 no ano"
+  ],
+  "statistics": {
+    "crops": {
+      "soja": {
+        "n_pairs": 9,
+        "years": [
+          "2017",
+          "2018",
+          "2019",
+          "2020",
+          "2021",
+          "2022",
+          "2023",
+          "2024",
+          "2025"
+        ],
+        "yield_kg_ha_mean": 3666.6666666666665,
+        "yield_kg_ha_min": 3360.0,
+        "yield_kg_ha_max": 4260.0,
+        "ndvi_aoi_mean": 0.4955661252697573,
+        "ndvi_aoi_min": 0.4312319321675297,
+        "ndvi_aoi_max": 0.5419437650526177,
+        "pearson_r": 0.43184281258239865,
+        "spearman_rho": 0.13445852909056286,
+        "permutation_p": 0.2455508898220356,
+        "yield_trend_per_year": 41.499999999997996,
+        "ndvi_trend_per_year": -0.002537510905082519,
+        "pearson_r_detrended": 0.583727663389649
+      },
+      "milho": {
+        "n_pairs": 9,
+        "years": [
+          "2017",
+          "2018",
+          "2019",
+          "2020",
+          "2021",
+          "2022",
+          "2023",
+          "2024",
+          "2025"
+        ],
+        "yield_kg_ha_mean": 7009.0,
+        "yield_kg_ha_min": 5666.0,
+        "yield_kg_ha_max": 8400.0,
+        "ndvi_aoi_mean": 0.4955661252697573,
+        "ndvi_aoi_min": 0.4312319321675297,
+        "ndvi_aoi_max": 0.5419437650526177,
+        "pearson_r": 0.2003491250747168,
+        "spearman_rho": 0.06666666666666667,
+        "permutation_p": 0.609878024395121,
+        "yield_trend_per_year": 128.23333333332528,
+        "ndvi_trend_per_year": -0.002537510905082519,
+        "pearson_r_detrended": 0.3542442055432821
+      }
+    },
+    "notes": [
+      "Correlações exploratórias: n reduzido, Spatial scale mismatch (rendimento municipal x NDVI de uma sub-região de 0,4654% do município) e ausência de controle de tendências e de outras lavouras."
+    ]
+  },
+  "gate": {
+    "minimum_pairs_required": 9,
+    "per_crop_meets_minimum": {
+      "soja": true,
+      "milho": true
+    },
+    "modeling_gate_open": true,
+    "note": "Com menos de 9 pares anuais por cultura, a modelagem exploratória não é executada (critério definido na V2.2/V2.3)."
+  },
+  "experiments": {
+    "crops": {
+      "soja": {
+        "status": "ok",
+        "n_pairs": 9,
+        "metrics": {
+          "media_historica": {
+            "n_predictions": 4,
+            "mae_kg_ha": 253.7678571428571,
+            "rmse_kg_ha": 350.79476273346,
+            "mape_percent": 6.322254773527194,
+            "years": [
+              "2022",
+              "2023",
+              "2024",
+              "2025"
+            ]
+          },
+          "ultimo_valor": {
+            "n_predictions": 4,
+            "mae_kg_ha": 360.0,
+            "rmse_kg_ha": 435.25854385640724,
+            "mape_percent": 9.188306401824153,
+            "years": [
+              "2022",
+              "2023",
+              "2024",
+              "2025"
+            ]
+          },
+          "tendencia": {
+            "n_predictions": 4,
+            "mae_kg_ha": 272.73214285714084,
+            "rmse_kg_ha": 368.93100711407817,
+            "mape_percent": 6.8218494779312255,
+            "years": [
+              "2022",
+              "2023",
+              "2024",
+              "2025"
+            ]
+          },
+          "ols_com_ndvi": {
+            "n_predictions": 4,
+            "mae_kg_ha": 368.2281218791593,
+            "rmse_kg_ha": 430.3990945941954,
+            "mape_percent": 9.560701757723777,
+            "years": [
+              "2022",
+              "2023",
+              "2024",
+              "2025"
+            ]
+          }
+        },
+        "predictions": {
+          "media_historica": [
+            {
+              "year": "2022",
+              "predicted": 3594.0,
+              "observed": 3540.0,
+              "error": 54.0
+            },
+            {
+              "year": "2023",
+              "predicted": 3585.0,
+              "observed": 3750.0,
+              "error": -165.0
+            },
+            {
+              "year": "2024",
+              "predicted": 3608.5714285714284,
+              "observed": 3480.0,
+              "error": 128.57142857142844
+            },
+            {
+              "year": "2025",
+              "predicted": 3592.5,
+              "observed": 4260.0,
+              "error": -667.5
+            }
+          ],
+          "ultimo_valor": [
+            {
+              "year": "2022",
+              "predicted": 3360.0,
+              "observed": 3540.0,
+              "error": -180.0
+            },
+            {
+              "year": "2023",
+              "predicted": 3540.0,
+              "observed": 3750.0,
+              "error": -210.0
+            },
+            {
+              "year": "2024",
+              "predicted": 3750.0,
+              "observed": 3480.0,
+              "error": 270.0
+            },
+            {
+              "year": "2025",
+              "predicted": 3480.0,
+              "observed": 4260.0,
+              "error": -780.0
+            }
+          ],
+          "tendencia": [
+            {
+              "year": "2022",
+              "predicted": 3566.9999999999527,
+              "observed": 3540.0,
+              "error": 26.999999999952706
+            },
+            {
+              "year": "2023",
+              "predicted": 3539.999999999978,
+              "observed": 3750.0,
+              "error": -210.00000000002183
+            },
+            {
+              "year": "2024",
+              "predicted": 3647.1428571428714,
+              "observed": 3480.0,
+              "error": 167.14285714287143
+            },
+            {
+              "year": "2025",
+              "predicted": 3573.2142857142826,
+              "observed": 4260.0,
+              "error": -686.7857142857174
+            }
+          ],
+          "ols_com_ndvi": [
+            {
+              "year": "2022",
+              "predicted": 4041.571748337866,
+              "observed": 3540.0,
+              "error": 501.5717483378662
+            },
+            {
+              "year": "2023",
+              "predicted": 3586.15556202704,
+              "observed": 3750.0,
+              "error": -163.8444379729599
+            },
+            {
+              "year": "2024",
+              "predicted": 3622.4732324667584,
+              "observed": 3480.0,
+              "error": 142.47323246675842
+            },
+            {
+              "year": "2025",
+              "predicted": 3594.9769312609474,
+              "observed": 4260.0,
+              "error": -665.0230687390526
+            }
+          ]
+        }
+      },
+      "milho": {
+        "status": "ok",
+        "n_pairs": 9,
+        "metrics": {
+          "media_historica": {
+            "n_predictions": 4,
+            "mae_kg_ha": 751.8294642857143,
+            "rmse_kg_ha": 887.4913466828069,
+            "mape_percent": 9.673630801827539,
+            "years": [
+              "2022",
+              "2023",
+              "2024",
+              "2025"
+            ]
+          },
+          "ultimo_valor": {
+            "n_predictions": 4,
+            "mae_kg_ha": 683.5,
+            "rmse_kg_ha": 894.6781544220246,
+            "mape_percent": 9.03206169936716,
+            "years": [
+              "2022",
+              "2023",
+              "2024",
+              "2025"
+            ]
+          },
+          "tendencia": {
+            "n_predictions": 4,
+            "mae_kg_ha": 1042.966071428582,
+            "rmse_kg_ha": 1096.0068563172583,
+            "mape_percent": 13.85189282541318,
+            "years": [
+              "2022",
+              "2023",
+              "2024",
+              "2025"
+            ]
+          },
+          "ols_com_ndvi": {
+            "n_predictions": 4,
+            "mae_kg_ha": 955.0582485061425,
+            "rmse_kg_ha": 1117.6985058660264,
+            "mape_percent": 12.399202610360778,
+            "years": [
+              "2022",
+              "2023",
+              "2024",
+              "2025"
+            ]
+          }
+        },
+        "predictions": {
+          "media_historica": [
+            {
+              "year": "2022",
+              "predicted": 6628.2,
+              "observed": 7080.0,
+              "error": -451.8000000000002
+            },
+            {
+              "year": "2023",
+              "predicted": 6703.5,
+              "observed": 7140.0,
+              "error": -436.5
+            },
+            {
+              "year": "2024",
+              "predicted": 6765.857142857143,
+              "observed": 7320.0,
+              "error": -554.1428571428569
+            },
+            {
+              "year": "2025",
+              "predicted": 6835.125,
+              "observed": 8400.0,
+              "error": -1564.875
+            }
+          ],
+          "ultimo_valor": [
+            {
+              "year": "2022",
+              "predicted": 5666.0,
+              "observed": 7080.0,
+              "error": -1414.0
+            },
+            {
+              "year": "2023",
+              "predicted": 7080.0,
+              "observed": 7140.0,
+              "error": -60.0
+            },
+            {
+              "year": "2024",
+              "predicted": 7140.0,
+              "observed": 7320.0,
+              "error": -180.0
+            },
+            {
+              "year": "2025",
+              "predicted": 7320.0,
+              "observed": 8400.0,
+              "error": -1080.0
+            }
+          ],
+          "tendencia": [
+            {
+              "year": "2022",
+              "predicted": 5744.999999999884,
+              "observed": 7080.0,
+              "error": -1335.0000000001164
+            },
+            {
+              "year": "2023",
+              "predicted": 6340.600000000006,
+              "observed": 7140.0,
+              "error": -799.3999999999942
+            },
+            {
+              "year": "2024",
+              "predicted": 6693.714285714348,
+              "observed": 7320.0,
+              "error": -626.2857142856519
+            },
+            {
+              "year": "2025",
+              "predicted": 6988.821428571435,
+              "observed": 8400.0,
+              "error": -1411.1785714285652
+            }
+          ],
+          "ols_com_ndvi": [
+            {
+              "year": "2022",
+              "predicted": 5986.426221990647,
+              "observed": 7080.0,
+              "error": -1093.5737780093532
+            },
+            {
+              "year": "2023",
+              "predicted": 6712.860455976761,
+              "observed": 7140.0,
+              "error": -427.13954402323907
+            },
+            {
+              "year": "2024",
+              "predicted": 6868.3635918817445,
+              "observed": 7320.0,
+              "error": -451.63640811825553
+            },
+            {
+              "year": "2025",
+              "predicted": 6552.116736126278,
+              "observed": 8400.0,
+              "error": -1847.8832638737222
+            }
+          ]
+        }
+      }
+    },
+    "protocol": {
+      "validation": "expanding window (walk-forward), ordem cronológica",
+      "min_train_years": 5,
+      "models": [
+        "media_historica",
+        "ultimo_valor",
+        "tendencia",
+        "ols_com_ndvi"
+      ],
+      "note": "Métricas indicativas: com poucos pontos de teste, não sustentam capacidade preditiva generalizável."
+    }
+  },
+  "limitations": [
+    "Escala espacial divergente: o alvo é municipal; o indicador é de uma AOI de 43,26 km².",
+    "Não há identificação de cultura na AOI: os indicadores não são 'soja'/'milho'.",
+    "Calendário fenológico não validado: a agregação é por ano civil.",
+    "Série curta e n pequeno: as correlações são exploratórias."
+  ]
+}
