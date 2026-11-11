@@ -177,7 +177,7 @@ pendências em `docs/V2_EXECUTION_STATUS.md`; relatório técnico em
 `docs/V2_1_VALIDATION_REPORT.md`. A V2 **não** está integrada ao produto e não
 produz inferência agronômica/econômica.
 
-Branch de validação publicada: `v2/geospatial-validation` (`5f5cf70`).
+Branch de validação publicada: `v2/geospatial-validation` (`c7842d6`).
 
 Próxima ação única recomendada: **V2.2 — investigar a compatibilidade
 espacial/temporal de dados oficiais de produtividade (IBGE/SIDRA, CONAB) com a
