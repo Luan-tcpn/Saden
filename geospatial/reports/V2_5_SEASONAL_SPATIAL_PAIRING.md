@@ -359,10 +359,13 @@ modal do ZARC, escala municipal):**
 | milho · ano civil · municipal | 9 | −0,0154 | 0,0000 | 0,9704 | −0,0016 |
 
 **FATO.** A réplica da V2.3 reproduz **exatamente** os números publicados:
-soja r = 0,432 / ρ = 0,134 / p = 0,246 / r detrendizado 0,584; milho
-r = 0,200 / ρ = 0,067 / p = 0,610 / r detrendizado 0,354 (a diferença no
-p-valor — 0,2422 vs 0,2456 — vem da semente e do número de iterações; a
-diferença é de 0,0034 e está dentro da resolução do teste de permutação).
+soja r = 0,432 / ρ = 0,134 / r detrendizado 0,584; milho r = 0,200 / ρ = 0,067 /
+r detrendizado 0,354. O p-valor por permutação difere em 0,0034
+(0,2456 → 0,2422) — a **semente** do gerador de permutações é diferente
+(20261111 na V2.3, 20261112 na V2.5), com o mesmo número de iterações
+(5.000); 0,0034 corresponde a 17 permutações de 5.000. A correlação, o
+coeficiente de Spearman e a correlação detrendizada são **bit a bit**
+iguais.
 
 **FATO.** Nenhum dos 32 testes da família é significativo após a correção de
 Holm (todos com p ajustado = 1,000). O p-valor mais baixo da família é
