@@ -624,6 +624,370 @@ def cmd_relation(args: argparse.Namespace) -> dict[str, Any]:
     }
 
 
+# ------------------------------------------------- série municipal mensal
+
+
+def cmd_municipal_series(args: argparse.Namespace) -> dict[str, Any]:
+    """Série municipal mensal de NDVI sobre a área agrícola (retomável)."""
+    import numpy as np
+    from pystac_client import Client
+
+    from historical import landuse as lu
+    from historical import municipal as muni
+    from historical import municipal_series as mser
+    from historical import radiometry as radio
+    from s2_poc import config, network
+
+    network.configure_tls()
+    client = Client.open(config.STAC_URL)
+
+    monthly_csv = os.path.join(PROCESSED_DIR, "sentinel2_historical_monthly.csv")
+    observed = [
+        row
+        for row in mser.series_mod.read_monthly_csv(monthly_csv)
+        if row.get("status") == "observed"
+    ]
+    if args.months:
+        wanted = {str(m).zfill(2) for m in args.months}
+        observed = [r for r in observed if str(r["month"])[5:7] in wanted]
+    if args.max_months:
+        observed = observed[: args.max_months]
+
+    grid = muni.municipality_grid()
+    blocks = muni.grid_blocks(grid, n_blocks=args.blocks)
+    out_csv = os.path.join(PROCESSED_DIR, "municipal_ndvi_monthly.csv")
+    done = mser.load_completed(out_csv)
+    rows: list[dict[str, Any]] = []
+    if os.path.exists(out_csv):
+        import csv as _csv
+
+        with open(out_csv, newline="", encoding="utf-8-sig") as handle:
+            rows = list(_csv.DictReader(handle))
+
+    from agri.geometry_compat import municipality_geometry
+
+    municipality_cells = muni.municipality_mask(grid, municipality_geometry())
+    variant_masks: dict[tuple[int, int], dict[str, np.ndarray]] = {}
+    for block in blocks:
+        bbox = lu.block_bounds_wgs84(grid, block)
+        payload20 = lu.read_worldcover_block(2020, bbox)
+        payload21 = lu.read_worldcover_block(2021, bbox)
+        subgrid = lu.block_subgrid(grid, block)
+        # máscaras reamostradas para a grade de 20 m do bloco (mesmo método
+        # validado na AOI: centro da célula -> pixel WorldCover)
+        crop20 = lu.cropland_grid_mask(payload20["data"], payload20["meta"], subgrid)
+        crop21 = lu.cropland_grid_mask(payload21["data"], payload21["meta"], subgrid)
+        variant_masks[(block["row_off"], block["col_off"])] = mser.mask_variants(
+            crop20, crop21
+        )
+
+    for entry in observed:
+        month = str(entry["month"])
+        date = str(entry.get("datetime") or "")[:10]
+        if not date:
+            continue
+        if all((month, variant) in done for variant in mser.MASK_VARIANTS):
+            continue
+        item_xg = mser.find_tile_item(client, "sentinel-2-c1-l2a", date, mser.TILE_XG)
+        if item_xg is None:
+            item_xg = mser.find_tile_item(client, "sentinel-2-l2a", date, mser.TILE_XG)
+        item_xf = mser.find_tile_item(client, "sentinel-2-c1-l2a", date, mser.TILE_XF)
+        if item_xf is None:
+            item_xf = mser.find_tile_item(client, "sentinel-2-l2a", date, mser.TILE_XF)
+        if item_xg is None:
+            print(f"[municipal] {month}: item do tile 21LXG nao encontrado")
+            continue
+        collection = (
+            "sentinel-2-c1-l2a"
+            if "_T21LXG_" in str(item_xg.id)
+            else "sentinel-2-l2a"
+        )
+        profile = radio.item_radiometry(item_xg, collection)
+        result = mser.process_month(
+            grid,
+            blocks,
+            item_xg,
+            item_xf,
+            profile,
+            variant_masks,
+            municipality_cells,
+        )
+        for variant, stats in result["variants"].items():
+            if (month, variant) in done:
+                continue
+            rows.append(
+                {
+                    "month": month,
+                    "year": month[:4],
+                    "item_id": str(item_xg.id),
+                    "catalog": entry.get("catalog"),
+                    "baseline": entry.get("baseline"),
+                    "radiometry_profile": profile["profile"],
+                    "tiles_used": ";".join(result["tiles_used"]),
+                    "mask_variant": variant,
+                    "mask_year": (
+                        "2020+2021" if variant in ("stable", "broad") else variant[-4:]
+                    ),
+                    "agricultural_pixels": stats["count"],
+                    "valid_pixels": stats["count"],
+                    "valid_fraction": 1.0 if stats["count"] else None,
+                    "ndvi_mean": stats["mean"],
+                    "ndvi_median": stats["quantiles"].get("p50"),
+                    "ndvi_std": stats["std"],
+                    "ndvi_p05": stats["quantiles"].get("p05"),
+                    "ndvi_p95": stats["quantiles"].get("p95"),
+                    "obstruction_fraction": stats.get("obstruction_fraction"),
+                    "scenes": 1,
+                    "blocks": len(blocks),
+                    "source_manifest": "municipal_ndvi_series.json",
+                }
+            )
+            done.add((month, variant))
+        mser.write_rows(rows, out_csv)
+        print(
+            f"[municipal] {month} ({item_xg.id}) processado; "
+            f"{len(rows)} linhas acumuladas"
+        )
+
+    manifest = {
+        "generated_at": _now(),
+        "municipality": MUNICIPALITY,
+        "grid": {
+            "crs": muni.MUNICIPAL_CRS,
+            "res": grid["res"],
+            "width": grid["width"],
+            "height": grid["height"],
+        },
+        "blocks": len(blocks),
+        "mask_variants": list(mser.MASK_VARIANTS),
+        "mask_source": "ESA WorldCover 10 m — classe 40 (Cropland), 2020 e 2021",
+        "months_processed": sorted({r["month"] for r in rows}),
+        "rows": len(rows),
+        "csv": os.path.relpath(out_csv, HERE).replace("\\", "/"),
+        "tile_rule": (
+            "Mosaico first_valid_wins (D44): 21LXG tem prioridade; 21LXF e lido "
+            "apenas nos blocos abaixo de -12,657 graus."
+        ),
+        "limitations": [
+            "Mascara agricola existe apenas para 2020 e 2021 (WorldCover): "
+            "aplicada retroativamente aos demais anos (proxy, nao informacao "
+            "historica).",
+            "Cobertura por tile varia; blocos fora do footprint ficam sem dado.",
+        ],
+    }
+    path = _write_json(
+        manifest, os.path.join(MANIFEST_DIR, "municipal_ndvi_series.json")
+    )
+    return {
+        "ok": True,
+        "report": path,
+        "csv": manifest["csv"],
+        "months_processed": len(manifest["months_processed"]),
+        "rows": len(rows),
+    }
+
+
+# ------------------------------------------------------- pareamento (V2.5)
+
+
+def cmd_pair(args: argparse.Namespace) -> dict[str, Any]:
+    """Constrói o dataset pareado espacial × agronômico."""
+    from agri import pairing, season
+
+    zarc_rows = pairing.read_csv(
+        os.path.join(PROCESSED_DIR, "zarc_planting_windows.csv")
+    )
+    municipal_rows = pairing.read_csv(
+        os.path.join(PROCESSED_DIR, "municipal_ndvi_monthly.csv")
+    )
+    aoi_rows = pairing.read_csv(
+        os.path.join(PROCESSED_DIR, "sentinel2_historical_monthly.csv")
+    )
+    pam_rows = pairing.read_csv(
+        os.path.join(PROCESSED_DIR, "productivity_observations.csv")
+    )
+
+    dataset = pairing.build_paired_dataset(
+        zarc_rows, municipal_rows, aoi_rows, pam_rows, min_months=args.min_months
+    )
+    out_csv = os.path.join(
+        PROCESSED_DIR, "municipal_seasonal_productivity_dataset.csv"
+    )
+    pairing.write_csv(dataset, out_csv)
+
+    usable = [row for row in dataset if row.get("status") == "paired_usable"]
+    by_crop: dict[str, int] = {}
+    for row in usable:
+        key = f"{row['crop']}|{row['mask_variant']}"
+        by_crop[key] = by_crop.get(key, 0) + 1
+
+    manifest = {
+        "generated_at": _now(),
+        "rows": len(dataset),
+        "paired_usable": len(usable),
+        "usable_by_crop_and_mask": by_crop,
+        "csv": os.path.relpath(out_csv, HERE).replace("\\", "/"),
+        "primary_protocol": {
+            "mask_variant": "stable",
+            "risk_level": season.PRIMARY_RISK,
+            "risk_justification": season.PRIMARY_RISK_JUSTIFICATION,
+            "window_rule": (
+                "janela modal entre as combinações oficiais de solo/ciclo da "
+                "safra (as demais ficam como sensibilidade)"
+            ),
+            "note": (
+                "Fixado antes da análise de correlação; não é o subconjunto de "
+                "maior correlação."
+            ),
+        },
+        "semantics": {
+            "milho": (
+                "A PAM publica o rendimento total do milho do ano (1ª + 2ª "
+                "safras); as janelas de safra são cenários, não observações "
+                "independentes."
+            ),
+            "mask": (
+                "Máscara WorldCover (2020/2021) aplicada retroativamente aos "
+                "anos anteriores — proxy espacial, não informação histórica."
+            ),
+        },
+        "sources": {
+            "zarc": "data/processed/zarc_planting_windows.csv",
+            "municipal_ndvi": "data/processed/municipal_ndvi_monthly.csv",
+            "aoi_ndvi": "data/processed/sentinel2_historical_monthly.csv",
+            "pam": "data/processed/productivity_observations.csv",
+        },
+    }
+    path = _write_json(
+        manifest, os.path.join(MANIFEST_DIR, "seasonal_pairing_manifest.json")
+    )
+    return {
+        "ok": True,
+        "manifest": path,
+        "csv": manifest["csv"],
+        "rows": len(dataset),
+        "paired_usable": len(usable),
+        "usable_by_crop_and_mask": by_crop,
+    }
+
+
+def cmd_reeval(args: argparse.Namespace) -> dict[str, Any]:
+    """Reavalia as associações com a base ampliada (mesmos métodos da V2.3)."""
+    import csv as _csv
+
+    from historical import reeval
+
+    dataset_csv = os.path.join(
+        PROCESSED_DIR, "municipal_seasonal_productivity_dataset.csv"
+    )
+    if not os.path.exists(dataset_csv):
+        return {"ok": False, "error": f"dataset pareado ausente: {dataset_csv}"}
+    with open(dataset_csv, newline="", encoding="utf-8-sig") as handle:
+        dataset = list(_csv.DictReader(handle))
+
+    groups = reeval.group_pairs(dataset)
+    results: dict[str, Any] = {}
+    p_values: dict[str, float] = {}
+    for (crop, variant), pairs in sorted(groups.items()):
+        key = f"{crop}|{variant}"
+        for field, label in (
+            ("ndvi_municipal_mean", "ndvi_municipal"),
+            ("ndvi_aoi_mean", "ndvi_aoi"),
+        ):
+            analysis = reeval.analyze_pairs(
+                pairs, field, permutations=args.permutations
+            )
+            analysis["walk_forward"] = reeval.walk_forward(
+                pairs, field, min_train=args.min_train
+            )
+            results[f"{key}|{label}"] = analysis
+            if analysis.get("permutation_p") is not None:
+                p_values[f"{key}|{label}"] = analysis["permutation_p"]
+
+    corrected = reeval.holm_correction(p_values)
+    for key, value in corrected.items():
+        if key in results:
+            results[key]["holm_p"] = value
+
+    # comparação com a V2.3 (mesmos pares, indicador da AOI)
+    v23 = None
+    v23_path = os.path.join(MANIFEST_DIR, "exploratory_study.json")
+    if os.path.exists(v23_path):
+        with open(v23_path, encoding="utf-8") as handle:
+            v23 = json.load(handle).get("statistics", {})
+
+    manifest = {
+        "generated_at": _now(),
+        "results": results,
+        "primary_analysis": "soja|stable|ndvi_municipal",
+        "protocol": {
+            "primary_mask": "stable",
+            "primary_indicator": "ndvi_municipal_mean",
+            "sensitivity": "máscaras (wc2020/wc2021/broad) e indicador da AOI",
+            "permutations": args.permutations,
+            "min_train": args.min_train,
+            "multiple_comparisons": "correção de Holm aplicada à família de testes",
+        },
+        "v23_reference": v23,
+        "note": (
+            "Mesmos métodos da V2.3 (Pearson, Spearman, permutação com semente "
+            "fixa, detrendizado, walk-forward com os mesmos baselines)."
+        ),
+    }
+    path = _write_json(manifest, os.path.join(MANIFEST_DIR, "reevaluation.json"))
+    summary_csv = os.path.join(MANIFEST_DIR, "reevaluation_summary.csv")
+    with open(summary_csv, "w", newline="", encoding="utf-8-sig") as handle:
+        writer = _csv.DictWriter(
+            handle,
+            fieldnames=[
+                "key", "n", "pearson_r", "spearman_rho", "permutation_p",
+                "holm_p", "ci95_low", "ci95_high", "r_detrended",
+                "wf_mae_ols_ndvi", "wf_mae_media", "wf_mae_ultimo",
+                "wf_mae_tendencia", "ndvi_beats_baselines",
+            ],
+        )
+        writer.writeheader()
+        for key, analysis in results.items():
+            wf = analysis.get("walk_forward", {})
+            models = wf.get("models", {}) if isinstance(wf, dict) else {}
+            ci = analysis.get("bootstrap_ci95") or [None, None]
+            writer.writerow(
+                {
+                    "key": key,
+                    "n": analysis.get("n"),
+                    "pearson_r": analysis.get("pearson_r"),
+                    "spearman_rho": analysis.get("spearman_rho"),
+                    "permutation_p": analysis.get("permutation_p"),
+                    "holm_p": analysis.get("holm_p"),
+                    "ci95_low": ci[0],
+                    "ci95_high": ci[1],
+                    "r_detrended": analysis.get("pearson_r_detrended"),
+                    "wf_mae_ols_ndvi": models.get("ols_com_ndvi", {}).get("mae_kg_ha"),
+                    "wf_mae_media": models.get("media_historica", {}).get("mae_kg_ha"),
+                    "wf_mae_ultimo": models.get("ultimo_valor", {}).get("mae_kg_ha"),
+                    "wf_mae_tendencia": models.get("tendencia", {}).get("mae_kg_ha"),
+                    "ndvi_beats_baselines": wf.get("ndvi_beats_baselines"),
+                }
+            )
+    return {
+        "ok": True,
+        "report": path,
+        "summary_csv": os.path.relpath(summary_csv, HERE).replace("\\", "/"),
+        "results": {
+            key: {
+                "n": analysis.get("n"),
+                "pearson_r": analysis.get("pearson_r"),
+                "permutation_p": analysis.get("permutation_p"),
+                "holm_p": analysis.get("holm_p"),
+                "ndvi_beats_baselines": analysis.get("walk_forward", {}).get(
+                    "ndvi_beats_baselines"
+                ),
+            }
+            for key, analysis in results.items()
+        },
+    }
+
+
 # ---------------------------------------------------------------- main
 
 
@@ -660,6 +1024,23 @@ def main(argv: list[str] | None = None) -> int:
 
     p_re = sub.add_parser("relation", help="correspondência safra ZARC × ano PAM")
     p_re.set_defaults(func=cmd_relation)
+
+    p_pr = sub.add_parser("pair", help="dataset pareado espacial × agronômico")
+    p_pr.add_argument("--min-months", type=int, default=2)
+    p_pr.set_defaults(func=cmd_pair)
+
+    p_rv = sub.add_parser("reeval", help="reavaliação estatística da base ampliada")
+    p_rv.add_argument("--permutations", type=int, default=5000)
+    p_rv.add_argument("--min-train", type=int, default=5)
+    p_rv.set_defaults(func=cmd_reeval)
+
+    p_ms = sub.add_parser(
+        "municipal-series", help="série municipal mensal (retomável, 4 máscaras)"
+    )
+    p_ms.add_argument("--blocks", type=int, default=16)
+    p_ms.add_argument("--months", nargs="+", default=None, help="meses (MM) a processar")
+    p_ms.add_argument("--max-months", type=int, default=0)
+    p_ms.set_defaults(func=cmd_municipal_series)
 
     p_mu = sub.add_parser("municipal", help="NDVI municipal sobre a área agrícola")
     p_mu.add_argument("--blocks", type=int, default=16)
