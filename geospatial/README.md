@@ -187,6 +187,33 @@ geospatial\.venv\Scripts\python.exe geospatial\run_historical.py study
 | Calendário | **não validado** (SISZARC sem DNS) → agregação por ano civil — D52 |
 | Relatório | `geospatial/reports/V2_3_EXPLORATORY_PRODUCTIVITY_STUDY.md` |
 
+### 5.5 Escala espacial e calendário (V2.4)
+
+```powershell
+# calendário oficial de plantio (ZARC do MAPA, CC-BY) — 11 safras
+geospatial\.venv\Scripts\python.exe geospatial\run_scale.py zarc
+
+# relação safra ZARC × ano de referência da PAM
+geospatial\.venv\Scripts\python.exe geospatial\run_scale.py relation
+
+# polígonos de produção da CONAB (SUTIN, GeoServer oficial)
+geospatial\.venv\Scripts\python.exe geospatial\run_scale.py sutin --uf MT
+
+# NDVI municipal sobre a área agrícola (processamento por blocos)
+geospatial\.venv\Scripts\python.exe geospatial\run_scale.py municipal --month 03 --blocks 16
+
+# rotas do MapBiomas (GCS/GEE) — relatório de bloqueio
+geospatial\.venv\Scripts\python.exe geospatial\run_scale.py mapbiomas
+```
+
+| Item | Valor |
+|---|---|
+| Calendário | ZARC/MAPA (`dados.agricultura.gov.br`), CC-BY, safras 2016/17–2026/27 |
+| Uso do solo | ESA WorldCover 10 m (classe 40 = Cropland) + CONAB SUTIN (polígonos de cultura, **área**, sem produtividade) |
+| Escala do indicador | município (9.293 km²), processado em 16 blocos, mosaico de dois tiles, recorte pelo polígono |
+| Nomes dos indicadores | `ndvi_all_cropland` (genérico — **nunca** `ndvi_soja`/`ndvi_milho` sem fonte que identifique a cultura) |
+| Relatórios | `geospatial/reports/V2_4_*.md` |
+
 ## 6. Testes
 
 ```powershell

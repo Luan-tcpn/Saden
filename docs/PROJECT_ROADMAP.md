@@ -724,5 +724,54 @@ V2.1 e V2.2 intocadas.
 - [!] Licenciamento: Sentinel-2 (`proprietary` × “free, full and open”) e
       termos da CONAB ainda abertos (D48)
 - [!] Escala espacial mais fina que a municipal para a AOI: inexistente nas
-      fontes oficiais investigate
+      fontes oficiais investigate (D56)
 - [!] GitHub Release `v1-final` (bloqueio de autenticação)
+
+---
+
+## V2.4 — Escala espacial, calendário ZARC e referências agrícolas (2026-11-12, D54–D57)
+
+Branch isolada `v2/agricultural-scale-harmonization`, derivada de
+`v2/agricultural-productivity-exploratory` (`3ff7104`). Sem merge em `main`;
+V1, V2.1, V2.2 e V2.3 intocadas.
+
+### Concluído e verificado
+
+- [x] **Calendário oficial adquirido**: ZARC do MAPA (dados abertos, CC-BY) —
+      11 safras (2016/17–2026/27), **1.408 registros de Sorriso**, 23 culturas,
+      janelas por decêndio/solo/ciclo e portaria de origem (D54)
+- [x] **Relação safra × ano PAM** registrada como regra derivada, com
+      alternativa e confiança
+- [x] **Investigação de produtividade submunicipal** concluída **negativamente**,
+      com evidência: CONAB SUTIN entrega área (não produtividade), MapBiomas
+      GCS 403 / GEE exige conta, IMEA 500, SIGS/INCRA sem DNS (D56)
+- [x] **Referência submunicipal de área por cultura**: CONAB SUTIN `MT_SOJA_2021`
+      com 17 feições em Sorriso
+- [x] **Escala municipal do indicador**: NDVI agregado por 16 blocos sobre a
+      área agrícola (WorldCover 40) e o polígono municipal, com mosaico de dois
+      tiles (D44) e sem materializar o raster (D57)
+- [x] **Referência espacial e agronômica mantidas separadas** (D55)
+- [x] **Testes**: 181/181 offline (16 novos); dois bugs reais corrigidos
+      (NaN no acumulador; topo do bloco)
+
+### Portão de decisão
+
+- [x] **CAMINHO B** — referência fina indisponível, escala municipal
+      harmonizável. Registrado no resumo para a orientadora
+      (`geospatial/reports/V2_4_ADVISOR_DECISION_BRIEF.md`)
+
+### Não iniciado (exige decisão/escopo novo)
+
+- [ ] **V2.5 (condicional)** — experimento sobre a base municipal
+      harmonizada: definir a janela do ZARC usada no indicador, montar a tabela
+      pareada (referência espacial × agronômica) e só então reavaliar
+      associations e baselines
+- [ ] Acesso institucional ao MapBiomas (GEE) para máscara anual 2017–2025
+- [ ] Conferência dos textos das portarias do ZARC e do calendário de
+      semeadura
+- [ ] Investigação de Constante/CoCoTi (produtividade por talhão)
+
+### Pendências
+
+- [!] IMEA acessível apenas por navegação manual (HTTP 500 por API)
+- [!] Termos de uso de CONAB/ZARC para redistribuição (D48)

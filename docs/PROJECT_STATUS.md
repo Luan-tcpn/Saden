@@ -162,3 +162,15 @@ Veredito do portão: **CAMINHO 2** (dados reais, escala municipal/estadual).
 | Integração ao produto/Ridge | NOT_STARTED | fora de escopo; requer aprovação do portão |
 
 Relatório: `geospatial/reports/V2_3_EXPLORATORY_PRODUCTIVITY_STUDY.md`.
+
+## V2.4 escala espacial e calendário oficial — branch `v2/agricultural-scale-harmonization` (2026-11-12, D54–D57)
+
+| Item | Estado | Evidência |
+|---|---|---|
+| Calendário oficial (ZARC/MAPA) | DONE | 11 safras, 1.408 registros de Sorriso, 23 culturas, portaria de origem |
+| Safra × ano PAM | DONE | 148 combinações com regra derivada + alternativa |
+| Produtividade submunicipal | NONE (com evidência) | CONAB SUTIN traz área, não produtividade; MapBiomas 403/GEE; IMEA 500; SIGS/INCRA sem DNS |
+| Referência submunicipal de área | DONE | CONAB SUTIN soja/MT 2021: 17 feições em Sorriso |
+| Escala municipal do indicador | DONE | 16 blocos, mosaico de 2 tiles, recorte pelo polígono; piloto 2017-03: 0,5668 (AOI 0,5282) |
+| Testes | DONE | **181/181** offline |
+| Veredito | **CAMINHO B** | referência fina indisponível; escala municipal harmonizável |

@@ -215,6 +215,22 @@ Relatório: `geospatial/reports/V2_2_PRODUCTIVITY_DATA_COMPATIBILITY.md`.
 - Testes: **165/165** offline. Relatório:
   `geospatial/reports/V2_3_EXPLORATORY_PRODUCTIVITY_STUDY.md`.
 
+### 10.5 V2.4 — escala espacial, calendário ZARC e referências agrícolas (branch `v2/agricultural-scale-harmonization`)
+
+- **Calendário oficial (D54)**: ZARC do MAPA (`dados.agricultura.gov.br`,
+  CC-BY) — 11 safras, **1.408 registros de Sorriso**, 23 culturas, janelas por
+  decêndio/solo/ciclo e portaria de origem.
+- **Produtividade submunicipal (D56)**: **não existe** em fonte pública
+  reproduzível. A CONAB SUTIN entrega **área** por feição (submunicipal), sem
+  produtividade; MapBiomas GCS 403, GEE exige conta; IMEA 500; SIGS/INCRA sem
+  DNS.
+- **Escala municipal (D57)**: indicador NDVI agregado por 16 blocos sobre a
+  área agrícola (WorldCover 40) e o polígono do município, com mosaico de dois
+  tiles; piloto 2017-03 → 11.999.215 pixels agrícolas (≈4.800 km²), NDVI médio
+  0,5668 (AOI 43,26 km²: 0,5282).
+- **Referência espacial e agronômica separadas (D55)**.
+- Testes: **181/181** offline. Relatórios: `geospatial/reports/V2_4_*.md`.
+
 ## 11. Próximos passos propostos (não iniciados)
 
 1. Revisar a V2.1 com orientador antes de ampliar escopo.
