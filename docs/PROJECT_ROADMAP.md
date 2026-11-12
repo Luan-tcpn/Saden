@@ -775,3 +775,35 @@ V1, V2.1, V2.2 e V2.3 intocadas.
 
 - [!] IMEA acessível apenas por navegação manual (HTTP 500 por API)
 - [!] Termos de uso de CONAB/ZARC para redistribuição (D48)
+
+## V2.5 — executada (2026-11-12)
+
+Branch `v2/seasonal-spatial-pairing`, derivada de `v2/agricultural-scale-harmonization`.
+
+| Etapa | Resultado |
+|---|---|
+| Série municipal mensal | **DONE** — 47/47 meses das janelas agrícolas, 188 linhas, reprodutível (SHA-256 idêntico) |
+| Auditoria da máscara (4 variantes) | **DONE** — `stable` principal; limitação temporal declarada |
+| Conversão de decêndios (regra oficial) | **DONE** — 3 por mês; âncora de ano corrigida (165 → 0 violações) |
+| Janelas ZARC por safra | **DONE** — risco ≤ 20%, janela modal, sem arbitragem de solo/ciclo |
+| Pareamento espacial × agronômico | **DONE** — 228 linhas, 2 fatias, n efetivo = anos com rendimento |
+| Reavaliação estatística | **DONE** — r, ρ, permutação (5.000), bootstrap, Holm, detrendizado |
+| Walk-forward alinhado | **DONE** — 2023–2025, 8 configurações; NDVI não supera a média histórica |
+| Representatividade AOI × município | **DONE** — r = 0,972, diferença média +0,037, não estável entre anos |
+| Testes | **DONE** — 213/213 offline |
+| Relatórios | **DONE** — `V2_5_SEASONAL_SPATIAL_PAIRING.md`, `V2_5_ADVISOR_SUMMARY.md` |
+
+**Caminho final: B** — base pareada válida, sem ganho do NDVI. Nenhuma
+integração ao produto.
+
+### V2.6 — recomendada (2026-11-12)
+
+| Prioridade | Item | Justificativa |
+|---|---|---|
+| 1 | Encerrar a linha de produtividade com NDVI | resultado negativo com replicação verificada da V2.3 |
+| 2 | Variáveis agroclimáticas diretas (INMET, graus-dia, balanço hídrico) | conteúdo agronômico direto, ao contrário do NDVI |
+| 3 | Painel de municípios (se o objetivo for produto) | a limitação de n = 8 é estrutural e não se resolve com melhor modelagem |
+| 4 | MapBiomas via GEE (conta institucional) | única pendência que muda o resultado (máscara anual); não bloqueante |
+| 5 | Textos das portarias do ZARC | fecha documentalmente a regra safra → ano PAM |
+| 6 | Duração de ciclo por cultivar (EMBRAPA) | habilitaria o indicador de desenvolvimento vegetativo (Indicador 2/3) |
+| 7 | Gerar os 54 meses restantes da série municipal | mecanismo retomável; habilita o ano civil municipal com 12 meses/ano |

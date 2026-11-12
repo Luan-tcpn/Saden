@@ -57,6 +57,45 @@ Atualizado em **2026-11-11** (V1 congelada; seções abaixo preservam o históri
 | Roadmap granular | DONE | `docs/PROJECT_ROADMAP.md` é o plano oficial de execução |
 | Auditoria final (P14→P19) | DONE | 29/29 testes, smoke 8/8, visual sem erros, docs coerentes — ver roadmap |
 
+## V2.5 — Pareamento sazonal, integração espacial e reavaliação estatística (2026-11-12)
+
+Branch: `v2/seasonal-spatial-pairing`. Relatórios:
+`geospatial/reports/V2_5_SEASONAL_SPATIAL_PAIRING.md` e
+`geospatial/reports/V2_5_ADVISOR_SUMMARY.md`. Decisões D58–D65.
+
+| Item | Estado | Evidência |
+|---|---|---|
+| Série NDVI municipal mensal | DONE | `municipal_ndvi_monthly.csv`, 47 meses × 4 máscaras = 188 linhas; SHA-256 idêntico na reexecução; 0 duplicatas |
+| Mosaico de tiles verificado | DONE | 47/47 meses com `21LXG` + `21LXF` (`first_valid_wins`, D44) |
+| Perfil radiométrico por registro | DONE | 60 `original_pre_04_no_offset` + 52 `C1_harmonized`, identificados linha a linha |
+| Máscara agrícola auditada | DONE | 4 variantes (`wc2020`/`wc2021`/`stable`/`broad`); `stable` = 12.498.721 px = 4.999,5 km² |
+| Limitação temporal da máscara | DECLARED | `mask_year` + `mask_retrospective` em 100% das linhas (só há mapas de 2020 e 2021) |
+| Regra oficial de decêndios | DONE | 3 por mês (1–10, 11–20, 21–fim); 36 decêndios testados, fevereiro e bissextos |
+| Âncora de ano dos decêndios | CORRIGIDA | 165 violações da cronologia das portarias → **0** (D62) |
+| Risco textual do ZARC | CORRIGIDO | `baixo`/`medio`/`alto` lidos corretamente; antes produzia janelas vazias |
+| Janela recomendada | DONE | risco ≤ 20% (critério oficial do MAPA) + janela modal por safra (D63) |
+| Correspondência safra → PAM | PARCIAL | regra = ano de colheita (`safra_fin`); textos das portarias ainda pendentes |
+| Milho 1ª × 2ª safra | DONE | janelas separadas; 2ª ficou com n = 3 (incompatibilidade semântica declarada, D60) |
+| Dataset pareado | DONE | `municipal_seasonal_productivity_dataset.csv`, 228 linhas, 2 fatias de pareamento |
+| Réplica da V2.3 | VERIFICADA | diferença máxima 1,1·10⁻¹⁶ em 18 pares (D64) |
+| n efetivo contabilizado | DONE | soja 8, milho 8, milho 2ª 3 (sazonal); 9/9 (ano civil) — anos com rendimento |
+| Reavaliação estatística | DONE | Pearson, Spearman, permutação (5.000, semente fixa), IC bootstrap, Holm, detrendizado |
+| Validação temporal alinhada | DONE | mesmos anos de teste (2023–2025) em todas as 8 configurações |
+| Representatividade AOI × município | DONE | r = 0,972; diferença média +0,037 (não estável: −0,000 a +0,078 por ano) |
+| Sensibilidade à máscara | DONE | 4 máscaras → resultados praticamente idênticos |
+| Testes offline | DONE | **213/213** (33 novos da V2.5) |
+| Integração ao Ridge / API / UI | NOT_STARTED | fora de escopo; não houve ganho (D53, D61) |
+| Treino de modelo de produtividade | NOT_STARTED | gate metodológico não satisfeito |
+
+**Resultado da V2.5 — CAMINHO B (base pareada válida, sem ganho do NDVI).**
+A pergunta central ("a escala municipal e a janela agronômica oficial
+produzem uma relação mais consistente?") tem resposta **negativa**: mudar a
+escala reduz r (soja 0,432 → 0,302; milho 0,200 → −0,015) e mudar a janela
+também (soja 0,432 → 0,372; milho 0,200 → −0,455). Nenhum dos 32 testes da
+família é significativo após Holm (todos p = 1,000) e, na validação temporal
+alinhada, o modelo com NDVI **não** supera a média histórica em nenhuma das 8
+configurações.
+
 ## Problemas conhecidos
 
 1. Servidor roda como processo manual (`Start-Process`, PID volátil) — sem serviço/systemd.

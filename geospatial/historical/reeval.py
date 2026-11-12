@@ -178,8 +178,15 @@ def walk_forward(
     x_field: str,
     y_field: str = "yield_kg_ha",
     min_train: int = 5,
+    test_years: Sequence[int] | None = None,
 ) -> dict[str, Any]:
-    """Validação temporal progressiva (mesmos baselines da V2.3)."""
+    """Validação temporal progressiva (mesmos baselines da V2.3).
+
+    ``test_years`` fixa o conjunto de anos de teste (com treino = todos os
+    anos anteriores a cada um deles). É o que permite comparar fatias com
+    n diferentes **nos mesmos anos de teste**, como exige a comparação
+    equivalente com a V2.3.
+    """
     rows = []
     for row in pairs:
         x = _to_float(row.get(x_field))
@@ -198,12 +205,16 @@ def walk_forward(
         "tendencia": [],
         "ols_com_ndvi": [],
     }
+    wanted = set(int(y) for y in test_years) if test_years else None
     for index in range(min_train, len(rows)):
         train = rows[:index]
         test = rows[index]
+        if wanted is not None and int(test[0]) not in wanted:
+            continue
         train_years = [r[0] for r in train]
-        train_y = [r[1] for r in train]
-        train_x = [r[2 - 1] for r in train]
+        # as tuplas são (ano, indicador, rendimento): o alvo é o índice 2
+        train_y = [r[2] for r in train]
+        train_x = [r[1] for r in train]
         target = test[2]
         models = {
             "media_historica": float(np.mean(train_y)),
@@ -249,6 +260,7 @@ def walk_forward(
         "status": "ok",
         "n_pairs": len(rows),
         "min_train": min_train,
+        "test_years": sorted({int(r["year"]) for r in predictions["media_historica"]}),
         "models": metrics,
         "best_by_mae": best,
         "ndvi_beats_baselines": (

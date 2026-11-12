@@ -46,6 +46,21 @@ Verificado em **2026-09-08** por teste real de endpoint. Status atualizado em `d
 > obtidas por acesso público, mas ficam **fora do Git** (decisão D48), com URL
 > e SHA-256 registrados no manifesto.
 
+## V2.5 — fontes efetivamente usadas (2026-11-12)
+
+| Fonte | Endpoint / recurso | Uso na V2.5 | Verificação |
+|---|---|---|---|
+| ESA WorldCover 10 m | `https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2020/map/ESA_WorldCover_10m_2020_v200_N36W056_Map.tif` (e equivalente 2021/v100) | máscara agrícola (classe 40) em 4 variantes: `wc2020`, `wc2021`, `stable` (interseção) e `broad` (união) | leitura remota por janela, com repetição quando o servidor devolve janela parcial; `transform` da janela corrigido (D59) |
+| MAPA — ZARC, tábua de risco | `https://dados.agricultura.gov.br/dataset/6d3d141c-885e-41a4-ab7f-dc8ff323b96f/resource/0bb6188d-8b6a-4ab6-9d77-2e88dc889313/download/dados-abertos-tabua-de-risco-safra-2016-2017.csv` (11 safras) | janelas de plantio por cultura × safra × solo × ciclo × nível de risco; portaria de origem | reuso da base normalizada da V2.4 (`zarc_planting_windows.csv`); **âncora de ano e risco textual corrigidos** na camada de janelas (D62) |
+| Sentinel-2 L2A (COG) | `https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/...` e `sentinel-2-c1-l2a-cogs/...` (Earth Search) | série municipal mensal: 47 meses × 2 tiles (`21LXG` + `21LXF`) | cena principal = `item_id` **exato** da série de referência da V2.3; tile complementar na mesma data e com o mesmo índice de reprocessamento |
+| IBGE — PAM (SIDRA 5457) | `https://apisidra.ibge.gov.br/values` | rendimento médio, área colhida, área plantada e quantidade produzida por município e ano | base da V2.2, reusada sem alteração; 4.916 observações, 1.118 do milho (produto **agregado** do ano) |
+| CONAB — SUTIN (GeoServer WFS) | `https://conab-map.conab.gov.br/geoserver/wfs` | camada `MT_SOJA_2021` (17 feições em Sorriso) — **não** usada como máscara | verificado: só há **área** (`AREA_HA`), **sem produtividade**;Polígono único de 2021 não generalizável (D56, D49) |
+| MapBiomas — Cobertura 10 m | GCS / GEE | **não disponível** | HTTP 403 no GCS; asset GEE exige conta institucional (D56). A máscara **anual** de uso do solo permanece a maior limitação da V2.5 |
+
+> **Nenhuma fonte nova foi introduzida na V2.5.** A versão reusa exclusivamente
+> as fontes já declaradas e verificadas nas V2.2–V2.4, o que preserva a
+> rastreabilidade e o regime de licenciamento (D48).
+
 ## Consequência metodológica
 
 Os preços do SADEN são **referência internacional convertida** (futuro CBOT/ICE × PTAX venda), não o preço físico regional.

@@ -231,6 +231,57 @@ Relatório: `geospatial/reports/V2_2_PRODUCTIVITY_DATA_COMPATIBILITY.md`.
 - **Referência espacial e agronômica separadas (D55)**.
 - Testes: **181/181** offline. Relatórios: `geospatial/reports/V2_4_*.md`.
 
+### 10.6 V2.5 — pareamento sazonal, integração espacial e reavaliação (branch `v2/seasonal-spatial-pairing`)
+
+- **Branch:** derivada de `v2/agricultural-scale-harmonization` (`ba3fa5a`);
+  V1, V2.1, V2.2, V2.3 e V2.4 intocadas; sem merge em `main`; bundle de
+  recuperação verificado (SHA-256 `84FE004E…56DCE`).
+- **Série municipal concluída (D59, D65):** 47 meses (jan/fev/set–dez de
+  2017–2025 — todos os meses observados da série de referência que caiem nas
+  janelas agrícolas) × 4 variantes de máscara = **188 linhas**, com
+  proveniência completa (cena, tile, perfil radiométrico, cobertura válida,
+  fração obstruída, quantis). Reprocessamento incremental → **SHA-256
+  idêntico**, **0 duplicatas**.
+- **Correção do ZARC (D62, D63):** o campo `decendios_com_risco` é **textual**
+  (`baixo`/`medio`/`alto`) — a leitura da V2.4 produzia janelas **vazias**; e a
+  âncora de ano dos decêndios 1–12 é o **segundo** ano da safra. Verificado por
+  um critério objetivo: a portaria que publica a recomendação precede o
+  início da janela (165 violações → **0**). Regra oficial de decêndios: 3 por
+  mês (1–10, 11–20, 21–fim), com fevereiro e bissextos.
+- **Janela recomendada:** risco **≤ 20%** (muito baixo ou baixo — critério
+  oficial do MAPA) e **modal** entre as combinações oficiais de solo/ciclo;
+  desempate determinístico e independente do rendimento.
+- **Relação safra → PAM (D60):** regra principal = **ano de colheita**
+  (`safra_fin`); alternativa = ano de plantio. Milho 1ª e 2ª safras **separados**
+  — a PAM publica o **total do ano**, incompatibilidade declarada; a 2ª ficou
+  com n = 3 (não avaliável).
+- **Dataset pareado (D64):** 228 linhas em **duas fatias** — `zarc_sazonal`
+  (janela oficial) e `ano_civil_v23` (**réplica da V2.3**, verificada par a
+  par com diferença máxima **1,1·10⁻¹⁶**). n efetivo = **anos com
+  rendimento**: soja 8, milho 8, milho 2ª 3 (sazonal); 9/9 (ano civil).
+- **Estatística (D61):** Pearson, Spearman, permutação (5.000, semente fixa),
+  IC 95% por bootstrap, **correção de Holm** (32 testes), correlação
+  detrendizada e walk-forward com os mesmos baselines da V2.3, **alinhado nos
+  mesmos anos de teste** (2023–2025).
+- **Resultado — CAMINHO B:** mudar a escala **reduz** a correlação (soja
+  0,432 → 0,302; milho 0,200 → −0,015) e mudar a janela também (soja
+  0,432 → 0,372; milho 0,200 → −0,455). Nenhum dos 32 testes é significativo
+  após Holm (p = 1,000) e o modelo com NDVI **não** supera a média histórica
+  em nenhuma das 8 configurações. **A hipótese da V2.4 está refutada.**
+- **Representatividade:** a AOI subestima o NDVI municipal em **+0,037**
+  (V2.4 estimava +0,039); a diferença média **anual** varia de −0,0002
+  (2018) a +0,0775 (2022) — **não é estável**. Sensibilidade à máscara:
+  desprezível (4 variantes → resultados praticamente idênticos).
+- **Correções de engenharia reais** encontradas na auditoria (8): máscara
+  booleana comparada com `== 40`; `transform` do WorldCover não ajustado à
+  janela; leitura sem validação (janelas vazias); topo do bloco; `NaN` no
+  acumulador; risco textual do ZARC; âncora de ano; e `walk_forward` calculando
+  os baselines sobre o **indicador** em vez do **rendimento**.
+- Testes: **213/213** offline (33 novos da V2.5). Relatórios:
+  `geospatial/reports/V2_5_SEASONAL_SPATIAL_PAIRING.md` e
+  `geospatial/reports/V2_5_ADVISOR_SUMMARY.md`.
+- **Nada foi integrado** ao Ridge de preços, à API ou à interface (D40, D41).
+
 ## 11. Próximos passos propostos (não iniciados)
 
 1. Revisar a V2.1 com orientador antes de ampliar escopo.

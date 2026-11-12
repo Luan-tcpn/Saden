@@ -356,6 +356,39 @@ class StatisticsTest(unittest.TestCase):
         )
         self.assertEqual(result["status"], "insufficient_pairs")
 
+    def test_walk_forward_baselines_use_yield_not_indicator(self):
+        """Regressão: o baseline tem de ser calculado sobre o RENDIMENTO."""
+        rows = [
+            {
+                "pam_reference_year": 2015 + i,
+                "ndvi_municipal_mean": 0.30 + 0.001 * i,
+                "yield_kg_ha": 3000 + 100 * i,
+            }
+            for i in range(8)
+        ]
+        result = reeval.walk_forward(rows, "ndvi_municipal_mean", min_train=5)
+        media = result["models"]["media_historica"]["mae_kg_ha"]
+        # a média histórica dos primeiros 5 rendimentos é ~3300 kg/ha;
+        # se o cálculo usasse o indicador (NDVI ~0,30), o erro seria ~3300
+        self.assertLess(media, 1000)
+        self.assertGreater(media, 100)
+
+    def test_walk_forward_can_fix_test_years(self):
+        rows = [
+            {
+                "pam_reference_year": 2015 + i,
+                "ndvi_municipal_mean": 0.3 + 0.01 * i,
+                "yield_kg_ha": 3000 + 50 * i,
+            }
+            for i in range(8)
+        ]
+        result = reeval.walk_forward(
+            rows, "ndvi_municipal_mean", min_train=5, test_years=[2020, 2022]
+        )
+        # com min_train=5 o primeiro ano testável é 2020 (índice 5)
+        self.assertEqual(result["models"]["media_historica"]["years"], [2020, 2022])
+        self.assertEqual(result["test_years"], [2020, 2022])
+
 
 class MaskVariantTest(unittest.TestCase):
     def test_variants(self):

@@ -841,7 +841,12 @@ def cmd_pair(args: argparse.Namespace) -> dict[str, Any]:
     )
 
     dataset = pairing.build_paired_dataset(
-        zarc_rows, municipal_rows, aoi_rows, pam_rows, min_months=args.min_months
+        zarc_rows,
+        municipal_rows,
+        aoi_rows,
+        pam_rows,
+        min_months=args.min_months,
+        min_coverage=args.min_coverage,
     )
     out_csv = os.path.join(
         PROCESSED_DIR, "municipal_seasonal_productivity_dataset.csv"
@@ -930,8 +935,10 @@ def cmd_reeval(args: argparse.Namespace) -> dict[str, Any]:
     # família; a correção de Holm é aplicada sobre o conjunto inteiro.
     results: dict[str, Any] = {}
     p_values: dict[str, float] = {}
+    groups_by_mode: dict[str, dict[tuple[str, str], list[dict[str, Any]]]] = {}
     for mode in ("zarc_sazonal", "ano_civil_v23"):
         groups = reeval.group_pairs_by_mode(dataset, mode)
+        groups_by_mode[mode] = groups
         for (crop, variant), pairs in sorted(groups.items()):
             key = f"{mode}|{crop}|{variant}"
             for field, label in (
@@ -956,6 +963,78 @@ def cmd_reeval(args: argparse.Namespace) -> dict[str, Any]:
     for key, value in corrected.items():
         if key in results:
             results[key]["holm_p"] = value
+
+    # --- comparação ALINHADA (mesmos anos de teste em todas as fatias) ---
+    # Sem isto, as fatias teriam n e anos de teste diferentes e a comparação
+    # V2.3 x V2.5 não seria equivalente. Os anos comuns são calculados **por
+    # cultura e máscara** (as fatias não têm necessarily os mesmos anos), e
+    # o mínimo de treino é respeitado em cada grupo.
+    aligned: dict[str, Any] = {}
+    for crop in sorted({c for groups in groups_by_mode.values() for (c, _v) in groups}):
+        for variant in sorted(
+            {v for groups in groups_by_mode.values() for (_c, v) in groups}
+        ):
+            per_mode: dict[str, set[int]] = {}
+            for mode, groups in groups_by_mode.items():
+                pairs = groups.get((crop, variant))
+                if not pairs:
+                    continue
+                per_mode[mode] = {int(p["pam_reference_year"]) for p in pairs}
+            if len(per_mode) < 2:
+                continue
+            common = set.intersection(*per_mode.values())
+            # o treino precisa ter pelo menos `min_train` anos antes do teste
+            eligible = sorted(
+                year
+                for year in common
+                if all(
+                    len([y for y in years if y < year]) >= args.min_train
+                    for years in per_mode.values()
+                )
+            )
+            for mode, groups in groups_by_mode.items():
+                pairs = groups.get((crop, variant))
+                if not pairs:
+                    continue
+                key = f"{mode}|{crop}|{variant}"
+                for field, label in (
+                    ("ndvi_mean", "ndvi_municipal"),
+                    ("ndvi_aoi_mean", "ndvi_aoi"),
+                ):
+                    wf = reeval.walk_forward(
+                        pairs,
+                        field,
+                        min_train=args.min_train,
+                        test_years=eligible,
+                    )
+                    aligned[f"{key}|{label}"] = {
+                        "pairing_mode": mode,
+                        "crop": crop,
+                        "mask_variant": variant,
+                        "indicator": label,
+                        "test_years": eligible,
+                        "models": wf.get("models", {}),
+                        "best_by_mae": wf.get("best_by_mae"),
+                        "ndvi_beats_baselines": wf.get("ndvi_beats_baselines"),
+                    }
+    aligned_table: dict[str, Any] = {}
+    for key, item in aligned.items():
+        models = item["models"]
+        if not models:
+            continue
+        aligned_table[key] = {
+            "pairing_mode": item["pairing_mode"],
+            "crop": item["crop"],
+            "mask_variant": item["mask_variant"],
+            "indicator": item["indicator"],
+            "test_years": item["test_years"],
+            "n_predictions": next(iter(models.values())).get("n_predictions"),
+            "mae_ols_ndvi": models.get("ols_com_ndvi", {}).get("mae_kg_ha"),
+            "mae_media_historica": models.get("media_historica", {}).get("mae_kg_ha"),
+            "mae_ultimo_valor": models.get("ultimo_valor", {}).get("mae_kg_ha"),
+            "mae_tendencia": models.get("tendencia", {}).get("mae_kg_ha"),
+            "ndvi_beats_baselines": item["ndvi_beats_baselines"],
+        }
 
     # comparação com a V2.3 (mesmos pares, indicador da AOI)
     v23 = None
@@ -982,9 +1061,13 @@ def cmd_reeval(args: argparse.Namespace) -> dict[str, Any]:
             "family_size": len(p_values),
         },
         "v23_reference": v23,
+        "aligned_walk_forward": aligned_table,
         "note": (
             "Mesmos métodos da V2.3 (Pearson, Spearman, permutação com semente "
-            "fixa, detrendizado, walk-forward com os mesmos baselines)."
+            "fixa, detrendizado, walk-forward com os mesmos baselines). A "
+            "seção 'aligned_walk_forward' restringe TODAS as fatias aos mesmos "
+            "anos de teste (por cultura e máscara), para a comparação "
+            "V2.3 x V2.5 ser equivalente."
         ),
     }
 
@@ -1018,6 +1101,10 @@ def cmd_reeval(args: argparse.Namespace) -> dict[str, Any]:
                 "holm_p", "ci95_low", "ci95_high", "r_detrended",
                 "wf_mae_ols_ndvi", "wf_mae_media", "wf_mae_ultimo",
                 "wf_mae_tendencia", "ndvi_beats_baselines",
+                "aligned_test_years", "aligned_n_pred",
+                "aligned_mae_ols_ndvi", "aligned_mae_media",
+                "aligned_mae_ultimo", "aligned_mae_tendencia",
+                "aligned_ndvi_beats_baselines",
             ],
         )
         writer.writeheader()
@@ -1025,6 +1112,7 @@ def cmd_reeval(args: argparse.Namespace) -> dict[str, Any]:
             wf = analysis.get("walk_forward", {})
             models = wf.get("models", {}) if isinstance(wf, dict) else {}
             ci = analysis.get("bootstrap_ci95") or [None, None]
+            al = aligned_table.get(key, {})
             writer.writerow(
                 {
                     "key": key,
@@ -1045,6 +1133,13 @@ def cmd_reeval(args: argparse.Namespace) -> dict[str, Any]:
                     "wf_mae_ultimo": models.get("ultimo_valor", {}).get("mae_kg_ha"),
                     "wf_mae_tendencia": models.get("tendencia", {}).get("mae_kg_ha"),
                     "ndvi_beats_baselines": wf.get("ndvi_beats_baselines"),
+                    "aligned_test_years": ";".join(str(y) for y in al.get("test_years", [])),
+                    "aligned_n_pred": al.get("n_predictions"),
+                    "aligned_mae_ols_ndvi": al.get("mae_ols_ndvi"),
+                    "aligned_mae_media": al.get("mae_media_historica"),
+                    "aligned_mae_ultimo": al.get("mae_ultimo_valor"),
+                    "aligned_mae_tendencia": al.get("mae_tendencia"),
+                    "aligned_ndvi_beats_baselines": al.get("ndvi_beats_baselines"),
                 }
             )
     return {
@@ -1105,6 +1200,12 @@ def main(argv: list[str] | None = None) -> int:
 
     p_pr = sub.add_parser("pair", help="dataset pareado espacial × agronômico")
     p_pr.add_argument("--min-months", type=int, default=2)
+    p_pr.add_argument(
+        "--min-coverage",
+        type=float,
+        default=0.5,
+        help="cobertura válida média mínima dos meses da janela",
+    )
     p_pr.set_defaults(func=cmd_pair)
 
     p_rv = sub.add_parser("reeval", help="reavaliação estatística da base ampliada")

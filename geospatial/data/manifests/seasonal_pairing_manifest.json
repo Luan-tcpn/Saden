@@ -1,20 +1,24 @@
 {
-  "generated_at": "2026-11-12T05:19:03.160375+00:00",
+  "generated_at": "2026-11-12T06:16:44.216596+00:00",
   "rows": 228,
-  "paired_usable": 16,
+  "paired_usable": 148,
   "usable_by_crop_and_mask": {
-    "soja|stable": 2,
-    "soja|wc2020": 2,
-    "soja|wc2021": 2,
-    "soja|broad": 2,
-    "milho|stable": 2,
-    "milho|wc2020": 2,
-    "milho|wc2021": 2,
-    "milho|broad": 2
+    "soja|stable": 17,
+    "soja|wc2020": 17,
+    "soja|wc2021": 17,
+    "soja|broad": 17,
+    "milho|stable": 17,
+    "milho|wc2020": 17,
+    "milho|wc2021": 17,
+    "milho|broad": 17,
+    "milho_2|stable": 3,
+    "milho_2|wc2020": 3,
+    "milho_2|wc2021": 3,
+    "milho_2|broad": 3
   },
   "usable_by_mode": {
-    "ano_civil_v23": 8,
-    "zarc_sazonal": 8
+    "ano_civil_v23": 72,
+    "zarc_sazonal": 76
   },
   "csv": "data/processed/municipal_seasonal_productivity_dataset.csv",
   "primary_protocol": {

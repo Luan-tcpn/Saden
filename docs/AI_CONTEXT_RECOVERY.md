@@ -288,3 +288,44 @@ publicados e verificados.
 4. Não declarar Docker/push/release sem execução e evidência.
 5. Não inventar métricas, fontes ou prontidão de produção.
 6. `SADEN-TCC` permanece intocado.
+
+## V2.5 — estado final (2026-11-12)
+
+**Branch:** `v2/seasonal-spatial-pairing` (derivada de
+`v2/agricultural-scale-harmonization`, `ba3fa5a`). Sem merge em `main`; sem
+force push; tags intocadas.
+
+**Bundle de recuperação:**
+`..\SADEN_V2_5_RECOVERY_2026-11-12\saden-v2-5-start-2026-11-12.bundle`
+(3.918.573 B, SHA-256 `84FE004E006B50494A62BBB9D6C7F79BEE55620E70F0D9E62A8B9BA4C4356DCE`,
+`git bundle verify` → OK).
+
+**Entregas da V2.5:**
+
+| Artefato | Conteúdo |
+|---|---|
+| `geospatial/data/processed/municipal_ndvi_monthly.csv` | série municipal: 188 linhas (47 meses × 4 máscaras) |
+| `geospatial/data/processed/municipal_seasonal_productivity_dataset.csv` | dataset pareado: 228 linhas, 2 fatias |
+| `geospatial/data/manifests/reevaluation.json` | estatísticas, Holm, bootstrap, walk-forward alinhado, representatividade |
+| `geospatial/data/manifests/reevaluation_summary.csv` | resumo tabular |
+| `geospatial/reports/V2_5_SEASONAL_SPATIAL_PAIRING.md` | relatório técnico (17 seções) |
+| `geospatial/reports/V2_5_ADVISOR_SUMMARY.md` | resumo para a orientadora |
+| `docs/DECISIONS.md` | D58–D65 (D42–D57 preservadas) |
+
+**Módulos novos:** `geospatial/agri/season.py`, `geospatial/agri/pairing.py`,
+`geospatial/historical/municipal_series.py`, `geospatial/historical/reeval.py`.
+**Comandos novos:** `run_scale.py municipal-series | pair | reeval`.
+
+**Resultado: CAMINHO B** — base pareada válida, **sem ganho do NDVI**.
+Hipótese da V2.4 (escala + janela) refutada com controle metodológico:
+réplica da V2.3 verificada a 1,1·10⁻¹⁶, decomposição escala × janela,
+validação temporal alinhada e correção de Holm.
+
+**Testes:** 213/213 offline. Testes externos: opt-in
+(`SADEN_EXTERNAL_TESTS=1`).
+
+**Continuidade para a V2.6 (recomendação da V2.5):** encerrar a linha de
+produtividade com NDVI; migrar para variáveis agroclimáticas diretas
+(INMET, graus-dia, balanço hídrico); ampliar para painel de municípios se o
+objetivo for produto; o MapBiomas via GEE (conta institucional) é a única
+pendência que **muda** o resultado e **não** é bloqueante para encerrar.

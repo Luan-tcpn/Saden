@@ -295,3 +295,42 @@ idênticos entre cenas. SHA-256 de cada arquivo fica no manifesto.
 | crash `-1073740791` ao abrir URL | rasterio 1.5.2/GDAL 3.12 | fixar `rasterio==1.4.3` |
 | `Content-Encoding` inesperado no IBGE | API envia gzip sempre | descompressão explícita em `aoi.py`/`geometry.py` |
 | `DeprecationWarning` de shape no numpy | rasterio 1.4.3 + numpy 2.5 | suprimido localmente em `read.py` |
+
+## V2.5 — pareamento sazonal e reavaliação (2026-11-12)
+
+Comandos novos (`run_scale.py`):
+
+```bash
+# 1) série municipal mensal (retomável; 4 variantes de máscara)
+python run_scale.py municipal-series --blocks 16 --workers 8 \
+    --months 01 02 09 10 11 12
+
+# 2) dataset pareado espacial × agronômico (2 fatias de pareamento)
+python run_scale.py pair --min-months 2 --min-coverage 0.5
+
+# 3) reavaliação estatística (mesmos métodos da V2.3 + Holm + bootstrap)
+python run_scale.py reeval --permutations 5000 --min-train 5
+```
+
+Artefatos:
+
+| Arquivo | Conteúdo |
+|---|---|
+| `data/processed/municipal_ndvi_monthly.csv` | série municipal: 47 meses × 4 máscaras = 188 linhas (proveniência, cobertura, quantis) |
+| `data/processed/municipal_seasonal_productivity_dataset.csv` | dataset pareado: 228 linhas (`zarc_sazonal` + `ano_civil_v23`) |
+| `data/manifests/reevaluation.json` | correlações, permutação, bootstrap, Holm, walk-forward alinhado e representatividade AOI × município |
+| `data/manifests/reevaluation_summary.csv` | resumo tabular de todas as análises |
+| `data/manifests/municipal_ndvi_series.json` | manifesto da série municipal |
+| `data/manifests/seasonal_pairing_manifest.json` | manifesto do pareamento e do protocolo pré-declarado |
+| `reports/V2_5_SEASONAL_SPATIAL_PAIRING.md` | relatório técnico |
+| `reports/V2_5_ADVISOR_SUMMARY.md` | resumo para a orientadora |
+
+Módulos novos: `agri/season.py` (janelas ZARC, regra oficial de decêndios,
+âncora de ano, relação safra–PAM), `agri/pairing.py` (dataset pareado),
+`historical/municipal_series.py` (série municipal retomável),
+`historical/reeval.py` (estatística, walk-forward, representatividade).
+
+**Resultado da V2.5: CAMINHO B** — base pareada válida, **sem ganho do NDVI**.
+O indicador municipal na janela oficial do ZARC não supera os baselines na
+validação temporal alinhada. Nada foi integrado ao Ridge de preços nem à
+interface.

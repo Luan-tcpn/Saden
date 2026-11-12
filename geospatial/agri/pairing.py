@@ -168,6 +168,7 @@ def build_paired_dataset(
     mask_variants: Sequence[str] = ("stable", "wc2020", "wc2021", "broad"),
     min_months: int = 2,
     max_risk: int = season.PRIMARY_MAX_RISK,
+    min_coverage: float = 0.5,
 ) -> list[dict[str, Any]]:
     """Monta o dataset pareado (uma linha por cultura × janela × máscara).
 
@@ -180,6 +181,10 @@ def build_paired_dataset(
         agregação por ano civil (exatamente a regra da V2.3) sobre a AOI e
         sobre o município — é a **réplica** da V2.3 e o controle que isola a
         mudança de escala.
+
+    ``min_coverage`` é a cobertura válida média mínima exigida dos meses
+    **usados** na janela: abaixo disso o período é marcado como incompleto e
+    **não** entra na análise estatística (o valor original é preservado).
     """
     yields = pam_yields(pam_rows)
     municipal_by_variant: dict[str, list[dict[str, Any]]] = defaultdict(list)
@@ -204,6 +209,7 @@ def build_paired_dataset(
             mask_variants,
             min_months,
             max_risk,
+            min_coverage,
         )
     )
     output.extend(
@@ -226,6 +232,7 @@ def _seasonal_rows(
     mask_variants: Sequence[str],
     min_months: int,
     max_risk: int,
+    min_coverage: float,
 ) -> list[dict[str, Any]]:
     """Fatia sazonal: janela ZARC × ano de colheita da PAM."""
     output: list[dict[str, Any]] = []
@@ -262,6 +269,10 @@ def _seasonal_rows(
                 if stats["months_with_value"] < min_months:
                     reasons.append(
                         f"meses com NDVI municipal ({stats['months_with_value']}) < {min_months}"
+                    )
+                elif (stats["mean_coverage"] or 0.0) < min_coverage:
+                    reasons.append(
+                        f"cobertura média municipal ({stats['mean_coverage']:.2f}) < {min_coverage}"
                     )
                 if aoi_stats["months_with_value"] < min_months:
                     reasons.append(
