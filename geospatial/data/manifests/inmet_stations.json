@@ -1,0 +1,46 @@
+{
+  "generated_at": "2026-11-12T08:56:30.413508+00:00",
+  "source": "https://apitempo.inmet.gov.br/estacoes/T",
+  "n_stations": 668,
+  "n_operational": 534,
+  "by_state": {
+    "AC": 6,
+    "AL": 7,
+    "AM": 19,
+    "AP": 4,
+    "BA": 43,
+    "CE": 14,
+    "DF": 5,
+    "ES": 11,
+    "GO": 26,
+    "MA": 14,
+    "MG": 68,
+    "MS": 62,
+    "MT": 61,
+    "PA": 32,
+    "PB": 9,
+    "PE": 16,
+    "PI": 21,
+    "PR": 26,
+    "RJ": 26,
+    "RN": 7,
+    "RO": 3,
+    "RR": 1,
+    "RS": 98,
+    "SC": 23,
+    "SE": 6,
+    "SP": 40,
+    "TO": 20
+  },
+  "catalog_csv": "data/processed/inmet_station_catalog.csv",
+  "selection_csv": "data/processed/panel_station_selection.csv",
+  "selection_rules": {
+    "priority": [
+      "inside_municipality",
+      "nearest_within_threshold",
+      "none"
+    ],
+    "max_distance_km": 80.0,
+    "far_distance_km": 50.0
+  }
+}

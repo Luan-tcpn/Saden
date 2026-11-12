@@ -1,0 +1,143 @@
+﻿ibge_code,municipality,state,station_code,station_name,station_state,station_latitude,station_longitude,station_altitude_m,station_type,station_situation,station_start_operation,station_end_operation,distance_km,selection_method,representativeness
+5100102,Acorizal,MT,A944,ROSARIO OESTE,MT,-14.82888888,-56.44194444,195.0,Automatica,Operante,2019-05-29,,40.96,nearest_within_threshold,medium
+5100201,Água Boa,MT,A908,AGUA BOA,MT,-14.01638888,-52.21166666,440.0,Automatica,Pane,2006-12-15,,31.434,inside_municipality,high
+5100250,Alta Floresta,MT,A924,ALTA FLORESTA,MT,-10.07722221,-56.17916666,291.85,Automatica,Pane,2007-05-22,,20.779,inside_municipality,high
+5100300,Alto Araguaia,MT,A909,ALTO ARAGUAIA,MT,-17.33944444,-53.22444443,753.28,Automatica,Operante,2011-09-21,,27.239,inside_municipality,high
+5100359,Alto Boa Vista,MT,A943,SERRA NOVA DOURADA,MT,-11.98777777,-51.4261111,441.0,Automatica,Pane,2019-03-28,,40.346,nearest_within_threshold,medium
+5100409,Alto Garças,MT,A909,ALTO ARAGUAIA,MT,-17.33944444,-53.22444443,753.28,Automatica,Operante,2011-09-21,,62.865,nearest_within_threshold,low
+5100508,Alto Paraguai,MT,A944,ROSARIO OESTE,MT,-14.82888888,-56.44194444,195.0,Automatica,Operante,2019-05-29,,24.797,nearest_within_threshold,medium
+5100607,Alto Taquari,MT,A934,ALTO TAQUARI,MT,-17.8411111,-53.28944444,862.42,Automatica,Operante,2008-01-28,,5.085,inside_municipality,high
+5100805,Apiacás,MT,A910,APIACAS,MT,-9.56333333,-57.3936111,217.75,Automatica,Pane,2006-10-23,,101.286,inside_municipality,high
+5101001,Araguaiana,MT,A956,NOVA XAVANTINA,MT,-14.69777777,-52.35027777,306.0,Automatica,Operante,2025-12-02,,75.659,nearest_within_threshold,low
+5101209,Araguainha,MT,A909,ALTO ARAGUAIA,MT,-17.33944444,-53.22444443,753.28,Automatica,Operante,2011-09-21,,66.398,nearest_within_threshold,low
+5101258,Araputanga,MT,A936,SALTO DO CEU,MT,-15.12472221,-58.12722221,300.83,Automatica,Operante,2008-01-23,,38.365,nearest_within_threshold,medium
+5101308,Arenápolis,MT,A949,DIAMANTINO,MT,-14.37777777,-56.37972221,317.0,Automatica,Operante,2025-11-26,,53.61,nearest_within_threshold,low
+5101407,Aripuanã,MT,A964,ARIPUANA,MT,-10.18249999,-59.45972222,230.0,Automatica,Operante,2026-02-22,,43.405,inside_municipality,high
+5101605,Barão de Melgaço,MT,,,,,,,,,,,98.08,none,low
+5101704,Barra do Bugres,MT,A967,BARRA DO BUGRES,MT,-15.07583332,-57.19472221,186.0,Automatica,Operante,2026-02-02,,39.184,inside_municipality,high
+5101803,Barra do Garças,MT,A945,BARRA DO GARCAS,MT,-15.88472221,-52.22722221,304.0,Automatica,Operante,2025-11-25,,62.428,inside_municipality,high
+5101837,Boa Esperança do Norte,MT,A929,NOVA UBIRATA,MT,-13.68666666,-54.95611111,466.48,Automatica,Operante,2008-04-12,,24.897,inside_municipality,high
+5101852,Bom Jesus do Araguaia,MT,A943,SERRA NOVA DOURADA,MT,-11.98777777,-51.4261111,441.0,Automatica,Pane,2019-03-28,,42.603,nearest_within_threshold,medium
+5101902,Brasnorte,MT,A927,BRASNORTE (NOVO MUNDO),MT,-12.52194443,-58.23138888,426.2,Automatica,Operante,2008-02-28,,27.537,inside_municipality,high
+5102504,Cáceres,MT,A941,CACERES,MT,-16.12999999,-57.69083333,123.53,Automatica,Operante,2012-03-29,2021-01-07,47.806,inside_municipality,high
+5102603,Campinápolis,MT,,,,,,,,,,,91.135,none,low
+5102637,Campo Novo do Parecis,MT,A905,CAMPO NOVO DOS PARECIS,MT,-13.78583333,-57.8386111,525.41,Automatica,Operante,2002-12-12,,14.735,inside_municipality,high
+5102678,Campo Verde,MT,A912,CAMPO VERDE,MT,-15.55888888,-55.17944443,747.0,Automatica,Operante,2006-11-20,,33.613,inside_municipality,high
+5102686,Campos de Júlio,MT,A962,CAMPOS DE JULIO,MT,-13.72722221,-59.2625,620.0,Automatica,Operante,2026-02-14,,18.024,inside_municipality,high
+5102694,Canabrava do Norte,MT,A970,ESPIGAO DO LESTE,MT,-11.42666666,-52.18583333,380.0,Automatica,Operante,2026-03-12,,46.755,nearest_within_threshold,medium
+5102702,Canarana,MT,A957,CANARANA,MT,-13.47055554,-52.30444444,430.0,Automatica,Operante,2026-02-08,,18.688,inside_municipality,high
+5102793,Carlinda,MT,A926,CARLINDA,MT,-9.97055554,-55.82749999,293.71,Automatica,Pane,2008-04-08,,15.121,inside_municipality,high
+5102850,Castanheira,MT,A920,JUINA,MT,-11.37499999,-58.77472221,365.39,Automatica,Pane,2006-11-23,,51.804,nearest_within_threshold,low
+5103007,Chapada dos Guimarães,MT,A958,CHAPADA DOS GUIMARAES,MT,-15.46055555,-55.74972221,800.0,Automatica,Operante,2026-02-05,,43.297,inside_municipality,high
+5103056,Cláudia,MT,A946,MARCELANDIA,MT,-11.08499999,-54.51388888,291.0,Automatica,Operante,2025-12-13,,70.848,nearest_within_threshold,low
+5103106,Cocalinho,MT,A954,COCALINHO,MT,-14.38555555,-51.00972222,252.0,Automatica,Operante,2025-12-02,,59.266,inside_municipality,high
+5103205,Colíder,MT,A953,NOVA CANAA DO NORTE,MT,-10.62444443,-55.72416666,270.0,Automatica,Operante,2025-12-15,,27.941,nearest_within_threshold,medium
+5103254,Colniza,MT,A965,COLNIZA,MT,-9.45222222,-59.23527777,140.0,Automatica,Operante,2026-02-21,,118.61,inside_municipality,high
+5103304,Comodoro,MT,A963,COMODORO NORTE,MT,-13.63555555,-59.78499999,624.0,Automatica,Operante,2026-02-16,,49.271,inside_municipality,high
+5103353,Confresa,MT,A968,CONFRESA,MT,-10.65416666,-51.55222222,240.0,Automatica,Operante,2026-03-10,,32.074,inside_municipality,high
+5103361,Conquista D'Oeste,MT,A937,PONTES E LACERDA,MT,-15.32527777,-59.2336111,272.53,Automatica,Operante,2008-01-29,,77.518,nearest_within_threshold,low
+5103379,Cotriguaçu,MT,A919,COTRIGUACU,MT,-9.90638888,-58.57222221,265.0,Automatica,Pane,2007-05-27,,42.504,inside_municipality,high
+5103403,Cuiabá,MT,A901,CUIABA,MT,-15.60694444,-56.06083333,184.0,Automatica,Operante,2002-12-07,,26.032,inside_municipality,high
+5103437,Curvelândia,MT,A961,MIRASSOL D'OESTE,MT,-15.64027777,-58.07888888,263.0,Automatica,Operante,2026-02-04,,21.832,nearest_within_threshold,medium
+5103452,Denise,MT,A967,BARRA DO BUGRES,MT,-15.07583332,-57.19472221,186.0,Automatica,Operante,2026-02-02,,45.886,nearest_within_threshold,medium
+5103502,Diamantino,MT,A949,DIAMANTINO,MT,-14.37777777,-56.37972221,317.0,Automatica,Operante,2025-11-26,,55.5,inside_municipality,high
+5103601,Dom Aquino,MT,A923,PRIMAVERA DO LESTE,MT,-15.57999999,-54.3811111,680.0,Automatica,Operante,2017-10-25,,43.187,nearest_within_threshold,medium
+5103700,Feliz Natal,MT,A951,FELIZ NATAL,MT,-12.39694444,-54.92999999,373.0,Automatica,Operante,2025-12-11,,96.04,inside_municipality,high
+5103809,Figueirópolis D'Oeste,MT,A960,PORTO ESPERIDIAO,MT,-15.86083333,-58.47222221,159.0,Automatica,Operante,2026-02-06,,44.529,nearest_within_threshold,medium
+5103858,Gaúcha do Norte,MT,A930,GAUCHA DO NORTE,MT,-13.18472221,-53.2575,375.87,Automatica,Operante,2008-06-03,,30.059,inside_municipality,high
+5103908,General Carneiro,MT,,,,,,,,,,,88.072,none,low
+5103957,Glória D'Oeste,MT,A960,PORTO ESPERIDIAO,MT,-15.86083333,-58.47222221,159.0,Automatica,Operante,2026-02-06,,15.9,nearest_within_threshold,medium
+5104104,Guarantã do Norte,MT,A906,GUARANTA DO NORTE,MT,-9.9525,-54.89777777,283.58,Automatica,Pane,2002-12-19,,36.093,inside_municipality,high
+5104203,Guiratinga,MT,A932,GUIRATINGA,MT,-16.34166666,-53.76611111,525.43,Automatica,Operante,2008-01-23,,19.386,inside_municipality,high
+5104500,Indiavaí,MT,A936,SALTO DO CEU,MT,-15.12472221,-58.12722221,300.83,Automatica,Operante,2008-01-23,,55.629,nearest_within_threshold,low
+5104526,Ipiranga do Norte,MT,A917,SINOP,MT,-11.98222221,-55.56611111,366.57,Automatica,Operante,2006-10-28,,53.712,nearest_within_threshold,low
+5104542,Itanhangá,MT,A950,ITANHANGA,MT,-12.23416666,-56.60222222,350.0,Automatica,Operante,2025-11-30,,19.597,inside_municipality,high
+5104559,Itaúba,MT,A953,NOVA CANAA DO NORTE,MT,-10.62444443,-55.72416666,270.0,Automatica,Operante,2025-12-15,,56.056,nearest_within_threshold,low
+5104609,Itiquira,MT,A933,ITIQUIRA,MT,-17.17499999,-54.50166666,593.12,Automatica,Operante,2008-08-13,,20.379,inside_municipality,high
+5104807,Jaciara,MT,A912,CAMPO VERDE,MT,-15.55888888,-55.17944443,747.0,Automatica,Operante,2006-11-20,,46.371,nearest_within_threshold,medium
+5104906,Jangada,MT,A944,ROSARIO OESTE,MT,-14.82888888,-56.44194444,195.0,Automatica,Operante,2019-05-29,,58.309,nearest_within_threshold,low
+5105002,Jauru,MT,A937,PONTES E LACERDA,MT,-15.32527777,-59.2336111,272.53,Automatica,Operante,2008-01-29,,39.526,nearest_within_threshold,medium
+5105101,Juara,MT,A914,JUARA,MT,-11.28027777,-57.52666666,263.43,Automatica,Pane,2006-11-01,,30.231,inside_municipality,high
+5105150,Juína,MT,A920,JUINA,MT,-11.37499999,-58.77472221,365.39,Automatica,Pane,2006-11-23,,62.409,inside_municipality,high
+5105176,Juruena,MT,A919,COTRIGUACU,MT,-9.90638888,-58.57222221,265.0,Automatica,Pane,2007-05-27,,54.907,nearest_within_threshold,low
+5105200,Juscimeira,MT,A907,RONDONOPOLIS,MT,-16.4625,-54.58027777,289.88,Automatica,Operante,2003-11-16,,46.495,nearest_within_threshold,medium
+5105234,Lambari D'Oeste,MT,A961,MIRASSOL D'OESTE,MT,-15.64027777,-58.07888888,263.0,Automatica,Operante,2026-02-04,,43.45,nearest_within_threshold,medium
+5105259,Lucas do Rio Verde,MT,A955,LUCAS DO RIO VERDE,MT,-13.07499999,-55.91138888,393.0,Automatica,Operante,2025-12-02,,28.053,inside_municipality,high
+5105309,Luciara,MT,A968,CONFRESA,MT,-10.65416666,-51.55222222,240.0,Automatica,Operante,2026-03-10,,77.416,nearest_within_threshold,low
+5105507,Vila Bela da Santíssima Trindade,MT,,,,,,,,,,,82.6,none,low
+5105580,Marcelândia,MT,A946,MARCELANDIA,MT,-11.08499999,-54.51388888,291.0,Automatica,Operante,2025-12-13,,54.907,inside_municipality,high
+5105606,Matupá,MT,A906,GUARANTA DO NORTE,MT,-9.9525,-54.89777777,283.58,Automatica,Pane,2002-12-19,,59.628,nearest_within_threshold,low
+5105622,Mirassol d'Oeste,MT,A961,MIRASSOL D'OESTE,MT,-15.64027777,-58.07888888,263.0,Automatica,Operante,2026-02-04,,2.991,inside_municipality,high
+5105903,Nobres,MT,A949,DIAMANTINO,MT,-14.37777777,-56.37972221,317.0,Automatica,Operante,2025-11-26,,61.099,nearest_within_threshold,low
+5106000,Nortelândia,MT,A949,DIAMANTINO,MT,-14.37777777,-56.37972221,317.0,Automatica,Operante,2025-11-26,,37.074,nearest_within_threshold,medium
+5106109,Nossa Senhora do Livramento,MT,A969,SANTO ANTONIO DO LEVERGER,MT,-15.85472222,-56.07083332,190.0,Automatica,Operante,2026-03-18,,44.966,nearest_within_threshold,medium
+5106158,Nova Bandeirantes,MT,A919,COTRIGUACU,MT,-9.90638888,-58.57222221,265.0,Automatica,Pane,2007-05-27,,56.389,nearest_within_threshold,low
+5106174,Nova Nazaré,MT,A908,AGUA BOA,MT,-14.01638888,-52.21166666,440.0,Automatica,Pane,2006-12-15,,38.023,nearest_within_threshold,medium
+5106182,Nova Lacerda,MT,A963,COMODORO NORTE,MT,-13.63555555,-59.78499999,624.0,Automatica,Operante,2026-02-16,,73.879,nearest_within_threshold,low
+5106190,Nova Santa Helena,MT,A946,MARCELANDIA,MT,-11.08499999,-54.51388888,291.0,Automatica,Operante,2025-12-13,,46.681,nearest_within_threshold,medium
+5106208,Nova Brasilândia,MT,,,,,,,,,,,87.214,none,low
+5106216,Nova Canaã do Norte,MT,A953,NOVA CANAA DO NORTE,MT,-10.62444443,-55.72416666,270.0,Automatica,Operante,2025-12-15,,35.711,inside_municipality,high
+5106224,Nova Mutum,MT,A903,S.J. DO RIO CLARO,MT,-13.45388888,-56.67722221,339.59,Automatica,Operante,2003-02-24,,64.763,nearest_within_threshold,low
+5106232,Nova Olímpia,MT,A902,TANGARA DA SERRA,MT,-14.65,-57.43166666,440.01,Automatica,Operante,2002-12-10,,17.207,nearest_within_threshold,medium
+5106240,Nova Ubiratã,MT,A959,NOVA UBIRATA - SEDE,MT,-13.03249999,-55.24194444,440.0,Automatica,Pane,2026-03-04,,62.902,inside_municipality,high
+5106257,Nova Xavantina,MT,A956,NOVA XAVANTINA,MT,-14.69777777,-52.35027777,306.0,Automatica,Operante,2025-12-02,,12.753,inside_municipality,high
+5106265,Novo Mundo,MT,A926,CARLINDA,MT,-9.97055554,-55.82749999,293.71,Automatica,Pane,2008-04-08,,52.398,nearest_within_threshold,low
+5106273,Novo Horizonte do Norte,MT,A914,JUARA,MT,-11.28027777,-57.52666666,263.43,Automatica,Pane,2006-11-01,,26.906,nearest_within_threshold,medium
+5106281,Novo São Joaquim,MT,A931,SANTO ANTONIO DO LESTE,MT,-14.92499999,-53.88444444,662.0,Automatica,Pane,2008-05-29,,69.354,nearest_within_threshold,low
+5106299,Paranaíta,MT,A924,ALTA FLORESTA,MT,-10.07722221,-56.17916666,291.85,Automatica,Pane,2007-05-22,,77.034,nearest_within_threshold,low
+5106307,Paranatinga,MT,,,,,,,,,,,91.714,none,low
+5106315,Novo Santo Antônio,MT,A947,NOVO SANTO ANTONIO,MT,-12.28805555,-50.97138888,205.0,Automatica,Operante,2025-11-27,,9.493,inside_municipality,high
+5106372,Pedra Preta,MT,A933,ITIQUIRA,MT,-17.17499999,-54.50166666,593.12,Automatica,Operante,2008-08-13,,50.046,nearest_within_threshold,low
+5106422,Peixoto de Azevedo,MT,,,,,,,,,,,138.707,none,low
+5106455,Planalto da Serra,MT,,,,,,,,,,,92.762,none,low
+5106505,Poconé,MT,A966,POCONE,MT,-17.33666666,-56.76999999,100.0,Automatica,Operante,2026-04-23,,63.559,inside_municipality,high
+5106653,Pontal do Araguaia,MT,A013,ARAGARCAS,GO,-15.90277777,-52.24527777,327.35,Automatica,Operante,2007-07-12,,51.016,nearest_within_threshold,low
+5106703,Ponte Branca,MT,,,,,,,,,,,81.625,none,low
+5106752,Pontes e Lacerda,MT,A937,PONTES E LACERDA,MT,-15.32527777,-59.2336111,272.53,Automatica,Operante,2008-01-29,,32.107,inside_municipality,high
+5106778,Porto Alegre do Norte,MT,A968,CONFRESA,MT,-10.65416666,-51.55222222,240.0,Automatica,Operante,2026-03-10,,26.01,nearest_within_threshold,medium
+5106802,Porto dos Gaúchos,MT,A950,ITANHANGA,MT,-12.23416666,-56.60222222,350.0,Automatica,Operante,2025-11-30,,57.662,nearest_within_threshold,low
+5106828,Porto Esperidião,MT,A960,PORTO ESPERIDIAO,MT,-15.86083333,-58.47222221,159.0,Automatica,Operante,2026-02-06,,55.584,inside_municipality,high
+5106851,Porto Estrela,MT,A935,PORTO ESTRELA,MT,-15.32472221,-57.22583332,147.75,Automatica,Operante,2008-05-29,,21.873,inside_municipality,high
+5107008,Poxoréu,MT,A923,PRIMAVERA DO LESTE,MT,-15.57999999,-54.3811111,680.0,Automatica,Operante,2017-10-25,,36.663,nearest_within_threshold,medium
+5107040,Primavera do Leste,MT,A923,PRIMAVERA DO LESTE,MT,-15.57999999,-54.3811111,680.0,Automatica,Operante,2017-10-25,,56.453,inside_municipality,high
+5107065,Querência,MT,A916,QUERENCIA,MT,-12.60305555,-52.1625,355.0,Automatica,Operante,2007-07-17,,80.138,inside_municipality,high
+5107107,São José dos Quatro Marcos,MT,A961,MIRASSOL D'OESTE,MT,-15.64027777,-58.07888888,263.0,Automatica,Operante,2026-02-04,,24.767,nearest_within_threshold,medium
+5107156,Reserva do Cabaçal,MT,A936,SALTO DO CEU,MT,-15.12472221,-58.12722221,300.83,Automatica,Operante,2008-01-23,,41.673,nearest_within_threshold,medium
+5107180,Ribeirão Cascalheira,MT,A916,QUERENCIA,MT,-12.60305555,-52.1625,355.0,Automatica,Operante,2007-07-17,,71.173,nearest_within_threshold,low
+5107198,Ribeirãozinho,MT,,,,,,,,,,,85.675,none,low
+5107206,Rio Branco,MT,A936,SALTO DO CEU,MT,-15.12472221,-58.12722221,300.83,Automatica,Operante,2008-01-23,,16.661,nearest_within_threshold,medium
+5107248,Santa Carmem,MT,A951,FELIZ NATAL,MT,-12.39694444,-54.92999999,373.0,Automatica,Operante,2025-12-11,,51.509,nearest_within_threshold,low
+5107263,Santo Afonso,MT,A902,TANGARA DA SERRA,MT,-14.65,-57.43166666,440.01,Automatica,Operante,2002-12-10,,24.011,nearest_within_threshold,medium
+5107297,São José do Povo,MT,A907,RONDONOPOLIS,MT,-16.4625,-54.58027777,289.88,Automatica,Operante,2003-11-16,,33.304,nearest_within_threshold,medium
+5107305,São José do Rio Claro,MT,A903,S.J. DO RIO CLARO,MT,-13.45388888,-56.67722221,339.59,Automatica,Operante,2003-02-24,,17.823,inside_municipality,high
+5107354,São José do Xingu,MT,A942,SAO JOSE DO XINGU,MT,-10.48416666,-52.37249999,300.0,Automatica,Pane,2019-02-18,,35.65,inside_municipality,high
+5107404,São Pedro da Cipa,MT,A923,PRIMAVERA DO LESTE,MT,-15.57999999,-54.3811111,680.0,Automatica,Operante,2017-10-25,,56.636,nearest_within_threshold,low
+5107578,Rondolândia,MT,,,,,,,,,,,118.687,none,low
+5107602,Rondonópolis,MT,A907,RONDONOPOLIS,MT,-16.4625,-54.58027777,289.88,Automatica,Operante,2003-11-16,,16.139,inside_municipality,high
+5107701,Rosário Oeste,MT,A944,ROSARIO OESTE,MT,-14.82888888,-56.44194444,195.0,Automatica,Operante,2019-05-29,,54.802,inside_municipality,high
+5107743,Santa Cruz do Xingu,MT,A942,SAO JOSE DO XINGU,MT,-10.48416666,-52.37249999,300.0,Automatica,Pane,2019-02-18,,50.193,nearest_within_threshold,low
+5107750,Salto do Céu,MT,A936,SALTO DO CEU,MT,-15.12472221,-58.12722221,300.83,Automatica,Operante,2008-01-23,,11.605,inside_municipality,high
+5107768,Santa Rita do Trivelato,MT,A948,SANTA RITA DO TRIVELATO,MT,-13.81805554,-55.26777777,510.0,Automatica,Operante,2025-12-08,,3.29,inside_municipality,high
+5107776,Santa Terezinha,MT,,,,,,,,,,,90.451,none,low
+5107792,Santo Antônio do Leste,MT,A931,SANTO ANTONIO DO LESTE,MT,-14.92499999,-53.88444444,662.0,Automatica,Pane,2008-05-29,,26.63,inside_municipality,high
+5107800,Santo Antônio de Leverger,MT,A969,SANTO ANTONIO DO LEVERGER,MT,-15.85472222,-56.07083332,190.0,Automatica,Operante,2026-03-18,,100.355,inside_municipality,high
+5107859,São Félix do Araguaia,MT,A970,ESPIGAO DO LESTE,MT,-11.42666666,-52.18583333,380.0,Automatica,Operante,2026-03-12,,23.77,inside_municipality,high
+5107875,Sapezal,MT,A911,SAPEZAL,MT,-13.30388888,-58.76333333,105.0,Automatica,Operante,2017-10-19,,20.43,inside_municipality,high
+5107883,Serra Nova Dourada,MT,A943,SERRA NOVA DOURADA,MT,-11.98777777,-51.4261111,441.0,Automatica,Pane,2019-03-28,,7.989,inside_municipality,high
+5107909,Sinop,MT,A917,SINOP,MT,-11.98222221,-55.56611111,366.57,Automatica,Operante,2006-10-28,,30.983,inside_municipality,high
+5107925,Sorriso,MT,A904,SORRISO,MT,-12.555,-55.72277777,379.31,Automatica,Operante,2002-12-15,,12.566,inside_municipality,high
+5107941,Tabaporã,MT,A952,TABAPORA,MT,-11.05055555,-56.83583333,337.0,Automatica,Operante,2025-12-03,,41.255,inside_municipality,high
+5107958,Tangará da Serra,MT,A902,TANGARA DA SERRA,MT,-14.65,-57.43166666,440.01,Automatica,Operante,2002-12-10,,95.703,inside_municipality,high
+5108006,Tapurah,MT,A950,ITANHANGA,MT,-12.23416666,-56.60222222,350.0,Automatica,Operante,2025-11-30,,37.902,nearest_within_threshold,medium
+5108055,Terra Nova do Norte,MT,A906,GUARANTA DO NORTE,MT,-9.9525,-54.89777777,283.58,Automatica,Pane,2002-12-19,,62.988,nearest_within_threshold,low
+5108105,Tesouro,MT,A932,GUIRATINGA,MT,-16.34166666,-53.76611111,525.43,Automatica,Operante,2008-01-23,,58.605,nearest_within_threshold,low
+5108204,Torixoréu,MT,,,,,,,,,,,81.503,none,low
+5108303,União do Sul,MT,A946,MARCELANDIA,MT,-11.08499999,-54.51388888,291.0,Automatica,Operante,2025-12-13,,53.725,nearest_within_threshold,low
+5108352,Vale de São Domingos,MT,A937,PONTES E LACERDA,MT,-15.32527777,-59.2336111,272.53,Automatica,Operante,2008-01-29,,49.389,nearest_within_threshold,medium
+5108402,Várzea Grande,MT,A901,CUIABA,MT,-15.60694444,-56.06083333,184.0,Automatica,Operante,2002-12-07,,25.112,nearest_within_threshold,medium
+5108501,Vera,MT,A904,SORRISO,MT,-12.555,-55.72277777,379.31,Automatica,Operante,2002-12-15,,43.666,nearest_within_threshold,medium
+5108600,Vila Rica,MT,A968,CONFRESA,MT,-10.65416666,-51.55222222,240.0,Automatica,Operante,2026-03-10,,76.573,nearest_within_threshold,low
+5108808,Nova Guarita,MT,A953,NOVA CANAA DO NORTE,MT,-10.62444443,-55.72416666,270.0,Automatica,Operante,2025-12-15,,55.97,nearest_within_threshold,low
+5108857,Nova Marilândia,MT,A902,TANGARA DA SERRA,MT,-14.65,-57.43166666,440.01,Automatica,Operante,2002-12-10,,44.164,nearest_within_threshold,medium
+5108907,Nova Maringá,MT,A928,NOVA MARINGA,MT,-13.0386111,-57.09222221,334.36,Automatica,Operante,2008-04-15,,31.544,inside_municipality,high
+5108956,Nova Monte Verde,MT,A910,APIACAS,MT,-9.56333333,-57.3936111,217.75,Automatica,Pane,2006-10-23,,48.058,nearest_within_threshold,medium

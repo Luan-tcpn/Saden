@@ -123,7 +123,14 @@ def haversine_km(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
 def point_in_polygon(
     lon: float, lat: float, polygon: Any
 ) -> bool:
-    """Teste ponto-em-polígono (implementação própria, sem dependência)."""
+    """Teste ponto-em-polígono (implementação própria, sem dependência).
+
+    Aceita ``Polygon`` e ``MultiPolygon`` (este último em qualquer um dos
+    seus componentes).
+    """
+    geoms = getattr(polygon, "geoms", None)
+    if geoms is not None:
+        return any(point_in_polygon(lon, lat, geom) for geom in geoms)
     inside = False
     coords = list(polygon.exterior.coords) if hasattr(polygon, "exterior") else list(polygon)
     n = len(coords)
@@ -191,7 +198,7 @@ def select_stations_for_municipalities(
         out.append(
             {
                 "ibge_code": str(muni["ibge_code"]),
-                "municipality": muni.get("name"),
+                "municipality": muni.get("municipality") or muni.get("name"),
                 "state": muni.get("state"),
                 "station_code": station.code if method != "none" else None,
                 "station_name": station.name if method != "none" else None,
