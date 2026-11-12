@@ -179,6 +179,17 @@ def build_windows(
 
     Cada registro preserva solo, ciclo, portaria e a combinação completa; as
     janelas **não** são reduzidas a uma única linha arbitrária.
+
+    **Regra do bloco principal (correção V2.6).** Com a âncora dupla
+    (decêndios 1–12 no segundo ano da safra, 13–36 no primeiro), algumas
+    janelas oficiais caem em dois blocos de calendário separados — é o caso
+    das culturas de ciclo curto do Nordeste (soja e milho da Bahia, janelas
+    em março–junho **ou** outubro–dezembro). Nesses casos usa-se o **bloco
+    contíguo de maior duração** (desempate: o de início mais antigo), que é
+    o período de plantio principal da cultura. Os meses do bloco
+    secundário são **descartados**, e não agregados — agregar meses
+    separados por um intervalo não coberto misturaria períodos e poderia
+    incorporar meses posteriores ao ano de colheita.
     """
     labels = CROP_LABELS.get(crop, [])
     grouped: dict[tuple, dict[str, Any]] = {}
@@ -201,12 +212,14 @@ def build_windows(
             dates = [
                 decend_to_dates(decend_year(d, safra_ini, safra_fin), d) for d in decends
             ]
-            months = sorted(
+            months_all = sorted(
                 {
                     f"{decend_year(d, safra_ini, safra_fin):04d}-{decend_month(d):02d}"
                     for d in decends
                 }
             )
+            blocks = _month_blocks(months_all)
+            primary = max(blocks, key=lambda b: (len(b), -int(b[0].replace("-", ""))))
             entry = {
                 "safra": row.get("safra"),
                 "safra_ini": safra_ini,
@@ -219,7 +232,10 @@ def build_windows(
                 "portaria": row.get("portaria"),
                 "max_risk": max_risk,
                 "decends": decends,
-                "months": months,
+                "months": list(primary),
+                "months_all": months_all,
+                "n_blocks": len(blocks),
+                "discarded_months": [m for m in months_all if m not in primary],
                 "start_date": min(d[0] for d in dates),
                 "end_date": max(d[1] for d in dates),
                 "combinations": 0,
@@ -230,6 +246,24 @@ def build_windows(
         grouped.values(),
         key=lambda w: (str(w["safra"]), str(w["cod_ciclo"]), str(w["cod_solo"])),
     )
+
+
+def _month_blocks(months: Sequence[str]) -> list[list[str]]:
+    """Separa uma lista de meses ``YYYY-MM`` em blocos de meses consecutivos."""
+    if not months:
+        return []
+    ordered = sorted(months)
+    blocks: list[list[str]] = [[ordered[0]]]
+    for month in ordered[1:]:
+        previous = blocks[-1][-1]
+        year_prev, month_prev = (int(x) for x in previous.split("-"))
+        year_now, month_now = (int(x) for x in month.split("-"))
+        step = (year_now - year_prev) * 12 + (month_now - month_prev)
+        if step == 1:
+            blocks[-1].append(month)
+        else:
+            blocks.append([month])
+    return blocks
 
 
 def pam_year_candidates(safra: str, crop: str) -> dict[str, Any]:

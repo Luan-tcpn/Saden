@@ -1,0 +1,14 @@
+{
+  "generated_at": "2026-11-12T13:00:57.421298+00:00",
+  "rows": 35894,
+  "paired_usable": 19402,
+  "usable_by_crop": {
+    "milho": 7616,
+    "milho_2": 2902,
+    "soja": 8884
+  },
+  "soil_profile": "tipo2_medio",
+  "et_method": "fao56_penman_monteith",
+  "min_coverage": 0.6,
+  "csv": "data/processed/agroclimatic_productivity_panel.csv"
+}

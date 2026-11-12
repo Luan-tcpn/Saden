@@ -259,6 +259,11 @@ def _empty_row(
         "climate_source": source,
         "climate_source_type": None,
         "zarc_window_months": ";".join(months),
+        "zarc_window_months_all": ";".join(window.get("months_all") or months),
+        "zarc_window_blocks": window.get("n_blocks"),
+        "zarc_window_discarded_months": ";".join(
+            window.get("discarded_months") or []
+        ),
         "zarc_window_start": window.get("start_date"),
         "zarc_window_end": window.get("end_date"),
         "zarc_decends": ";".join(str(d) for d in window.get("decends", [])),
@@ -271,6 +276,11 @@ def _empty_row(
         "et_method": et_method,
         "soil_profile": soil.key,
         "cad_mm": soil.cad_mm,
+        "semantic_compatibility": (
+            "incompativel (PAM publica o total anual de milho, 1a + 2a safras)"
+            if crop == "milho_2"
+            else "boa (mesma cultura, mesma area, mesmo ano de colheita)"
+        ),
         "status": "excluded",
         "exclusion_reason": reason,
     }
@@ -307,17 +317,31 @@ def _build_row(
     row["station_code"] = daily[0].get("station_code") if daily else None
     row["climate_days"] = len(daily)
 
-    precip = [d.get("precip_mm") for d in daily if d.get("precip_mm") is not None]
-    tmax = [d.get("temp_max_c") for d in daily if d.get("temp_max_c") is not None]
-    tmin = [d.get("temp_min_c") for d in daily if d.get("temp_min_c") is not None]
-    tmean = [d.get("temp_media_c") for d in daily if d.get("temp_media_c") is not None]
-    rad = [d.get("radiacao_mj_m2") for d in daily if d.get("radiacao_mj_m2") is not None]
-    humidity = [d.get("umidade_rel_pct") for d in daily if d.get("umidade_rel_pct") is not None]
-    wind = [d.get("vento_kmh") for d in daily if d.get("vento_kmh") is not None]
+    precip = [
+        v for v in (_to_float(d.get("precip_mm")) for d in daily) if v is not None
+    ]
+    tmax = [
+        v for v in (_to_float(d.get("temp_max_c")) for d in daily) if v is not None
+    ]
+    tmin = [
+        v for v in (_to_float(d.get("temp_min_c")) for d in daily) if v is not None
+    ]
+    tmean = [
+        v for v in (_to_float(d.get("temp_media_c")) for d in daily) if v is not None
+    ]
+    rad = [
+        v for v in (_to_float(d.get("radiacao_mj_m2")) for d in daily) if v is not None
+    ]
+    humidity = [
+        v for v in (_to_float(d.get("umidade_rel_pct")) for d in daily) if v is not None
+    ]
+    wind = [
+        v for v in (_to_float(d.get("vento_kmh")) for d in daily) if v is not None
+    ]
     soil_moist = [
-        d.get("solo_umidade_0_7")
-        for d in daily
-        if d.get("solo_umidade_0_7") is not None
+        v
+        for v in (_to_float(d.get("solo_umidade_0_7")) for d in daily)
+        if v is not None
     ]
 
     def mean(values: Sequence[float]) -> float | None:
@@ -345,7 +369,17 @@ def _build_row(
     }.get(crop)
     if profile_key:
         profile = thermal.PROFILES[profile_key]
-        gdd = thermal.accumulate_degree_days(daily, profile)
+        gdd = thermal.accumulate_degree_days(
+            [
+                {
+                    "date": d.get("date"),
+                    "temp_max_c": _to_float(d.get("temp_max_c")),
+                    "temp_min_c": _to_float(d.get("temp_min_c")),
+                }
+                for d in daily
+            ],
+            profile,
+        )
         row["thermal_profile"] = profile.key
         row["thermal_profile_label"] = profile.label
         row["degree_days_total"] = gdd["degree_days_total"]
@@ -354,21 +388,55 @@ def _build_row(
         row["degree_days_coverage"] = gdd["coverage"]
         row["base_temperature_c"] = profile.base_temperature_c
         row["upper_temperature_c"] = profile.upper_temperature_c
-        heat = thermal.heat_wave_events(daily, threshold_c=35.0)
+        heat = thermal.heat_wave_events(
+            [
+                {"date": d.get("date"), "temp_max_c": _to_float(d.get("temp_max_c"))}
+                for d in daily
+            ],
+            threshold_c=35.0,
+        )
         row["heat_wave_events"] = heat["n_events"]
         row["heat_wave_days"] = heat["total_days"]
-        extreme = thermal.extreme_heat_days(daily)
+        extreme = thermal.extreme_heat_days(
+            [
+                {
+                    "date": d.get("date"),
+                    "temp_max_c": _to_float(d.get("temp_max_c")),
+                    "temp_min_c": _to_float(d.get("temp_min_c")),
+                }
+                for d in daily
+            ]
+        )
         row["extreme_heat_days"] = extreme["extreme_heat_days"]
         row["warm_nights"] = extreme["warm_nights"]
 
     # --- evapotranspiração e balanço hídrico --------------------------------
     if latitude is not None:
         et_series = et_module.daily_et0_series(
-            daily,
+            [
+                {
+                    "date": d.get("date"),
+                    "temp_max_c": _to_float(d.get("temp_max_c")),
+                    "temp_min_c": _to_float(d.get("temp_min_c")),
+                    "temp_media_c": _to_float(d.get("temp_media_c")),
+                    "radiacao_mj_m2": _to_float(d.get("radiacao_mj_m2")),
+                    "vento_kmh": _to_float(d.get("vento_kmh")),
+                    "umidade_rel_pct": _to_float(d.get("umidade_rel_pct")),
+                    "pressao_kpa": _to_float(d.get("pressao_kpa")),
+                }
+                for d in daily
+            ],
             float(latitude),
             method=et_method,
             elevation_m=elevation,
         )
+        # a precipitação vem da série climática original (a série de ET0 só
+        # tem a evapotranspiração) — o balanço hídrico precisa das duas
+        by_date = {str(r.get("date")): r for r in daily}
+        for item in et_series:
+            source_row = by_date.get(str(item.get("date")))
+            if source_row is not None:
+                item["precip_mm"] = source_row.get("precip_mm")
         et_values = [
             item["et0_mm"] for item in et_series if item.get("et0_mm") is not None
         ]
@@ -387,7 +455,9 @@ def _build_row(
         row["storage_final_mm"] = totals["storage_final_mm"]
         row["balance_months"] = totals["months"]
 
-    coverage = len(daily) / max(1, len(months) * 30)
+    coverage = _window_coverage(
+        str(window.get("start_date")), str(window.get("end_date")), len(daily)
+    )
     row["coverage"] = coverage
     reasons: list[str] = []
     if pam is None:
@@ -396,6 +466,14 @@ def _build_row(
         reasons.append(f"cobertura climática ({coverage:.2f}) < {min_coverage}")
     if row.get("degree_days_total") is None:
         reasons.append("sem graus-dia calculável")
+    if crop == "milho_2":
+        row["semantic_compatibility"] = (
+            "incompativel (PAM publica o total anual de milho, 1a + 2a safras)"
+        )
+    else:
+        row["semantic_compatibility"] = (
+            "boa (mesma cultura, mesma area, mesmo ano de colheita)"
+        )
     if reasons:
         row["status"] = "excluded"
         row["exclusion_reason"] = "; ".join(reasons)
@@ -405,13 +483,25 @@ def _build_row(
         row["quality_flag"] = (
             "retrospective_mask" if crop == "milho_2" else "paired"
         )
-        if crop == "milho_2":
-            row["semantic_compatibility"] = (
-                "incompativel (PAM publica o total anual de milho, 1a + 2a safras)"
-            )
-        else:
-            row["semantic_compatibility"] = "boa (mesma cultura, mesma area, mesmo ano)"
     return row
+
+
+def _window_coverage(start: str, end: str, n_days: int) -> float | None:
+    """Cobertura da janela: dias observados / dias do intervalo da janela.
+
+    ``start`` e ``end`` são as datas reais da janela do ZARC (``YYYY-MM-DD``).
+    """
+    from datetime import date
+
+    try:
+        begin = date.fromisoformat(start)
+        finish = date.fromisoformat(end)
+    except ValueError:
+        return None
+    expected = (finish - begin).days + 1
+    if expected <= 0:
+        return None
+    return min(1.0, n_days / expected)
 
 
 def write_csv(rows: Iterable[dict[str, Any]], path: str) -> str:

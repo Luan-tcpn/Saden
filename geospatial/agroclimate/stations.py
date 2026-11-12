@@ -169,10 +169,25 @@ def select_stations_for_municipalities(
     """
     out: list[dict[str, Any]] = []
     for muni in municipalities:
+        geometry = muni.get("geometry")
+        bounds = geometry.bounds if geometry is not None else None
         candidates: list[tuple[float, Station, bool]] = []
         for station in stations:
+            # pré-filtro por caixa delimitadora: evita o teste ponto-em-polígono
+            # para estações claramente fora do município
+            if bounds is not None and not (
+                bounds[0] <= station.longitude <= bounds[2]
+                and bounds[1] <= station.latitude <= bounds[3]
+            ):
+                distance = haversine_km(
+                    float(muni["centroid_lat"]),
+                    float(muni["centroid_lon"]),
+                    station.latitude,
+                    station.longitude,
+                )
+                candidates.append((distance, station, False))
+                continue
             inside = False
-            geometry = muni.get("geometry")
             if geometry is not None:
                 inside = point_in_polygon(station.longitude, station.latitude, geometry)
             distance = haversine_km(

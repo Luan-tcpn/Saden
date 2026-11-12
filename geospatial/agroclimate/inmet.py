@@ -250,7 +250,7 @@ def to_daily_records(
     03:00 UTC do mesmo dia civil). A data é preservada sem deslocamento.
     """
     header = station_file.header
-    index_date = _match_column(header, (r"^DATA$", r"^DATA/HORA$"))
+    index_date = _match_column(header, (r"^DATA", r"^DATA/HORA$"))
     index_hour = _match_column(header, (r"^HORA", r"HORA UTC", r"HOR[ÁA]RIO"))
     if index_date is None or index_hour is None:
         raise InmetError(f"CSV sem colunas DATA/HORA: {station_file.member}")

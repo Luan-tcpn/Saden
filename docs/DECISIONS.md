@@ -1097,3 +1097,174 @@ Decisão:
 
 Consequências: reprodutibilidade bit a bit da série municipal, com o custo de
 processamento viável para os 47 meses das janelas agrícolas.
+
+## D66 — Encerramento da linha do NDVI como variável de produtividade (2026-11-12)
+
+Contexto: a V2.5 refutou a hipótese de que a incompatibilidade de escala e a
+janela anual explicavam a ausência de relação entre NDVI e rendimento
+municipal (soja: r = 0,432 na réplica da V2.3 → 0,203 com escala municipal e
+janela do ZARC; milho: 0,200 → −0,396). Nenhum dos 32 testes da família foi
+significativo após Holm, e o modelo com NDVI não superou a média histórica
+em nenhuma das 8 configurações de validação temporal alinhada.
+
+Decisão:
+
+1. A hipótese do NDVI como **variável principal** de produtividade é
+   **encerrada**. Nenhum indicador de vegetação será otimizado, integrado ao
+   Ridge de preços ou à interface.
+2. Os indicadores Sentinel-2 **não são excluídos**: a série municipal
+   (`municipal_ndvi_monthly.csv`), os manifests e os experimentos anteriores
+   permanecem como **material de pesquisa** e **referência geoespacial**
+   (comparador histórico na análise da V2.6).
+3. O processamento Sentinel-2 não é descontinuado; o pipeline continua
+   disponível e reprodutível.
+
+Consequências: a V2.6 abre uma linha **agroclimática** (variáveis
+climáticas diretas) e um **painel multi-municipal**, mantendo a V2.5 como
+evidência contrária documentada.
+
+## D67 — Fontes meteorológicas: INMET, ERA5-Land, ERA5 e NASA POWER, com tipo de fonte explícito (2026-11-12)
+
+Decisão:
+
+1. Cada observação climática carrega `source_type`:
+   * `station_observation` — estação do INMET (medição pontual);
+   * `reanalysis` — ERA5-Land, ERA5 e NASA POWER (reanálises);
+   * `gridded_precipitation` — Reserved para precipitação de produtos
+     grillados (CHIRPS), hoje **bloqueado** (sem resolução DNS).
+2. **Prioridade de aquisição**: INMET (observação) como base independente; a
+   reanálise espacialmente consistente como base do painel.
+3. **Acesso ao ERA5-Land**: a API do CDS da Copernicus exige uma chave de
+   conta (não configurada neste ambiente) e o espelho ARCO não resolve DNS.
+   O ERA5-Land **não é declarado indisponível**: ele é obtido pela API
+   histórica do Open-Meteo (`models=era5_land`), que entrega temperatura do
+   ar, umidade, ponto de orvalho, temperatura do solo e **umidade do solo**
+   (camadas 0–7 e 7–28 cm) de 1950 ao presente. As variáveis acumuladas
+   (precipitação, radiação) e de vento/pressão **não** estão disponíveis
+   nesse acesso e são obtidas do **ERA5** (0,25°), com o par de fontes
+   identificado por variável.
+4. **NASA POWER** (MERRA-2 + CERES, comunidade AG) entra como terceira
+   reanálise, usada como **verificação independente** e fonte completa
+   (precipitação, radiação, vento, pressão, temperatura do solo).
+5. **CHIRPS** fica registrado como **bloqueio** (o host `chc.ucf.edu` não
+   resolve DNS neste ambiente); a precipitação grillada é suprida por ERA5.
+6. A **leitura dos arquivos anuais do INMET** é feita por **HTTP Range**
+   (leitor de ZIP remoto próprio): apenas o CSV da estação necessária é
+   transferido — 808 kB lidos (7 requisições, 3,2 MB) em vez de 102 MB
+   por ano e por estação.
+
+Consequências: o painel distingue permanentemente **observação** de
+**reanálise**; a comparação entre as duas é feita e reportada (D71), sem
+correções empíricas.
+
+## D68 — Graus-dia, soma térmica e balanço hídrico: perfis metodológicos por cultura (2026-11-12)
+
+Decisão:
+
+1. **Não há temperatura-base universal.** Cada cultura tem perfis
+   documentados (fonte, fórmula, grupo de cultivar, limitações):
+   * `soja_ometto` — Ometto (1981), aplicado no Centro-Norte de MT:
+     Tb = 14 °C, Tmed limitada a 36 °C;
+   * `soja_gilmore` — Gilmore & Rogers (1958) / Arnold (1960) / Schneider et
+     al. (1987): Tb = 10 °C, Tmed limitada a 30 °C; emergência = 92,5 °C·dia
+     e R5 = 554 °C·dia (Martorano et al., 2012);
+   * `milho_embrapa` — Embrapa Milho e Sorgo (AgenTec): Tmax ≤ 30 °C,
+     Tmin ≥ 10 °C, Tb = 10 °C; exigências de 780–830 °C·dia
+     (superprecoces), 831–890 (precoces) e 890–1.200 (normais).
+2. O **modo de limite** é explícito no perfil: a soja limita a temperatura
+   **média**; o milho limita os **extremos**.
+3. **Balanço hídrico**: método de **Thornthwaite & Mather (1955)**
+   sequencial, com ETP de Thornthwaite (1948) — é o método da ferramenta
+   BHCalc (Embrapa/IAC) e da planilha BHNorm (Rolim et al.).
+4. **CAD**: entra como parâmetro explícito, com perfis de solo documentados
+   (tipo 2 do MAPA = 50 mm como principal; tipos 1 e 3 como cenários). Não
+   se atribui CAD específica de município sem fonte de solos.
+5. **ET0**: três métodos implementados e **identificados** na saída — FAO-56
+   Penman-Monteith (com a conversão de vento de 10 m para 2 m pelo coeficiente
+   0,4), Thornthwaite (1948) e Hargreaves-Samani (1985). Estimativas de
+   métodos diferentes **nunca** são misturadas na mesma série.
+6. **Balanço hídrico de cultivo** (com Kc e estádios fenológicos) **não** é
+   construído: os parâmetros por cultivar não são conhecidos.
+
+Consequências: os indicadores térmicos e hídricos do painel têm
+metodologia rastreável, e as incertezas (temperatura-base, CAD) são
+tratadas como **cenários**, não como medidas.
+
+## D69 — Critérios de elegibilidade do painel, fixados antes da análise (2026-11-12)
+
+Decisão: um município entra no painel se, **para a cultura**:
+
+1. tiver rendimento médio **observado** (PAM) positivo em pelo menos **7**
+   dos 9 anos de 2017–2025;
+2. tiver área colhida positiva em pelo menos um ano;
+3. tiver geometria municipal oficial disponível;
+4. tiver pelo menos uma estação do INMET dentro do município ou a até 80 km
+   (para a via observacional).
+
+Os critérios **não** dependem de clima nem de correlação com o
+rendimento. Cada exclusão é registrada com o motivo. A seleção da estação
+por município segue três níveis, na ordem: dentro do município → mais
+próxima dentro de 80 km → sem estação (lacuna preservada).
+
+Consequências: o n do painel é definido **antes** de qualquer correlação,
+e a seleção de municípios não pode ser enviesada pelo desempenho
+estatístico.
+
+## D70 — Modelos pré-declarados e validações separadas (2026-11-12)
+
+Decisão:
+
+1. Os modelos comparados são **fixados antes** da análise:
+   * **A — baselines**: média histórica, último valor, tendência temporal
+     (os mesmos da V2.3);
+   * **B — meteorológicos**: precipitação acumulada e temperatura média;
+   * **C — térmicos**: graus-dia acumulados e dias de calor extremo;
+   * **D — hídricos**: ET0, déficit hídrico e excedente hídrico;
+   * **E — combinados**: apenas combinações com justificativa agronômica.
+2. **Validação temporal** (walk-forward por município: treino com anos
+   anteriores, teste nos anos seguintes) e **validação territorial**
+   (municípios inteiros no treino ou no teste) são experimentos
+   **distintos**, reportados separadamente; anos do mesmo município nunca
+   são distribuídos aleatoriamente entre treino e teste.
+3. **Nenhum** algoritmo complexo (XGBoost, Random Forest, redes neurais,
+   ensembles) é desenvolvido nesta etapa.
+4. Análises de painel usam **efeitos fixos de município e de ano**, com
+   **erro-padrão agrupado por município** — as linhas município-ano **não**
+   são tratadas como observações independentes.
+5. Correção de **Holm** sobre a família de testes.
+
+Consequências: a comparação com os baselines da V2.3 é feita em condições
+equivalentes, e a significância reportada e familiar (FWER).
+
+## D71 — Comparação INMET × reanálise: diferença de escala, não erro (2026-11-12)
+
+Decisão:
+
+1. Quando uma estação tem série suficiente, ela é comparada com a
+   reanálise **na localização da estação**: viés (bias), MAE, RMSE e
+   correlação, para precipitação e temperatura, além das somas acumuladas.
+2. **Não se espera equivalência** entre uma medição pontual e uma célula de
+   ~9 km (ERA5-Land) ou 0,25° (ERA5): as diferenças são de **escala**, e
+   isso é declarado.
+3. **Nenhuma correção empírica** (bias adjustment) é aplicada sem registro
+   explícito do procedimento; na V2.6 nenhuma correção é aplicada.
+
+Consequências: o painel usa a reanálise como base espacialmente
+consistente, e o INMET permanece como verificação independente.
+
+## D72 — Ausência nunca é zero; a máscara do ZARC é proxy (2026-11-12)
+
+Decisão:
+
+1. Valor ausente (`-9999` do INMET, `None`) **nunca** é convertido em zero.
+   Precipitação realmente zero é uma observação e é preservada como tal.
+2. A qualidade é auditada (faixas físicas, datas duplicadas,
+   descontinuidades) e os valores fora da faixa são **marcados**, nunca
+   corrigidos nem substituídos.
+3. A janela do ZARC é uma **recomendação oficial de risco**, não um
+   plantio observado: toda linha do painel carrega os decêndios, o solo, o
+   ciclo, o nível de risco e a portaria de origem, e a compatibilidade
+   semântica do milho 2ª safra é declarada em cada linha.
+
+Consequências: o painel preserva a diferença entre "zero" e "sem
+informação", e nenhuma janela agrícola é apresentada como data de plantio.

@@ -64,6 +64,10 @@ class ThermalProfile:
     cultivar_group: str
     reference_requirements: str
     limitations: str
+    # "mean": o limite superior entra na temperatura média (Ometto, Gilmore &
+    # Rogers); "extremes": Tmax e Tmin são limitados separadamente (Embrapa
+    # Milho e Sorgo).
+    limit_mode: str = "mean"
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -77,6 +81,7 @@ class ThermalProfile:
             "cultivar_group": self.cultivar_group,
             "reference_requirements": self.reference_requirements,
             "limitations": self.limitations,
+            "limit_mode": self.limit_mode,
         }
 
 
@@ -99,6 +104,7 @@ PROFILES: dict[str, ThermalProfile] = {
             "Cultivares tardias do Cerrado; a Tb de 14 °C não é válida para "
             "cultivares precoces sem ajuste."
         ),
+        limit_mode="mean",
     ),
     "soja_gilmore": ThermalProfile(
         key="soja_gilmore",
@@ -120,6 +126,7 @@ PROFILES: dict[str, ThermalProfile] = {
             "brasileira recente usa 14 °C para o ciclo plantio-maturação "
             "(Schneider et al., 1987)."
         ),
+        limit_mode="mean",
     ),
     "milho_embrapa": ThermalProfile(
         key="milho_embrapa",
@@ -142,6 +149,7 @@ PROFILES: dict[str, ThermalProfile] = {
             "identificação de cultivar na PAM, o grupo é um cenário, não uma "
             "medição."
         ),
+        limit_mode="extremes",
     ),
 }
 
@@ -168,23 +176,22 @@ def degree_days(
 ) -> float | None:
     """Graus-dia de um dia segundo o perfil.
 
-    O cálculo segue exatamente a fórmula do perfil: para o perfil da Embrapa
-    (milho), Tmax e Tmin são **limitados** antes da média; para os perfis da
-    soja, o limite é aplicado à temperatura média.
+    O cálculo segue exatamente a fórmula do perfil:
+
+    * ``limit_mode = "extremes"`` (milho, Embrapa): ``Tmax`` é limitada a
+      30 °C e ``Tmin`` a 10 °C **antes** da média;
+    * ``limit_mode = "mean"`` (soja, Ometto e Gilmore & Rogers): a
+      temperatura média é limitada à faixa [Tb, Ts] **depois** de calculada.
     """
     if temp_max_c is None or temp_min_c is None:
         return None
-    if profile.key == "milho_embrapa":
+    if profile.limit_mode == "extremes":
         tmax = min(temp_max_c, profile.upper_temperature_c)
         tmin = max(temp_min_c, profile.base_temperature_c)
         mean = (tmax + tmin) / 2.0
     else:
-        mean = daily_mean_temperature(temp_max_c, temp_min_c)
-        if mean is None:
-            return None
-        tmax = min(temp_max_c, profile.upper_temperature_c)
-        tmin = max(temp_min_c, profile.base_temperature_c)
-        mean = (tmax + tmin) / 2.0
+        mean = (temp_max_c + temp_min_c) / 2.0
+        mean = min(max(mean, profile.base_temperature_c), profile.upper_temperature_c)
     value = mean - profile.base_temperature_c
     return value if value > 0 else 0.0
 

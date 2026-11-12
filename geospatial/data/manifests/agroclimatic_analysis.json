@@ -1,0 +1,1079 @@
+{
+  "generated_at": "2026-11-12T13:01:05.726486+00:00",
+  "crops": {
+    "milho": {
+      "n_observations": 7616,
+      "n_municipalities": 1063,
+      "n_years": 8,
+      "descriptive": {
+        "precip_acumulada_mm": {
+          "n": 7616,
+          "mean": 402.14047006302525,
+          "sd": 217.07012105674497,
+          "min": 1.71,
+          "max": 1495.17
+        },
+        "temp_media_c": {
+          "n": 7616,
+          "mean": 23.82066543306261,
+          "sd": 3.839102917473975,
+          "min": 13.226451612903226,
+          "max": 34.617704918032786
+        },
+        "degree_days_total": {
+          "n": 7616,
+          "mean": 1119.0940073529414,
+          "sd": 251.0556727691019,
+          "min": 147.61000000000004,
+          "max": 1815.4450000000004
+        },
+        "deficiency_total_mm": {
+          "n": 7616,
+          "mean": 109.53733329171192,
+          "sd": 113.44257126998018,
+          "min": 0.0,
+          "max": 676.5339662597639
+        },
+        "excess_total_mm": {
+          "n": 7616,
+          "mean": 120.33362054390697,
+          "sd": 169.3258675543122,
+          "min": 0.0,
+          "max": 954.840417115691
+        },
+        "et0_total_mm": {
+          "n": 7616,
+          "mean": 435.400578184513,
+          "sd": 113.1738803605486,
+          "min": 56.17733190840271,
+          "max": 860.713966259764
+        }
+      },
+      "correlations": {
+        "precip_acumulada_mm": {
+          "n": 7616,
+          "pearson_r": 0.18460141014558606,
+          "spearman_rho": 0.17367897292346937,
+          "permutation_p": 0.0001999600079984003
+        },
+        "temp_media_c": {
+          "n": 7616,
+          "pearson_r": -0.25759521202996655,
+          "spearman_rho": -0.21484944932313996,
+          "permutation_p": 0.0001999600079984003
+        },
+        "degree_days_total": {
+          "n": 7616,
+          "pearson_r": -0.1686070559579871,
+          "spearman_rho": -0.19414516531515627,
+          "permutation_p": 0.0001999600079984003
+        },
+        "deficiency_total_mm": {
+          "n": 7616,
+          "pearson_r": -0.37306933876648646,
+          "spearman_rho": -0.3654348074311305,
+          "permutation_p": 0.0001999600079984003
+        },
+        "excess_total_mm": {
+          "n": 7616,
+          "pearson_r": 0.14224001887964455,
+          "spearman_rho": 0.12787091997394037,
+          "permutation_p": 0.0001999600079984003
+        },
+        "et0_total_mm": {
+          "n": 7616,
+          "pearson_r": -0.2626107736195684,
+          "spearman_rho": -0.2863657804347719,
+          "permutation_p": 0.0001999600079984003
+        }
+      },
+      "models": {
+        "B_meteorologicos": {
+          "variables": [
+            "precip_acumulada_mm",
+            "temp_media_c"
+          ],
+          "walk_forward": {
+            "status": "ok",
+            "n_predictions": 2483,
+            "models": {
+              "media_historica": {
+                "n_predictions": 2483,
+                "mae_kg_ha": 1134.6818211456955,
+                "rmse_kg_ha": 1475.8728185503187,
+                "mape_percent": 20.13972230349756
+              },
+              "ultimo_valor": {
+                "n_predictions": 2483,
+                "mae_kg_ha": 1282.6480064438178,
+                "rmse_kg_ha": 1799.7834257994825,
+                "mape_percent": 22.95106411853383
+              },
+              "tendencia": {
+                "n_predictions": 2483,
+                "mae_kg_ha": 1518.5219882654073,
+                "rmse_kg_ha": 2073.2421787985045,
+                "mape_percent": 25.886064319997516
+              },
+              "modelo": {
+                "n_predictions": 2483,
+                "mae_kg_ha": 2275.087936640116,
+                "rmse_kg_ha": 3669.887176061476,
+                "mape_percent": 40.7285048508
+              }
+            },
+            "best_by_mae": "media_historica"
+          },
+          "territorial_holdout": {
+            "status": "ok",
+            "n_predictions": 7616,
+            "models": {
+              "media_historica": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1578.3300596512374,
+                "rmse_kg_ha": 2044.6452403580824,
+                "mape_percent": 61.807227281439616
+              },
+              "ultimo_valor": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1747.2094275210084,
+                "rmse_kg_ha": 2196.137431919779,
+                "mape_percent": 72.35243881766347
+              },
+              "tendencia": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1574.2452115606977,
+                "rmse_kg_ha": 2034.754457983035,
+                "mape_percent": 60.59735343588323
+              },
+              "modelo": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1552.376726971553,
+                "rmse_kg_ha": 1973.437741484255,
+                "mape_percent": 58.88972009448773
+              }
+            },
+            "best_by_mae": "modelo"
+          }
+        },
+        "C_thermal": {
+          "variables": [
+            "degree_days_total",
+            "extreme_heat_days"
+          ],
+          "walk_forward": {
+            "status": "ok",
+            "n_predictions": 2483,
+            "models": {
+              "media_historica": {
+                "n_predictions": 2483,
+                "mae_kg_ha": 1134.6818211456955,
+                "rmse_kg_ha": 1475.8728185503187,
+                "mape_percent": 20.13972230349756
+              },
+              "ultimo_valor": {
+                "n_predictions": 2483,
+                "mae_kg_ha": 1282.6480064438178,
+                "rmse_kg_ha": 1799.7834257994825,
+                "mape_percent": 22.95106411853383
+              },
+              "tendencia": {
+                "n_predictions": 2483,
+                "mae_kg_ha": 1518.5219882654073,
+                "rmse_kg_ha": 2073.2421787985045,
+                "mape_percent": 25.886064319997516
+              },
+              "modelo": {
+                "n_predictions": 2483,
+                "mae_kg_ha": 1704.1442999997068,
+                "rmse_kg_ha": 2449.7491480061262,
+                "mape_percent": 30.380715511236517
+              }
+            },
+            "best_by_mae": "media_historica"
+          },
+          "territorial_holdout": {
+            "status": "ok",
+            "n_predictions": 7616,
+            "models": {
+              "media_historica": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1578.3300596512374,
+                "rmse_kg_ha": 2044.6452403580824,
+                "mape_percent": 61.807227281439616
+              },
+              "ultimo_valor": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1747.2094275210084,
+                "rmse_kg_ha": 2196.137431919779,
+                "mape_percent": 72.35243881766347
+              },
+              "tendencia": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1574.2452115606977,
+                "rmse_kg_ha": 2034.754457983035,
+                "mape_percent": 60.59735343588323
+              },
+              "modelo": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1511.7859522025196,
+                "rmse_kg_ha": 1937.82151324186,
+                "mape_percent": 60.77157929993406
+              }
+            },
+            "best_by_mae": "modelo"
+          }
+        },
+        "D_hidricos": {
+          "variables": [
+            "et0_total_mm",
+            "deficiency_total_mm",
+            "excess_total_mm"
+          ],
+          "walk_forward": {
+            "status": "ok",
+            "n_predictions": 2483,
+            "models": {
+              "media_historica": {
+                "n_predictions": 2483,
+                "mae_kg_ha": 1134.6818211456955,
+                "rmse_kg_ha": 1475.8728185503187,
+                "mape_percent": 20.13972230349756
+              },
+              "ultimo_valor": {
+                "n_predictions": 2483,
+                "mae_kg_ha": 1282.6480064438178,
+                "rmse_kg_ha": 1799.7834257994825,
+                "mape_percent": 22.95106411853383
+              },
+              "tendencia": {
+                "n_predictions": 2483,
+                "mae_kg_ha": 1518.5219882654073,
+                "rmse_kg_ha": 2073.2421787985045,
+                "mape_percent": 25.886064319997516
+              },
+              "modelo": {
+                "n_predictions": 2483,
+                "mae_kg_ha": 1967.2416271163424,
+                "rmse_kg_ha": 3437.2610172236514,
+                "mape_percent": 35.76634966722364
+              }
+            },
+            "best_by_mae": "media_historica"
+          },
+          "territorial_holdout": {
+            "status": "ok",
+            "n_predictions": 7616,
+            "models": {
+              "media_historica": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1578.3300596512374,
+                "rmse_kg_ha": 2044.6452403580824,
+                "mape_percent": 61.807227281439616
+              },
+              "ultimo_valor": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1747.2094275210084,
+                "rmse_kg_ha": 2196.137431919779,
+                "mape_percent": 72.35243881766347
+              },
+              "tendencia": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1574.2452115606977,
+                "rmse_kg_ha": 2034.754457983035,
+                "mape_percent": 60.59735343588323
+              },
+              "modelo": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1477.8788791079635,
+                "rmse_kg_ha": 1897.7784649256037,
+                "mape_percent": 58.49569094597737
+              }
+            },
+            "best_by_mae": "modelo"
+          }
+        }
+      },
+      "fixed_effects": {
+        "precip_acumulada_mm": {
+          "status": "ok",
+          "n": 7616,
+          "n_municipalities": 1063,
+          "n_years": 8,
+          "variable": "precip_acumulada_mm",
+          "coefficient": 0.9747995078060505,
+          "std_error_clustered": 0.09548009422477365,
+          "t_statistic": 10.209452721226214,
+          "r_squared_within": 0.6629339071514726,
+          "interpretation": "coeficiente da variável climática dentro dos efeitos fixos de município e de ano; erro-padrão agrupado por município"
+        },
+        "degree_days_total": {
+          "status": "ok",
+          "n": 7616,
+          "n_municipalities": 1063,
+          "n_years": 8,
+          "variable": "degree_days_total",
+          "coefficient": -0.3375540167028457,
+          "std_error_clustered": 0.10600900762479763,
+          "t_statistic": -3.1842012699294906,
+          "r_squared_within": 0.6586044678342782,
+          "interpretation": "coeficiente da variável climática dentro dos efeitos fixos de município e de ano; erro-padrão agrupado por município"
+        },
+        "deficiency_total_mm": {
+          "status": "ok",
+          "n": 7616,
+          "n_municipalities": 1063,
+          "n_years": 8,
+          "variable": "deficiency_total_mm",
+          "coefficient": -3.039498720805632,
+          "std_error_clustered": 0.17674345680757242,
+          "t_statistic": -17.197234770138362,
+          "r_squared_within": 0.6714366490930845,
+          "interpretation": "coeficiente da variável climática dentro dos efeitos fixos de município e de ano; erro-padrão agrupado por município"
+        },
+        "temp_media_c": {
+          "status": "ok",
+          "n": 7616,
+          "n_municipalities": 1063,
+          "n_years": 8,
+          "variable": "temp_media_c",
+          "coefficient": -182.66541428029532,
+          "std_error_clustered": 16.76652054067683,
+          "t_statistic": -10.894652461560847,
+          "r_squared_within": 0.6628303029902511,
+          "interpretation": "coeficiente da variável climática dentro dos efeitos fixos de município e de ano; erro-padrão agrupado por município"
+        }
+      }
+    },
+    "milho_2": {
+      "n_observations": 2902,
+      "n_municipalities": 505,
+      "n_years": 9,
+      "descriptive": {
+        "precip_acumulada_mm": {
+          "n": 2902,
+          "mean": 258.3616953824948,
+          "sd": 134.0151388111113,
+          "min": 17.169999999999998,
+          "max": 815.84
+        },
+        "temp_media_c": {
+          "n": 2902,
+          "mean": 25.499898126170468,
+          "sd": 1.99029993250595,
+          "min": 19.251935483870966,
+          "max": 33.4858064516129
+        },
+        "degree_days_total": {
+          "n": 2902,
+          "mean": 753.0315317022743,
+          "sd": 342.3942827141516,
+          "min": 290.07,
+          "max": 1549.5550000000003
+        },
+        "deficiency_total_mm": {
+          "n": 2902,
+          "mean": 46.55957545803152,
+          "sd": 85.17459732381852,
+          "min": 0.0,
+          "max": 491.83181489719544
+        },
+        "excess_total_mm": {
+          "n": 2902,
+          "mean": 52.71733982264189,
+          "sd": 77.05717250601096,
+          "min": 0.0,
+          "max": 468.6280563791196
+        },
+        "et0_total_mm": {
+          "n": 2902,
+          "mean": 280.0411077314396,
+          "sd": 143.47969571962102,
+          "min": 105.77609989829534,
+          "max": 740.9349596281784
+        }
+      },
+      "correlations": {
+        "precip_acumulada_mm": {
+          "n": 2902,
+          "pearson_r": -0.26866399989394535,
+          "spearman_rho": -0.22680434890761697,
+          "permutation_p": 0.0001999600079984003
+        },
+        "temp_media_c": {
+          "n": 2902,
+          "pearson_r": -0.44839889241771397,
+          "spearman_rho": -0.3880110537013856,
+          "permutation_p": 0.0001999600079984003
+        },
+        "degree_days_total": {
+          "n": 2902,
+          "pearson_r": -0.4195216976349202,
+          "spearman_rho": -0.4500950413712778,
+          "permutation_p": 0.0001999600079984003
+        },
+        "deficiency_total_mm": {
+          "n": 2902,
+          "pearson_r": -0.2597543021844459,
+          "spearman_rho": -0.255848729712362,
+          "permutation_p": 0.0001999600079984003
+        },
+        "excess_total_mm": {
+          "n": 2902,
+          "pearson_r": -0.08948942173216244,
+          "spearman_rho": 0.05052722429209067,
+          "permutation_p": 0.0001999600079984003
+        },
+        "et0_total_mm": {
+          "n": 2902,
+          "pearson_r": -0.4006062650500484,
+          "spearman_rho": -0.42835598688165916,
+          "permutation_p": 0.0001999600079984003
+        }
+      },
+      "models": {
+        "B_meteorologicos": {
+          "variables": [
+            "precip_acumulada_mm",
+            "temp_media_c"
+          ],
+          "walk_forward": {
+            "status": "ok",
+            "n_predictions": 502,
+            "models": {
+              "media_historica": {
+                "n_predictions": 502,
+                "mae_kg_ha": 1010.2281848795295,
+                "rmse_kg_ha": 1230.7356615088613,
+                "mape_percent": 23.778969536668587
+              },
+              "ultimo_valor": {
+                "n_predictions": 502,
+                "mae_kg_ha": 1323.996015936255,
+                "rmse_kg_ha": 1719.401331928949,
+                "mape_percent": 30.55838512831461
+              },
+              "tendencia": {
+                "n_predictions": 502,
+                "mae_kg_ha": 1403.5662726453043,
+                "rmse_kg_ha": 1740.7376997726242,
+                "mape_percent": 30.36514356605684
+              },
+              "modelo": {
+                "n_predictions": 502,
+                "mae_kg_ha": 1451.2159544365245,
+                "rmse_kg_ha": 1866.4361611309937,
+                "mape_percent": 33.43408079240485
+              }
+            },
+            "best_by_mae": "media_historica"
+          },
+          "territorial_holdout": {
+            "status": "ok",
+            "n_predictions": 2902,
+            "models": {
+              "media_historica": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1365.1067344225587,
+                "rmse_kg_ha": 1796.057858309298,
+                "mape_percent": 35.63740408474999
+              },
+              "ultimo_valor": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1654.9672639558926,
+                "rmse_kg_ha": 2082.05544009203,
+                "mape_percent": 47.71192357653818
+              },
+              "tendencia": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1335.6738420508527,
+                "rmse_kg_ha": 1743.2748151347078,
+                "mape_percent": 35.13769862419863
+              },
+              "modelo": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1166.603789374692,
+                "rmse_kg_ha": 1490.736785666325,
+                "mape_percent": 29.014834167341053
+              }
+            },
+            "best_by_mae": "modelo"
+          }
+        },
+        "C_thermal": {
+          "variables": [
+            "degree_days_total",
+            "extreme_heat_days"
+          ],
+          "walk_forward": {
+            "status": "ok",
+            "n_predictions": 502,
+            "models": {
+              "media_historica": {
+                "n_predictions": 502,
+                "mae_kg_ha": 1010.2281848795295,
+                "rmse_kg_ha": 1230.7356615088613,
+                "mape_percent": 23.778969536668587
+              },
+              "ultimo_valor": {
+                "n_predictions": 502,
+                "mae_kg_ha": 1323.996015936255,
+                "rmse_kg_ha": 1719.401331928949,
+                "mape_percent": 30.55838512831461
+              },
+              "tendencia": {
+                "n_predictions": 502,
+                "mae_kg_ha": 1403.5662726453043,
+                "rmse_kg_ha": 1740.7376997726242,
+                "mape_percent": 30.36514356605684
+              },
+              "modelo": {
+                "n_predictions": 502,
+                "mae_kg_ha": 2055.61498901306,
+                "rmse_kg_ha": 3615.6760287866605,
+                "mape_percent": 47.95711088067502
+              }
+            },
+            "best_by_mae": "media_historica"
+          },
+          "territorial_holdout": {
+            "status": "ok",
+            "n_predictions": 2902,
+            "models": {
+              "media_historica": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1365.1067344225587,
+                "rmse_kg_ha": 1796.057858309298,
+                "mape_percent": 35.63740408474999
+              },
+              "ultimo_valor": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1654.9672639558926,
+                "rmse_kg_ha": 2082.05544009203,
+                "mape_percent": 47.71192357653818
+              },
+              "tendencia": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1335.6738420508527,
+                "rmse_kg_ha": 1743.2748151347078,
+                "mape_percent": 35.13769862419863
+              },
+              "modelo": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1240.1486420272283,
+                "rmse_kg_ha": 1613.4867798042358,
+                "mape_percent": 30.716753695375466
+              }
+            },
+            "best_by_mae": "modelo"
+          }
+        },
+        "D_hidricos": {
+          "variables": [
+            "et0_total_mm",
+            "deficiency_total_mm",
+            "excess_total_mm"
+          ],
+          "walk_forward": {
+            "status": "ok",
+            "n_predictions": 502,
+            "models": {
+              "media_historica": {
+                "n_predictions": 502,
+                "mae_kg_ha": 1010.2281848795295,
+                "rmse_kg_ha": 1230.7356615088613,
+                "mape_percent": 23.778969536668587
+              },
+              "ultimo_valor": {
+                "n_predictions": 502,
+                "mae_kg_ha": 1323.996015936255,
+                "rmse_kg_ha": 1719.401331928949,
+                "mape_percent": 30.55838512831461
+              },
+              "tendencia": {
+                "n_predictions": 502,
+                "mae_kg_ha": 1403.5662726453043,
+                "rmse_kg_ha": 1740.7376997726242,
+                "mape_percent": 30.36514356605684
+              },
+              "modelo": {
+                "n_predictions": 502,
+                "mae_kg_ha": 24760.32628882303,
+                "rmse_kg_ha": 328668.4856259399,
+                "mape_percent": 505.6384104623801
+              }
+            },
+            "best_by_mae": "media_historica"
+          },
+          "territorial_holdout": {
+            "status": "ok",
+            "n_predictions": 2902,
+            "models": {
+              "media_historica": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1365.1067344225587,
+                "rmse_kg_ha": 1796.057858309298,
+                "mape_percent": 35.63740408474999
+              },
+              "ultimo_valor": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1654.9672639558926,
+                "rmse_kg_ha": 2082.05544009203,
+                "mape_percent": 47.71192357653818
+              },
+              "tendencia": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1335.6738420508527,
+                "rmse_kg_ha": 1743.2748151347078,
+                "mape_percent": 35.13769862419863
+              },
+              "modelo": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1252.9194659311424,
+                "rmse_kg_ha": 1639.6777165140284,
+                "mape_percent": 31.290748022107756
+              }
+            },
+            "best_by_mae": "modelo"
+          }
+        }
+      },
+      "fixed_effects": {
+        "precip_acumulada_mm": {
+          "status": "ok",
+          "n": 2902,
+          "n_municipalities": 505,
+          "n_years": 9,
+          "variable": "precip_acumulada_mm",
+          "coefficient": 0.19675980197768883,
+          "std_error_clustered": 0.23106135595226365,
+          "t_statistic": 0.8515478547539495,
+          "r_squared_within": 0.718505538577362,
+          "interpretation": "coeficiente da variável climática dentro dos efeitos fixos de município e de ano; erro-padrão agrupado por município"
+        },
+        "degree_days_total": {
+          "status": "ok",
+          "n": 2902,
+          "n_municipalities": 505,
+          "n_years": 9,
+          "variable": "degree_days_total",
+          "coefficient": -0.12699974967914285,
+          "std_error_clustered": 0.13610159512657743,
+          "t_statistic": -0.9331246232715372,
+          "r_squared_within": 0.7184855385680049,
+          "interpretation": "coeficiente da variável climática dentro dos efeitos fixos de município e de ano; erro-padrão agrupado por município"
+        },
+        "deficiency_total_mm": {
+          "status": "ok",
+          "n": 2902,
+          "n_municipalities": 505,
+          "n_years": 9,
+          "variable": "deficiency_total_mm",
+          "coefficient": -0.7419606599949731,
+          "std_error_clustered": 0.3908775227188505,
+          "t_statistic": -1.8981921877576184,
+          "r_squared_within": 0.7188675410512912,
+          "interpretation": "coeficiente da variável climática dentro dos efeitos fixos de município e de ano; erro-padrão agrupado por município"
+        },
+        "temp_media_c": {
+          "status": "ok",
+          "n": 2902,
+          "n_municipalities": 505,
+          "n_years": 9,
+          "variable": "temp_media_c",
+          "coefficient": -83.47622895497167,
+          "std_error_clustered": 31.10178064891178,
+          "t_statistic": -2.6839694452636564,
+          "r_squared_within": 0.7195741859412954,
+          "interpretation": "coeficiente da variável climática dentro dos efeitos fixos de município e de ano; erro-padrão agrupado por município"
+        }
+      }
+    },
+    "soja": {
+      "n_observations": 8884,
+      "n_municipalities": 1225,
+      "n_years": 8,
+      "descriptive": {
+        "precip_acumulada_mm": {
+          "n": 8884,
+          "mean": 385.30243133723553,
+          "sd": 221.34752761760228,
+          "min": 25.87,
+          "max": 1839.72
+        },
+        "temp_media_c": {
+          "n": 8884,
+          "mean": 23.471179142547477,
+          "sd": 3.467733070970412,
+          "min": 15.46516129032258,
+          "max": 34.49573770491803
+        },
+        "degree_days_total": {
+          "n": 8884,
+          "mean": 1095.6294400045026,
+          "sd": 393.4633754710177,
+          "min": 182.03999999999996,
+          "max": 2950.0299999999997
+        },
+        "deficiency_total_mm": {
+          "n": 8884,
+          "mean": 85.93386995433865,
+          "sd": 101.63479394679018,
+          "min": 0.0,
+          "max": 724.5065817946167
+        },
+        "excess_total_mm": {
+          "n": 8884,
+          "mean": 110.47269420954957,
+          "sd": 147.93536531303968,
+          "min": 0.0,
+          "max": 1289.173548431726
+        },
+        "et0_total_mm": {
+          "n": 8884,
+          "mean": 401.65487145592624,
+          "sd": 128.64308345872715,
+          "min": 86.82390062488804,
+          "max": 1138.9529162483518
+        }
+      },
+      "correlations": {
+        "precip_acumulada_mm": {
+          "n": 8884,
+          "pearson_r": 0.14683925622622224,
+          "spearman_rho": 0.1438406369468914,
+          "permutation_p": 0.0001999600079984003
+        },
+        "temp_media_c": {
+          "n": 8884,
+          "pearson_r": 0.19927729472092306,
+          "spearman_rho": 0.159431889160078,
+          "permutation_p": 0.0001999600079984003
+        },
+        "degree_days_total": {
+          "n": 8884,
+          "pearson_r": 0.226886026752365,
+          "spearman_rho": 0.228531836660926,
+          "permutation_p": 0.0001999600079984003
+        },
+        "deficiency_total_mm": {
+          "n": 8884,
+          "pearson_r": 0.013894142720416057,
+          "spearman_rho": -0.018742181931334766,
+          "permutation_p": 0.1899620075984803
+        },
+        "excess_total_mm": {
+          "n": 8884,
+          "pearson_r": 0.05329754820111658,
+          "spearman_rho": 0.013346569872080069,
+          "permutation_p": 0.0001999600079984003
+        },
+        "et0_total_mm": {
+          "n": 8884,
+          "pearson_r": 0.1832388180097192,
+          "spearman_rho": 0.20379225323821418,
+          "permutation_p": 0.0001999600079984003
+        }
+      },
+      "models": {
+        "B_meteorologicos": {
+          "variables": [
+            "precip_acumulada_mm",
+            "temp_media_c"
+          ],
+          "walk_forward": {
+            "status": "ok",
+            "n_predictions": 3138,
+            "models": {
+              "media_historica": {
+                "n_predictions": 3138,
+                "mae_kg_ha": 486.61299735955566,
+                "rmse_kg_ha": 613.1939669264193,
+                "mape_percent": 18.417801622700097
+              },
+              "ultimo_valor": {
+                "n_predictions": 3138,
+                "mae_kg_ha": 758.3355640535373,
+                "rmse_kg_ha": 1026.5905740944781,
+                "mape_percent": 26.733755578601254
+              },
+              "tendencia": {
+                "n_predictions": 3138,
+                "mae_kg_ha": 681.4127174015272,
+                "rmse_kg_ha": 938.5257501848154,
+                "mape_percent": 22.874303312321402
+              },
+              "modelo": {
+                "n_predictions": 3138,
+                "mae_kg_ha": 982.0511868887752,
+                "rmse_kg_ha": 1488.7594777226373,
+                "mape_percent": 36.27427068876269
+              }
+            },
+            "best_by_mae": "media_historica"
+          },
+          "territorial_holdout": {
+            "status": "ok",
+            "n_predictions": 8884,
+            "models": {
+              "media_historica": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 621.5813835297719,
+                "rmse_kg_ha": 800.4965579060349,
+                "mape_percent": 31.77012636673398
+              },
+              "ultimo_valor": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 1034.2827555155336,
+                "rmse_kg_ha": 1295.8222384843389,
+                "mape_percent": 53.648241830852804
+              },
+              "tendencia": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 617.8584789831931,
+                "rmse_kg_ha": 798.5508984301605,
+                "mape_percent": 31.545908868368265
+              },
+              "modelo": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 596.6983602415087,
+                "rmse_kg_ha": 771.9790380620146,
+                "mape_percent": 30.214930690084724
+              }
+            },
+            "best_by_mae": "modelo"
+          }
+        },
+        "C_thermal": {
+          "variables": [
+            "degree_days_total",
+            "extreme_heat_days"
+          ],
+          "walk_forward": {
+            "status": "ok",
+            "n_predictions": 3138,
+            "models": {
+              "media_historica": {
+                "n_predictions": 3138,
+                "mae_kg_ha": 486.61299735955566,
+                "rmse_kg_ha": 613.1939669264193,
+                "mape_percent": 18.417801622700097
+              },
+              "ultimo_valor": {
+                "n_predictions": 3138,
+                "mae_kg_ha": 758.3355640535373,
+                "rmse_kg_ha": 1026.5905740944781,
+                "mape_percent": 26.733755578601254
+              },
+              "tendencia": {
+                "n_predictions": 3138,
+                "mae_kg_ha": 681.4127174015272,
+                "rmse_kg_ha": 938.5257501848154,
+                "mape_percent": 22.874303312321402
+              },
+              "modelo": {
+                "n_predictions": 3138,
+                "mae_kg_ha": 1872.2921044809464,
+                "rmse_kg_ha": 4099.449728883535,
+                "mape_percent": 67.0538893641734
+              }
+            },
+            "best_by_mae": "media_historica"
+          },
+          "territorial_holdout": {
+            "status": "ok",
+            "n_predictions": 8884,
+            "models": {
+              "media_historica": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 621.5813835297719,
+                "rmse_kg_ha": 800.4965579060349,
+                "mape_percent": 31.77012636673398
+              },
+              "ultimo_valor": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 1034.2827555155336,
+                "rmse_kg_ha": 1295.8222384843389,
+                "mape_percent": 53.648241830852804
+              },
+              "tendencia": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 617.8584789831931,
+                "rmse_kg_ha": 798.5508984301605,
+                "mape_percent": 31.545908868368265
+              },
+              "modelo": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 607.216234560846,
+                "rmse_kg_ha": 778.5074158533633,
+                "mape_percent": 30.678712270090713
+              }
+            },
+            "best_by_mae": "modelo"
+          }
+        },
+        "D_hidricos": {
+          "variables": [
+            "et0_total_mm",
+            "deficiency_total_mm",
+            "excess_total_mm"
+          ],
+          "walk_forward": {
+            "status": "ok",
+            "n_predictions": 3138,
+            "models": {
+              "media_historica": {
+                "n_predictions": 3138,
+                "mae_kg_ha": 486.61299735955566,
+                "rmse_kg_ha": 613.1939669264193,
+                "mape_percent": 18.417801622700097
+              },
+              "ultimo_valor": {
+                "n_predictions": 3138,
+                "mae_kg_ha": 758.3355640535373,
+                "rmse_kg_ha": 1026.5905740944781,
+                "mape_percent": 26.733755578601254
+              },
+              "tendencia": {
+                "n_predictions": 3138,
+                "mae_kg_ha": 681.4127174015272,
+                "rmse_kg_ha": 938.5257501848154,
+                "mape_percent": 22.874303312321402
+              },
+              "modelo": {
+                "n_predictions": 3138,
+                "mae_kg_ha": 2015.701780964992,
+                "rmse_kg_ha": 6498.765549930742,
+                "mape_percent": 78.53838592617613
+              }
+            },
+            "best_by_mae": "media_historica"
+          },
+          "territorial_holdout": {
+            "status": "ok",
+            "n_predictions": 8884,
+            "models": {
+              "media_historica": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 621.5813835297719,
+                "rmse_kg_ha": 800.4965579060349,
+                "mape_percent": 31.77012636673398
+              },
+              "ultimo_valor": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 1034.2827555155336,
+                "rmse_kg_ha": 1295.8222384843389,
+                "mape_percent": 53.648241830852804
+              },
+              "tendencia": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 617.8584789831931,
+                "rmse_kg_ha": 798.5508984301605,
+                "mape_percent": 31.545908868368265
+              },
+              "modelo": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 611.2840334038613,
+                "rmse_kg_ha": 780.0721269216951,
+                "mape_percent": 30.80567557205041
+              }
+            },
+            "best_by_mae": "modelo"
+          }
+        }
+      },
+      "fixed_effects": {
+        "precip_acumulada_mm": {
+          "status": "ok",
+          "n": 8884,
+          "n_municipalities": 1225,
+          "n_years": 8,
+          "variable": "precip_acumulada_mm",
+          "coefficient": 0.5806225536174386,
+          "std_error_clustered": 0.035880946590471,
+          "t_statistic": 16.181918505227955,
+          "r_squared_within": 0.5059289102719193,
+          "interpretation": "coeficiente da variável climática dentro dos efeitos fixos de município e de ano; erro-padrão agrupado por município"
+        },
+        "degree_days_total": {
+          "status": "ok",
+          "n": 8884,
+          "n_municipalities": 1225,
+          "n_years": 8,
+          "variable": "degree_days_total",
+          "coefficient": 0.246081362350031,
+          "std_error_clustered": 0.03403401770119223,
+          "t_statistic": 7.230452910689138,
+          "r_squared_within": 0.496029585063956,
+          "interpretation": "coeficiente da variável climática dentro dos efeitos fixos de município e de ano; erro-padrão agrupado por município"
+        },
+        "deficiency_total_mm": {
+          "status": "ok",
+          "n": 8884,
+          "n_municipalities": 1225,
+          "n_years": 8,
+          "variable": "deficiency_total_mm",
+          "coefficient": -1.260169893887058,
+          "std_error_clustered": 0.07227759500069414,
+          "t_statistic": -17.435138702041147,
+          "r_squared_within": 0.505223649603816,
+          "interpretation": "coeficiente da variável climática dentro dos efeitos fixos de município e de ano; erro-padrão agrupado por município"
+        },
+        "temp_media_c": {
+          "status": "ok",
+          "n": 8884,
+          "n_municipalities": 1225,
+          "n_years": 8,
+          "variable": "temp_media_c",
+          "coefficient": -92.78901723572022,
+          "std_error_clustered": 7.921859827113246,
+          "t_statistic": -11.713034471796867,
+          "r_squared_within": 0.4989246453864312,
+          "interpretation": "coeficiente da variável climática dentro dos efeitos fixos de município e de ano; erro-padrão agrupado por município"
+        }
+      }
+    }
+  },
+  "holm": {
+    "milho|precip_acumulada_mm": 0.0035992801439712055,
+    "milho|temp_media_c": 0.0035992801439712055,
+    "milho|degree_days_total": 0.0035992801439712055,
+    "milho|deficiency_total_mm": 0.0035992801439712055,
+    "milho|excess_total_mm": 0.0035992801439712055,
+    "milho|et0_total_mm": 0.0035992801439712055,
+    "milho_2|precip_acumulada_mm": 0.0035992801439712055,
+    "milho_2|temp_media_c": 0.0035992801439712055,
+    "milho_2|degree_days_total": 0.0035992801439712055,
+    "milho_2|deficiency_total_mm": 0.0035992801439712055,
+    "milho_2|excess_total_mm": 0.0035992801439712055,
+    "milho_2|et0_total_mm": 0.0035992801439712055,
+    "soja|precip_acumulada_mm": 0.0035992801439712055,
+    "soja|temp_media_c": 0.0035992801439712055,
+    "soja|degree_days_total": 0.0035992801439712055,
+    "soja|excess_total_mm": 0.0035992801439712055,
+    "soja|et0_total_mm": 0.0035992801439712055,
+    "soja|deficiency_total_mm": 0.1899620075984803
+  },
+  "protocol": {
+    "models": {
+      "A_baselines": [],
+      "B_meteorologicos": [
+        "precip_acumulada_mm",
+        "temp_media_c"
+      ],
+      "C_thermal": [
+        "degree_days_total",
+        "extreme_heat_days"
+      ],
+      "D_hidricos": [
+        "et0_total_mm",
+        "deficiency_total_mm",
+        "excess_total_mm"
+      ]
+    },
+    "min_train": 5,
+    "folds": 5,
+    "permutations": 5000,
+    "note": "Modelos e validações fixados antes da análise; nenhum algoritmo complexo; erros-padrão agrupados por município no painel de efeitos fixos."
+  }
+}

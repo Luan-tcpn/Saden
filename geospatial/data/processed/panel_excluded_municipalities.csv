@@ -1,0 +1,785 @@
+﻿ibge_code,municipality,state,crop,years_with_yield,years_total,area_positive_years,station_code,station_selection,station_distance_km,eligible,exclusion_reason
+2900108,Abaíra,BA,soja,0,9,0,A430,nearest_within_threshold,16.041,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2900207,Abaré,BA,soja,0,9,0,A329,nearest_within_threshold,36.657,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2900306,Acajutiba,BA,soja,0,9,0,A472,inside_municipality,1.928,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2900355,Adustina,BA,soja,0,9,0,A419,nearest_within_threshold,21.018,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2900405,Água Fria,BA,soja,0,9,0,A441,nearest_within_threshold,38.322,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2900504,Érico Cardoso,BA,soja,0,9,0,A430,nearest_within_threshold,41.793,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2900603,Aiquara,BA,soja,0,9,0,A445,nearest_within_threshold,22.155,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2900702,Alagoinhas,BA,soja,0,9,0,A413,nearest_within_threshold,62.135,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2900801,Alcobaça,BA,soja,0,9,0,A455,nearest_within_threshold,53.769,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2900900,Almadina,BA,soja,0,9,0,A410,nearest_within_threshold,52.136,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2901007,Amargosa,BA,soja,0,9,0,A434,inside_municipality,3.637,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2901106,Amélia Rodrigues,BA,soja,0,9,0,A413,nearest_within_threshold,36.695,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2901155,América Dourada,BA,soja,0,9,0,A424,nearest_within_threshold,38.21,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2901205,Anagé,BA,soja,0,9,0,A414,nearest_within_threshold,35.657,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2901304,Andaraí,BA,soja,0,9,0,A425,nearest_within_threshold,27.167,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2901353,Andorinha,BA,soja,0,9,0,A428,nearest_within_threshold,35.212,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2901403,Angical,BA,soja,0,9,0,A402,nearest_within_threshold,43.616,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2901502,Anguera,BA,soja,0,9,0,A413,nearest_within_threshold,24.534,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2901601,Antas,BA,soja,0,9,0,A450,nearest_within_threshold,35.472,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2901700,Antônio Cardoso,BA,soja,0,9,0,A413,nearest_within_threshold,28.244,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2901809,Antônio Gonçalves,BA,soja,0,9,0,A428,nearest_within_threshold,29.291,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2901908,Aporá,BA,soja,0,9,0,A472,nearest_within_threshold,21.191,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2901957,Apuarema,BA,soja,0,9,0,A445,nearest_within_threshold,39.585,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2901957,Apuarema,BA,milho,0,9,0,A445,nearest_within_threshold,39.585,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2902005,Aracatu,BA,soja,0,9,0,A433,nearest_within_threshold,38.366,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2902054,Araçás,BA,soja,0,9,0,A431,nearest_within_threshold,59.465,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2902104,Araci,BA,soja,0,9,0,A441,nearest_within_threshold,50.49,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2902203,Aramari,BA,soja,0,9,0,A413,nearest_within_threshold,50.752,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2902252,Arataca,BA,soja,0,9,0,A437,nearest_within_threshold,34.657,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2902252,Arataca,BA,milho,0,9,0,A437,nearest_within_threshold,34.657,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2902302,Aratuípe,BA,soja,0,9,0,A444,nearest_within_threshold,29.456,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2902401,Aurelino Leal,BA,soja,0,9,0,A445,nearest_within_threshold,31.351,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2902609,Baixa Grande,BA,soja,0,9,0,A412,nearest_within_threshold,28.707,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2902658,Banzaê,BA,soja,0,9,0,A442,nearest_within_threshold,38.442,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2902708,Barra,BA,soja,3,9,3,A429,inside_municipality,25.511,False,anos com rendimento observado positivo (3) < 7
+2902807,Barra da Estiva,BA,soja,0,9,0,,none,85.628,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva; sem estacao do INMET dentro do limite
+2902807,Barra da Estiva,BA,milho,9,9,9,,none,85.628,False,sem estacao do INMET dentro do limite
+2902906,Barra do Choça,BA,soja,0,9,0,A414,nearest_within_threshold,23.838,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2903003,Barra do Mendes,BA,soja,0,9,0,A424,nearest_within_threshold,74.043,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2903102,Barra do Rocha,BA,soja,0,9,0,A445,nearest_within_threshold,13.631,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2903102,Barra do Rocha,BA,milho,0,9,0,A445,nearest_within_threshold,13.631,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2903235,Barro Alto,BA,soja,0,9,0,A424,nearest_within_threshold,57.8,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2903276,Barrocas,BA,soja,0,9,0,A441,nearest_within_threshold,16.115,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2903300,Barro Preto,BA,soja,0,9,0,A410,nearest_within_threshold,31.165,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2903300,Barro Preto,BA,milho,0,9,0,A410,nearest_within_threshold,31.165,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2903409,Belmonte,BA,soja,0,9,0,A447,nearest_within_threshold,17.425,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2903508,Belo Campo,BA,soja,0,9,0,A414,nearest_within_threshold,44.999,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2903607,Biritinga,BA,soja,0,9,0,A441,nearest_within_threshold,26.604,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2903706,Boa Nova,BA,soja,0,9,0,A445,nearest_within_threshold,61.611,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2903805,Boa Vista do Tupim,BA,soja,0,9,0,A408,nearest_within_threshold,48.623,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2903904,Bom Jesus da Lapa,BA,soja,0,9,0,,none,119.016,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva; sem estacao do INMET dentro do limite
+2903904,Bom Jesus da Lapa,BA,milho,9,9,9,,none,119.016,False,sem estacao do INMET dentro do limite
+2903953,Bom Jesus da Serra,BA,soja,0,9,0,A414,nearest_within_threshold,60.243,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2904001,Boninal,BA,soja,0,9,0,A430,nearest_within_threshold,42.242,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2904050,Bonito,BA,soja,0,9,0,A425,nearest_within_threshold,65.86,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2904100,Boquira,BA,soja,0,9,0,,none,80.971,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva; sem estacao do INMET dentro do limite
+2904100,Boquira,BA,milho,9,9,9,,none,80.971,False,sem estacao do INMET dentro do limite
+2904209,Botuporã,BA,soja,0,9,0,,none,84.479,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva; sem estacao do INMET dentro do limite
+2904209,Botuporã,BA,milho,9,9,9,,none,84.479,False,sem estacao do INMET dentro do limite
+2904308,Brejões,BA,soja,0,9,0,A434,nearest_within_threshold,26.371,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2904407,Brejolândia,BA,soja,0,9,0,A439,nearest_within_threshold,74.64,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2904506,Brotas de Macaúbas,BA,soja,0,9,0,,none,84.098,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva; sem estacao do INMET dentro do limite
+2904506,Brotas de Macaúbas,BA,milho,9,9,9,,none,84.098,False,sem estacao do INMET dentro do limite
+2904605,Brumado,BA,soja,0,9,0,A433,inside_municipality,2.393,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2904704,Buerarema,BA,soja,0,9,0,A437,nearest_within_threshold,36.904,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2904704,Buerarema,BA,milho,0,9,0,A437,nearest_within_threshold,36.904,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2904753,Buritirama,BA,soja,0,9,0,A432,inside_municipality,15.112,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2904803,Caatiba,BA,soja,0,9,0,A446,nearest_within_threshold,31.226,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2904852,Cabaceiras do Paraguaçu,BA,soja,0,9,0,A406,nearest_within_threshold,16.677,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2904902,Cachoeira,BA,soja,0,9,0,A406,nearest_within_threshold,22.424,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2905008,Caculé,BA,soja,0,9,0,A426,nearest_within_threshold,58.642,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2905107,Caém,BA,soja,0,9,0,A440,nearest_within_threshold,20.181,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2905156,Caetanos,BA,soja,0,9,0,A414,nearest_within_threshold,65.097,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2905206,Caetité,BA,soja,0,9,0,A426,nearest_within_threshold,41.278,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2905305,Cafarnaum,BA,soja,0,9,0,A424,nearest_within_threshold,59.929,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2905404,Cairu,BA,soja,0,9,0,A444,nearest_within_threshold,23.865,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2905404,Cairu,BA,milho,0,9,0,A444,nearest_within_threshold,23.865,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2905503,Caldeirão Grande,BA,soja,0,9,0,A440,nearest_within_threshold,32.266,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2905602,Camacan,BA,soja,0,9,0,A437,nearest_within_threshold,49.315,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2905602,Camacan,BA,milho,0,9,0,A437,nearest_within_threshold,49.315,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2905701,Camaçari,BA,soja,0,9,0,A456,nearest_within_threshold,35.163,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2905800,Camamu,BA,soja,0,9,0,A438,nearest_within_threshold,23.812,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2905800,Camamu,BA,milho,0,9,0,A438,nearest_within_threshold,23.812,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2905909,Campo Alegre de Lourdes,BA,soja,0,9,0,A337,nearest_within_threshold,35.636,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2906006,Campo Formoso,BA,soja,0,9,0,A443,nearest_within_threshold,56.992,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2906105,Canápolis,BA,soja,0,9,0,A416,nearest_within_threshold,51.923,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2906204,Canarana,BA,soja,0,9,0,A424,nearest_within_threshold,50.457,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2906303,Canavieiras,BA,soja,0,9,0,A437,nearest_within_threshold,41.325,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2906303,Canavieiras,BA,milho,0,9,0,A437,nearest_within_threshold,41.325,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2906402,Candeal,BA,soja,0,9,0,A441,nearest_within_threshold,29.326,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2906501,Candeias,BA,soja,0,9,0,A456,nearest_within_threshold,14.527,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2906600,Candiba,BA,soja,0,9,0,A426,nearest_within_threshold,23.533,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2906709,Cândido Sales,BA,soja,0,9,0,A549,nearest_within_threshold,48.492,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2906808,Cansanção,BA,soja,0,9,0,A436,nearest_within_threshold,32.707,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2906824,Canudos,BA,soja,0,9,0,A442,nearest_within_threshold,59.076,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2906857,Capela do Alto Alegre,BA,soja,0,9,0,A412,nearest_within_threshold,76.973,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2906873,Capim Grosso,BA,soja,0,9,0,A440,nearest_within_threshold,52.383,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2906899,Caraíbas,BA,soja,0,9,0,A414,nearest_within_threshold,59.422,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2906907,Caravelas,BA,soja,0,9,0,A522,nearest_within_threshold,61.524,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2907004,Cardeal da Silva,BA,soja,0,9,0,A431,nearest_within_threshold,27.692,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2907202,Casa Nova,BA,soja,0,9,0,,none,91.845,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva; sem estacao do INMET dentro do limite
+2907202,Casa Nova,BA,milho,6,9,6,,none,91.845,False,anos com rendimento observado positivo (6) < 7; sem estacao do INMET dentro do limite
+2907301,Castro Alves,BA,soja,0,9,0,A406,nearest_within_threshold,30.427,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2907400,Catolândia,BA,soja,0,9,0,A402,nearest_within_threshold,39.482,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2907509,Catu,BA,soja,0,9,0,A456,nearest_within_threshold,53.882,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2907558,Caturama,BA,soja,0,9,0,A430,nearest_within_threshold,59.661,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2907608,Central,BA,soja,0,9,0,A424,nearest_within_threshold,33.488,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2907707,Chorrochó,BA,soja,0,9,0,,none,84.915,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva; sem estacao do INMET dentro do limite
+2907707,Chorrochó,BA,milho,9,9,9,,none,84.915,False,sem estacao do INMET dentro do limite
+2907806,Cícero Dantas,BA,soja,0,9,0,A419,nearest_within_threshold,45.791,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2907905,Cipó,BA,soja,0,9,0,A458,nearest_within_threshold,10.201,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2908002,Coaraci,BA,soja,0,9,0,A410,nearest_within_threshold,44.405,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2908002,Coaraci,BA,milho,0,9,0,A410,nearest_within_threshold,44.405,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2908101,Cocos,BA,soja,9,9,9,,none,88.41,False,sem estacao do INMET dentro do limite
+2908101,Cocos,BA,milho,9,9,9,,none,88.41,False,sem estacao do INMET dentro do limite
+2908200,Conceição da Feira,BA,soja,0,9,0,A406,nearest_within_threshold,21.33,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2908309,Conceição do Almeida,BA,soja,0,9,0,A406,nearest_within_threshold,26.589,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2908408,Conceição do Coité,BA,soja,0,9,0,A441,nearest_within_threshold,29.232,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2908507,Conceição do Jacuípe,BA,soja,0,9,0,A413,nearest_within_threshold,29.077,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2908606,Conde,BA,soja,0,9,0,A431,inside_municipality,23.149,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2908705,Condeúba,BA,soja,0,9,0,,none,81.401,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva; sem estacao do INMET dentro do limite
+2908705,Condeúba,BA,milho,9,9,9,,none,81.401,False,sem estacao do INMET dentro do limite
+2908804,Contendas do Sincorá,BA,soja,0,9,0,A433,nearest_within_threshold,73.185,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2908903,Coração de Maria,BA,soja,0,9,0,A413,nearest_within_threshold,20.105,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2909000,Cordeiros,BA,soja,0,9,0,,none,92.613,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva; sem estacao do INMET dentro do limite
+2909000,Cordeiros,BA,milho,9,9,9,,none,92.613,False,sem estacao do INMET dentro do limite
+2909109,Coribe,BA,soja,0,9,0,A416,nearest_within_threshold,59.598,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2909208,Coronel João Sá,BA,soja,0,9,0,A450,nearest_within_threshold,50.002,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2909406,Cotegipe,BA,soja,9,9,9,,none,81.915,False,sem estacao do INMET dentro do limite
+2909406,Cotegipe,BA,milho,9,9,9,,none,81.915,False,sem estacao do INMET dentro do limite
+2909505,Cravolândia,BA,soja,0,9,0,A407,nearest_within_threshold,38.043,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2909505,Cravolândia,BA,milho,0,9,0,A407,nearest_within_threshold,38.043,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2909604,Crisópolis,BA,soja,0,9,0,A472,nearest_within_threshold,22.836,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2909703,Cristópolis,BA,soja,0,9,0,,none,83.847,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva; sem estacao do INMET dentro do limite
+2909703,Cristópolis,BA,milho,9,9,9,,none,83.847,False,sem estacao do INMET dentro do limite
+2909802,Cruz das Almas,BA,soja,0,9,0,A406,inside_municipality,3.198,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2909901,Curaçá,BA,soja,0,9,0,A448,inside_municipality,37.76,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2909901,Curaçá,BA,milho,6,9,6,A448,inside_municipality,37.76,False,anos com rendimento observado positivo (6) < 7
+2910008,Dário Meira,BA,soja,0,9,0,A445,nearest_within_threshold,41.093,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2910008,Dário Meira,BA,milho,0,9,0,A445,nearest_within_threshold,41.093,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2910057,Dias d'Ávila,BA,soja,0,9,0,A456,nearest_within_threshold,32.652,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2910107,Dom Basílio,BA,soja,0,9,0,A433,nearest_within_threshold,36.465,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2910206,Dom Macedo Costa,BA,soja,0,9,0,A406,nearest_within_threshold,27.88,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2910305,Elísio Medrado,BA,soja,0,9,0,A434,nearest_within_threshold,12.851,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2910404,Encruzilhada,BA,soja,0,9,0,A549,nearest_within_threshold,52.026,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2910503,Entre Rios,BA,soja,0,9,0,A431,nearest_within_threshold,39.745,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2910602,Esplanada,BA,soja,0,9,0,A431,nearest_within_threshold,24.807,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2910701,Euclides da Cunha,BA,soja,0,9,0,A442,inside_municipality,12.057,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2910727,Eunápolis,BA,soja,0,9,0,A427,nearest_within_threshold,46.299,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2910750,Fátima,BA,soja,0,9,0,A419,nearest_within_threshold,18.792,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2910776,Feira da Mata,BA,soja,0,9,0,A526,nearest_within_threshold,35.914,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2910800,Feira de Santana,BA,soja,0,9,0,A413,inside_municipality,7.234,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2910859,Filadélfia,BA,soja,0,9,0,A428,nearest_within_threshold,31.177,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2910909,Firmino Alves,BA,soja,0,9,0,A446,nearest_within_threshold,48.835,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2910909,Firmino Alves,BA,milho,0,9,0,A446,nearest_within_threshold,48.835,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2911006,Floresta Azul,BA,soja,0,9,0,A410,nearest_within_threshold,61.13,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2911006,Floresta Azul,BA,milho,0,9,0,A410,nearest_within_threshold,61.13,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2911204,Gandu,BA,soja,0,9,0,A445,nearest_within_threshold,48.201,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2911204,Gandu,BA,milho,0,9,0,A445,nearest_within_threshold,48.201,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2911253,Gavião,BA,soja,0,9,0,A436,nearest_within_threshold,60.262,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2911303,Gentio do Ouro,BA,soja,0,9,0,A429,nearest_within_threshold,68.54,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2911402,Glória,BA,soja,0,9,0,A351,nearest_within_threshold,71.759,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2911501,Gongogi,BA,soja,0,9,0,A445,nearest_within_threshold,17.016,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2911501,Gongogi,BA,milho,0,9,0,A445,nearest_within_threshold,17.016,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2911600,Governador Mangabeira,BA,soja,0,9,0,A406,nearest_within_threshold,10.418,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2911659,Guajeru,BA,soja,0,9,0,A433,nearest_within_threshold,53.888,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2911709,Guanambi,BA,soja,0,9,0,A426,inside_municipality,7.593,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2911808,Guaratinga,BA,soja,0,9,0,A455,nearest_within_threshold,64.646,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2911857,Heliópolis,BA,soja,0,9,0,A419,nearest_within_threshold,22.277,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2911907,Iaçu,BA,soja,0,9,0,A408,nearest_within_threshold,38.016,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2912004,Ibiassucê,BA,soja,0,9,0,A426,nearest_within_threshold,48.78,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2912103,Ibicaraí,BA,soja,0,9,0,A410,nearest_within_threshold,46.67,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2912103,Ibicaraí,BA,milho,0,9,0,A410,nearest_within_threshold,46.67,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2912202,Ibicoara,BA,soja,3,9,3,A430,nearest_within_threshold,54.416,False,anos com rendimento observado positivo (3) < 7
+2912301,Ibicuí,BA,soja,0,9,0,A445,nearest_within_threshold,55.475,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2912400,Ibipeba,BA,soja,0,9,0,A424,nearest_within_threshold,43.809,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2912509,Ibipitanga,BA,soja,0,9,0,A430,nearest_within_threshold,71.478,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2912608,Ibiquera,BA,soja,0,9,0,A425,nearest_within_threshold,54.941,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2912707,Ibirapitanga,BA,soja,0,9,0,A445,nearest_within_threshold,30.305,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2912707,Ibirapitanga,BA,milho,0,9,0,A445,nearest_within_threshold,30.305,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2912806,Ibirapuã,BA,soja,0,9,0,A522,nearest_within_threshold,25.88,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2912905,Ibirataia,BA,soja,0,9,0,A445,nearest_within_threshold,22.876,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2912905,Ibirataia,BA,milho,0,9,0,A445,nearest_within_threshold,22.876,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2913002,Ibitiara,BA,soja,0,9,0,,none,84.815,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva; sem estacao do INMET dentro do limite
+2913002,Ibitiara,BA,milho,9,9,9,,none,84.815,False,sem estacao do INMET dentro do limite
+2913101,Ibititá,BA,soja,0,9,0,A424,nearest_within_threshold,28.36,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2913200,Ibotirama,BA,soja,0,9,0,A439,inside_municipality,17.205,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2913309,Ichu,BA,soja,0,9,0,A441,nearest_within_threshold,15.916,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2913408,Igaporã,BA,soja,0,9,0,A426,nearest_within_threshold,38.675,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2913457,Igrapiúna,BA,soja,0,9,0,A438,nearest_within_threshold,25.5,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2913507,Iguaí,BA,soja,0,9,0,A445,nearest_within_threshold,65.149,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2913606,Ilhéus,BA,soja,0,9,0,A410,inside_municipality,10.496,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2913705,Inhambupe,BA,soja,0,9,0,A472,nearest_within_threshold,45.442,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2913804,Ipecaetá,BA,soja,0,9,0,A413,nearest_within_threshold,40.977,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2913903,Ipiaú,BA,soja,0,9,0,A445,inside_municipality,13.465,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2914000,Ipirá,BA,soja,0,9,0,A412,nearest_within_threshold,63.341,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2914109,Ipupiara,BA,soja,0,9,0,,none,86.979,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva; sem estacao do INMET dentro do limite
+2914109,Ipupiara,BA,milho,8,9,8,,none,86.979,False,sem estacao do INMET dentro do limite
+2914208,Irajuba,BA,soja,0,9,0,A407,nearest_within_threshold,33.827,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2914307,Iramaia,BA,soja,0,9,0,,none,86.867,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva; sem estacao do INMET dentro do limite
+2914307,Iramaia,BA,milho,7,9,7,,none,86.867,False,sem estacao do INMET dentro do limite
+2914406,Iraquara,BA,soja,0,9,0,A425,nearest_within_threshold,40.357,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2914505,Irará,BA,soja,0,9,0,A413,nearest_within_threshold,28.571,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2914604,Irecê,BA,soja,0,9,0,A424,inside_municipality,3.52,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2914653,Itabela,BA,soja,0,9,0,A455,nearest_within_threshold,38.263,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2914703,Itaberaba,BA,soja,0,9,0,A408,inside_municipality,4.93,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2914802,Itabuna,BA,soja,0,9,0,A410,nearest_within_threshold,25.673,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2914901,Itacaré,BA,soja,0,9,0,A410,nearest_within_threshold,33.1,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2915007,Itaeté,BA,soja,0,9,0,A425,nearest_within_threshold,70.377,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2915106,Itagi,BA,soja,0,9,0,A445,nearest_within_threshold,35.846,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2915205,Itagibá,BA,soja,0,9,0,A445,nearest_within_threshold,17.396,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2915205,Itagibá,BA,milho,0,9,0,A445,nearest_within_threshold,17.396,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2915304,Itagimirim,BA,soja,0,9,0,A447,nearest_within_threshold,55.853,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2915304,Itagimirim,BA,milho,0,9,0,A447,nearest_within_threshold,55.853,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2915353,Itaguaçu da Bahia,BA,soja,0,9,0,A424,nearest_within_threshold,74.409,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2915403,Itaju do Colônia,BA,soja,0,9,0,A446,nearest_within_threshold,54.503,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2915403,Itaju do Colônia,BA,milho,0,9,0,A446,nearest_within_threshold,54.503,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2915502,Itajuípe,BA,soja,0,9,0,A410,nearest_within_threshold,28.381,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2915601,Itamaraju,BA,soja,0,9,0,A455,inside_municipality,21.987,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2915700,Itamari,BA,soja,0,9,0,A445,nearest_within_threshold,45.096,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2915809,Itambé,BA,soja,0,9,0,A446,nearest_within_threshold,26.769,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2915908,Itanagra,BA,soja,0,9,0,A431,nearest_within_threshold,49.861,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2916005,Itanhém,BA,soja,0,9,0,A522,nearest_within_threshold,77.21,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2916104,Itaparica,BA,soja,0,9,0,A456,nearest_within_threshold,19.612,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2916104,Itaparica,BA,milho,0,9,0,A456,nearest_within_threshold,19.612,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2916203,Itapé,BA,soja,0,9,0,A410,nearest_within_threshold,47.135,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2916203,Itapé,BA,milho,0,9,0,A410,nearest_within_threshold,47.135,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2916302,Itapebi,BA,soja,0,9,0,A447,nearest_within_threshold,50.576,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2916401,Itapetinga,BA,soja,0,9,0,A446,inside_municipality,19.415,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2916401,Itapetinga,BA,milho,0,9,0,A446,inside_municipality,19.415,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2916609,Itapitanga,BA,soja,0,9,0,A445,nearest_within_threshold,34.426,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2916708,Itaquara,BA,soja,0,9,0,A407,nearest_within_threshold,25.482,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2916807,Itarantim,BA,soja,0,9,0,A446,nearest_within_threshold,53.952,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2916906,Itiruçu,BA,soja,0,9,0,A407,nearest_within_threshold,5.735,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2917003,Itiúba,BA,soja,0,9,0,A436,nearest_within_threshold,37.627,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2917102,Itororó,BA,soja,0,9,0,A446,nearest_within_threshold,32.309,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2917102,Itororó,BA,milho,0,9,0,A446,nearest_within_threshold,32.309,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2917201,Ituaçu,BA,soja,0,9,0,A433,nearest_within_threshold,48.963,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2917300,Ituberá,BA,soja,0,9,0,A438,nearest_within_threshold,26.228,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2917300,Ituberá,BA,milho,0,9,0,A438,nearest_within_threshold,26.228,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2917334,Iuiu,BA,soja,0,9,0,,none,85.561,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva; sem estacao do INMET dentro do limite
+2917334,Iuiu,BA,milho,9,9,9,,none,85.561,False,sem estacao do INMET dentro do limite
+2917359,Jaborandi,BA,soja,9,9,9,,none,100.078,False,sem estacao do INMET dentro do limite
+2917359,Jaborandi,BA,milho,9,9,9,,none,100.078,False,sem estacao do INMET dentro do limite
+2917409,Jacaraci,BA,soja,0,9,0,A543,nearest_within_threshold,54.156,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2917508,Jacobina,BA,soja,0,9,0,A440,inside_municipality,13.723,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2917607,Jaguaquara,BA,soja,0,9,0,A407,inside_municipality,17.828,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2917706,Jaguarari,BA,soja,0,9,0,A428,nearest_within_threshold,45.378,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2917805,Jaguaripe,BA,soja,0,9,0,A444,nearest_within_threshold,29.001,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2917904,Jandaíra,BA,soja,0,9,0,A417,nearest_within_threshold,42.275,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2918001,Jequié,BA,soja,0,9,0,A407,nearest_within_threshold,39.004,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2918100,Jeremoabo,BA,soja,0,9,0,A450,inside_municipality,20.113,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2918209,Jiquiriçá,BA,soja,0,9,0,A434,nearest_within_threshold,35.209,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2918308,Jitaúna,BA,soja,0,9,0,A445,nearest_within_threshold,30.266,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2918357,João Dourado,BA,soja,0,9,0,A424,nearest_within_threshold,34.594,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2918407,Juazeiro,BA,soja,0,9,0,A448,nearest_within_threshold,73.45,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2918456,Jucuruçu,BA,soja,0,9,0,A455,nearest_within_threshold,60.456,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2918506,Jussara,BA,soja,0,9,0,A424,nearest_within_threshold,44.884,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2918555,Jussari,BA,soja,0,9,0,A437,nearest_within_threshold,46.437,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2918555,Jussari,BA,milho,0,9,0,A437,nearest_within_threshold,46.437,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2918605,Jussiape,BA,soja,0,9,0,A430,nearest_within_threshold,43.87,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2918704,Lafaiete Coutinho,BA,soja,0,9,0,A407,nearest_within_threshold,22.566,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2918753,Lagoa Real,BA,soja,0,9,0,A426,nearest_within_threshold,59.894,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2918803,Laje,BA,soja,0,9,0,A444,nearest_within_threshold,30.845,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2918902,Lajedão,BA,soja,0,9,0,A522,nearest_within_threshold,27.342,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2919009,Lajedinho,BA,soja,0,9,0,A425,nearest_within_threshold,50.201,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2919058,Lajedo do Tabocal,BA,soja,0,9,0,A407,nearest_within_threshold,19.112,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2919108,Lamarão,BA,soja,0,9,0,A441,nearest_within_threshold,18.254,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2919157,Lapão,BA,soja,0,9,0,A424,nearest_within_threshold,21.423,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2919207,Lauro de Freitas,BA,soja,0,9,0,A456,nearest_within_threshold,19.284,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2919207,Lauro de Freitas,BA,milho,0,9,0,A456,nearest_within_threshold,19.284,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2919306,Lençóis,BA,soja,0,9,0,A425,inside_municipality,15.801,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2919405,Licínio de Almeida,BA,soja,0,9,0,A543,nearest_within_threshold,51.387,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2919504,Livramento de Nossa Senhora,BA,soja,0,9,0,A433,nearest_within_threshold,53.73,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2919603,Macajuba,BA,soja,0,9,0,A412,inside_municipality,9.995,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2919702,Macarani,BA,soja,0,9,0,A446,nearest_within_threshold,38.198,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2919801,Macaúbas,BA,soja,0,9,0,,none,99.629,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva; sem estacao do INMET dentro do limite
+2919801,Macaúbas,BA,milho,9,9,9,,none,99.629,False,sem estacao do INMET dentro do limite
+2919900,Macururé,BA,soja,0,9,0,,none,84.278,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva; sem estacao do INMET dentro do limite
+2919900,Macururé,BA,milho,7,9,7,,none,84.278,False,sem estacao do INMET dentro do limite
+2919926,Madre de Deus,BA,soja,0,9,0,A456,nearest_within_threshold,17.533,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2919926,Madre de Deus,BA,milho,0,9,0,A456,nearest_within_threshold,17.533,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2919959,Maetinga,BA,soja,0,9,0,A433,nearest_within_threshold,55.282,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2920007,Maiquinique,BA,soja,0,9,0,A446,nearest_within_threshold,47.922,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2920106,Mairi,BA,soja,0,9,0,A412,nearest_within_threshold,48.317,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2920205,Malhada,BA,soja,9,9,9,,none,84.471,False,sem estacao do INMET dentro do limite
+2920205,Malhada,BA,milho,9,9,9,,none,84.471,False,sem estacao do INMET dentro do limite
+2920304,Malhada de Pedras,BA,soja,0,9,0,A433,nearest_within_threshold,26.594,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2920403,Manoel Vitorino,BA,soja,0,9,0,A407,nearest_within_threshold,74.285,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2920452,Mansidão,BA,soja,0,9,0,A415,nearest_within_threshold,48.726,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2920502,Maracás,BA,soja,0,9,0,A407,nearest_within_threshold,47.226,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2920601,Maragogipe,BA,soja,0,9,0,A406,nearest_within_threshold,23.187,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2920700,Maraú,BA,soja,0,9,0,A438,inside_municipality,33.692,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2920700,Maraú,BA,milho,0,9,0,A438,inside_municipality,33.692,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2920809,Marcionílio Souza,BA,soja,0,9,0,A407,nearest_within_threshold,73.976,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2920908,Mascote,BA,soja,0,9,0,A447,nearest_within_threshold,51.802,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2920908,Mascote,BA,milho,0,9,0,A447,nearest_within_threshold,51.802,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2921005,Mata de São João,BA,soja,0,9,0,A456,nearest_within_threshold,52.132,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2921054,Matina,BA,soja,0,9,0,A426,nearest_within_threshold,44.916,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2921104,Medeiros Neto,BA,soja,0,9,0,A522,nearest_within_threshold,48.786,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2921203,Miguel Calmon,BA,soja,0,9,0,A440,nearest_within_threshold,29.602,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2921302,Milagres,BA,soja,0,9,0,A434,nearest_within_threshold,23.053,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2921401,Mirangaba,BA,soja,0,9,0,A440,nearest_within_threshold,54.835,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2921450,Mirante,BA,soja,0,9,0,,none,80.002,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva; sem estacao do INMET dentro do limite
+2921450,Mirante,BA,milho,7,9,7,,none,80.002,False,sem estacao do INMET dentro do limite
+2921500,Monte Santo,BA,soja,0,9,0,A442,nearest_within_threshold,52.888,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2921609,Morpará,BA,soja,0,9,0,A439,nearest_within_threshold,52.675,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2921708,Morro do Chapéu,BA,soja,0,9,0,A424,nearest_within_threshold,77.508,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2921807,Mortugaba,BA,soja,0,9,0,A543,nearest_within_threshold,52.891,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2921906,Mucugê,BA,soja,5,9,5,A430,nearest_within_threshold,33.937,False,anos com rendimento observado positivo (5) < 7
+2922003,Mucuri,BA,soja,0,9,0,A522,nearest_within_threshold,49.799,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2922052,Mulungu do Morro,BA,soja,0,9,0,A425,nearest_within_threshold,66.143,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2922102,Mundo Novo,BA,soja,0,9,0,A412,nearest_within_threshold,29.89,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2922201,Muniz Ferreira,BA,soja,0,9,0,A406,nearest_within_threshold,36.354,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2922201,Muniz Ferreira,BA,milho,0,9,0,A406,nearest_within_threshold,36.354,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2922300,Muritiba,BA,soja,0,9,0,A406,nearest_within_threshold,5.992,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2922409,Mutuípe,BA,soja,0,9,0,A434,nearest_within_threshold,35.689,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2922508,Nazaré,BA,soja,0,9,0,A406,nearest_within_threshold,33.091,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2922508,Nazaré,BA,milho,0,9,0,A406,nearest_within_threshold,33.091,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2922607,Nilo Peçanha,BA,soja,0,9,0,A438,nearest_within_threshold,35.048,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2922656,Nordestina,BA,soja,0,9,0,A436,nearest_within_threshold,21.925,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2922706,Nova Canaã,BA,soja,0,9,0,A446,nearest_within_threshold,43.377,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2922730,Nova Fátima,BA,soja,0,9,0,A441,nearest_within_threshold,66.886,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2922755,Nova Ibiá,BA,soja,0,9,0,A445,nearest_within_threshold,40.295,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2922755,Nova Ibiá,BA,milho,0,9,0,A445,nearest_within_threshold,40.295,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2922805,Nova Itarana,BA,soja,0,9,0,A434,nearest_within_threshold,45.431,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2922854,Nova Redenção,BA,soja,0,9,0,A425,nearest_within_threshold,42.057,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2922854,Nova Redenção,BA,milho,6,9,6,A425,nearest_within_threshold,42.057,False,anos com rendimento observado positivo (6) < 7
+2922904,Nova Soure,BA,soja,0,9,0,A458,nearest_within_threshold,30.647,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2923001,Nova Viçosa,BA,soja,0,9,0,A522,nearest_within_threshold,57.682,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2923035,Novo Horizonte,BA,soja,0,9,0,A430,nearest_within_threshold,51.958,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2923050,Novo Triunfo,BA,soja,0,9,0,A450,nearest_within_threshold,33.098,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2923100,Olindina,BA,soja,0,9,0,A458,nearest_within_threshold,42.963,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2923209,Oliveira dos Brejinhos,BA,soja,0,9,0,A439,nearest_within_threshold,52.953,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2923308,Ouriçangas,BA,soja,0,9,0,A413,nearest_within_threshold,39.944,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2923357,Ourolândia,BA,soja,0,9,0,A443,nearest_within_threshold,44.352,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2923407,Palmas de Monte Alto,BA,soja,0,9,0,A426,nearest_within_threshold,50.57,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2923506,Palmeiras,BA,soja,0,9,0,A425,nearest_within_threshold,17.916,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2923605,Paramirim,BA,soja,0,9,0,A430,nearest_within_threshold,64.679,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2923704,Paratinga,BA,soja,0,9,0,A439,nearest_within_threshold,57.644,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2923803,Paripiranga,BA,soja,0,9,0,A419,nearest_within_threshold,26.681,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2923902,Pau Brasil,BA,soja,0,9,0,A446,nearest_within_threshold,62.911,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2923902,Pau Brasil,BA,milho,0,9,0,A446,nearest_within_threshold,62.911,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2924009,Paulo Afonso,BA,soja,0,9,0,A371,nearest_within_threshold,58.45,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2924058,Pé de Serra,BA,soja,0,9,0,A441,nearest_within_threshold,67.892,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2924108,Pedrão,BA,soja,0,9,0,A413,nearest_within_threshold,36.302,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2924207,Pedro Alexandre,BA,soja,0,9,0,A450,nearest_within_threshold,44.405,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2924306,Piatã,BA,soja,0,9,0,A430,inside_municipality,16.535,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2924405,Pilão Arcado,BA,soja,0,9,0,,none,83.49,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva; sem estacao do INMET dentro do limite
+2924405,Pilão Arcado,BA,milho,9,9,9,,none,83.49,False,sem estacao do INMET dentro do limite
+2924504,Pindaí,BA,soja,0,9,0,A426,nearest_within_threshold,30.293,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2924603,Pindobaçu,BA,soja,0,9,0,A428,nearest_within_threshold,37.661,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2924652,Pintadas,BA,soja,0,9,0,A412,nearest_within_threshold,57.583,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2924678,Piraí do Norte,BA,soja,0,9,0,A438,nearest_within_threshold,45.118,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2924678,Piraí do Norte,BA,milho,0,9,0,A438,nearest_within_threshold,45.118,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2924702,Piripá,BA,soja,0,9,0,,none,87.689,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva; sem estacao do INMET dentro do limite
+2924702,Piripá,BA,milho,9,9,9,,none,87.689,False,sem estacao do INMET dentro do limite
+2924801,Piritiba,BA,soja,0,9,0,A412,nearest_within_threshold,55.724,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2924900,Planaltino,BA,soja,0,9,0,A407,nearest_within_threshold,42.828,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2925006,Planalto,BA,soja,0,9,0,A414,nearest_within_threshold,41.936,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2925105,Poções,BA,soja,0,9,0,A414,nearest_within_threshold,59.524,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2925204,Pojuca,BA,soja,0,9,0,A456,nearest_within_threshold,56.221,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2925204,Pojuca,BA,milho,0,9,0,A456,nearest_within_threshold,56.221,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2925253,Ponto Novo,BA,soja,0,9,0,A440,nearest_within_threshold,47.81,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2925303,Porto Seguro,BA,soja,0,9,0,A427,inside_municipality,28.203,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2925303,Porto Seguro,BA,milho,0,9,0,A427,inside_municipality,28.203,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2925402,Potiraguá,BA,soja,0,9,0,A446,nearest_within_threshold,68.981,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2925501,Prado,BA,soja,0,9,0,A455,nearest_within_threshold,25.872,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2925600,Presidente Dutra,BA,soja,0,9,0,A424,nearest_within_threshold,14.547,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2925709,Presidente Jânio Quadros,BA,soja,0,9,0,A433,nearest_within_threshold,57.521,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2925758,Presidente Tancredo Neves,BA,soja,0,9,0,A444,nearest_within_threshold,33.595,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2925808,Queimadas,BA,soja,0,9,0,A436,inside_municipality,16.818,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2925808,Queimadas,BA,milho,6,9,6,A436,inside_municipality,16.818,False,anos com rendimento observado positivo (6) < 7
+2925907,Quijingue,BA,soja,0,9,0,A442,nearest_within_threshold,27.404,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2925931,Quixabeira,BA,soja,0,9,0,A440,nearest_within_threshold,43.143,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2925931,Quixabeira,BA,milho,3,9,3,A440,nearest_within_threshold,43.143,False,anos com rendimento observado positivo (3) < 7
+2925956,Rafael Jambeiro,BA,soja,0,9,0,A406,nearest_within_threshold,56.967,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2926004,Remanso,BA,soja,0,9,0,A423,inside_municipality,18.751,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2926103,Retirolândia,BA,soja,0,9,0,A441,nearest_within_threshold,46.496,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2926103,Retirolândia,BA,milho,6,9,6,A441,nearest_within_threshold,46.496,False,anos com rendimento observado positivo (6) < 7
+2926301,Riachão do Jacuípe,BA,soja,0,9,0,A441,nearest_within_threshold,46.153,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2926400,Riacho de Santana,BA,soja,0,9,0,A426,nearest_within_threshold,71.658,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2926509,Ribeira do Amparo,BA,soja,0,9,0,A458,inside_municipality,12.4,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2926608,Ribeira do Pombal,BA,soja,0,9,0,A458,nearest_within_threshold,31.489,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2926657,Ribeirão do Largo,BA,soja,0,9,0,A446,nearest_within_threshold,49.635,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2926707,Rio de Contas,BA,soja,0,9,0,A430,nearest_within_threshold,47.469,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2926806,Rio do Antônio,BA,soja,0,9,0,A433,nearest_within_threshold,46.642,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2926905,Rio do Pires,BA,soja,0,9,0,A430,nearest_within_threshold,40.514,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2927002,Rio Real,BA,soja,0,9,0,A472,nearest_within_threshold,16.338,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2927101,Rodelas,BA,soja,0,9,0,A351,nearest_within_threshold,66.133,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2927101,Rodelas,BA,milho,0,9,0,A351,nearest_within_threshold,66.133,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2927200,Ruy Barbosa,BA,soja,0,9,0,A412,nearest_within_threshold,32.424,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2927309,Salinas da Margarida,BA,soja,0,9,0,A456,nearest_within_threshold,29.818,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2927309,Salinas da Margarida,BA,milho,0,9,0,A456,nearest_within_threshold,29.818,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2927408,Salvador,BA,soja,0,9,0,A456,inside_municipality,7.541,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2927408,Salvador,BA,milho,0,9,0,A456,inside_municipality,7.541,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2927507,Santa Bárbara,BA,soja,0,9,0,A413,nearest_within_threshold,28.587,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2927606,Santa Brígida,BA,soja,0,9,0,A450,nearest_within_threshold,39.66,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2927705,Santa Cruz Cabrália,BA,soja,0,9,0,A447,inside_municipality,15.767,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2927705,Santa Cruz Cabrália,BA,milho,0,9,0,A447,inside_municipality,15.767,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2927804,Santa Cruz da Vitória,BA,soja,0,9,0,A446,nearest_within_threshold,59.358,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2927903,Santa Inês,BA,soja,0,9,0,A434,nearest_within_threshold,39.642,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2928000,Santaluz,BA,soja,0,9,0,A436,nearest_within_threshold,29.872,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2928059,Santa Luzia,BA,soja,0,9,0,A437,nearest_within_threshold,24.896,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2928059,Santa Luzia,BA,milho,0,9,0,A437,nearest_within_threshold,24.896,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2928109,Santa Maria da Vitória,BA,soja,2,9,2,A416,nearest_within_threshold,28.668,False,anos com rendimento observado positivo (2) < 7
+2928307,Santanópolis,BA,soja,0,9,0,A413,nearest_within_threshold,27.101,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2928505,Santa Terezinha,BA,soja,0,9,0,A434,nearest_within_threshold,31.0,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2928604,Santo Amaro,BA,soja,0,9,0,A406,nearest_within_threshold,37.47,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2928703,Santo Antônio de Jesus,BA,soja,0,9,0,A444,nearest_within_threshold,38.824,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2928802,Santo Estêvão,BA,soja,0,9,0,A406,nearest_within_threshold,30.178,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2928901,São Desidério,BA,soja,9,9,9,,none,83.031,False,sem estacao do INMET dentro do limite
+2928901,São Desidério,BA,milho,9,9,9,,none,83.031,False,sem estacao do INMET dentro do limite
+2928950,São Domingos,BA,soja,0,9,0,A436,nearest_within_threshold,52.373,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2928950,São Domingos,BA,milho,5,9,5,A436,nearest_within_threshold,52.373,False,anos com rendimento observado positivo (5) < 7
+2929008,São Félix,BA,soja,0,9,0,A406,nearest_within_threshold,9.809,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2929057,São Félix do Coribe,BA,soja,0,9,0,A416,nearest_within_threshold,68.07,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2929107,São Felipe,BA,soja,0,9,0,A406,nearest_within_threshold,18.885,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2929206,São Francisco do Conde,BA,soja,0,9,0,A456,nearest_within_threshold,22.907,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2929255,São Gabriel,BA,soja,0,9,0,A424,nearest_within_threshold,34.354,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2929305,São Gonçalo dos Campos,BA,soja,0,9,0,A413,nearest_within_threshold,24.745,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2929354,São José da Vitória,BA,soja,0,9,0,A437,nearest_within_threshold,36.359,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2929354,São José da Vitória,BA,milho,0,9,0,A437,nearest_within_threshold,36.359,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2929370,São José do Jacuípe,BA,soja,0,9,0,A436,nearest_within_threshold,59.896,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2929370,São José do Jacuípe,BA,milho,3,9,3,A436,nearest_within_threshold,59.896,False,anos com rendimento observado positivo (3) < 7
+2929404,São Miguel das Matas,BA,soja,0,9,0,A434,nearest_within_threshold,21.554,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2929503,São Sebastião do Passé,BA,soja,0,9,0,A456,nearest_within_threshold,32.376,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2929503,São Sebastião do Passé,BA,milho,0,9,0,A456,nearest_within_threshold,32.376,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2929602,Sapeaçu,BA,soja,0,9,0,A406,nearest_within_threshold,14.511,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2929701,Sátiro Dias,BA,soja,0,9,0,A441,nearest_within_threshold,48.262,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2929750,Saubara,BA,soja,0,9,0,A456,nearest_within_threshold,29.882,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2929800,Saúde,BA,soja,0,9,0,A440,nearest_within_threshold,33.778,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2929909,Seabra,BA,soja,0,9,0,A425,nearest_within_threshold,56.042,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2930006,Sebastião Laranjeiras,BA,soja,0,9,0,A543,nearest_within_threshold,50.905,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2930105,Senhor do Bonfim,BA,soja,0,9,0,A428,inside_municipality,5.83,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2930154,Serra do Ramalho,BA,soja,9,9,9,,none,103.201,False,sem estacao do INMET dentro do limite
+2930154,Serra do Ramalho,BA,milho,9,9,9,,none,103.201,False,sem estacao do INMET dentro do limite
+2930204,Sento Sé,BA,soja,0,9,0,A443,nearest_within_threshold,61.852,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2930303,Serra Dourada,BA,soja,0,9,0,,none,93.125,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva; sem estacao do INMET dentro do limite
+2930303,Serra Dourada,BA,milho,9,9,9,,none,93.125,False,sem estacao do INMET dentro do limite
+2930402,Serra Preta,BA,soja,0,9,0,A413,nearest_within_threshold,46.07,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2930501,Serrinha,BA,soja,0,9,0,A441,inside_municipality,3.189,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2930600,Serrolândia,BA,soja,0,9,0,A440,nearest_within_threshold,33.404,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2930709,Simões Filho,BA,soja,0,9,0,A456,nearest_within_threshold,11.264,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2930709,Simões Filho,BA,milho,0,9,0,A456,nearest_within_threshold,11.264,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2930766,Sítio do Quinto,BA,soja,0,9,0,A450,nearest_within_threshold,36.116,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2930774,Sobradinho,BA,soja,0,9,0,,none,95.612,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva; sem estacao do INMET dentro do limite
+2930774,Sobradinho,BA,milho,8,9,8,,none,95.612,False,sem estacao do INMET dentro do limite
+2930808,Souto Soares,BA,soja,0,9,0,A425,nearest_within_threshold,73.285,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2930907,Tabocas do Brejo Velho,BA,soja,9,9,9,,none,102.566,False,sem estacao do INMET dentro do limite
+2930907,Tabocas do Brejo Velho,BA,milho,9,9,9,,none,102.566,False,sem estacao do INMET dentro do limite
+2931004,Tanhaçu,BA,soja,0,9,0,A433,nearest_within_threshold,51.563,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2931053,Tanque Novo,BA,soja,0,9,0,A426,nearest_within_threshold,76.033,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2931103,Tanquinho,BA,soja,0,9,0,A413,nearest_within_threshold,29.816,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2931202,Taperoá,BA,soja,0,9,0,A444,nearest_within_threshold,27.746,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2931301,Tapiramutá,BA,soja,0,9,0,A412,nearest_within_threshold,55.392,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2931350,Teixeira de Freitas,BA,soja,0,9,0,A455,nearest_within_threshold,52.367,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2931400,Teodoro Sampaio,BA,soja,0,9,0,A413,nearest_within_threshold,39.102,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2931400,Teodoro Sampaio,BA,milho,0,9,0,A413,nearest_within_threshold,39.102,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2931509,Teofilândia,BA,soja,0,9,0,A441,nearest_within_threshold,22.953,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2931608,Teolândia,BA,soja,0,9,0,A444,nearest_within_threshold,46.451,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2931608,Teolândia,BA,milho,0,9,0,A444,nearest_within_threshold,46.451,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2931707,Terra Nova,BA,soja,0,9,0,A413,nearest_within_threshold,45.499,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2931806,Tremedal,BA,soja,0,9,0,A414,nearest_within_threshold,74.445,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2931905,Tucano,BA,soja,0,9,0,A458,nearest_within_threshold,40.173,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2932002,Uauá,BA,soja,0,9,0,,none,86.707,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva; sem estacao do INMET dentro do limite
+2932002,Uauá,BA,milho,8,9,8,,none,86.707,False,sem estacao do INMET dentro do limite
+2932101,Ubaíra,BA,soja,0,9,0,A434,nearest_within_threshold,30.448,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2932200,Ubaitaba,BA,soja,0,9,0,A445,nearest_within_threshold,31.074,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2932200,Ubaitaba,BA,milho,0,9,0,A445,nearest_within_threshold,31.074,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2932309,Ubatã,BA,soja,0,9,0,A445,nearest_within_threshold,20.201,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2932309,Ubatã,BA,milho,0,9,0,A445,nearest_within_threshold,20.201,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2932408,Uibaí,BA,soja,0,9,0,A424,nearest_within_threshold,26.724,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2932457,Umburanas,BA,soja,0,9,0,A443,inside_municipality,14.129,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2932507,Una,BA,soja,0,9,0,A437,inside_municipality,9.362,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2932507,Una,BA,milho,1,9,1,A437,inside_municipality,9.362,False,anos com rendimento observado positivo (1) < 7
+2932606,Urandi,BA,soja,0,9,0,A543,nearest_within_threshold,23.684,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2932705,Uruçuca,BA,soja,0,9,0,A410,nearest_within_threshold,15.586,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2932804,Utinga,BA,soja,0,9,0,A425,nearest_within_threshold,66.097,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2932804,Utinga,BA,milho,0,9,0,A425,nearest_within_threshold,66.097,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2932903,Valença,BA,soja,0,9,0,A444,inside_municipality,7.292,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2933000,Valente,BA,soja,0,9,0,A436,nearest_within_threshold,47.256,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2933000,Valente,BA,milho,5,9,5,A436,nearest_within_threshold,47.256,False,anos com rendimento observado positivo (5) < 7
+2933059,Várzea da Roça,BA,soja,0,9,0,A440,nearest_within_threshold,61.635,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2933109,Várzea do Poço,BA,soja,0,9,0,A440,nearest_within_threshold,40.764,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2933158,Várzea Nova,BA,soja,0,9,0,A440,nearest_within_threshold,61.22,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2933174,Varzedo,BA,soja,0,9,0,A434,nearest_within_threshold,25.098,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2933208,Vera Cruz,BA,soja,0,9,0,A401,nearest_within_threshold,20.709,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2933208,Vera Cruz,BA,milho,0,9,0,A401,nearest_within_threshold,20.709,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2933257,Vereda,BA,soja,0,9,0,A455,nearest_within_threshold,47.289,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2933257,Vereda,BA,milho,0,9,0,A455,nearest_within_threshold,47.289,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2933307,Vitória da Conquista,BA,soja,0,9,0,A414,inside_municipality,19.301,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2933406,Wagner,BA,soja,0,9,0,A425,nearest_within_threshold,44.869,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2933455,Wanderley,BA,soja,0,9,0,,none,86.674,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva; sem estacao do INMET dentro do limite
+2933455,Wanderley,BA,milho,9,9,9,,none,86.674,False,sem estacao do INMET dentro do limite
+2933505,Wenceslau Guimarães,BA,soja,0,9,0,A407,nearest_within_threshold,55.243,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2933505,Wenceslau Guimarães,BA,milho,0,9,0,A407,nearest_within_threshold,55.243,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+2933604,Xique-Xique,BA,soja,0,9,0,A429,nearest_within_threshold,40.717,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4100202,Adrianópolis,PR,soja,3,9,3,A746,nearest_within_threshold,45.398,False,anos com rendimento observado positivo (3) < 7
+4101200,Antonina,PR,soja,0,9,0,A873,nearest_within_threshold,24.181,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4104006,Campina Grande do Sul,PR,soja,3,9,3,B806,nearest_within_threshold,35.021,False,anos com rendimento observado positivo (3) < 7
+4105805,Colombo,PR,soja,2,9,2,B806,inside_municipality,3.547,False,anos com rendimento observado positivo (2) < 7
+4106902,Curitiba,PR,soja,4,9,4,A807,inside_municipality,6.631,False,anos com rendimento observado positivo (4) < 7
+4107603,Faxinal,PR,soja,9,9,9,,none,83.012,False,sem estacao do INMET dentro do limite
+4107603,Faxinal,PR,milho,9,9,9,,none,83.012,False,sem estacao do INMET dentro do limite
+4108908,Guairaçá,PR,soja,3,9,3,A849,nearest_within_threshold,35.041,False,anos com rendimento observado positivo (3) < 7
+4109500,Guaraqueçaba,PR,soja,0,9,0,A746,nearest_within_threshold,30.536,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4109609,Guaratuba,PR,soja,0,9,0,A851,nearest_within_threshold,32.032,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4110300,Inajá,PR,milho,6,9,6,A850,nearest_within_threshold,11.488,False,anos com rendimento observado positivo (6) < 7
+4115705,Matinhos,PR,soja,0,9,0,A851,nearest_within_threshold,36.595,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4115705,Matinhos,PR,milho,0,9,0,A851,nearest_within_threshold,36.595,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4115754,Mauá da Serra,PR,soja,9,9,9,,none,82.491,False,sem estacao do INMET dentro do limite
+4115754,Mauá da Serra,PR,milho,9,9,9,,none,82.491,False,sem estacao do INMET dentro do limite
+4116208,Morretes,PR,soja,0,9,0,A873,inside_municipality,4.892,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4116505,Nova Aliança do Ivaí,PR,milho,6,9,6,A869,nearest_within_threshold,39.036,False,anos com rendimento observado positivo (6) < 7
+4118204,Paranaguá,PR,soja,0,9,0,A873,nearest_within_threshold,29.254,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4119152,Pinhais,PR,soja,3,9,3,A807,nearest_within_threshold,8.18,False,anos com rendimento observado positivo (3) < 7
+4119954,Pontal do Paraná,PR,soja,0,9,0,A873,nearest_within_threshold,36.37,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4119954,Pontal do Paraná,PR,milho,0,9,0,A873,nearest_within_threshold,36.37,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4120200,Porto Rico,PR,soja,4,9,4,A849,nearest_within_threshold,48.447,False,anos com rendimento observado positivo (4) < 7
+4120705,Quatiguá,PR,soja,6,9,6,A821,nearest_within_threshold,6.486,False,anos com rendimento observado positivo (6) < 7
+4120804,Quatro Barras,PR,soja,3,9,3,B806,nearest_within_threshold,17.218,False,anos com rendimento observado positivo (3) < 7
+4124905,São João do Caiuá,PR,soja,5,9,5,A850,nearest_within_threshold,28.366,False,anos com rendimento observado positivo (5) < 7
+4124905,São João do Caiuá,PR,milho,2,9,2,A850,nearest_within_threshold,28.366,False,anos com rendimento observado positivo (2) < 7
+4126801,Tapejara,PR,soja,2,9,2,A869,nearest_within_threshold,33.55,False,anos com rendimento observado positivo (2) < 7
+4127882,Tunas do Paraná,PR,soja,3,9,3,B806,nearest_within_threshold,48.547,False,anos com rendimento observado positivo (3) < 7
+4128625,Alto Paraíso,PR,milho,6,9,6,A824,nearest_within_threshold,25.373,False,anos com rendimento observado positivo (6) < 7
+4128807,Xambrê,PR,milho,3,9,3,A824,nearest_within_threshold,38.664,False,anos com rendimento observado positivo (3) < 7
+4300001,"Área Operacional ""Lagoa Mirim""",RS,soja,0,9,0,B829,nearest_within_threshold,32.036,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4300001,"Área Operacional ""Lagoa Mirim""",RS,milho,0,9,0,B829,nearest_within_threshold,32.036,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4300002,"Área Operacional ""Lagoa dos Patos""",RS,soja,0,9,0,A878,nearest_within_threshold,47.604,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4300002,"Área Operacional ""Lagoa dos Patos""",RS,milho,0,9,0,A878,nearest_within_threshold,47.604,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4300570,Alto Feliz,RS,soja,0,9,0,B818,nearest_within_threshold,21.815,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4300604,Alvorada,RS,soja,5,9,5,B808,nearest_within_threshold,9.66,False,anos com rendimento observado positivo (5) < 7
+4300604,Alvorada,RS,milho,2,9,2,B808,nearest_within_threshold,9.66,False,anos com rendimento observado positivo (2) < 7
+4300802,Antônio Prado,RS,soja,2,9,2,B817,nearest_within_threshold,33.193,False,anos com rendimento observado positivo (2) < 7
+4300877,Araricá,RS,soja,0,9,0,A884,nearest_within_threshold,13.279,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4301057,Arroio do Sal,RS,soja,4,9,4,B841,nearest_within_threshold,14.702,False,anos com rendimento observado positivo (4) < 7
+4301651,Barão,RS,soja,0,9,0,A840,nearest_within_threshold,24.898,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4301875,Barra do Quaraí,RS,milho,3,9,3,B848,inside_municipality,4.415,False,anos com rendimento observado positivo (3) < 7
+4302105,Bento Gonçalves,RS,soja,0,9,0,A840,inside_municipality,4.659,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4302253,Boa Vista do Sul,RS,soja,0,9,0,A882,nearest_within_threshold,18.342,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4302352,Bom Princípio,RS,soja,2,9,2,B814,nearest_within_threshold,32.74,False,anos com rendimento observado positivo (2) < 7
+4302659,Brochier,RS,soja,0,9,0,A882,nearest_within_threshold,21.773,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4303103,Cachoeirinha,RS,soja,0,9,0,B808,inside_municipality,4.383,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4303103,Cachoeirinha,RS,milho,0,9,0,B808,inside_municipality,4.383,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4303905,Campo Bom,RS,soja,0,9,0,A884,inside_municipality,1.518,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4304408,Canela,RS,soja,0,9,0,A879,inside_municipality,5.409,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4304606,Canoas,RS,milho,0,9,0,B808,nearest_within_threshold,6.896,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4304614,Canudos do Vale,RS,soja,1,9,1,B860,nearest_within_threshold,30.372,False,anos com rendimento observado positivo (1) < 7
+4304630,Capão da Canoa,RS,soja,0,9,0,B832,inside_municipality,0.895,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4304697,Capitão,RS,soja,2,9,2,B859,nearest_within_threshold,18.469,False,anos com rendimento observado positivo (2) < 7
+4304804,Carlos Barbosa,RS,soja,0,9,0,A840,nearest_within_threshold,17.706,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4305934,Coronel Pilar,RS,soja,0,9,0,B859,nearest_within_threshold,18.565,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4306403,Dois Irmãos,RS,soja,0,9,0,A884,nearest_within_threshold,8.708,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4306551,Dom Pedro de Alcântara,RS,soja,0,9,0,B841,nearest_within_threshold,7.167,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4306551,Dom Pedro de Alcântara,RS,milho,0,9,0,B841,nearest_within_threshold,7.167,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4307609,Estância Velha,RS,soja,0,9,0,A884,nearest_within_threshold,12.344,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4307708,Esteio,RS,soja,0,9,0,B809,nearest_within_threshold,4.636,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4307708,Esteio,RS,milho,0,9,0,B809,nearest_within_threshold,4.636,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4307906,Farroupilha,RS,soja,0,9,0,A840,nearest_within_threshold,17.095,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4308102,Feliz,RS,soja,0,9,0,B816,nearest_within_threshold,26.403,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4308201,Flores da Cunha,RS,soja,2,9,2,B818,nearest_within_threshold,18.609,False,anos com rendimento observado positivo (2) < 7
+4308607,Garibaldi,RS,soja,0,9,0,A840,nearest_within_threshold,9.691,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4309100,Gramado,RS,soja,0,9,0,A879,nearest_within_threshold,7.013,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4309555,Harmonia,RS,soja,0,9,0,B814,nearest_within_threshold,23.696,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4310330,Imbé,RS,soja,0,9,0,A834,nearest_within_threshold,9.027,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4310330,Imbé,RS,milho,0,9,0,A834,nearest_within_threshold,9.027,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4310652,Itati,RS,soja,0,9,0,B832,nearest_within_threshold,29.822,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4310801,Ivoti,RS,soja,0,9,0,A884,nearest_within_threshold,13.738,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4311627,Lindolfo Collor,RS,soja,0,9,0,A884,nearest_within_threshold,18.15,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4311643,Linha Nova,RS,soja,0,9,0,B816,nearest_within_threshold,19.692,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4311734,Mampituba,RS,soja,0,9,0,B841,nearest_within_threshold,25.625,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4311775,Maquiné,RS,soja,2,9,2,B832,nearest_within_threshold,21.529,False,anos com rendimento observado positivo (2) < 7
+4311791,Maratá,RS,soja,1,9,1,B814,nearest_within_threshold,25.87,False,anos com rendimento observado positivo (1) < 7
+4311981,Mariana Pimentel,RS,soja,5,9,5,B811,nearest_within_threshold,21.422,False,anos com rendimento observado positivo (5) < 7
+4312385,Monte Belo do Sul,RS,soja,0,9,0,A840,nearest_within_threshold,11.724,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4312401,Montenegro,RS,soja,3,9,3,B814,inside_municipality,8.408,False,anos com rendimento observado positivo (3) < 7
+4312443,Morrinhos do Sul,RS,soja,2,9,2,B841,nearest_within_threshold,16.863,False,anos com rendimento observado positivo (2) < 7
+4312476,Morro Reuter,RS,soja,0,9,0,B816,nearest_within_threshold,6.012,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4313003,Nova Bréscia,RS,soja,1,9,1,B860,nearest_within_threshold,13.19,False,anos com rendimento observado positivo (1) < 7
+4313060,Nova Hartz,RS,soja,6,9,6,B816,nearest_within_threshold,16.182,False,anos com rendimento observado positivo (6) < 7
+4313086,Nova Pádua,RS,soja,0,9,0,B818,nearest_within_threshold,25.081,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4313201,Nova Petrópolis,RS,soja,0,9,0,B816,nearest_within_threshold,13.818,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4313375,Nova Santa Rita,RS,soja,0,9,0,B809,nearest_within_threshold,13.155,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4314035,Pareci Novo,RS,soja,0,9,0,B814,nearest_within_threshold,16.555,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4314035,Pareci Novo,RS,milho,6,9,6,B814,nearest_within_threshold,16.555,False,anos com rendimento observado positivo (6) < 7
+4314050,Parobé,RS,soja,6,9,6,A884,nearest_within_threshold,20.162,False,anos com rendimento observado positivo (6) < 7
+4314423,Picada Café,RS,soja,3,9,3,B816,nearest_within_threshold,9.502,False,anos com rendimento observado positivo (3) < 7
+4314548,Pinto Bandeira,RS,soja,0,9,0,A840,nearest_within_threshold,10.618,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4314753,Poço das Antas,RS,soja,0,9,0,A882,nearest_within_threshold,17.678,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4315149,Presidente Lucena,RS,soja,0,9,0,B816,nearest_within_threshold,16.369,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4315750,Riozinho,RS,soja,0,9,0,B819,nearest_within_threshold,21.552,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4316006,Rolante,RS,soja,5,9,5,B819,inside_municipality,7.22,False,anos com rendimento observado positivo (5) < 7
+4316501,Salvador do Sul,RS,soja,0,9,0,A882,nearest_within_threshold,27.892,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4317251,Santa Tereza,RS,soja,0,9,0,B859,nearest_within_threshold,15.026,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4318481,São José do Hortêncio,RS,soja,0,9,0,A884,nearest_within_threshold,24.233,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4318507,São José do Norte,RS,soja,2,9,2,B831,nearest_within_threshold,57.298,False,anos com rendimento observado positivo (2) < 7
+4318614,São José do Sul,RS,soja,0,9,0,B814,nearest_within_threshold,23.912,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4318705,São Leopoldo,RS,soja,0,9,0,B809,nearest_within_threshold,6.611,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4319000,São Marcos,RS,soja,0,9,0,B817,nearest_within_threshold,13.175,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4319356,São Pedro da Serra,RS,soja,0,9,0,A840,nearest_within_threshold,28.368,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4319505,São Sebastião do Caí,RS,soja,0,9,0,B814,nearest_within_threshold,21.029,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4319752,São Vendelino,RS,soja,0,9,0,B818,nearest_within_threshold,27.472,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4319901,Sapiranga,RS,soja,0,9,0,A884,nearest_within_threshold,9.455,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4320008,Sapucaia do Sul,RS,soja,5,9,5,B809,inside_municipality,2.452,False,anos com rendimento observado positivo (5) < 7
+4320008,Sapucaia do Sul,RS,milho,5,9,5,B809,inside_municipality,2.452,False,anos com rendimento observado positivo (5) < 7
+4320859,Tabaí,RS,soja,0,9,0,B815,nearest_within_threshold,16.699,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4321436,Terra de Areia,RS,soja,0,9,0,B832,nearest_within_threshold,11.667,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4321501,Torres,RS,soja,3,9,3,B841,inside_municipality,9.499,False,anos com rendimento observado positivo (3) < 7
+4321667,Três Cachoeiras,RS,soja,0,9,0,B841,nearest_within_threshold,16.868,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4321709,Três Coroas,RS,soja,3,9,3,A879,nearest_within_threshold,13.605,False,anos com rendimento observado positivo (3) < 7
+4321832,Três Forquilhas,RS,soja,0,9,0,B841,nearest_within_threshold,27.341,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4322251,Tupandi,RS,soja,0,9,0,B814,nearest_within_threshold,31.654,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4322400,Uruguaiana,RS,milho,2,9,2,A809,inside_municipality,34.004,False,anos com rendimento observado positivo (2) < 7
+4322541,Vale Real,RS,soja,0,9,0,B818,nearest_within_threshold,19.449,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+4323804,Xangri-lá,RS,soja,1,9,1,B832,nearest_within_threshold,15.515,False,anos com rendimento observado positivo (1) < 7
+4323804,Xangri-lá,RS,milho,0,9,0,B832,nearest_within_threshold,15.515,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+5000203,Água Clara,MS,milho,3,9,3,S733,inside_municipality,41.934,False,anos com rendimento observado positivo (3) < 7
+5001003,Aparecida do Taboado,MS,milho,3,9,3,A710,nearest_within_threshold,43.758,False,anos com rendimento observado positivo (3) < 7
+5001102,Aquidauana,MS,soja,4,9,4,S729,inside_municipality,34.901,False,anos com rendimento observado positivo (4) < 7
+5003108,Corguinho,MS,milho,2,9,2,S722,inside_municipality,28.958,False,anos com rendimento observado positivo (2) < 7
+5003900,Figueirão,MS,milho,3,9,3,S732,inside_municipality,7.755,False,anos com rendimento observado positivo (3) < 7
+5004403,Inocência,MS,soja,6,9,6,S734,inside_municipality,38.746,False,anos com rendimento observado positivo (6) < 7
+5004403,Inocência,MS,milho,4,9,4,S734,inside_municipality,38.746,False,anos com rendimento observado positivo (4) < 7
+5005202,Ladário,MS,soja,0,9,0,A724,nearest_within_threshold,13.859,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+5005202,Ladário,MS,milho,2,9,2,A724,nearest_within_threshold,13.859,False,anos com rendimento observado positivo (2) < 7
+5007307,Rio Negro,MS,milho,6,9,6,A732,nearest_within_threshold,43.084,False,anos com rendimento observado positivo (6) < 7
+5007554,Santa Rita do Pardo,MS,milho,6,9,6,S716,inside_municipality,4.964,False,anos com rendimento observado positivo (6) < 7
+5008305,Três Lagoas,MS,milho,0,9,0,A704,inside_municipality,65.217,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+5100102,Acorizal,MT,soja,0,9,0,A944,nearest_within_threshold,40.96,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+5100102,Acorizal,MT,milho,3,9,3,A944,nearest_within_threshold,40.96,False,anos com rendimento observado positivo (3) < 7
+5100805,Apiacás,MT,soja,5,9,5,A910,inside_municipality,101.286,False,anos com rendimento observado positivo (5) < 7
+5100805,Apiacás,MT,milho,5,9,5,A910,inside_municipality,101.286,False,anos com rendimento observado positivo (5) < 7
+5101258,Araputanga,MT,soja,6,9,6,A936,nearest_within_threshold,38.365,False,anos com rendimento observado positivo (6) < 7
+5101605,Barão de Melgaço,MT,soja,1,9,1,,none,98.08,False,anos com rendimento observado positivo (1) < 7; sem estacao do INMET dentro do limite
+5101605,Barão de Melgaço,MT,milho,7,9,7,,none,98.08,False,sem estacao do INMET dentro do limite
+5101837,Boa Esperança do Norte,MT,soja,1,9,1,A929,inside_municipality,24.897,False,anos com rendimento observado positivo (1) < 7
+5101837,Boa Esperança do Norte,MT,milho,1,9,1,A929,inside_municipality,24.897,False,anos com rendimento observado positivo (1) < 7
+5102603,Campinápolis,MT,soja,9,9,9,,none,91.135,False,sem estacao do INMET dentro do limite
+5102603,Campinápolis,MT,milho,9,9,9,,none,91.135,False,sem estacao do INMET dentro do limite
+5102850,Castanheira,MT,soja,5,9,5,A920,nearest_within_threshold,51.804,False,anos com rendimento observado positivo (5) < 7
+5103254,Colniza,MT,soja,2,9,2,A965,inside_municipality,118.61,False,anos com rendimento observado positivo (2) < 7
+5103403,Cuiabá,MT,soja,5,9,5,A901,inside_municipality,26.032,False,anos com rendimento observado positivo (5) < 7
+5103403,Cuiabá,MT,milho,6,9,6,A901,inside_municipality,26.032,False,anos com rendimento observado positivo (6) < 7
+5103437,Curvelândia,MT,soja,0,9,0,A961,nearest_within_threshold,21.832,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+5103809,Figueirópolis D'Oeste,MT,soja,4,9,4,A960,nearest_within_threshold,44.529,False,anos com rendimento observado positivo (4) < 7
+5103908,General Carneiro,MT,soja,9,9,9,,none,88.072,False,sem estacao do INMET dentro do limite
+5103908,General Carneiro,MT,milho,9,9,9,,none,88.072,False,sem estacao do INMET dentro do limite
+5103957,Glória D'Oeste,MT,soja,0,9,0,A960,nearest_within_threshold,15.9,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+5104500,Indiavaí,MT,soja,2,9,2,A936,nearest_within_threshold,55.629,False,anos com rendimento observado positivo (2) < 7
+5105002,Jauru,MT,soja,0,9,0,A937,nearest_within_threshold,39.526,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+5105507,Vila Bela da Santíssima Trindade,MT,soja,9,9,9,,none,82.6,False,sem estacao do INMET dentro do limite
+5105507,Vila Bela da Santíssima Trindade,MT,milho,9,9,9,,none,82.6,False,sem estacao do INMET dentro do limite
+5106208,Nova Brasilândia,MT,soja,9,9,9,,none,87.214,False,sem estacao do INMET dentro do limite
+5106208,Nova Brasilândia,MT,milho,9,9,9,,none,87.214,False,sem estacao do INMET dentro do limite
+5106232,Nova Olímpia,MT,soja,5,9,5,A902,nearest_within_threshold,17.207,False,anos com rendimento observado positivo (5) < 7
+5106307,Paranatinga,MT,soja,9,9,9,,none,91.714,False,sem estacao do INMET dentro do limite
+5106307,Paranatinga,MT,milho,9,9,9,,none,91.714,False,sem estacao do INMET dentro do limite
+5106422,Peixoto de Azevedo,MT,soja,9,9,9,,none,138.707,False,sem estacao do INMET dentro do limite
+5106422,Peixoto de Azevedo,MT,milho,9,9,9,,none,138.707,False,sem estacao do INMET dentro do limite
+5106455,Planalto da Serra,MT,soja,9,9,9,,none,92.762,False,sem estacao do INMET dentro do limite
+5106455,Planalto da Serra,MT,milho,9,9,9,,none,92.762,False,sem estacao do INMET dentro do limite
+5106703,Ponte Branca,MT,soja,8,9,8,,none,81.625,False,sem estacao do INMET dentro do limite
+5106703,Ponte Branca,MT,milho,1,9,1,,none,81.625,False,anos com rendimento observado positivo (1) < 7; sem estacao do INMET dentro do limite
+5106851,Porto Estrela,MT,soja,3,9,3,A935,inside_municipality,21.873,False,anos com rendimento observado positivo (3) < 7
+5107156,Reserva do Cabaçal,MT,soja,0,9,0,A936,nearest_within_threshold,41.673,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+5107198,Ribeirãozinho,MT,soja,9,9,9,,none,85.675,False,sem estacao do INMET dentro do limite
+5107198,Ribeirãozinho,MT,milho,9,9,9,,none,85.675,False,sem estacao do INMET dentro do limite
+5107206,Rio Branco,MT,soja,2,9,2,A936,nearest_within_threshold,16.661,False,anos com rendimento observado positivo (2) < 7
+5107297,São José do Povo,MT,soja,4,9,4,A907,nearest_within_threshold,33.304,False,anos com rendimento observado positivo (4) < 7
+5107578,Rondolândia,MT,soja,4,9,4,,none,118.687,False,anos com rendimento observado positivo (4) < 7; sem estacao do INMET dentro do limite
+5107578,Rondolândia,MT,milho,9,9,9,,none,118.687,False,sem estacao do INMET dentro do limite
+5107776,Santa Terezinha,MT,soja,9,9,9,,none,90.451,False,sem estacao do INMET dentro do limite
+5107776,Santa Terezinha,MT,milho,9,9,9,,none,90.451,False,sem estacao do INMET dentro do limite
+5108204,Torixoréu,MT,soja,9,9,9,,none,81.503,False,sem estacao do INMET dentro do limite
+5108204,Torixoréu,MT,milho,9,9,9,,none,81.503,False,sem estacao do INMET dentro do limite
+5108352,Vale de São Domingos,MT,soja,3,9,3,A937,nearest_within_threshold,49.389,False,anos com rendimento observado positivo (3) < 7
+5108402,Várzea Grande,MT,soja,0,9,0,A901,nearest_within_threshold,25.112,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+5200555,Alto Horizonte,GO,soja,9,9,9,,none,90.701,False,sem estacao do INMET dentro do limite
+5200555,Alto Horizonte,GO,milho,7,9,7,,none,90.701,False,sem estacao do INMET dentro do limite
+5200829,Amaralina,GO,soja,9,9,9,,none,80.05,False,sem estacao do INMET dentro do limite
+5200829,Amaralina,GO,milho,9,9,9,,none,80.05,False,sem estacao do INMET dentro do limite
+5200902,Amorinópolis,GO,milho,6,9,6,A028,nearest_within_threshold,22.962,False,anos com rendimento observado positivo (6) < 7
+5201207,Anhanguera,GO,soja,4,9,4,A034,nearest_within_threshold,36.013,False,anos com rendimento observado positivo (4) < 7
+5201207,Anhanguera,GO,milho,1,9,1,A034,nearest_within_threshold,36.013,False,anos com rendimento observado positivo (1) < 7
+5201405,Aparecida de Goiânia,GO,soja,3,9,3,A002,nearest_within_threshold,19.128,False,anos com rendimento observado positivo (3) < 7
+5201702,Aragarças,GO,soja,3,9,3,A013,inside_municipality,12.937,False,anos com rendimento observado positivo (3) < 7
+5201702,Aragarças,GO,milho,0,9,0,A013,inside_municipality,12.937,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+5202155,Araguapaz,GO,soja,9,9,9,,none,94.549,False,sem estacao do INMET dentro do limite
+5202155,Araguapaz,GO,milho,8,9,8,,none,94.549,False,sem estacao do INMET dentro do limite
+5202353,Arenópolis,GO,milho,1,9,1,A028,nearest_within_threshold,47.191,False,anos com rendimento observado positivo (1) < 7
+5202601,Aurilândia,GO,soja,3,9,3,A027,nearest_within_threshold,31.554,False,anos com rendimento observado positivo (3) < 7
+5202601,Aurilândia,GO,milho,0,9,0,A027,nearest_within_threshold,31.554,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+5203104,Baliza,GO,milho,6,9,6,A013,nearest_within_threshold,54.86,False,anos com rendimento observado positivo (6) < 7
+5203401,Bom Jardim de Goiás,GO,milho,0,9,0,A013,nearest_within_threshold,34.802,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+5203575,Bonópolis,GO,soja,9,9,9,,none,85.667,False,sem estacao do INMET dentro do limite
+5203575,Bonópolis,GO,milho,9,9,9,,none,85.667,False,sem estacao do INMET dentro do limite
+5203807,Britânia,GO,soja,9,9,9,,none,97.074,False,sem estacao do INMET dentro do limite
+5203807,Britânia,GO,milho,6,9,6,,none,97.074,False,anos com rendimento observado positivo (6) < 7; sem estacao do INMET dentro do limite
+5203939,Buriti de Goiás,GO,soja,4,9,4,A014,nearest_within_threshold,42.007,False,anos com rendimento observado positivo (4) < 7
+5203962,Buritinópolis,GO,soja,0,9,0,A017,nearest_within_threshold,36.101,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+5203962,Buritinópolis,GO,milho,4,9,4,A017,nearest_within_threshold,36.101,False,anos com rendimento observado positivo (4) < 7
+5204102,Cachoeira Alta,GO,soja,4,9,4,A011,nearest_within_threshold,60.026,False,anos com rendimento observado positivo (4) < 7
+5204102,Cachoeira Alta,GO,milho,3,9,3,A011,nearest_within_threshold,60.026,False,anos com rendimento observado positivo (3) < 7
+5204201,Cachoeira de Goiás,GO,soja,2,9,2,A027,nearest_within_threshold,39.7,False,anos com rendimento observado positivo (2) < 7
+5204201,Cachoeira de Goiás,GO,milho,0,9,0,A027,nearest_within_threshold,39.7,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+5204656,Campinaçu,GO,soja,9,9,9,,none,87.251,False,sem estacao do INMET dentro do limite
+5204656,Campinaçu,GO,milho,9,9,9,,none,87.251,False,sem estacao do INMET dentro do limite
+5204706,Campinorte,GO,soja,9,9,9,,none,83.259,False,sem estacao do INMET dentro do limite
+5204706,Campinorte,GO,milho,9,9,9,,none,83.259,False,sem estacao do INMET dentro do limite
+5204904,Campos Belos,GO,soja,2,9,2,A032,nearest_within_threshold,49.847,False,anos com rendimento observado positivo (2) < 7
+5204904,Campos Belos,GO,milho,2,9,2,A032,nearest_within_threshold,49.847,False,anos com rendimento observado positivo (2) < 7
+5204953,Campos Verdes,GO,soja,2,9,2,,none,87.685,False,anos com rendimento observado positivo (2) < 7; sem estacao do INMET dentro do limite
+5204953,Campos Verdes,GO,milho,9,9,9,,none,87.685,False,sem estacao do INMET dentro do limite
+5205000,Carmo do Rio Verde,GO,soja,2,9,2,A015,nearest_within_threshold,54.103,False,anos com rendimento observado positivo (2) < 7
+5205307,Cavalcante,GO,milho,4,9,4,A024,nearest_within_threshold,58.428,False,anos com rendimento observado positivo (4) < 7
+5205521,Colinas do Sul,GO,soja,1,9,1,A024,nearest_within_threshold,61.781,False,anos com rendimento observado positivo (1) < 7
+5205703,Córrego do Ouro,GO,soja,4,9,4,A028,nearest_within_threshold,60.804,False,anos com rendimento observado positivo (4) < 7
+5206404,Crixás,GO,soja,0,9,0,A015,nearest_within_threshold,67.982,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+5206701,Damianópolis,GO,soja,0,9,0,A017,nearest_within_threshold,55.299,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+5206701,Damianópolis,GO,milho,2,9,2,A017,nearest_within_threshold,55.299,False,anos com rendimento observado positivo (2) < 7
+5206800,Damolândia,GO,soja,6,9,6,A002,nearest_within_threshold,44.72,False,anos com rendimento observado positivo (6) < 7
+5207535,Faina,GO,soja,4,9,4,A014,nearest_within_threshold,61.2,False,anos com rendimento observado positivo (4) < 7
+5207600,Fazenda Nova,GO,soja,4,9,4,A028,nearest_within_threshold,43.348,False,anos com rendimento observado positivo (4) < 7
+5207600,Fazenda Nova,GO,milho,0,9,0,A028,nearest_within_threshold,43.348,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+5207907,Flores de Goiás,GO,soja,9,9,9,,none,85.328,False,sem estacao do INMET dentro do limite
+5207907,Flores de Goiás,GO,milho,9,9,9,,none,85.328,False,sem estacao do INMET dentro do limite
+5208103,Formoso,GO,soja,2,9,2,A005,nearest_within_threshold,53.253,False,anos com rendimento observado positivo (2) < 7
+5208301,Divinópolis de Goiás,GO,soja,2,9,2,A032,nearest_within_threshold,40.183,False,anos com rendimento observado positivo (2) < 7
+5208301,Divinópolis de Goiás,GO,milho,2,9,2,A032,nearest_within_threshold,40.183,False,anos com rendimento observado positivo (2) < 7
+5209291,Guaraíta,GO,soja,1,9,1,A014,nearest_within_threshold,31.247,False,anos com rendimento observado positivo (1) < 7
+5209408,Guarani de Goiás,GO,milho,4,9,4,A017,nearest_within_threshold,23.321,False,anos com rendimento observado positivo (4) < 7
+5209457,Guarinos,GO,soja,1,9,1,A015,nearest_within_threshold,37.337,False,anos com rendimento observado positivo (1) < 7
+5209457,Guarinos,GO,milho,1,9,1,A015,nearest_within_threshold,37.337,False,anos com rendimento observado positivo (1) < 7
+5210158,Ipiranga de Goiás,GO,soja,4,9,4,A015,nearest_within_threshold,25.255,False,anos com rendimento observado positivo (4) < 7
+5210307,Israelândia,GO,milho,0,9,0,A028,nearest_within_threshold,29.461,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+5210802,Itajá,GO,soja,5,9,5,A742,nearest_within_threshold,42.23,False,anos com rendimento observado positivo (5) < 7
+5211602,Ivolândia,GO,milho,0,9,0,A028,nearest_within_threshold,30.656,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+5212006,Jaupaci,GO,milho,4,9,4,A028,nearest_within_threshold,27.593,False,anos com rendimento observado positivo (4) < 7
+5212055,Jesúpolis,GO,soja,5,9,5,A014,nearest_within_threshold,78.17,False,anos com rendimento observado positivo (5) < 7
+5212204,Jussara,GO,soja,9,9,9,,none,95.44,False,sem estacao do INMET dentro do limite
+5212204,Jussara,GO,milho,8,9,8,,none,95.44,False,sem estacao do INMET dentro do limite
+5212253,Lagoa Santa,GO,soja,0,9,0,A742,nearest_within_threshold,46.359,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+5212709,Mambaí,GO,milho,2,9,2,A017,nearest_within_threshold,48.949,False,anos com rendimento observado positivo (2) < 7
+5212808,Mara Rosa,GO,soja,9,9,9,,none,82.104,False,sem estacao do INMET dentro do limite
+5212808,Mara Rosa,GO,milho,9,9,9,,none,82.104,False,sem estacao do INMET dentro do limite
+5212956,Matrinchã,GO,soja,9,9,9,,none,92.199,False,sem estacao do INMET dentro do limite
+5212956,Matrinchã,GO,milho,9,9,9,,none,92.199,False,sem estacao do INMET dentro do limite
+5213087,Minaçu,GO,soja,9,9,9,,none,85.809,False,sem estacao do INMET dentro do limite
+5213087,Minaçu,GO,milho,9,9,9,,none,85.809,False,sem estacao do INMET dentro do limite
+5213400,Moiporá,GO,milho,0,9,0,A028,nearest_within_threshold,41.193,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+5213509,Monte Alegre de Goiás,GO,milho,6,9,6,A032,inside_municipality,5.828,False,anos com rendimento observado positivo (6) < 7
+5213855,Morro Agudo de Goiás,GO,soja,2,9,2,A015,nearest_within_threshold,62.663,False,anos com rendimento observado positivo (2) < 7
+5214051,Mundo Novo,GO,soja,9,9,9,,none,108.802,False,sem estacao do INMET dentro do limite
+5214051,Mundo Novo,GO,milho,9,9,9,,none,108.802,False,sem estacao do INMET dentro do limite
+5214507,Nerópolis,GO,milho,6,9,6,A002,nearest_within_threshold,24.315,False,anos com rendimento observado positivo (6) < 7
+5214606,Niquelândia,GO,soja,9,9,9,,none,102.139,False,sem estacao do INMET dentro do limite
+5214606,Niquelândia,GO,milho,9,9,9,,none,102.139,False,sem estacao do INMET dentro do limite
+5214705,Nova América,GO,soja,0,9,0,A015,nearest_within_threshold,43.027,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+5214861,Nova Glória,GO,soja,5,9,5,A015,nearest_within_threshold,11.43,False,anos com rendimento observado positivo (5) < 7
+5214903,Nova Roma,GO,milho,4,9,4,A032,nearest_within_threshold,62.177,False,anos com rendimento observado positivo (4) < 7
+5215207,Novo Brasil,GO,soja,1,9,1,A014,nearest_within_threshold,55.461,False,anos com rendimento observado positivo (1) < 7
+5215405,Ouro Verde de Goiás,GO,soja,1,9,1,A002,nearest_within_threshold,43.188,False,anos com rendimento observado positivo (1) < 7
+5216908,Pilar de Goiás,GO,soja,1,9,1,A015,nearest_within_threshold,43.719,False,anos com rendimento observado positivo (1) < 7
+5217203,Piranhas,GO,milho,1,9,1,A023,nearest_within_threshold,61.536,False,anos com rendimento observado positivo (1) < 7
+5218904,Rubiataba,GO,soja,2,9,2,A015,nearest_within_threshold,42.511,False,anos com rendimento observado positivo (2) < 7
+5219258,Santa Fé de Goiás,GO,soja,9,9,9,,none,84.06,False,sem estacao do INMET dentro do limite
+5219258,Santa Fé de Goiás,GO,milho,8,9,8,,none,84.06,False,sem estacao do INMET dentro do limite
+5219704,Santa Terezinha de Goiás,GO,soja,1,9,1,A015,nearest_within_threshold,74.522,False,anos com rendimento observado positivo (1) < 7
+5219803,São Domingos,GO,milho,5,9,5,A032,nearest_within_threshold,53.899,False,anos com rendimento observado positivo (5) < 7
+5220108,São Luís de Montes Belos,GO,milho,4,9,4,A027,nearest_within_threshold,56.623,False,anos com rendimento observado positivo (4) < 7
+5220280,São Patrício,GO,soja,2,9,2,A015,nearest_within_threshold,52.938,False,anos com rendimento observado positivo (2) < 7
+5220405,São Simão,GO,soja,3,9,3,A011,inside_municipality,6.447,False,anos com rendimento observado positivo (3) < 7
+5220405,São Simão,GO,milho,5,9,5,A011,inside_municipality,6.447,False,anos com rendimento observado positivo (5) < 7
+5220686,Simolândia,GO,milho,4,9,4,A017,nearest_within_threshold,44.785,False,anos com rendimento observado positivo (4) < 7
+5221080,Teresina de Goiás,GO,soja,3,9,3,A024,nearest_within_threshold,59.022,False,anos com rendimento observado positivo (3) < 7
+5221080,Teresina de Goiás,GO,milho,2,9,2,A024,nearest_within_threshold,59.022,False,anos com rendimento observado positivo (2) < 7
+5221577,Uirapuru,GO,soja,5,9,5,,none,103.145,False,anos com rendimento observado positivo (5) < 7; sem estacao do INMET dentro do limite
+5221577,Uirapuru,GO,milho,9,9,9,,none,103.145,False,sem estacao do INMET dentro do limite
+5221858,Valparaíso de Goiás,GO,soja,3,9,3,A012,nearest_within_threshold,19.694,False,anos com rendimento observado positivo (3) < 7
+5221858,Valparaíso de Goiás,GO,milho,0,9,0,A012,nearest_within_threshold,19.694,False,anos com rendimento observado positivo (0) < 7; sem area colhida positiva
+5222203,Vila Boa,GO,soja,9,9,9,,none,89.489,False,sem estacao do INMET dentro do limite
+5222203,Vila Boa,GO,milho,9,9,9,,none,89.489,False,sem estacao do INMET dentro do limite

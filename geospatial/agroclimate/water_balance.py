@@ -190,8 +190,14 @@ def daily_to_monthly(
     daily_records: Sequence[dict[str, Any]],
     variables: Sequence[str] = ("precip_mm", "et0_mm"),
     etp_field: str = "et0_mm",
+    sum_variables: Sequence[str] = ("precip_mm", "radiacao_mj_m2", "et0_mm"),
 ) -> list[dict[str, Any]]:
-    """Agrega a série diária em mensal (somas e médias conforme a variável)."""
+    """Agrega a série diária em mensal (somas e médias conforme a variável).
+
+    ``etp_field`` entra como **soma** mensal (a ETP de um mês é a soma do
+    ET0 diário) — usar a média diaria compara precipitacao (soma) com ETP
+    (media) e produz um balanco hidrico sem deficiencia.
+    """
     buckets: dict[str, dict[str, list[float]]] = {}
     for record in daily_records:
         month = str(record.get("date"))[:7]
@@ -212,7 +218,7 @@ def daily_to_monthly(
                 item[variable] = None
                 item[f"{variable}_n"] = 0
                 continue
-            if variable in ("precip_mm", "radiacao_mj_m2"):
+            if variable in sum_variables:
                 item[variable] = float(sum(series))
             else:
                 item[variable] = float(sum(series) / len(series))

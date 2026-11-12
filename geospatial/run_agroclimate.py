@@ -1,4 +1,4 @@
-"""CLI da V2.6 — base agroclimática e painel multi-municipal.
+﻿"""CLI da V2.6 — base agroclimática e painel multi-municipal.
 
 Comandos
 --------
@@ -29,6 +29,8 @@ import argparse
 import json
 import os
 import sys
+import numpy as np
+from collections import defaultdict
 from datetime import datetime, timezone
 from typing import Any
 
@@ -236,14 +238,148 @@ def cmd_stations(args: argparse.Namespace) -> dict[str, Any]:
     }
 
 
+def cmd_eligible(args: argparse.Namespace) -> dict[str, Any]:
+    """Municipios **elegiveis** para o painel (criterios de D69).
+
+    Os criterios sao fixados **antes** da analise estatistica e nao dependem
+    de clima nem de correlacao:
+
+    1. rendimento medio **observado** (PAM) positivo em pelo menos
+       ``--min-years`` dos anos da janela;
+    2. area colhida positiva em pelo menos um ano;
+    3. geometria municipal oficial disponivel;
+    4. pelo menos uma estacao do INMET dentro do municipio ou a ate
+       ``--max-distance`` km (para a via observacional).
+
+    Cada municipio entra com o registro do motivo; a exclusao tambem e
+    registrada.
+    """
+    pam_records = _read_csv(os.path.join(PROCESSED, "pam_panel.csv"))
+    municipalities = _read_csv(os.path.join(PROCESSED, "panel_municipalities.csv"))
+    selection = {
+        row["ibge_code"]: row
+        for row in _read_csv(os.path.join(PROCESSED, "panel_station_selection.csv"))
+    }
+    years = [str(y) for y in range(args.start_year, args.end_year + 1)]
+    products = {"40124": "soja", "40122": "milho"}
+
+    yields: dict[tuple[str, str], dict[str, float]] = defaultdict(dict)
+    areas: dict[tuple[str, str], dict[str, float]] = defaultdict(dict)
+    for record in pam_records:
+        crop = products.get(str(record.get("crop_code")))
+        if not crop:
+            continue
+        if record.get("observation_status") != "observed":
+            continue
+        value = record.get("value_normalized")
+        if value in (None, ""):
+            continue
+        try:
+            number = float(value)
+        except ValueError:
+            continue
+        key = (str(record.get("geography_code")), crop)
+        year = str(record.get("reference_year"))
+        if record.get("variable_normalized") == "rendimento_medio_kg_ha" and number > 0:
+            yields[key][year] = number
+        elif record.get("variable_normalized") == "area_colhida_ha" and number > 0:
+            areas[key][year] = number
+
+    rows: list[dict[str, Any]] = []
+    excluded: list[dict[str, Any]] = []
+    for muni in municipalities:
+        code = muni["ibge_code"]
+        station = selection.get(code)
+        for crop in ("soja", "milho"):
+            reasons: list[str] = []
+            series = yields.get((code, crop), {})
+            if len(series) < args.min_years:
+                reasons.append(
+                    f"anos com rendimento observado positivo ({len(series)}) < {args.min_years}"
+                )
+            if not areas.get((code, crop)):
+                reasons.append("sem area colhida positiva")
+            if not station or station.get("selection_method") == "none":
+                reasons.append("sem estacao do INMET dentro do limite")
+            if not muni.get("centroid_lat"):
+                reasons.append("sem centroide")
+            record = {
+                "ibge_code": code,
+                "municipality": muni["municipality"],
+                "state": muni["state"],
+                "crop": crop,
+                "years_with_yield": len(series),
+                "years_total": len(years),
+                "area_positive_years": len(areas.get((code, crop), {})),
+                "station_code": (station or {}).get("station_code"),
+                "station_selection": (station or {}).get("selection_method"),
+                "station_distance_km": (station or {}).get("distance_km"),
+                "eligible": not reasons,
+                "exclusion_reason": "; ".join(reasons),
+            }
+            if reasons:
+                excluded.append(record)
+            else:
+                rows.append(record)
+    path = _write_csv(
+        rows, os.path.join(PROCESSED, "panel_eligible_municipalities.csv")
+    )
+    excluded_path = _write_csv(
+        excluded, os.path.join(PROCESSED, "panel_excluded_municipalities.csv")
+    )
+    by_crop: dict[str, int] = {}
+    for row in rows:
+        by_crop[str(row["crop"])] = by_crop.get(str(row["crop"]), 0) + 1
+    report = _write_json(
+        {
+            "generated_at": _now(),
+            "criteria": {
+                "min_years_with_observed_positive_yield": args.min_years,
+                "window_years": years,
+                "require_positive_harvested_area": True,
+                "require_municipality_geometry": True,
+                "require_inmet_station": True,
+                "note": (
+                    "Criterios fixados antes da analise estatistica; nao "
+                    "dependem de clima nem de correlacao com o rendimento."
+                ),
+            },
+            "eligible_rows": len(rows),
+            "eligible_by_crop": by_crop,
+            "distinct_municipalities": len({r["ibge_code"] for r in rows}),
+            "excluded_rows": len(excluded),
+            "csv": os.path.relpath(path, HERE).replace("\\", "/"),
+            "excluded_csv": os.path.relpath(excluded_path, HERE).replace("\\", "/"),
+        },
+        os.path.join(MANIFESTS, "panel_eligibility.json"),
+    )
+    return {
+        "ok": True,
+        "report": report,
+        "eligible_rows": len(rows),
+        "eligible_by_crop": by_crop,
+        "distinct_municipalities": len({r["ibge_code"] for r in rows}),
+    }
+
+
 # -------------------------------------------------------------------climate
 
 
 def cmd_climate(args: argparse.Namespace) -> dict[str, Any]:
-    """Aquisição das séries climáticas diárias por município."""
+    """Aquisição das séries climáticas diárias por município.
+
+    O conjunto de municípios é o dos **elegíveis** (critérios de D69), para
+    não requerer dados climáticos de municípios que não entram no painel.
+    """
+    from concurrent.futures import ThreadPoolExecutor
+
     municipalities = _read_csv(os.path.join(PROCESSED, "panel_municipalities.csv"))
     if not municipalities:
         return {"ok": False, "error": "rode 'municipalities' antes"}
+    eligible_path = os.path.join(PROCESSED, "panel_eligible_municipalities.csv")
+    if os.path.exists(eligible_path):
+        eligible = {r["ibge_code"] for r in _read_csv(eligible_path)}
+        municipalities = [m for m in municipalities if m["ibge_code"] in eligible]
     selection = {
         row["ibge_code"]: row
         for row in _read_csv(os.path.join(PROCESSED, "panel_station_selection.csv"))
@@ -256,33 +392,35 @@ def cmd_climate(args: argparse.Namespace) -> dict[str, Any]:
         "municipalities": len(municipalities),
         "years": years,
     }
+
+    # --- reanálises (uma requisição por município e por fonte) ------------
+    # O paralelismo é **por fonte**: o NASA POWER e o Open-Meteo têm limites
+    # de requisições (HTTP 429 sob carga alta) e não toleram a mesma carga.
+    source_workers = {
+        "nasa_power": max(1, args.workers // 2),
+        "era5_land": max(1, args.workers // 2),
+        "era5": max(1, args.workers // 2),
+    }
+    climate_csv = os.path.join(PROCESSED, "climate_daily.csv")
+    existing = _read_csv(climate_csv)
     for source in args.sources:
-        name = "inmet" if source == "inmet" else source
         if source == "inmet":
-            if not selection:
-                print("[clima] sem selecao de estacoes: pulando INMET")
-                continue
-            for muni in municipalities:
-                row = selection.get(muni["ibge_code"])
-                if not row or not row.get("station_code"):
-                    continue
-                code = row["station_code"]
-                for year in years:
-                    station_file = inmet.fetch_station_year(year, code)
-                    if station_file is None:
-                        continue
-                    for record in inmet.to_daily_records(station_file):
-                        record["ibge_code"] = muni["ibge_code"]
-                        record["station_code"] = code
-                        record["station_name"] = row.get("station_name")
-                        record["distance_km"] = row.get("distance_km")
-                        record["selection_method"] = row.get("selection_method")
-                        out_rows.append(record)
-                print(f"[clima] INMET {muni['municipality']} ({code})")
-        else:
-            for muni in municipalities:
-                if muni.get("centroid_lat") is None:
-                    continue
+            continue
+        done_codes = {
+            str(r.get("ibge_code"))
+            for r in existing
+            if str(r.get("source")) == source
+        }
+        pending = [m for m in municipalities if m["ibge_code"] not in done_codes]
+        if not pending:
+            print(f"[clima] {source}: ja concluido")
+            continue
+        collected: list[dict[str, Any]] = []
+        attempt = 0
+        while pending and attempt < 4:
+            attempt += 1
+
+            def fetch_gridded(muni):
                 try:
                     records = gridded.fetch_point(
                         float(muni["centroid_lat"]),
@@ -292,17 +430,78 @@ def cmd_climate(args: argparse.Namespace) -> dict[str, Any]:
                         source=source,
                     )
                 except Exception as exc:  # noqa: BLE001
-                    print(f"[clima] {source} {muni['municipality']}: {exc}")
+                    return muni, [], str(exc)
+                return muni, records, None
+
+            failed: list[tuple[dict[str, Any], str]] = []
+            done = 0
+            workers = source_workers.get(source, args.workers)
+            with ThreadPoolExecutor(max_workers=workers) as pool:
+                for muni, records, error in pool.map(fetch_gridded, pending):
+                    done += 1
+                    if error:
+                        failed.append((muni, error))
+                        continue
+                    for record in records:
+                        record["ibge_code"] = muni["ibge_code"]
+                    collected.extend(records)
+                    if done % 200 == 0:
+                        print(f"[clima] {source}: {done}/{len(pending)}")
+                        _write_csv(existing + collected, climate_csv)
+            print(
+                f"[clima] {source}: {done} municipios na tentativa {attempt} "
+                f"({len(failed)} falhas)"
+            )
+            # persiste o progresso a cada fonte/tentativa
+            existing = existing + collected
+            _write_csv(existing, climate_csv)
+            collected = []
+            pending = [muni for muni, _err in failed]
+            if pending:
+                print(f"[clima] {source}: repetindo {len(pending)} municipios")
+        manifest["sources"][source] = {
+            "n_failed": len(pending),
+        }
+    out_rows = existing
+
+    # --- estação do INMET -------------------------------------------------
+    if "inmet" in args.sources:
+        inmet_rows: list[dict[str, Any]] = []
+        failures = 0
+        for muni in municipalities:
+            row = selection.get(muni["ibge_code"])
+            if not row or not row.get("station_code"):
+                continue
+            code = row["station_code"]
+            for year in years:
+                try:
+                    station_file = inmet.fetch_station_year(year, code)
+                    if station_file is None:
+                        continue
+                    records = inmet.to_daily_records(station_file)
+                except Exception as exc:  # noqa: BLE001
+                    failures += 1
+                    print(
+                        f"[clima] INMET {muni['municipality']} ({code}) {year}: {exc}"
+                    )
                     continue
                 for record in records:
                     record["ibge_code"] = muni["ibge_code"]
-                    out_rows.append(record)
-                print(f"[clima] {source} {muni['municipality']}: {len(records)} dias")
+                    record["station_code"] = code
+                    record["station_name"] = row.get("station_name")
+                    record["distance_km"] = row.get("distance_km")
+                    record["selection_method"] = row.get("selection_method")
+                    inmet_rows.append(record)
+            print(f"[clima] INMET {muni['municipality']} ({code})")
+        out_rows.extend(inmet_rows)
+        manifest["sources"]["inmet"] = {
+            "n_records": len(inmet_rows),
+            "n_failures": failures,
+        }
+
     path = _write_csv(out_rows, os.path.join(PROCESSED, "climate_daily.csv"))
-    manifest["sources"] = {
-        "n_records": len(out_rows),
-        "csv": os.path.relpath(path, HERE).replace("\\", "/"),
-    }
+    manifest["sources"]["total"] = {"n_records": len(out_rows)}
+    manifest["csv"] = os.path.relpath(path, HERE).replace("\\", "/")
     report = _write_json(manifest, os.path.join(MANIFESTS, "climate_daily.json"))
     return {"ok": True, "report": report, "n_records": len(out_rows)}
 
@@ -559,6 +758,199 @@ def cmd_validate(args: argparse.Namespace) -> dict[str, Any]:
     return {"ok": True, "report": report, "n_comparisons": len(comparisons)}
 
 
+def cmd_analyse(args: argparse.Namespace) -> dict[str, Any]:
+    """Análise exploratória do painel (baselines, validação temporal e territorial)."""
+    from agroclimate import analysis
+
+    dataset = _read_csv(
+        os.path.join(PROCESSED, "agroclimatic_productivity_panel.csv")
+    )
+    if not dataset:
+        return {"ok": False, "error": "painel ausente; rode 'panel' antes"}
+    rows = analysis.prepare_rows(dataset)
+    by_crop: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for row in rows:
+        by_crop[str(row["crop"])].append(row)
+
+    results: dict[str, Any] = {"generated_at": _now(), "crops": {}}
+    p_values: dict[str, float] = {}
+    for crop, crop_rows in sorted(by_crop.items()):
+        item: dict[str, Any] = {"n_observations": len(crop_rows)}
+        item["n_municipalities"] = len({r["ibge_code"] for r in crop_rows})
+        item["n_years"] = len({r["year"] for r in crop_rows})
+        # ---_descritiva por variável ------------------------------------------------
+        descriptive: dict[str, Any] = {}
+        for variable in (
+            "precip_acumulada_mm",
+            "temp_media_c",
+            "degree_days_total",
+            "deficiency_total_mm",
+            "excess_total_mm",
+            "et0_total_mm",
+        ):
+            values = [
+                float(r[variable]) for r in crop_rows if r.get(variable) is not None
+            ]
+            if not values:
+                continue
+            descriptive[variable] = {
+                "n": len(values),
+                "mean": float(np.mean(values)),
+                "sd": float(np.std(values, ddof=1)) if len(values) > 1 else None,
+                "min": float(np.min(values)),
+                "max": float(np.max(values)),
+            }
+        item["descriptive"] = descriptive
+
+        # ---_correlações marginais --------------------------------------------------
+        correlations: dict[str, Any] = {}
+        for variable in (
+            "precip_acumulada_mm",
+            "temp_media_c",
+            "degree_days_total",
+            "deficiency_total_mm",
+            "excess_total_mm",
+            "et0_total_mm",
+        ):
+            pairs = [
+                (float(r[variable]), float(r["yield_kg_ha"]))
+                for r in crop_rows
+                if r.get(variable) is not None
+            ]
+            if len(pairs) < 4:
+                continue
+            xs = [p[0] for p in pairs]
+            ys = [p[1] for p in pairs]
+            correlations[variable] = {
+                "n": len(pairs),
+                "pearson_r": analysis.pearson(xs, ys),
+                "spearman_rho": analysis.spearman(xs, ys),
+                "permutation_p": analysis.permutation_p(
+                    xs, ys, permutations=args.permutations
+                ),
+            }
+            if correlations[variable]["permutation_p"] is not None:
+                p_values[f"{crop}|{variable}"] = correlations[variable]["permutation_p"]
+        item["correlations"] = correlations
+
+        # ---_modelos pré-declarados --------------------------------------------------
+        models: dict[str, Any] = {}
+        for name, variables in analysis.MODELS.items():
+            if not variables:
+                continue
+            wf = analysis.walk_forward(
+                crop_rows, variables=variables, min_train=args.min_train,
+                crop_filter=crop,
+            )
+            th = analysis.territorial_holdout(
+                crop_rows, variables=variables, n_folds=args.folds, crop_filter=crop
+            )
+            models[name] = {
+                "variables": list(variables),
+                "walk_forward": {
+                    "status": wf.get("status"),
+                    "n_predictions": wf.get("n_predictions"),
+                    "models": wf.get("models"),
+                    "best_by_mae": wf.get("best_by_mae"),
+                },
+                "territorial_holdout": {
+                    "status": th.get("status"),
+                    "n_predictions": th.get("n_predictions"),
+                    "models": th.get("models"),
+                    "best_by_mae": th.get("best_by_mae"),
+                },
+            }
+        item["models"] = models
+
+        # ---_painel com efeitos fixos ------------------------------------------------
+        fixed: dict[str, Any] = {}
+        for variable in (
+            "precip_acumulada_mm",
+            "degree_days_total",
+            "deficiency_total_mm",
+            "temp_media_c",
+        ):
+            fixed[variable] = analysis.fixed_effects(crop_rows, variable, crop_filter=crop)
+        item["fixed_effects"] = fixed
+        results["crops"][crop] = item
+
+    corrected = analysis.holm_correction(p_values)
+    results["holm"] = corrected
+    results["protocol"] = {
+        "models": {k: list(v) for k, v in analysis.MODELS.items()},
+        "min_train": args.min_train,
+        "folds": args.folds,
+        "permutations": args.permutations,
+        "note": (
+            "Modelos e validações fixados antes da análise; nenhum algoritmo "
+            "complexo; erros-padrão agrupados por município no painel de "
+            "efeitos fixos."
+        ),
+    }
+    path = _write_json(results, os.path.join(MANIFESTS, "agroclimatic_analysis.json"))
+    summary_path = _write_csv(
+        _analysis_summary_rows(results), os.path.join(MANIFESTS, "agroclimatic_analysis.csv")
+    )
+    return {
+        "ok": True,
+        "report": path,
+        "summary_csv": os.path.relpath(summary_path, HERE).replace("\\", "/"),
+        "crops": {
+            crop: {
+                "n_observations": item["n_observations"],
+                "n_municipalities": item["n_municipalities"],
+                "n_years": item["n_years"],
+            }
+            for crop, item in results["crops"].items()
+        },
+    }
+
+
+def _analysis_summary_rows(results: dict[str, Any]) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    for crop, item in results.get("crops", {}).items():
+        for variable, stats in (item.get("correlations") or {}).items():
+            rows.append(
+                {
+                    "crop": crop,
+                    "kind": "correlacao",
+                    "variable": variable,
+                    "n": stats.get("n"),
+                    "pearson_r": stats.get("pearson_r"),
+                    "spearman_rho": stats.get("spearman_rho"),
+                    "permutation_p": stats.get("permutation_p"),
+                    "holm_p": results.get("holm", {}).get(f"{crop}|{variable}"),
+                }
+            )
+        for name, model in (item.get("models") or {}).items():
+            for experiment in ("walk_forward", "territorial_holdout"):
+                block = model.get(experiment) or {}
+                for metric, values in (block.get("models") or {}).items():
+                    rows.append(
+                        {
+                            "crop": crop,
+                            "kind": f"{experiment}:{name}",
+                            "variable": metric,
+                            "n": values.get("n_predictions"),
+                            "mae_kg_ha": values.get("mae_kg_ha"),
+                            "rmse_kg_ha": values.get("rmse_kg_ha"),
+                        }
+                    )
+        for variable, block in (item.get("fixed_effects") or {}).items():
+            rows.append(
+                {
+                    "crop": crop,
+                    "kind": "efeitos_fixos",
+                    "variable": variable,
+                    "n": block.get("n"),
+                    "coefficient": block.get("coefficient"),
+                    "std_error_clustered": block.get("std_error_clustered"),
+                    "t_statistic": block.get("t_statistic"),
+                }
+            )
+    return rows
+
+
 # ------------------------------------------------------------------main
 
 
@@ -574,10 +966,17 @@ def build_parser() -> argparse.ArgumentParser:
     p = sub.add_parser("stations", help="inventário de estações do INMET")
     p.set_defaults(func=cmd_stations)
 
+    p = sub.add_parser("eligible", help="municípios elegíveis do painel (D69)")
+    p.add_argument("--min-years", type=int, default=7)
+    p.add_argument("--start-year", type=int, default=2017)
+    p.add_argument("--end-year", type=int, default=2025)
+    p.set_defaults(func=cmd_eligible)
+
     p = sub.add_parser("climate", help="aquisição das séries climáticas")
-    p.add_argument("--sources", nargs="+", default=["era5_land", "era5"])
+    p.add_argument("--sources", nargs="+", default=["nasa_power", "era5_land", "era5"])
     p.add_argument("--start-year", type=int, default=2016)
     p.add_argument("--end-year", type=int, default=2025)
+    p.add_argument("--workers", type=int, default=6)
     p.set_defaults(func=cmd_climate)
 
     p = sub.add_parser("quality", help="auditoria de qualidade")
@@ -600,6 +999,12 @@ def build_parser() -> argparse.ArgumentParser:
 
     p = sub.add_parser("validate", help="comparação entre fontes climáticas")
     p.set_defaults(func=cmd_validate)
+
+    p = sub.add_parser("analyse", help="análise exploratória do painel")
+    p.add_argument("--min-train", type=int, default=5)
+    p.add_argument("--folds", type=int, default=5)
+    p.add_argument("--permutations", type=int, default=5000)
+    p.set_defaults(func=cmd_analyse)
 
     return parser
 

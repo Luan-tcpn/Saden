@@ -1,0 +1,30 @@
+{
+  "generated_at": "2026-11-12T09:42:29.163411+00:00",
+  "criteria": {
+    "min_years_with_observed_positive_yield": 7,
+    "window_years": [
+      "2017",
+      "2018",
+      "2019",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "2025"
+    ],
+    "require_positive_harvested_area": true,
+    "require_municipality_geometry": true,
+    "require_inmet_station": true,
+    "note": "Criterios fixados antes da analise estatistica; nao dependem de clima nem de correlacao com o rendimento."
+  },
+  "eligible_rows": 2780,
+  "eligible_by_crop": {
+    "milho": 1590,
+    "soja": 1190
+  },
+  "distinct_municipalities": 1622,
+  "excluded_rows": 784,
+  "csv": "data/processed/panel_eligible_municipalities.csv",
+  "excluded_csv": "data/processed/panel_excluded_municipalities.csv"
+}

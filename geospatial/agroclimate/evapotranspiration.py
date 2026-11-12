@@ -151,49 +151,57 @@ def fao56_penman_monteith(
         return ETResult("fao56_penman_monteith", None, False, detail)
     vpd = es - ea
 
-    gamma = 0.665e-3 * (pressure_kpa or ATMOSPHERIC_PRESSURE_KPA)
-    delta = (4098 * (0.6108 * math.exp((17.27 * tmean) / (tmean + 237.3)))) / (
-        (tmean + 237.3) ** 2
-    )
+    if pressure_kpa:
+        p = pressure_kpa
+    elif elevation_m:
+        p = ATMOSPHERIC_PRESSURE_KPA * (1 - 0.0065 * elevation_m / 5.0) ** 5.26
+    else:
+        p = ATMOSPHERIC_PRESSURE_KPA
+    gamma = 0.665e-3 * p
+    delta = (4098 * es) / ((tmean + 237.3) ** 2)
     ra = extraterrestrial_radiation(latitude, day_of_year)
     if ra is None:
         return ETResult("fao56_penman_monteith", None, False, detail)
 
     rs = radiation_mj_m2
     if rs <= 0:
-        # sem radiação utilizável: usa Ra como limite superior dorix de
-        # Rayleigh (só ocorre com céu totalmente encoberto)
+        # sem radiação utilizável: usa Ra como limite superior de Rayleigh
         rs = 0.75 * ra
     rso = 0.75 * ra
     albedo = 0.23
+    # radiação de onda longa — FAO-56, equação 39
+    # Rnl = sigma * ((Tmax,K^4 + Tmin,K^4)/2) * (0,34 - 0,14*ea)
+    #       * (1,35*Rs/Rso - 0,35)
     net_longwave = (
         STEFAN_BOLTZMANN
         * ((temp_max_c + 273.16) ** 4 + (temp_min_c + 273.16) ** 4)
-        * 0.7
-        * 0.97
-        * (1 - albedo)
+        / 2.0
+        * max(0.0, 0.34 - 0.14 * ea)
+        * max(0.0, 1.35 * rs / rso - 0.35)
     )
+    # radiação líquida de curto comprimento de onda
     rns = (1 - albedo) * rs - net_longwave
-    if elevation_m:
-        p = pressure_kpa or (
-            ATMOSPHERIC_PRESSURE_KPA * (1 - 0.0065 * elevation_m / 5.0) ** 5.26
-        )
-    else:
-        p = pressure_kpa or ATMOSPHERIC_PRESSURE_KPA
-    gamma = 0.665e-3 * p
-    delta = (4098 * es) / ((tmean + 237.3) ** 2)
-    numerator = (
-        0.408 * rns
-        + gamma * (900 / (tmean + 273)) * u2 * vpd
-    )
-    denominator = (
-        delta
-        + gamma * (1 + 0.34 * u2)
-        + delta * (0.408 * rns / max(rso, 1e-6))
-    )
+    # FAO-56 Penman-Monteith (equação 6):
+    # ET0 = [0,408*delta*(Rn-G) + gamma*900/(T+273)*u2*(es-ea)]
+    #       / [delta + gamma*(1 + 0,34*u2)]
+    numerator = 0.408 * delta * rns + gamma * (900 / (tmean + 273)) * u2 * vpd
+    denominator = delta + gamma * (1 + 0.34 * u2)
     if denominator <= 0:
         return ETResult("fao56_penman_monteith", None, False, detail)
     et0 = max(0.0, numerator / denominator)
+    detail.update(
+        {
+            "temp_mean_c": tmean,
+            "wind_2m_ms": u2 / 3.6,
+            "vpd_kpa": vpd,
+            "ra_mj_m2": ra,
+            "rs_mj_m2": rs,
+            "rns_mj_m2": rns,
+            "rnl_mj_m2": net_longwave,
+            "delta_kpa_c": delta,
+        }
+    )
+    return ETResult("fao56_penman_monteith", et0, True, detail)
     detail.update(
         {
             "temp_mean_c": tmean,

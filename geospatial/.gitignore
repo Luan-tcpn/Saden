@@ -1,4 +1,4 @@
-.venv/
+﻿.venv/
 artifacts/
 __pycache__/
 *.pyc
@@ -18,3 +18,14 @@ data/processed/conab_sutin/*.geojson
 data/processed/*.json
 # Achados completos de qualidade: CSV versionado guarda error/warning.
 data/manifests/quality_findings_full.csv
+# V2.6 - artefatos grandes e regeráveis (fora do Git; URL + manifesto):
+# a serie diaria climatico tem centenas de MB por fonte, a base do ZARC multi-municipal (11 safras x 1.622 municípios) tem ~2 GB, a PAM
+# multi-municipal ~430 MB e as malhas municipais ~160 MB. Todos são
+# reconstruídos pelos comandos `run_agroclimate.py` (municipalities, stations,
+# climate, quality, pam, zarc) e têm o manifesto correspondente versionado.
+data/processed/climate_daily.csv
+data/processed/climate_daily_audited.csv
+data/processed/zarc_panel.csv
+data/processed/pam_panel.csv
+data/processed/panel_municipalities.geojson
+data/manifests/climate_quality_full.json

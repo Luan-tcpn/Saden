@@ -1,0 +1,20 @@
+{
+  "generated_at": "2026-11-12T11:12:19.775067+00:00",
+  "source": "https://dados.agricultura.gov.br/api/3/action/package_show?id=6d3d141c-885e-41a4-ab7f-dc8ff323b96f",
+  "n_municipalities": 1782,
+  "n_records": 2374625,
+  "safras": [
+    "2016/17",
+    "2017/18",
+    "2018/19",
+    "2019/20",
+    "2020/21",
+    "2021/22",
+    "2022/23",
+    "2023/24",
+    "2024/25",
+    "2025/26",
+    "2026/27"
+  ],
+  "csv": "data/processed/zarc_panel.csv"
+}
