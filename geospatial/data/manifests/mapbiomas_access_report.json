@@ -1,0 +1,45 @@
+{
+  "generated_at": "2026-11-12T02:53:44.610228+00:00",
+  "gcs_probes": [
+    {
+      "year": 2017,
+      "url": "https://storage.googleapis.com/mapbiomas-public/initiatives/brasil/lulc_10m/collection4/coverage/brazil_coverage/brazil_coverage-col4_10m_2017.tif",
+      "status": 403,
+      "error": "Forbidden"
+    },
+    {
+      "year": 2019,
+      "url": "https://storage.googleapis.com/mapbiomas-public/initiatives/brasil/lulc_10m/collection4/coverage/brazil_coverage/brazil_coverage-col4_10m_2019.tif",
+      "status": 403,
+      "error": "Forbidden"
+    },
+    {
+      "year": 2021,
+      "url": "https://storage.googleapis.com/mapbiomas-public/initiatives/brasil/lulc_10m/collection4/coverage/brazil_coverage/brazil_coverage-col4_10m_2021.tif",
+      "status": 403,
+      "error": "Forbidden"
+    },
+    {
+      "year": 2023,
+      "url": "https://storage.googleapis.com/mapbiomas-public/initiatives/brasil/lulc_10m/collection4/coverage/brazil_coverage/brazil_coverage-col4_10m_2023.tif",
+      "status": 403,
+      "error": "Forbidden"
+    },
+    {
+      "year": 2025,
+      "url": "https://storage.googleapis.com/mapbiomas-public/initiatives/brasil/lulc_10m/collection4/coverage/brazil_coverage/brazil_coverage-col4_10m_2025.tif",
+      "status": 403,
+      "error": "Forbidden"
+    }
+  ],
+  "gee_asset": {
+    "id": "projects/mapbiomas-public/assets/brazil/lulc_10m/collection4/mapbiomas_10m_collection4_coverage_v1",
+    "access": "requer conta Google Earth Engine (não configurada neste ambiente)",
+    "status": "bloqueado_por_acesso",
+    "procedure": "Acesso manual legítimo: conta GEE institucional, Image.load('projects/mapbiomas-public/assets/brazil/lulc_10m/collection4/mapbiomas_10m_collection4_coverage_v1') e exportação por AOI/município."
+  },
+  "worldcover_reference": {
+    "status": "adquirido na V2.3 (ESA WorldCover 10 m, classes 10..100)",
+    "role": "referência complementar preservada"
+  }
+}

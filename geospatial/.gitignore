@@ -7,6 +7,13 @@ __pycache__/
 # Planilhas da CONAB: acesso público, mas termos de uso ambíguos para
 # redistribuição (decisão D48) — ficam fora do Git; URL + SHA-256 no manifesto.
 data/raw/conab/
+# V2.4 — CSVs brutos do ZARC (todo o Brasil, ~180 MB por safra): fora do Git;
+# o recorte de Sorriso (data/processed/zarc/) é a evidência versionada.
+data/raw/zarc/
+# V2.4 — geometrias dos polígonos da CONAB (SUTIN): grandes (pixel-level) e
+# reproduzíveis pela consulta WFS registrada no manifesto; versiona-se o CSV
+# de atributos.
+data/processed/conab_sutin/*.geojson
 # Base normalizada em JSON: duplicata do CSV versionado (regenerável).
 data/processed/*.json
 # Achados completos de qualidade: CSV versionado guarda error/warning.

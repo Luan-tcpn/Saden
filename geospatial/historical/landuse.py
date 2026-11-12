@@ -223,6 +223,17 @@ def cropland_grid_mask(
     xs = np.asarray(xs, dtype="float64").reshape(height, width)
     ys = np.asarray(ys, dtype="float64").reshape(height, width)
 
+    # os centros das células estão no CRS da grade (UTM); o WorldCover está
+    # em EPSG:4326 — é preciso reprojetar os centros antes de indexar
+    if str(grid.get("crs")) != str(wc_meta.get("crs")):
+        from rasterio.warp import transform as warp_transform
+
+        xs, ys = warp_transform(
+            grid["crs"], wc_meta["crs"], xs.ravel().tolist(), ys.ravel().tolist()
+        )
+        xs = np.asarray(xs, dtype="float64").reshape(height, width)
+        ys = np.asarray(ys, dtype="float64").reshape(height, width)
+
     mask = np.zeros((height, width), dtype=bool)
     # offsets de sub-amostra (centro e cantos médios) em coordenadas de pixel
     offsets = [(0.5, 0.5), (0.0, 0.0), (1.0, 0.0), (0.0, 1.0), (1.0, 1.0)]
@@ -242,6 +253,71 @@ def cropland_grid_mask(
         hits += (value == WORLDCOVER_CROPLAND) & valid
     mask = hits >= 3  # 5 amostras: maioria estrita
     return mask
+
+
+def read_worldcover_block(
+    year: int,
+    bbox: list[float],
+    tile: str | None = None,
+) -> dict[str, Any]:
+    """Lê a classe WorldCover de uma janela (usado no processamento por blocos)."""
+    import rasterio
+    from rasterio.windows import from_bounds
+
+    from s2_poc import network
+
+    network.configure_tls()
+    tile = tile or worldcover_tile_name(bbox)
+    url = WORLDCOVER_URLS[year].format(tile=tile)
+    with rasterio.Env(GDAL_DISABLE_READDIR_ON_OPEN="EMPTY_DIR"):
+        with rasterio.open(url) as ds:
+            window = from_bounds(*bbox, transform=ds.transform)
+            data = ds.read(1, window=window)
+            meta = {
+                "url": url,
+                "crs": str(ds.crs),
+                "transform": list(window_transform(ds.transform, window))[:6],
+                "res": ds.res,
+                "width": ds.width,
+                "height": ds.height,
+                "nodata": ds.nodata,
+            }
+    return {"year": year, "data": data, "meta": meta}
+
+
+def window_transform(transform: Any, window: Any) -> Any:
+    """Transform do recorte de janela (reexportado do rasterio)."""
+    from rasterio.windows import transform as window_transform_
+
+    return window_transform_(window, transform)
+
+
+def block_subgrid(grid: dict[str, Any], block: dict[str, Any]) -> dict[str, Any]:
+    """Sub-grade (transform, altura e largura) de um bloco da grade."""
+    from affine import Affine
+
+    transform = grid["transform"] * Affine.translation(block["col_off"], block["row_off"])
+    return {
+        "crs": grid["crs"],
+        "transform": transform,
+        "height": block["height"],
+        "width": block["width"],
+        "res": grid["res"],
+        "bounds": grid["transform"] * Affine.translation(block["col_off"], block["row_off"]),
+    }
+
+
+def block_bounds_wgs84(grid: dict[str, Any], block: dict[str, Any]) -> list[float]:
+    """Bounds (lon/lat) de um bloco, a partir da grade em EPSG:32721."""
+    from rasterio.warp import transform_bounds
+
+    left = grid["transform"].c + block["col_off"] * grid["res"]
+    top = grid["transform"].f + block["row_off"] * grid["res"]
+    right = left + block["width"] * grid["res"]
+    bottom = top + block["height"] * grid["res"]
+    return list(
+        transform_bounds(grid["crs"], "EPSG:4326", left, bottom, right, top, densify_pts=21)
+    )
 
 
 def mask_to_grid(

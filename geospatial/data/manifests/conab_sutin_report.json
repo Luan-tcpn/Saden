@@ -1,0 +1,622 @@
+{
+  "generated_at": "2026-11-12T03:00:32.112388+00:00",
+  "institution": "CONAB",
+  "application": "https://conab-map.conab.gov.br/sutin-map-web/index.jsp",
+  "geoserver_wfs": "https://conab-map.conab.gov.br/geoserver/wfs",
+  "geoserver_wms": "https://conab-map.conab.gov.br/geoserver/wms",
+  "uf_filter": "MT",
+  "bbox": [
+    -55.75,
+    -12.85,
+    -55.45,
+    -12.6
+  ],
+  "layers_available": 17,
+  "layers": [
+    {
+      "name": "wp_geote:MT_CANA_1213",
+      "title": "MT_CANA_1213"
+    },
+    {
+      "name": "wp_geote:MT_CV_0405",
+      "title": "MT_CV_0405"
+    },
+    {
+      "name": "wp_geote:MT_CV_0506",
+      "title": "MT_CV_0506"
+    },
+    {
+      "name": "wp_geote:MT_CV_0607",
+      "title": "MT_CV_0607"
+    },
+    {
+      "name": "wp_geote:MT_CV_0708",
+      "title": "MT_CV_0708"
+    },
+    {
+      "name": "wp_geote:MT_CV_0809",
+      "title": "MT_CV_0809"
+    },
+    {
+      "name": "wp_geote:MT_CV_0910",
+      "title": "MT_CV_0910"
+    },
+    {
+      "name": "wp_geote:MT_CV_1011",
+      "title": "MT_CV_1011"
+    },
+    {
+      "name": "wp_geote:MT_CV_1112",
+      "title": "MT_CV_1112"
+    },
+    {
+      "name": "wp_geote:MT_CV_1112_2S",
+      "title": "MT_CV_1112_2S"
+    },
+    {
+      "name": "wp_geote:MT_CV_1213",
+      "title": "MT_CV_1213"
+    },
+    {
+      "name": "wp_geote:MT_CV_1213_2S",
+      "title": "MT_CV_1213_2S"
+    },
+    {
+      "name": "wp_geote:MT_CV_1314",
+      "title": "MT_CV_1314"
+    },
+    {
+      "name": "wp_geote:MT_CV_1314_2S",
+      "title": "MT_CV_1314_2S"
+    },
+    {
+      "name": "wp_geote:MT_CV_1415",
+      "title": "MT_CV_1415"
+    },
+    {
+      "name": "wp_geote:MT_CV_2021",
+      "title": "MT_CV_2021"
+    },
+    {
+      "name": "wp_geote:MT_SOJA_2021",
+      "title": "MT_SOJA_2021"
+    }
+  ],
+  "acquired": [
+    {
+      "layer": "wp_geote:MT_CANA_1213",
+      "status": "ok",
+      "total_features": 0,
+      "returned_features": 0,
+      "summary": {
+        "municipalities": [],
+        "total_area_ha": 0,
+        "total_features": 0
+      },
+      "geojson": "data/processed/conab_sutin/MT_CANA_1213.geojson",
+      "csv": "data/processed/conab_sutin/MT_CANA_1213.csv",
+      "url": "https://conab-map.conab.gov.br/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typeName=wp_geote%3AMT_CANA_1213&maxFeatures=100000&outputFormat=application%2Fjson&bbox=-55.75%2C-12.85%2C-55.45%2C-12.6%2CEPSG%3A4326",
+      "attributes": [
+        "ID",
+        "SIGLA_UF",
+        "CD_MUN",
+        "NM_MUN",
+        "AREA_HA",
+        "bbox"
+      ],
+      "has_productivity_attribute": false
+    },
+    {
+      "layer": "wp_geote:MT_CV_0405",
+      "status": "ok",
+      "total_features": 7,
+      "returned_features": 7,
+      "summary": {
+        "municipalities": [
+          {
+            "CD_MUN": "None",
+            "NM_MUN": null,
+            "SIGLA_UF": null,
+            "features": 7,
+            "area_ha": 0.0
+          }
+        ],
+        "total_area_ha": 0.0,
+        "total_features": 7
+      },
+      "geojson": "data/processed/conab_sutin/MT_CV_0405.geojson",
+      "csv": "data/processed/conab_sutin/MT_CV_0405.csv",
+      "url": "https://conab-map.conab.gov.br/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typeName=wp_geote%3AMT_CV_0405&maxFeatures=100000&outputFormat=application%2Fjson&bbox=-55.75%2C-12.85%2C-55.45%2C-12.6%2CEPSG%3A4326",
+      "attributes": [
+        "ID",
+        "SIGLA_UF",
+        "CD_MUN",
+        "NM_MUN",
+        "AREA_HA",
+        "bbox"
+      ],
+      "has_productivity_attribute": false
+    },
+    {
+      "layer": "wp_geote:MT_CV_0506",
+      "status": "ok",
+      "total_features": 14,
+      "returned_features": 14,
+      "summary": {
+        "municipalities": [
+          {
+            "CD_MUN": "None",
+            "NM_MUN": null,
+            "SIGLA_UF": null,
+            "features": 14,
+            "area_ha": 0.0
+          }
+        ],
+        "total_area_ha": 0.0,
+        "total_features": 14
+      },
+      "geojson": "data/processed/conab_sutin/MT_CV_0506.geojson",
+      "csv": "data/processed/conab_sutin/MT_CV_0506.csv",
+      "url": "https://conab-map.conab.gov.br/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typeName=wp_geote%3AMT_CV_0506&maxFeatures=100000&outputFormat=application%2Fjson&bbox=-55.75%2C-12.85%2C-55.45%2C-12.6%2CEPSG%3A4326",
+      "attributes": [
+        "ID",
+        "SIGLA_UF",
+        "CD_MUN",
+        "NM_MUN",
+        "AREA_HA",
+        "bbox"
+      ],
+      "has_productivity_attribute": false
+    },
+    {
+      "layer": "wp_geote:MT_CV_0607",
+      "status": "ok",
+      "total_features": 27,
+      "returned_features": 27,
+      "summary": {
+        "municipalities": [
+          {
+            "CD_MUN": "None",
+            "NM_MUN": null,
+            "SIGLA_UF": null,
+            "features": 27,
+            "area_ha": 0.0
+          }
+        ],
+        "total_area_ha": 0.0,
+        "total_features": 27
+      },
+      "geojson": "data/processed/conab_sutin/MT_CV_0607.geojson",
+      "csv": "data/processed/conab_sutin/MT_CV_0607.csv",
+      "url": "https://conab-map.conab.gov.br/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typeName=wp_geote%3AMT_CV_0607&maxFeatures=100000&outputFormat=application%2Fjson&bbox=-55.75%2C-12.85%2C-55.45%2C-12.6%2CEPSG%3A4326",
+      "attributes": [
+        "ID",
+        "SIGLA_UF",
+        "CD_MUN",
+        "NM_MUN",
+        "AREA_HA",
+        "bbox"
+      ],
+      "has_productivity_attribute": false
+    },
+    {
+      "layer": "wp_geote:MT_CV_0708",
+      "status": "ok",
+      "total_features": 27,
+      "returned_features": 27,
+      "summary": {
+        "municipalities": [
+          {
+            "CD_MUN": "None",
+            "NM_MUN": null,
+            "SIGLA_UF": null,
+            "features": 27,
+            "area_ha": 0.0
+          }
+        ],
+        "total_area_ha": 0.0,
+        "total_features": 27
+      },
+      "geojson": "data/processed/conab_sutin/MT_CV_0708.geojson",
+      "csv": "data/processed/conab_sutin/MT_CV_0708.csv",
+      "url": "https://conab-map.conab.gov.br/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typeName=wp_geote%3AMT_CV_0708&maxFeatures=100000&outputFormat=application%2Fjson&bbox=-55.75%2C-12.85%2C-55.45%2C-12.6%2CEPSG%3A4326",
+      "attributes": [
+        "ID",
+        "SIGLA_UF",
+        "CD_MUN",
+        "NM_MUN",
+        "AREA_HA",
+        "bbox"
+      ],
+      "has_productivity_attribute": false
+    },
+    {
+      "layer": "wp_geote:MT_CV_0809",
+      "status": "ok",
+      "total_features": 19,
+      "returned_features": 19,
+      "summary": {
+        "municipalities": [
+          {
+            "CD_MUN": "None",
+            "NM_MUN": null,
+            "SIGLA_UF": null,
+            "features": 19,
+            "area_ha": 0.0
+          }
+        ],
+        "total_area_ha": 0.0,
+        "total_features": 19
+      },
+      "geojson": "data/processed/conab_sutin/MT_CV_0809.geojson",
+      "csv": "data/processed/conab_sutin/MT_CV_0809.csv",
+      "url": "https://conab-map.conab.gov.br/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typeName=wp_geote%3AMT_CV_0809&maxFeatures=100000&outputFormat=application%2Fjson&bbox=-55.75%2C-12.85%2C-55.45%2C-12.6%2CEPSG%3A4326",
+      "attributes": [
+        "ID",
+        "SIGLA_UF",
+        "CD_MUN",
+        "NM_MUN",
+        "AREA_HA",
+        "bbox"
+      ],
+      "has_productivity_attribute": false
+    },
+    {
+      "layer": "wp_geote:MT_CV_0910",
+      "status": "ok",
+      "total_features": 18,
+      "returned_features": 18,
+      "summary": {
+        "municipalities": [
+          {
+            "CD_MUN": "None",
+            "NM_MUN": null,
+            "SIGLA_UF": null,
+            "features": 18,
+            "area_ha": 0.0
+          }
+        ],
+        "total_area_ha": 0.0,
+        "total_features": 18
+      },
+      "geojson": "data/processed/conab_sutin/MT_CV_0910.geojson",
+      "csv": "data/processed/conab_sutin/MT_CV_0910.csv",
+      "url": "https://conab-map.conab.gov.br/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typeName=wp_geote%3AMT_CV_0910&maxFeatures=100000&outputFormat=application%2Fjson&bbox=-55.75%2C-12.85%2C-55.45%2C-12.6%2CEPSG%3A4326",
+      "attributes": [
+        "ID",
+        "SIGLA_UF",
+        "CD_MUN",
+        "NM_MUN",
+        "AREA_HA",
+        "bbox"
+      ],
+      "has_productivity_attribute": false
+    },
+    {
+      "layer": "wp_geote:MT_CV_1011",
+      "status": "ok",
+      "total_features": 23,
+      "returned_features": 23,
+      "summary": {
+        "municipalities": [
+          {
+            "CD_MUN": "None",
+            "NM_MUN": null,
+            "SIGLA_UF": null,
+            "features": 23,
+            "area_ha": 0.0
+          }
+        ],
+        "total_area_ha": 0.0,
+        "total_features": 23
+      },
+      "geojson": "data/processed/conab_sutin/MT_CV_1011.geojson",
+      "csv": "data/processed/conab_sutin/MT_CV_1011.csv",
+      "url": "https://conab-map.conab.gov.br/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typeName=wp_geote%3AMT_CV_1011&maxFeatures=100000&outputFormat=application%2Fjson&bbox=-55.75%2C-12.85%2C-55.45%2C-12.6%2CEPSG%3A4326",
+      "attributes": [
+        "ID",
+        "SIGLA_UF",
+        "CD_MUN",
+        "NM_MUN",
+        "AREA_HA",
+        "bbox"
+      ],
+      "has_productivity_attribute": false
+    },
+    {
+      "layer": "wp_geote:MT_CV_1112",
+      "status": "ok",
+      "total_features": 48,
+      "returned_features": 48,
+      "summary": {
+        "municipalities": [
+          {
+            "CD_MUN": "None",
+            "NM_MUN": null,
+            "SIGLA_UF": null,
+            "features": 48,
+            "area_ha": 0.0
+          }
+        ],
+        "total_area_ha": 0.0,
+        "total_features": 48
+      },
+      "geojson": "data/processed/conab_sutin/MT_CV_1112.geojson",
+      "csv": "data/processed/conab_sutin/MT_CV_1112.csv",
+      "url": "https://conab-map.conab.gov.br/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typeName=wp_geote%3AMT_CV_1112&maxFeatures=100000&outputFormat=application%2Fjson&bbox=-55.75%2C-12.85%2C-55.45%2C-12.6%2CEPSG%3A4326",
+      "attributes": [
+        "ID",
+        "SIGLA_UF",
+        "CD_MUN",
+        "NM_MUN",
+        "AREA_HA",
+        "bbox"
+      ],
+      "has_productivity_attribute": false
+    },
+    {
+      "layer": "wp_geote:MT_CV_1112_2S",
+      "status": "ok",
+      "total_features": 96,
+      "returned_features": 96,
+      "summary": {
+        "municipalities": [
+          {
+            "CD_MUN": "None",
+            "NM_MUN": null,
+            "SIGLA_UF": null,
+            "features": 96,
+            "area_ha": 0.0
+          }
+        ],
+        "total_area_ha": 0.0,
+        "total_features": 96
+      },
+      "geojson": "data/processed/conab_sutin/MT_CV_1112_2S.geojson",
+      "csv": "data/processed/conab_sutin/MT_CV_1112_2S.csv",
+      "url": "https://conab-map.conab.gov.br/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typeName=wp_geote%3AMT_CV_1112_2S&maxFeatures=100000&outputFormat=application%2Fjson&bbox=-55.75%2C-12.85%2C-55.45%2C-12.6%2CEPSG%3A4326",
+      "attributes": [
+        "ID",
+        "SIGLA_UF",
+        "CD_MUN",
+        "NM_MUN",
+        "AREA_HA",
+        "bbox"
+      ],
+      "has_productivity_attribute": false
+    },
+    {
+      "layer": "wp_geote:MT_CV_1213",
+      "status": "ok",
+      "total_features": 17,
+      "returned_features": 17,
+      "summary": {
+        "municipalities": [
+          {
+            "CD_MUN": "None",
+            "NM_MUN": null,
+            "SIGLA_UF": null,
+            "features": 17,
+            "area_ha": 0.0
+          }
+        ],
+        "total_area_ha": 0.0,
+        "total_features": 17
+      },
+      "geojson": "data/processed/conab_sutin/MT_CV_1213.geojson",
+      "csv": "data/processed/conab_sutin/MT_CV_1213.csv",
+      "url": "https://conab-map.conab.gov.br/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typeName=wp_geote%3AMT_CV_1213&maxFeatures=100000&outputFormat=application%2Fjson&bbox=-55.75%2C-12.85%2C-55.45%2C-12.6%2CEPSG%3A4326",
+      "attributes": [
+        "ID",
+        "SIGLA_UF",
+        "CD_MUN",
+        "NM_MUN",
+        "AREA_HA",
+        "bbox"
+      ],
+      "has_productivity_attribute": false
+    },
+    {
+      "layer": "wp_geote:MT_CV_1213_2S",
+      "status": "ok",
+      "total_features": 34,
+      "returned_features": 34,
+      "summary": {
+        "municipalities": [
+          {
+            "CD_MUN": "None",
+            "NM_MUN": null,
+            "SIGLA_UF": null,
+            "features": 34,
+            "area_ha": 0.0
+          }
+        ],
+        "total_area_ha": 0.0,
+        "total_features": 34
+      },
+      "geojson": "data/processed/conab_sutin/MT_CV_1213_2S.geojson",
+      "csv": "data/processed/conab_sutin/MT_CV_1213_2S.csv",
+      "url": "https://conab-map.conab.gov.br/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typeName=wp_geote%3AMT_CV_1213_2S&maxFeatures=100000&outputFormat=application%2Fjson&bbox=-55.75%2C-12.85%2C-55.45%2C-12.6%2CEPSG%3A4326",
+      "attributes": [
+        "ID",
+        "SIGLA_UF",
+        "CD_MUN",
+        "NM_MUN",
+        "AREA_HA",
+        "bbox"
+      ],
+      "has_productivity_attribute": false
+    },
+    {
+      "layer": "wp_geote:MT_CV_1314",
+      "status": "ok",
+      "total_features": 26,
+      "returned_features": 26,
+      "summary": {
+        "municipalities": [
+          {
+            "CD_MUN": "None",
+            "NM_MUN": null,
+            "SIGLA_UF": null,
+            "features": 26,
+            "area_ha": 0.0
+          }
+        ],
+        "total_area_ha": 0.0,
+        "total_features": 26
+      },
+      "geojson": "data/processed/conab_sutin/MT_CV_1314.geojson",
+      "csv": "data/processed/conab_sutin/MT_CV_1314.csv",
+      "url": "https://conab-map.conab.gov.br/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typeName=wp_geote%3AMT_CV_1314&maxFeatures=100000&outputFormat=application%2Fjson&bbox=-55.75%2C-12.85%2C-55.45%2C-12.6%2CEPSG%3A4326",
+      "attributes": [
+        "ID",
+        "SIGLA_UF",
+        "CD_MUN",
+        "NM_MUN",
+        "AREA_HA",
+        "bbox"
+      ],
+      "has_productivity_attribute": false
+    },
+    {
+      "layer": "wp_geote:MT_CV_1314_2S",
+      "status": "ok",
+      "total_features": 28,
+      "returned_features": 28,
+      "summary": {
+        "municipalities": [
+          {
+            "CD_MUN": "None",
+            "NM_MUN": null,
+            "SIGLA_UF": null,
+            "features": 28,
+            "area_ha": 0.0
+          }
+        ],
+        "total_area_ha": 0.0,
+        "total_features": 28
+      },
+      "geojson": "data/processed/conab_sutin/MT_CV_1314_2S.geojson",
+      "csv": "data/processed/conab_sutin/MT_CV_1314_2S.csv",
+      "url": "https://conab-map.conab.gov.br/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typeName=wp_geote%3AMT_CV_1314_2S&maxFeatures=100000&outputFormat=application%2Fjson&bbox=-55.75%2C-12.85%2C-55.45%2C-12.6%2CEPSG%3A4326",
+      "attributes": [
+        "ID",
+        "SIGLA_UF",
+        "CD_MUN",
+        "NM_MUN",
+        "AREA_HA",
+        "bbox"
+      ],
+      "has_productivity_attribute": false
+    },
+    {
+      "layer": "wp_geote:MT_CV_1415",
+      "status": "ok",
+      "total_features": 17,
+      "returned_features": 17,
+      "summary": {
+        "municipalities": [
+          {
+            "CD_MUN": "None",
+            "NM_MUN": null,
+            "SIGLA_UF": null,
+            "features": 17,
+            "area_ha": 0.0
+          }
+        ],
+        "total_area_ha": 0.0,
+        "total_features": 17
+      },
+      "geojson": "data/processed/conab_sutin/MT_CV_1415.geojson",
+      "csv": "data/processed/conab_sutin/MT_CV_1415.csv",
+      "url": "https://conab-map.conab.gov.br/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typeName=wp_geote%3AMT_CV_1415&maxFeatures=100000&outputFormat=application%2Fjson&bbox=-55.75%2C-12.85%2C-55.45%2C-12.6%2CEPSG%3A4326",
+      "attributes": [
+        "ID",
+        "SIGLA_UF",
+        "CD_MUN",
+        "NM_MUN",
+        "AREA_HA",
+        "bbox"
+      ],
+      "has_productivity_attribute": false
+    },
+    {
+      "layer": "wp_geote:MT_CV_2021",
+      "status": "ok",
+      "total_features": 14,
+      "returned_features": 14,
+      "summary": {
+        "municipalities": [
+          {
+            "CD_MUN": "None",
+            "NM_MUN": null,
+            "SIGLA_UF": null,
+            "features": 14,
+            "area_ha": 0.0
+          }
+        ],
+        "total_area_ha": 0.0,
+        "total_features": 14
+      },
+      "geojson": "data/processed/conab_sutin/MT_CV_2021.geojson",
+      "csv": "data/processed/conab_sutin/MT_CV_2021.csv",
+      "url": "https://conab-map.conab.gov.br/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typeName=wp_geote%3AMT_CV_2021&maxFeatures=100000&outputFormat=application%2Fjson&bbox=-55.75%2C-12.85%2C-55.45%2C-12.6%2CEPSG%3A4326",
+      "attributes": [
+        "ID",
+        "SIGLA_UF",
+        "CD_MUN",
+        "NM_MUN",
+        "AREA_HA",
+        "bbox"
+      ],
+      "has_productivity_attribute": false
+    },
+    {
+      "layer": "wp_geote:MT_SOJA_2021",
+      "status": "ok",
+      "total_features": 24,
+      "returned_features": 24,
+      "summary": {
+        "municipalities": [
+          {
+            "CD_MUN": "5107925",
+            "NM_MUN": "Sorriso",
+            "SIGLA_UF": "MT",
+            "features": 17,
+            "area_ha": 272575.07
+          },
+          {
+            "CD_MUN": "5106240",
+            "NM_MUN": "Nova Ubiratã",
+            "SIGLA_UF": "MT",
+            "features": 1,
+            "area_ha": 152333.05
+          },
+          {
+            "CD_MUN": "5108501",
+            "NM_MUN": "Vera",
+            "SIGLA_UF": "MT",
+            "features": 6,
+            "area_ha": 27037.82
+          }
+        ],
+        "total_area_ha": 451945.94,
+        "total_features": 24
+      },
+      "geojson": "data/processed/conab_sutin/MT_SOJA_2021.geojson",
+      "csv": "data/processed/conab_sutin/MT_SOJA_2021.csv",
+      "url": "https://conab-map.conab.gov.br/geoserver/wfs?service=WFS&version=1.1.0&request=GetFeature&typeName=wp_geote%3AMT_SOJA_2021&maxFeatures=100000&outputFormat=application%2Fjson&bbox=-55.75%2C-12.85%2C-55.45%2C-12.6%2CEPSG%3A4326",
+      "attributes": [
+        "ID",
+        "SIGLA_UF",
+        "CD_MUN",
+        "NM_MUN",
+        "AREA_HA",
+        "bbox"
+      ],
+      "has_productivity_attribute": false
+    }
+  ],
+  "productivity_attribute": "As camadas trazem AREA_HA (área da feição) e identificadores de município/cultura/safra — não há campo de produtividade (kg/ha).",
+  "license_note": "Acesso público à aplicação oficial; termos de uso específicos de cada conjunto não obtidos — registrado como pendência (D48)."
+}
