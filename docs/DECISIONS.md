@@ -1268,3 +1268,70 @@ Decisão:
 
 Consequências: o painel preserva a diferença entre "zero" e "sem
 informação", e nenhuma janela agrícola é apresentada como data de plantio.
+
+## D73 — Janela descontígua: bloco contíguo principal (2026-11-12)
+
+Contexto: com a âncora dupla de decêndios (D62), as janelas oficiais das
+culturas de **ciclo curto do Nordeste** (soja e milho da Bahia, com janelas em
+março–junho **ou** outubro–dezembro) caíam em **dois blocos de calendário
+separados**: `[mai–jun de Y]` e `[mar–abr de Y+1]`. Agregar os meses dos dois
+blocos misturaria períodos e poderia incorporar meses **posteriores** ao ano
+de colheita.
+
+Decisão:
+
+1. Usa-se o **bloco contíguo de maior duração** da janela oficial (desempate:
+   o de início mais antigo) — o período de plantio principal.
+2. Os meses do bloco secundário são **descartados**, não agregados, e ficam
+   registrados em `zarc_window_discarded_months` (com
+   `zarc_window_blocks` contando os blocos originais).
+3. O critério é aplicado a **todas** as culturas e UFs, não apenas ao caso
+   diagnóstico da Bahia.
+
+Consequências: nenhuma janela utilizável do painel permanece descontígua
+(10 linhas com meses descartados, 0 descontíguas). A perda de cobertura de
+culturas de ciclo curto (Bahia) é preservada como limitação declarada.
+
+## D74 — Artefatos grandes e regeráveis fora do Git (2026-11-12)
+
+Contexto: a base da V2.6 produz artefatos de centenas de MB a gigabytes
+(série diária climática: ~835 MB; ZARC multi-municipal: ~2,0 GB; PAM
+multi-municipal: ~428 MB; malhas municipais: ~158 MB). Versioná-los faria o
+repositório crescer em gigabytes sem acrescentar informação (são **regeríveis**
+pelos comandos de `run_agroclimate.py`).
+
+Decisão:
+
+1. Os artefatos grandes ficam **fora do Git** (`.gitignore` do `geospatial/`),
+   com os **manifestos** correspondentes versionados
+   (`agroclimatic_panel.json`, `climate_quality.json`, `zarc_panel.json`,
+   `pam_panel.json`, `panel_eligibility.json`).
+2. O **painel final** (`agroclimatic_productivity_panel.csv`, ~24 MB) é
+   versionado: é o produto principal e é pequeno o bastante.
+3. O crescimento do repositório foi verificado: `.git` caiu de 587 MB para
+   13,6 MB quando os blobs grandes foram removidos do histórico local
+   (a branch ainda não havia sido publicada).
+
+Consequências: a reprodutibilidade passa a depender da reexecução dos
+comandos, e não do versionamento de gigabytes — que é o padrão já adotado
+para os CSVs brutos do ZARC (D48).
+
+## D75 — Comparação INMET × reanálise: diferença de escala, não erro (2026-11-12)
+
+Contexto: o INMET mede em um ponto; a reanálise descreve uma célula de ~9 km
+(ERA5-Land) a ~55 km (MERRA-2/NASA POWER). Não se espera equivalência.
+
+Decisão:
+
+1. A comparação é feita na **localização da estação**, com viés (bias), MAE,
+   RMSE, correlação e somas acumuladas de precipitação e temperatura.
+2. As diferenças são interpretadas como **diferença de escala**; nenhuma
+   correção empírica (bias adjustment) é aplicada na V2.6.
+3. A base do painel usa a **reanálise** (consistência espacial entre
+   municípios); o INMET permanece como **verificação independente** e base
+   da via observacional.
+
+Consequências: a resolucao espacial da reanálise é registrada como limitação
+principal do painel (pseudo-replicação espacial entre municípios vizinhos),
+e o erro-padrão é agrupado por município — agrupamento espacial por célula
+da grade fica como melhoria metodológica pendente.

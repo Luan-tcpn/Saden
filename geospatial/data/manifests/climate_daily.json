@@ -1,0 +1,28 @@
+{
+  "generated_at": "2026-11-12T19:43:27.964985+00:00",
+  "sources": {
+    "inmet": {
+      "n_records": 627381,
+      "n_failures": 64,
+      "n_municipalities": 278,
+      "scope": "inside"
+    },
+    "total": {
+      "n_records": 6552547
+    }
+  },
+  "municipalities": 1622,
+  "years": [
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+  ],
+  "csv": "data/processed/climate_daily.csv"
+}

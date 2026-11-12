@@ -282,6 +282,44 @@ Relatório: `geospatial/reports/V2_2_PRODUCTIVITY_DATA_COMPATIBILITY.md`.
   `geospatial/reports/V2_5_ADVISOR_SUMMARY.md`.
 - **Nada foi integrado** ao Ridge de preços, à API ou à interface (D40, D41).
 
+### 10.7 V2.6 — base agroclimática e painel multi-municipal (branch `v2/agroclimatic-productivity-panel`)
+
+- **Encerramento do NDVI (D66):** a hipótese do NDVI como variável de
+  produtividade foi **encerrada** com protocolo; os indicadores Sentinel-2
+  permanecem como material de pesquisa e referência geoespacial.
+- **Fontes meteorológicas (D67):** INMET (668 estações; séries diárias por
+  **HTTP Range** — 808 kB lidos por estação/ano), NASA POWER (MERRA-2 + CERES,
+  base reanalisada do painel), ERA5-Land e ERA5 via Open-Meteo (**parcial**:
+  HTTP 429 sob uso intensivo), CHIRPS e ARCO **bloqueados** (sem DNS), CDS
+  **exige chave de conta** (não criada). Toda linha carrega `source_type`
+  (`station_observation` / `reanalysis`).
+- **Métodos agroclimáticos (D68):** graus-dia com **perfis por cultura**
+  (soja de Ometto 1981 com Tb = 14 °C; soja de Gilmore & Rogers 1958 com
+  Tb = 10 °C; milho da Embrapa Milho e Sorgo com Tmax ≤ 30 °C e Tmin ≥ 10 °C);
+  ET0 pelo FAO-56 Penman-Monteith (vento de 10 m → 2 m pelo coeficiente 0,4),
+  Thornthwaite (1948) e Hargreaves-Samani, cada um **identificado**; balanço
+  hídrico de Thornthwaite & Mather (1955) com CAD por perfis de solo
+  documentados (50 mm do MAPA como principal).
+- **Janela descontígua (D73):** nas culturas de ciclo curto do Nordeste, usa-se
+  o **bloco contíguo de maior duração** da janela oficial; os meses do bloco
+  secundário são descartados, não agregados.
+- **Painel (D69):** 1.622 municípios elegíveis (produção observada em ≥ 7 dos
+  9 anos, área positiva, geometria e estação a até 80 km) → 2.780 pares
+  município-cultura; painel final de **19.402 observações utilizáveis**
+  (soja 1.225 municípios, milho 1.063, milho 2ª 505).
+- **Resultado (D70):** p ajustado (Holm) = **0,0036** para as variáveis
+  agroclimáticas — contra **1,000** do NDVI na V2.5. O **déficit hídrico** é
+  o sinal mais forte (t ≈ −17). Na **validação temporal** a média histórica
+  vence; na **validação territorial** (municípios inteiros) o modelo com clima
+  vence nas 6 combinações (ganho de 1,7% a 6,3%). O mesmo padrão aparece na
+  **via de observação do INMET** (146 municípios de soja): é validação
+  independente da reanálise.
+- **Comparação INMET × reanálise (D75):** temperatura r = 0,854 (viés
+  +0,37 °C); precipitação r = 0,602 com subestimação de ~8% — viés conhecido
+  do MERRA-2 em trópicos, não erro de implementação.
+- **Artefatos grandes fora do Git (D74).**
+- Testes: **262/262** offline. Relatórios: `geospatial/reports/V2_6_*.md`.
+
 ## 11. Próximos passos propostos (não iniciados)
 
 1. Revisar a V2.1 com orientador antes de ampliar escopo.

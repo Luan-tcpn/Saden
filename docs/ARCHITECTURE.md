@@ -58,3 +58,39 @@ forecasts, reports, data_sources, kv_cache` — ver `db.js` (fonte de verdade do
 `index.html` (auth + shell com 4 páginas), `css/styles.css` (identidade agro: verde/terra),
 `js/api.js` (fetch+JWT), `js/auth.js` (sessão), `js/app.js` (filtros, dashboard+Chart.js,
 mapa Leaflet OSM/Esri, relatórios, fontes).
+
+## Pipeline geoespacial da V2.6 (`geospatial/`, fora do produto)
+
+A V2.6 **não altera** o backend, o frontend, o schema ou o Ridge de preços.
+Ela acrescenta um pipeline **separado**, que produz base de pesquisa e não é
+integrado ao produto.
+
+```
+Fontes públicas
+  INMET  ──▶ stations.py ──▶ inmet.py ──▶ remote_zip.py  (ZIP remoto por HTTP Range)
+  NASA POWER / ERA5-Land / ERA5 ──▶ gridded.py
+  IBGE  ──▶ boundaries.py ──▶ shapefile.py   (malhas oficiais, leitor próprio)
+  SIDRA 5457 ──▶ agri/pam_panel.py
+  MAPA ZARC  ──▶ agri/zarc_panel.py          (streaming, filtro por geocódigo)
+        │
+        ▼
+  agroclimate/quality.py      (auditoria: ausente ≠ zero, faixas físicas)
+        │
+        ▼
+  agroclimate/thermal.py · evapotranspiration.py · water_balance.py
+        │
+        ▼
+  agroclimate/panel.py ──▶ data/processed/agroclimatic_productivity_panel.csv
+        │
+        ▼
+  agroclimate/analysis.py ──▶ data/manifests/agroclimatic_analysis*.json
+```
+
+* **CLI:** `geospatial/run_agroclimate.py` (comandos `municipalities`,
+  `stations`, `eligible`, `climate`, `quality`, `pam`, `zarc`, `panel`,
+  `validate`, `analyse`).
+* **Determinismo:** semente fixa (20261112) em toda a análise; a
+  aquisição é **retomável** (o progresso é persistido a cada lote).
+* **Artefatos grandes** ficam fora do Git (D74); os manifestos são versionados.
+* **Isolamento:** nada do pipeline entra em `backend/`, `frontend/` ou no
+  modelo de preço (D66, D40/D41).

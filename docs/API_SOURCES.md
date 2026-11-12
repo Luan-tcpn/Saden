@@ -61,6 +61,35 @@ Verificado em **2026-09-08** por teste real de endpoint. Status atualizado em `d
 > as fontes já declaradas e verificadas nas V2.2–V2.4, o que preserva a
 > rastreabilidade e o regime de licenciamento (D48).
 
+## V2.6 — fontes meteorológicas efetivamente usadas (2026-11-12)
+
+| Fonte | Endpoint / recurso | Uso na V2.6 | Verificação |
+|---|---|---|---|
+| **INMET — catálogo de estações** | `https://apitempo.inmet.gov.br/estacoes/T` | inventário de 668 estações automáticas (código WMO, coordenadas, altitude, estado, tipo, situação, datas de operação) | **200**, 668 registros, leitura em 0,6 s |
+| **INMET — dados históricos** | `https://portal.inmet.gov.br/uploads/dadoshistoricos/<ano>.zip` (2000–2026) | série **diária** por estação (temperatura, umidade, precipitação, pressão, radiação, vento) | **200**, ~100 MB/ano; extração parcial por **HTTP Range** (808 kB por estação/ano) |
+| **NASA POWER** (MERRA-2 + CERES, comunidade AG) | `https://power.larc.nasa.gov/api/temporal/daily/point?parameters=…&community=AG` | base **reanalisada** do painel (precipitação, temperatura, radiação, umidade, vento, pressão, temperatura do solo) | **200**, 3.653 dias por município, 1,6 s por ponto |
+| **ERA5-Land** (Copernicus) | via `https://archive-api.open-meteo.com/v1/archive?models=era5_land` (acesso público sem chave) | variáveis térmicas e de solo (complementares) | parcial: **HTTP 429** sob uso intensivo; acesso **nativo** do CDS exige chave de conta não configurada |
+| **ERA5** (Copernicus) | via `https://archive-api.open-meteo.com/v1/archive?models=era5` (0,25°) | precipitação, radiação, vento e pressão (ausentes no acesso público do ERA5-Land) | parcial: mesmo **HTTP 429** |
+| **CDS da Copernicus** | `https://cds.climate.copernicus.eu/api/catalogue/v1/collections/reanalysis-era5-land-timeseries` | acesso **nativo** ao ERA5-Land | metadados **200**; a execução exige **chave de conta** (não criada, não lida de credenciais pessoais) |
+| **ARCO (espelho ERA5)** | `https://data.lhncbc.ucsb.edu/ARCO/…` | espelho Zarr do ERA5-Land | **sem resolução DNS** neste ambiente |
+| **CHIRPS** | `https://chc.ucf.edu/`, `https://data.chc.ucf.edu/` | precipitação grillada complementar | **sem resolução DNS** — bloqueio registrado |
+| **IBGE — malhas municipais** | `https://geoftp.ibge.gov.br/organizacao_do_territorio/malhas_territoriais/malhas_municipais/municipio_<ano>/UFs/<UF>/<UF>_Municipios_<ano>.zip` | geometria oficial dos municípios (centroide e teste ponto-em-polígono) | **200**; a API `servicodados…/malhas` responde com **timeout** neste ambiente |
+| **IBGE — localidades** | `https://servicodados.ibge.gov.br/api/v1/localidades/estados/<UF>/municipios` | lista de municípios por UF | **200**, 0,2 s por UF |
+| **MAPA — ZARC** | `https://dados.agricultura.gov.br/dataset/6d3d141c-885e-41a4-ab7f-dc8ff323b96f` (11 safras) | janela de plantio por município × safra × cultura × solo × ciclo × risco | **200**; tabelas nacionais (~200 MB/safra) lidas em **streaming** e filtradas pelo geocódigo IBGE |
+| **IBGE — PAM (SIDRA 5457)** | `https://apisidra.ibge.gov.br/values/t/5457/n6/<códigos>/v/214,216,112,8331/p/2017..2025/c782/40124,40122` | produtividade municipal (rendimento, área colhida, área plantada, quantidade produzida) | **200**; 1.782 municípios em uma requisição por UF |
+
+> **Comparação entre fontes (V2.6, D75).** Em 215 estações com série do INMET
+> dentro do município, a reanálise (NASA POWER) apresenta, contra a estação:
+> temperatura — viés **+0,37 °C**, MAE 1,42 °C, RMSE 1,79 °C, **r = 0,854**;
+> precipitação — viés **−0,38 mm/dia**, MAE 3,26 mm/dia, **r = 0,602**, total
+> anual 7.512 contra 8.173 mm (**−8%**). A subestimação da precipitação é um
+> viés conhecido do MERRA-2 em regiões tropicais, **não** um erro de
+> implementação. Nenhuma correção empírica foi aplicada.
+
+> **Nenhuma fonte foi inventada, autenticada por conta alheia ou contornada.**
+> As fontes inacessíveis (CDS sem chave, ARCO, CHIRPS) foram registradas como
+> bloqueio, e o trabalho seguiu com as fontes legítimas acessíveis.
+
 ## Consequência metodológica
 
 Os preços do SADEN são **referência internacional convertida** (futuro CBOT/ICE × PTAX venda), não o preço físico regional.

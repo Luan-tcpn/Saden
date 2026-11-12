@@ -465,38 +465,67 @@ def cmd_climate(args: argparse.Namespace) -> dict[str, Any]:
     out_rows = existing
 
     # --- estação do INMET -------------------------------------------------
+    # O INMET é a base de **observação** e de **verificação independente**.
+    # A aquisição completa (1.622 municípios x 10 anos) é longa; por isso o
+    # escopo é configurável e o progresso é persistido a cada lote, para
+    # que uma interrupção não perca o trabalho feito.
     if "inmet" in args.sources:
         inmet_rows: list[dict[str, Any]] = []
         failures = 0
+        targets = []
         for muni in municipalities:
             row = selection.get(muni["ibge_code"])
             if not row or not row.get("station_code"):
                 continue
+            if args.inmet_scope == "inside" and row.get("selection_method") != "inside_municipality":
+                continue
+            targets.append((muni, row))
+        if args.inmet_limit:
+            targets = targets[: args.inmet_limit]
+        print(f"[clima] INMET: {len(targets)} municipios (escopo={args.inmet_scope})")
+
+        def fetch_inmet(item):
+            muni, row = item
             code = row["station_code"]
+            records_out: list[dict[str, Any]] = []
+            failed = 0
             for year in years:
                 try:
                     station_file = inmet.fetch_station_year(year, code)
                     if station_file is None:
                         continue
-                    records = inmet.to_daily_records(station_file)
+                    for record in inmet.to_daily_records(station_file):
+                        record["ibge_code"] = muni["ibge_code"]
+                        record["station_code"] = code
+                        record["station_name"] = row.get("station_name")
+                        record["distance_km"] = row.get("distance_km")
+                        record["selection_method"] = row.get("selection_method")
+                        records_out.append(record)
                 except Exception as exc:  # noqa: BLE001
-                    failures += 1
+                    failed += 1
                     print(
                         f"[clima] INMET {muni['municipality']} ({code}) {year}: {exc}"
                     )
-                    continue
-                for record in records:
-                    record["ibge_code"] = muni["ibge_code"]
-                    record["station_code"] = code
-                    record["station_name"] = row.get("station_name")
-                    record["distance_km"] = row.get("distance_km")
-                    record["selection_method"] = row.get("selection_method")
-                    inmet_rows.append(record)
-            print(f"[clima] INMET {muni['municipality']} ({code})")
+            return records_out, failed
+
+        from concurrent.futures import ThreadPoolExecutor
+
+        done = 0
+        with ThreadPoolExecutor(max_workers=args.workers) as pool:
+            for records_out, failed in pool.map(fetch_inmet, targets):
+                inmet_rows.extend(records_out)
+                failures += failed
+                done += 1
+                if done % 25 == 0:
+                    print(f"[clima] INMET: {done}/{len(targets)} municipios")
+                    # persiste o progresso: uma interrupção não perde o feito
+                    _write_csv(existing + inmet_rows, climate_csv)
         out_rows.extend(inmet_rows)
         manifest["sources"]["inmet"] = {
             "n_records": len(inmet_rows),
             "n_failures": failures,
+            "n_municipalities": len(targets),
+            "scope": args.inmet_scope,
         }
 
     path = _write_csv(out_rows, os.path.join(PROCESSED, "climate_daily.csv"))
@@ -674,7 +703,8 @@ def cmd_validate(args: argparse.Namespace) -> dict[str, Any]:
     rows = _read_csv(os.path.join(PROCESSED, "climate_daily_audited.csv"))
     grouped: dict[tuple[str, str], list[dict[str, Any]]] = {}
     for row in rows:
-        key = (str(row.get("ibge_code")), str(row.get("source")))
+        source = str(row.get("source") or "").strip().lower()
+        key = (str(row.get("ibge_code")), source)
         grouped.setdefault(key, []).append(row)
     by_code: dict[str, dict[str, list[dict[str, Any]]]] = {}
     for (code, source), series in grouped.items():
@@ -682,10 +712,8 @@ def cmd_validate(args: argparse.Namespace) -> dict[str, Any]:
 
     comparisons: list[dict[str, Any]] = []
     for code, sources in sorted(by_code.items()):
-        if "inmet" not in sources:
-            continue
         station = {
-            str(r["date"]): r for r in sources["inmet"] if r.get("date")
+            str(r["date"]): r for r in sources.get("inmet", []) if r.get("date")
         }
         for source, series in sorted(sources.items()):
             if source == "inmet":
@@ -767,6 +795,20 @@ def cmd_analyse(args: argparse.Namespace) -> dict[str, Any]:
     )
     if not dataset:
         return {"ok": False, "error": "painel ausente; rode 'panel' antes"}
+    # A análise principal usa **uma** fonte climática por linha. A base
+    # reanalisada cobre todos os municípios; a via de observação (INMET) é um
+    # subconjunto usado como verificação independente (D75).
+    if args.climate_source:
+        before = len(dataset)
+        dataset = [
+            row for row in dataset
+            if str(row.get("climate_source") or "").strip().lower()
+            == args.climate_source.strip().lower()
+        ]
+        print(
+            f"[analyse] fonte '{args.climate_source}': "
+            f"{len(dataset)} de {before} linhas"
+        )
     rows = analysis.prepare_rows(dataset)
     by_crop: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for row in rows:
@@ -887,9 +929,13 @@ def cmd_analyse(args: argparse.Namespace) -> dict[str, Any]:
             "efeitos fixos."
         ),
     }
-    path = _write_json(results, os.path.join(MANIFESTS, "agroclimatic_analysis.json"))
+    path = _write_json(
+        results,
+        os.path.join(MANIFESTS, f"agroclimatic_analysis{args.out_suffix}.json"),
+    )
     summary_path = _write_csv(
-        _analysis_summary_rows(results), os.path.join(MANIFESTS, "agroclimatic_analysis.csv")
+        _analysis_summary_rows(results),
+        os.path.join(MANIFESTS, f"agroclimatic_analysis{args.out_suffix}.csv"),
     )
     return {
         "ok": True,
@@ -977,6 +1023,13 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--start-year", type=int, default=2016)
     p.add_argument("--end-year", type=int, default=2025)
     p.add_argument("--workers", type=int, default=6)
+    p.add_argument(
+        "--inmet-scope",
+        choices=("all", "inside"),
+        default="inside",
+        help="'inside': apenas municípios com estação dentro do município",
+    )
+    p.add_argument("--inmet-limit", type=int, default=0, help="0 = sem limite")
     p.set_defaults(func=cmd_climate)
 
     p = sub.add_parser("quality", help="auditoria de qualidade")
@@ -1004,6 +1057,12 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--min-train", type=int, default=5)
     p.add_argument("--folds", type=int, default=5)
     p.add_argument("--permutations", type=int, default=5000)
+    p.add_argument(
+        "--climate-source",
+        default="NASA-POWER",
+        help="fonte climática da análise principal (vazio = todas)",
+    )
+    p.add_argument("--out-suffix", default="", help="sufixo do nome do manifesto")
     p.set_defaults(func=cmd_analyse)
 
     return parser

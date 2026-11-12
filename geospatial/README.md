@@ -334,3 +334,58 @@ Módulos novos: `agri/season.py` (janelas ZARC, regra oficial de decêndios,
 O indicador municipal na janela oficial do ZARC não supera os baselines na
 validação temporal alinhada. Nada foi integrado ao Ridge de preços nem à
 interface.
+
+## V2.6 — base agroclimática e painel multi-municipal (2026-11-12)
+
+Comandos novos (`run_agroclimate.py`):
+
+```bash
+# 1) municípios (malhas oficiais do IBGE) e inventário de estações do INMET
+python run_agroclimate.py municipalities --states MT GO MS PR RS BA
+python run_agroclimate.py stations
+
+# 2) Elegibilidade: municipios elegiveis (criterios de D69, fixados antes)
+python run_agroclimate.py eligible --min-years 7
+
+# 3) series climaticas diarias (INMET por HTTP Range; NASA POWER; ERA5-Land/ERA5)
+python run_agroclimate.py climate --sources nasa_power era5_land era5 --workers 6
+python run_agroclimate.py climate --sources inmet --inmet-scope inside --workers 8
+
+# 4) auditoria de qualidade, PAM multi-municipal e ZARC multi-municipal
+python run_agroclimate.py quality
+python run_agroclimate.py pam --states MT GO MS PR RS BA
+python run_agroclimate.py zarc
+
+# 5) painel, comparacao de fontes e analise exploratoria
+python run_agroclimate.py panel --soil-profile tipo2_medio --et-method fao56_penman_monteith
+python run_agroclimate.py validate
+python run_agroclimate.py analyse --climate-source NASA-POWER
+```
+
+Artefatos:
+
+| Arquivo | Conteúdo |
+|---|---|
+| `data/processed/agroclimatic_productivity_panel.csv` | painel (40.990 linhas; 21.422 utilizáveis) — **versionado** |
+| `data/manifests/agroclimatic_panel.json` | manifesto do painel e do protocolo |
+| `data/manifests/agroclimatic_analysis.json` | análise exploratória (fonte reanalisada) |
+| `data/manifests/agroclimatic_analysis_inmet.json` | análise pela via de **observação** (INMET) |
+| `data/manifests/climate_source_comparison.json` | comparação INMET × reanálise |
+| `data/manifests/climate_quality.json` | auditoria de qualidade das séries |
+| `data/manifests/panel_eligibility.json` | critérios de elegibilidade e contagens |
+| `reports/V2_6_*.md` | relatórios (fundação, painel, análise, resumo) |
+
+Módulos novos em `geospatial/agroclimate/`: `remote_zip.py` (leitor de ZIP
+remoto por HTTP Range), `stations.py`, `inmet.py`, `gridded.py`, `boundaries.py`
+(malhas do IBGE), `shapefile.py` (leitor próprio), `quality.py`, `thermal.py`,
+`evapotranspiration.py`, `water_balance.py`, `panel.py`, `analysis.py`.
+
+**Artefatos grandes** (série diária, ZARC/PAM multi-municipal, malhas) ficam
+**fora do Git** — são regeráveis pelos comandos acima; o manifesto
+correspondente é versionado (D74).
+
+**Resultado da V2.6: CAMINHO A.** As variáveis agroclimáticas têm associação
+significativa com o rendimento municipal (p Holm = 0,0036, contra 1,000 do
+NDVI), **validada também na via de observação** do INMET; elas **não**
+superam a média histórica na validação temporal, mas **superam** na validação
+territorial. Nada foi integrado ao Ridge de preços.

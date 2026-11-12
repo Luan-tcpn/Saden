@@ -96,6 +96,42 @@ família é significativo após Holm (todos p = 1,000) e, na validação tempora
 alinhada, o modelo com NDVI **não** supera a média histórica em nenhuma das 8
 configurações.
 
+## V2.6 — Base agroclimática e painel multi-municipal (2026-11-12)
+
+Branch: `v2/agroclimatic-productivity-panel`. Relatórios:
+`geospatial/reports/V2_6_AGROCLIMATIC_DATA_FOUNDATION.md`,
+`V2_6_MULTIMUNICIPAL_PANEL.md`, `V2_6_AGROCLIMATIC_EXPLORATORY_ANALYSIS.md`,
+`V2_6_ADVISOR_SUMMARY.md`. Decisões D66–D75.
+
+| Item | Estado | Evidência |
+|---|---|---|
+| Encerramento da linha do NDVI | DONE | D66; indicadores Sentinel-2 preservados como referência |
+| Inventário de estações do INMET | DONE | 668 estações; 294 municípios com estação dentro, 1.425 a até 80 km, 63 sem estação |
+| Aquisição meteorológica real | DONE | INMET por HTTP Range (808 kB lidos por estação/ano); NASA POWER (MERRA-2) para 1.622 municípios |
+| Qualidade das séries | DONE | 1.622 séries auditadas: cobertura 1,000, 0 duplicatas, 0 invalidos, 0 descontinuidades; ausente ≠ zero |
+| ERA5-Land investigado | PARCIAL | via Open-Meteo (temperatura, umidade, solo); acesso nativo do CDS exige chave de conta |
+| Extração municipal validada | DONE | 1.782 municípios de 6 UFs, malhas do shapefile oficial do IBGE (leitor próprio) |
+| Painel de municípios | DONE | 1.622 elegíveis → 2.780 pares município-cultura |
+| Critérios de inclusão documentados | DONE | D69 (produção em ≥ 7/9 anos, área positiva, geometria, estação) |
+| PAM normalizado | DONE | 128.160 registros em 6 UFs (1 consulta por UF) |
+| ZARC por município | DONE | 2.374.625 registros (11 safras) em streaming por geocódigo |
+| Graus-dia por perfil de cultura | DONE | soja (Ometto; Gilmore & Rogers) e milho (Embrapa), com fonte e limitações |
+| Balanço hídrico implementado | DONE | Thornthwaite & Mather (1955), CAD com perfis de solo documentados |
+| Indicadores por cultura | DONE | precipitação, temperatura, graus-dia, calor, ET0, ETR, déficit/excedente, umidade do solo |
+| Dataset agroclimático | DONE | 35.894 linhas, 19.402 utilizáveis (soja 8.884 / milho 7.616 / milho 2ª 2.902) |
+| Análise exploratória | DONE | correlações com Holm (p = 0,0036), walk-forward temporal e holdout territorial, efeitos fixos com EP agrupado |
+| Comparação INMET × reanálise | DONE | `climate_source_comparison.json` |
+| Testes offline | DONE | **262/262** (49 novos da V2.6) |
+| Integração ao Ridge / API / UI | NOT_STARTED | fora de escopo; ganho temporal não demonstrado |
+| Treino de modelo complexo | NOT_STARTED | proibido nesta etapa (D70) |
+
+**Resultado da V2.6 — CAMINHO A (painel viável, análise conclusiva).** As
+variáveis agroclimáticas têm associação **significativa** com o rendimento
+municipal (p Holm = 0,0036, contra 1,000 do NDVI na V2.5); o déficit hídrico
+na janela de plantio é o sinal mais forte (t ≈ −17). **Na validação temporal o
+clima não supera a média histórica**; **na validação territorial (municípios
+inteiros) o modelo com clima vence** nas 6 combinações (ganho de 1,7% a 6,3%).
+
 ## Problemas conhecidos
 
 1. Servidor roda como processo manual (`Start-Process`, PID volátil) — sem serviço/systemd.

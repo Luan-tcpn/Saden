@@ -206,9 +206,13 @@ def daily_to_monthly(
         bucket = buckets.setdefault(month, {})
         for variable in variables:
             value = record.get(variable)
-            if value is None:
+            if value in (None, ""):
                 continue
-            bucket.setdefault(variable, []).append(float(value))
+            try:
+                number = float(value)
+            except (TypeError, ValueError):
+                continue
+            bucket.setdefault(variable, []).append(number)
     out: list[dict[str, Any]] = []
     for month in sorted(buckets):
         item: dict[str, Any] = {"month": month}

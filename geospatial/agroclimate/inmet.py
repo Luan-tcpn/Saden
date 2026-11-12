@@ -133,6 +133,22 @@ def _normalize_key(text: str) -> str:
     return re.sub(r"\s+", " ", str(text or "").strip().upper())
 
 
+def _is_variable_header(parts: Sequence[str]) -> bool:
+    """Reconhece a linha de cabeçalho de variáveis do INMET.
+
+    A primeira coluna começa por ``DATA`` e a segunda por ``HORA``. O teste
+    é estrito porque o INMET também emite linhas de metadados como
+    ``DATA DE FUNDAÇÃO (YYYY-MM-DD):;16/12/02``, que não são cabeçalho.
+    """
+    if len(parts) < 2:
+        return False
+    first = _normalize_key(parts[0])
+    second = _normalize_key(parts[1])
+    return bool(re.match(r"^DATA(\s*\(.*\))?$", first)) and bool(
+        re.match(r"^HORA", second)
+    )
+
+
 def _match_column(header: Sequence[str], patterns: Sequence[str]) -> int | None:
     """Índice da primeira coluna que casa com um dos padrões (regex)."""
     for pattern in patterns:
@@ -205,7 +221,7 @@ def parse_station_csv(year: int, member: str, payload: bytes) -> StationFile:
                    "INICIO", "FIM"}:
             metadata[key] = parts[1].strip() if len(parts) > 1 else ""
             continue
-        if ";" in line and _normalize_key(parts[0]) in {"DATA", "DATA/HORA"}:
+        if ";" in line and _is_variable_header(parts):
             header = parts
             index += 1
             break

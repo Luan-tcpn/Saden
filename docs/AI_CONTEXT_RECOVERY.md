@@ -329,3 +329,46 @@ produtividade com NDVI; migrar para variáveis agroclimáticas diretas
 (INMET, graus-dia, balanço hídrico); ampliar para painel de municípios se o
 objetivo for produto; o MapBiomas via GEE (conta institucional) é a única
 pendência que **muda** o resultado e **não** é bloqueante para encerrar.
+
+## V2.6 — estado final (2026-11-12)
+
+**Branch:** `v2/agroclimatic-productivity-panel` (derivada de
+`v2/seasonal-spatial-pairing`).
+
+**Entregas da V2.6:**
+
+| Artefato | Conteúdo |
+|---|---|
+| `geospatial/data/processed/agroclimatic_productivity_panel.csv` | painel agroclimático × produtividade (40.990 linhas; 21.422 utilizáveis) |
+| `geospatial/data/manifests/agroclimatic_analysis.json` | análise exploratória (fonte reanalisada) |
+| `geospatial/data/manifests/agroclimatic_analysis_inmet.json` | análise pela via de observação (INMET) |
+| `geospatial/data/manifests/climate_source_comparison.json` | comparação INMET × reanálise (215 estações) |
+| `geospatial/data/manifests/climate_quality.json` | auditoria de qualidade (1.837 séries) |
+| `geospatial/data/manifests/panel_eligibility.json` | critérios de elegibilidade (D69) |
+| `geospatial/reports/V2_6_*.md` | 4 relatórios (fundação, painel, análise, resumo) |
+| `docs/DECISIONS.md` | D66–D75 (D42–D65 preservadas) |
+
+**Módulos novos:** `geospatial/agroclimate/` (remote_zip, stations, inmet,
+gridded, boundaries, shapefile, quality, thermal, evapotranspiration,
+water_balance, panel, analysis) e `geospatial/agri/pam_panel.py`,
+`geospatial/agri/zarc_panel.py`; CLI `geospatial/run_agroclimate.py`.
+
+**Resultado: CAMINHO A.** Variáveis agroclimáticas com associação
+significativa (p Holm = 0,0036) contra o NDVI (1,000); sinal reproduzido na
+via de observação; negativo na validação temporal e positivo na validação
+territorial. **Nada integrado ao Ridge de preços.**
+
+**Correções de engenharia relevantes (todas com teste de regressão):** FAO-56
+inflava o ET0 em ~6×; a ETP mensal usava média em vez de soma (déficit
+hídrico sempre zero); os dummies de município sobrescreviam a coluna da
+variável climática no design matrix e `_ols` adicionava um segundo
+intercepto; a lista de variáveis do modelo nunca era usada; a âncora dupla
+produzia janelas descontíguas; o cabeçalho do INMET pode ter sufixo.
+
+**Testes:** 262/262 offline. Externos: opt-in (`SADEN_EXTERNAL_TESTS=1`).
+
+**Continuidade para a V2.7 (recomendação da V2.6):** erro-padrão agrupado
+por **célula da grade** (não por município) para corrigir a
+pseudo-replicação espacial; acesso ao ERA5-Land nativo; janela de exposição
+do **enchimento de grãos**; CAD por município (Embrapa Solos); ampliação do
+painel; e **não** integrar ao Ridge sem ganho **temporal** demonstrado.

@@ -807,3 +807,33 @@ integração ao produto.
 | 5 | Textos das portarias do ZARC | fecha documentalmente a regra safra → ano PAM |
 | 6 | Duração de ciclo por cultivar (EMBRAPA) | habilitaria o indicador de desenvolvimento vegetativo (Indicador 2/3) |
 | 7 | Gerar os 54 meses restantes da série municipal | mecanismo retomável; habilita o ano civil municipal com 12 meses/ano |
+
+## V2.6 — executada (2026-11-12)
+
+Branch `v2/agroclimatic-productivity-panel`, derivada de
+`v2/seasonal-spatial-pairing`.
+
+| Etapa | Resultado |
+|---|---|
+| Fontes meteorológicas | INMET (668 estações) + NASA POWER + ERA5-Land/ERA5 (acesso parcial) + CHIRPS bloqueado |
+| Inventário e seleção de estações | 3 níveis de critério; 63 municípios sem estação (lacuna preservada) |
+| ZARC multi-municipal | 2.374.625 registros (11 safras × 1.622 municípios) em streaming |
+| PAM multi-municipal | 128.160 registros em 6 UFs |
+| Painel | 35.894 linhas, 19.402 utilizáveis (1.225 municípios de soja, 1.063 de milho) |
+| Indicadores | graus-dia por perfil, ET0 FAO-56, balanço hídrico de Thornthwaite & Mather |
+| Análise | Holm p = 0,0036; walk-forward temporal (baselines vencem) e holdout territorial (modelo vence) |
+| Testes | 262/262 offline |
+
+**Caminho final: A.** Nenhuma integração ao produto.
+
+### V2.7 — recomendada (2026-11-12)
+
+| Prioridade | Item | Justificativa |
+|---|---|---|
+| 1 | Erro-padrão agrupado por **célula da grade** (não por município) | corrigir a pseudo-replicação espacial — limitação estatística mais relevante |
+| 2 | Acesso ao **ERA5-Land nativo** (chave CDS) ou espelho ARCO resolvido | ~9 km em vez de ~55 km; libera precipitação/radiação da própria fonte |
+| 3 | Janela de exposição do **enchimento de grãos** | o milho é sensível ao calor nessa fase; hoje só a janela de plantio é coberta |
+| 4 | **CAD por município** (Embrapa Solos: textura, profundidade) | troca o cenário de solo por valor documentado |
+| 5 | Ampliação do painel (Nordeste; mais Centro-Oeste) | mais municípios por estrato e melhor controle regional |
+| 6 | Teste da hipótese clima → produtividade → **preço** | hipótese, não conclusão: a V2.7 deve quantificar estoques, câmbio, demanda e logística |
+| 7 | Integração ao Ridge | **não** recomendada sem ganho **temporal** demonstrado |
