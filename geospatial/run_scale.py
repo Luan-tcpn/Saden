@@ -274,6 +274,13 @@ def cmd_municipal(args: argparse.Namespace) -> dict[str, Any]:
         )
     primary_mask_year = str(args.mask_years[0])
 
+    # recorte territorial: somente centros de célula dentro do polígono do município
+    from agri.geometry_compat import municipality_geometry
+
+    municipality_geom = municipality_geometry()
+    municipality_cells = muni.municipality_mask(grid, municipality_geom)
+    municipality_fraction = float(municipality_cells.mean())
+
     client = Client.open(config.STAC_URL)
     rows: list[dict[str, Any]] = []
     for entry in reference:
@@ -382,7 +389,11 @@ def cmd_municipal(args: argparse.Namespace) -> dict[str, Any]:
             )
             if agri is None:
                 continue
-            accumulators.append(muni.accumulate_ndvi(ndvi, valid, agri))
+            inside = municipality_cells[
+                block["row_off"] : block["row_off"] + block["height"],
+                block["col_off"] : block["col_off"] + block["width"],
+            ]
+            accumulators.append(muni.accumulate_ndvi(ndvi, valid, agri & inside))
         merged = muni.merge_accumulators(accumulators)
         rows.append(
             {
@@ -431,6 +442,8 @@ def cmd_municipal(args: argparse.Namespace) -> dict[str, Any]:
         "estimate": estimate,
         "masks": mask_reports,
         "primary_mask_year": primary_mask_year,
+        "municipality_cells_20m": int(np.count_nonzero(municipality_cells)),
+        "municipality_fraction_of_bbox": municipality_fraction,
         "dates_processed": len(rows),
         "csv": os.path.relpath(csv_path, HERE).replace("\\", "/") if rows else None,
         "limitations": [
@@ -527,6 +540,90 @@ def cmd_sutin(args: argparse.Namespace) -> dict[str, Any]:
     }
 
 
+# ------------------------------------------------- relação safra × ano PAM
+
+
+def cmd_relation(args: argparse.Namespace) -> dict[str, Any]:
+    """Tabela de correspondência entre safra ZARC e ano de referência da PAM.
+
+    Regra **derivada** (não é uma afirmação do IBGE): a safra ZARC ``Y/Y+1``
+    tem plantio no ano Y (soja e milho 1ª, out–dez) ou no ano Y+1 (milho 2ª,
+    jan–fev) e, portanto, colheita **no ano civil Y+1**. A PAM referencia o ano
+    civil da produção/colheita → candidata principal: **Y+1**. A alternativa
+    (ano de plantio, Y) é preservada com confiança menor.
+    """
+    import csv as _csv
+    import statistics
+
+    zarc_csv = os.path.join(PROCESSED_DIR, "zarc_planting_windows.csv")
+    with open(zarc_csv, newline="", encoding="utf-8-sig") as handle:
+        rows = list(_csv.DictReader(handle))
+
+    grouped: dict[tuple[str, str], list[dict[str, Any]]] = {}
+    for row in rows:
+        grouped.setdefault((row["safra"], str(row["cultura"])), []).append(row)
+
+    output: list[dict[str, Any]] = []
+    for (safra, cultura), items in sorted(grouped.items()):
+        ini = int(str(safra).split("/")[0])
+        years = sorted({r["safra_ini"] for r in items})
+        janelas = sorted({r["janela_base"] for r in items if r["janela_base"]})
+        datas_ini = sorted(r["janela_inicio_data"] for r in items if r["janela_inicio_data"])
+        datas_fim = sorted(r["janela_fim_data"] for r in items if r["janela_fim_data"])
+        planting_year = int(years[0]) if years else ini
+        harvest_year = planting_year + 1
+        second_safra = "2ª" in str(cultura)
+        output.append(
+            {
+                "safra": safra,
+                "cultura": cultura,
+                "segunda_safra": second_safra,
+                "combinacoes_grupo_solo_ciclo": len(items),
+                "janelas_distintas": ";".join(janelas),
+                "plantio_inicio": datas_ini[0] if datas_ini else None,
+                "plantio_fim": datas_fim[-1] if datas_fim else None,
+                "ano_de_plantio": planting_year,
+                "ano_de_colheita_estimado": harvest_year,
+                "pam_ano_candidato_principal": harvest_year,
+                "pam_ano_candidato_alternativo": planting_year,
+                "confianca": "media" if second_safra else "media_alta",
+                "portarias": ";".join(sorted({r["portaria"] for r in items if r["portaria"]})),
+                "natureza": "regra_derivada_do_calendario_zarc",
+                "observacao": (
+                    "A correspondência safra→ano da PAM é DERIVADA (colheita no ano "
+                    "civil seguinte); deve ser confirmada com a documentação da "
+                    "portaria e do calendário de semeadura antes de uso analítico."
+                ),
+            }
+        )
+
+    csv_path = os.path.join(PROCESSED_DIR, "zarc_pam_year_relation.csv")
+    with open(csv_path, "w", newline="", encoding="utf-8-sig") as handle:
+        writer = _csv.DictWriter(handle, fieldnames=list(output[0].keys()))
+        writer.writeheader()
+        for row in output:
+            writer.writerow(row)
+
+    payload = {
+        "generated_at": _now(),
+        "rows": len(output),
+        "csv": os.path.relpath(csv_path, HERE).replace("\\", "/"),
+        "rule": (
+            "Safra Y/Y+1 → ano de referência PAM = Y+1 (ano de colheita), com Y "
+            "(ano de plantio) preservado como alternativa."
+        ),
+        "cultures": sorted({row["cultura"] for row in output}),
+        "safras": sorted({row["safra"] for row in output}),
+    }
+    path = _write_json(payload, os.path.join(MANIFEST_DIR, "zarc_pam_relation.json"))
+    return {
+        "ok": True,
+        "report": path,
+        "csv": payload["csv"],
+        "rows": len(output),
+    }
+
+
 # ---------------------------------------------------------------- main
 
 
@@ -560,6 +657,9 @@ def main(argv: list[str] | None = None) -> int:
     )
     p_su.add_argument("--layer", default=None, help="filtro por nome de camada")
     p_su.set_defaults(func=cmd_sutin)
+
+    p_re = sub.add_parser("relation", help="correspondência safra ZARC × ano PAM")
+    p_re.set_defaults(func=cmd_relation)
 
     p_mu = sub.add_parser("municipal", help="NDVI municipal sobre a área agrícola")
     p_mu.add_argument("--blocks", type=int, default=16)

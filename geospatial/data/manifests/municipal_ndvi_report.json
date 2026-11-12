@@ -1,0 +1,52 @@
+{
+  "generated_at": "2026-11-12T03:06:51.562053+00:00",
+  "municipality": "5107925",
+  "grid": {
+    "crs": "EPSG:32721",
+    "res": 20.0,
+    "width": 5878,
+    "height": 11008,
+    "transform": [
+      20.0,
+      0.0,
+      593340.0,
+      0.0,
+      -20.0,
+      8706300.0
+    ],
+    "municipality_bbox_wgs84": [
+      -56.1167,
+      -13.6661,
+      -55.0851,
+      -11.7216
+    ]
+  },
+  "blocks": 16,
+  "estimate": {
+    "grid_pixels_20m": 64705024,
+    "source_pixels_10m_per_band": 258820096,
+    "download_bytes_per_date": 1035280384,
+    "download_gb_total": 9.317523456,
+    "memory_note": "Processamento por blocos: memória limitada ao bloco (nunca o municipério inteiro).",
+    "dates": 9
+  },
+  "masks": [
+    {
+      "year": 2020,
+      "agricultural_cells_20m": 7446,
+      "fraction": 0.00011507607199094772
+    },
+    {
+      "year": 2021,
+      "agricultural_cells_20m": 7981,
+      "fraction": 0.0001233443634917746
+    }
+  ],
+  "primary_mask_year": "2020",
+  "dates_processed": 9,
+  "csv": "data/processed/municipal_ndvi_agriculture.csv",
+  "limitations": [
+    "Máscara agrícola do ESA WorldCover (2020 e 2021): não cobre 2017–2019 nem 2022–2025.",
+    "Processamento por blocos: estatística agregada, sem raster municipal."
+  ]
+}

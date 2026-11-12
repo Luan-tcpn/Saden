@@ -108,6 +108,28 @@
   cultura**; abaixo disso, só descrição e correlação exploratória.
 - Testes: **165/165** offline.
 
+### V2.4 escala espacial, calendário ZARC e referências agrícolas (branch `v2/agricultural-scale-harmonization`)
+
+- Branch nova derivada de `v2/agricultural-productivity-exploratory`
+  (`3ff7104`); V1, V2.1, V2.2 e V2.3 intocadas; bundle da V2.4 verificado.
+- **Calendário oficial (D54)**: o portal de dados abertos do **MAPA**
+  (`dados.agricultura.gov.br`, domínio distinto do `dados.gov.br`, que exige
+  autenticação) está acessível — 11 safras (2016/17–2026/27) em CSV, licença
+  CC-BY, **1.408 registros de Sorriso** em 23 culturas, com janela de plantio
+  por decêndio/risco e **portaria de origem**. Soja: decêndios 29–36 (out–dez);
+  milho principal: 27–36; milho 2ª: 1–5 (jan–fev). A relação safra→ano PAM foi
+  registrada como **regra derivada**, com alternativa e confiança.
+- **Produtividade submunicipal (D56)**: **não existe** fonte pública
+  reproduzível. A CONAB SUTIN (GeoServer oficial) entrega polígonos
+  **submunicipais** de cultura (soja/MT 2021: 17 feições em Sorriso) com
+  **área** (`AREA_HA`) e **sem produtividade**. MapBiomas GCS → HTTP 403;
+  GEE exige conta; IMEA → HTTP 500; SIGS/INCRA → sem DNS.
+- **Escala municipal (D57)**: indicador NDVI agregado por **16 blocos** sobre
+  a área agrícola (WorldCover, classe 40) **e** o polígono do município
+  (5.878 × 11.008 px a 20 m; ~1,04 GB por data; mosaico de dois tiles, D44).
+  Nomes genéricos: `ndvi_all_cropland`.
+- Testes: **181/181** offline. Relatórios em `geospatial/reports/V2_4_*.md`.
+
 ## 2. Escopo congelado da V1 (D40)
 - **Previsão = Ridge única** (pipeline, split 70/15/15, baselines, λ por
   validação e métricas inalterados).
@@ -193,14 +215,17 @@ renomeado nem reinterpretado. Leitura de `model_runs` não existe em produção.
 
 ## 8. Decisões
 
-- `docs/DECISIONS.md`: **D1–D53** (D40 = congelamento V1 e retirada do AR;
+- `docs/DECISIONS.md`: **D1–D57** (D40 = congelamento V1 e retirada do AR;
   D41 = V2 isolada e escopo da PoC Sentinel-2; D42 = geometrias separadas e
   limite municipal oficial; D43 = política de máscara SCL; D44 = regra de
   mosaico e par de tiles por datatake; D45 = seleção mensal da série 2023–2025;
   D46 = fonte de referência (IBGE/PAM); D47 = classes de compatibilidade
   espacial A/B/C; D48 = licenciamento (CONAB fora do Git); D49 = culturas-piloto;
   D50 = perfil radiométrico histórico; D51 = uso do solo (WorldCover,
-  MapBiomas bloqueado); D52 = calendário não validado; D53 = portão estatístico).
+  MapBiomas bloqueado); D52 = calendário não validado; D53 = portão estatístico;
+  D54 = calendário oficial (ZARC/MAPA); D55 = referência espacial × agronômica;
+  D56 = inexistência de produtividade submunicipal pública; D57 = escala
+  municipal do indicador).
 - D38/D39 são registros históricos superados por D40, preservados.
 - Segunda opinião (arquivo externo, 940 linhas): fonte de hipóteses, NÃO
   especificação. MAPE futuro (8–10%, 6–8%) é hipótese, nunca resultado.

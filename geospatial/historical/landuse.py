@@ -308,13 +308,17 @@ def block_subgrid(grid: dict[str, Any], block: dict[str, Any]) -> dict[str, Any]
 
 
 def block_bounds_wgs84(grid: dict[str, Any], block: dict[str, Any]) -> list[float]:
-    """Bounds (lon/lat) de um bloco, a partir da grade em EPSG:32721."""
+    """Bounds (lon/lat) de um bloco, a partir da grade em EPSG:32721.
+
+    O eixo vertical da grade é decrescente: o topo do bloco é
+    ``f - row_off * res`` e o base fica abaixo dele.
+    """
     from rasterio.warp import transform_bounds
 
     left = grid["transform"].c + block["col_off"] * grid["res"]
-    top = grid["transform"].f + block["row_off"] * grid["res"]
+    top = grid["transform"].f - block["row_off"] * grid["res"]
     right = left + block["width"] * grid["res"]
-    bottom = top + block["height"] * grid["res"]
+    bottom = top - block["height"] * grid["res"]
     return list(
         transform_bounds(grid["crs"], "EPSG:4326", left, bottom, right, top, densify_pts=21)
     )

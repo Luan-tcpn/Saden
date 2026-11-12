@@ -1,3 +1,2 @@
 ﻿month,year,item_id,catalog,baseline,radiometry_profile,mask_year,agricultural_pixels,ndvi_mean,ndvi_std,ndvi_p05,ndvi_p25,ndvi_p50,ndvi_p75,ndvi_p95,blocks
-2017-03,2017,S2A_21LXG_20170308_0_L2A,earth-search,00.01,original_pre_04_no_offset,2020,0,,,,,,,,16
-2018-03,2018,S2A_21LXG_20180303_0_L2A,earth-search,00.01,original_pre_04_no_offset,2020,0,,,,,,,,16
+2017-03,2017,S2A_21LXG_20170308_0_L2A,earth-search,00.01,original_pre_04_no_offset,2020,11999215,0.5667756668730934,0.2600534279357159,0.1629185407296352,0.3018490754622689,0.6236881559220389,0.815592203898051,0.8845577211394302,16

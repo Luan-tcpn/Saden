@@ -247,9 +247,24 @@ Branch: `v2/agricultural-productivity-exploratory` (derivada de
 | Veredito | **CAMINHO B** | estudo executável com ressalvas; **sem** modelo preditivo validado e **sem** base para integrar ao Ridge |
 | Testes | DONE | **165/165** offline (70 novos da V2.3) |
 
-## 14. Comandos de retomada
+## 14. Checkpoint V2.4 — escala espacial, calendário ZARC e referências agrícolas (D54–D57)
+
+Branch: `v2/agricultural-scale-harmonization` (derivada de
+`v2/agricultural-productivity-exploratory` / `3ff7104`).
+
+| Item | Estado | Evidência |
+|---|---|---|
+| Calendário oficial | DONE | ZARC/MAPA (`dados.agricultura.gov.br`, CC-BY): **11 safras**, **1.408 registros de Sorriso**, 23 culturas, com decêndios de risco e portaria de origem (D54) |
+| Safra × ano PAM | DONE | `zarc_pam_year_relation.csv` (148 combinações) — regra **derivada** (colheita no ano civil seguinte), alternativa e confiança declaradas |
+| Produtividade submunicipal | NEGATIVO (com evidência) | CONAB SUTIN: polígonos submunicipais **sem** campo de produtividade; MapBiomas GCS 403; IMEA 500; SIGS/INCRA sem DNS (D56) |
+| Referência submunicipal de área | DONE | CONAB SUTIN `MT_SOJA_2021`: 17 feições em Sorriso com `AREA_HA` |
+| Escala municipal do indicador | DONE | grade 5.878 × 11.008 px (20 m), 16 blocos, mosaico de dois tiles, recorte pelo polígono; ~1,04 GB/data (D57) |
+| Testes | DONE | **181/181** offline (16 novos da V2.4) |
+
+## 15. Comandos de retomada
 
 ```powershell
+git switch v2/agricultural-scale-harmonization
 git switch v2/agricultural-productivity-exploratory
 geospatial\.venv\Scripts\python.exe -m unittest discover -s geospatial\tests -t geospatial
 geospatial\.venv\Scripts\python.exe geospatial\run_validation.py geometry
@@ -268,6 +283,13 @@ geospatial\.venv\Scripts\python.exe geospatial\run_historical.py radiometry
 geospatial\.venv\Scripts\python.exe geospatial\run_historical.py series --start 2017-01 --end 2025-12
 geospatial\.venv\Scripts\python.exe geospatial\run_historical.py landuse --years 2020 2021
 geospatial\.venv\Scripts\python.exe geospatial\run_historical.py study
+
+# V2.4 — escala espacial e calendário
+geospatial\.venv\Scripts\python.exe geospatial\run_scale.py zarc
+geospatial\.venv\Scripts\python.exe geospatial\run_scale.py relation
+geospatial\.venv\Scripts\python.exe geospatial\run_scale.py sutin --uf MT
+geospatial\.venv\Scripts\python.exe geospatial\run_scale.py municipal --month 03 --blocks 16
+geospatial\.venv\Scripts\python.exe geospatial\run_scale.py mapbiomas
 ```
 
 Antes de qualquer coisa em nova sessão: ler este arquivo,

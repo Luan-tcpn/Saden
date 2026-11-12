@@ -228,6 +228,33 @@ def read_block(
     return destination
 
 
+def municipality_mask(
+    grid: dict[str, Any],
+    geometry: Any,
+) -> np.ndarray:
+    """Máscara dos centros de célula **dentro** do polígono municipal.
+
+    A bbox do município cobre ~24.400 km² (muito mais que os 9.293 km² do
+    polígono); sem esta máscara o indicador includiria lavoura de fora.
+    """
+    import rasterio.transform as rtransform
+    from rasterio.warp import transform as warp_transform
+    from shapely import contains_xy
+
+    height, width = grid["height"], grid["width"]
+    rows, cols = np.mgrid[0:height, 0:width]
+    xs, ys = rtransform.xy(grid["transform"], rows, cols, offset="center")
+    xs = np.asarray(xs, dtype="float64").reshape(height, width)
+    ys = np.asarray(ys, dtype="float64").reshape(height, width)
+    if str(grid.get("crs")) != "EPSG:4326":
+        xs, ys = warp_transform(
+            grid["crs"], "EPSG:4326", xs.ravel().tolist(), ys.ravel().tolist()
+        )
+        xs = np.asarray(xs, dtype="float64").reshape(height, width)
+        ys = np.asarray(ys, dtype="float64").reshape(height, width)
+    return np.asarray(contains_xy(geometry, xs, ys))
+
+
 def ndvi_from_reflectance(
     red: np.ndarray,
     nir: np.ndarray,

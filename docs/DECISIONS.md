@@ -527,6 +527,141 @@ meses — quebraria a comparabilidade radiométrica e espacial da série.
 Consequências: a série 2023–2025 é reproduzível, auditável e honesta nas suas
 lacunas; ela ainda **não** sustenta nenhuma afirmação agronômica.
 
+## D54 — Calendário oficial: ZARC do MAPA como fonte primária (2026-11-12)
+
+Contexto: a V2.2 agregou por ano civil porque o SISZARC não resolvia DNS (D52). A
+V2.4 verificou o portal de dados abertos do **MAPA**
+(`dados.agricultura.gov.br`), que é domínio distinto do `dados.gov.br` (que
+exige autenticação) e **não** é bloqueado.
+
+Fatos verificados em 2026-11-12:
+
+* conjunto *Zoneamento Agrícola de Risco Climático (Zarc) — Tábua de Risco*,
+  licença **Creative Commons Atribuição**, 11 safras (2016/2017 … 2026/2027) em
+  CSV + dicionário de dados oficial;
+* **1.408 registros** de Sorriso-MT (`5107925`) em **23 culturas**, com ciclo,
+  solo, risco por decêndio e **portaria de origem**;
+* janelas observadas: soja decêndios 29–36 (out–dez), milho principal 27–36
+  (set–dez), milho 2ª safra 1–5 (jan–fev);
+* a coluna `Produtividade` do ZARC é um **código de classe**, não kg/ha.
+
+Decisão:
+
+1. **O ZARC do MAPA é a fonte primária do calendário agrícola** do SADEN,
+   acquired por consulta HTTP reproduzível (bruto fora do Git com URL, tamanho e
+   SHA-256; recorte de Sorriso versionado).
+2. O ZARC é tratado como **recomendação oficial de plantio por condição de
+   risco** — **não** como data de plantio observada, e **não** como
+   produtividade.
+3. Todas as combinações oficiais (ciclo × solo × safra) são preservadas;
+   nenhuma é arbitrada para "simplificar".
+4. A relação **safra → ano de referência da PAM** é registrada como **regra
+   derivada** (colheita no ano civil seguinte), com alternativa preservada e
+   confiança declarada, devendo ser confrontada com o texto das portarias.
+5. ZARC e **calendário de semeadura** (normativo, vazio sanitário) permanecem
+   conceitos distintos e não são misturados.
+
+Consequências: a pendência de D52 (calendário) é **resolvida na parte
+agronômica**; a agregação por ano civil da V2.3 passa a ter alternativa
+oficial, ainda não aplicada aos indicadores (a V2.4 não retreina modelos).
+
+## D55 — Referência espacial separada da referência agronômica (2026-11-12)
+
+Contexto: o ZARC é municipal (por solo/ciclo), a CONAB SUTIN é submunicipal
+(por feição, mas **sem produtividade**) e o Sentinel-2 é raster.
+
+Decisão:
+
+1. A base passa a ter **duas tabelas conceitualmente distintas**:
+   **referência espacial** (geometrias, máscaras de uso do solo, pixels e
+   indicadores de vegetação) e **referência agronômica** (cultura, safra,
+   calendário, rendimento oficial).
+2. A tabela pareada só é construída quando existe justificativa **espacial,
+   temporal e semântica** simultânea; caso contrário, as tabelas permanecem
+   separadas e a ausência de pareamento é declarada.
+3. Nenhuma linha anual é criada quando existem múltiplas combinações oficiais
+   (grupo/solo/risco): as alternativas permanecem em estrutura própria, com
+   identificadores de relacionamento.
+
+Consequências: a base é auditável sem forçar junções artificiais.
+
+## D56 — Não existe produtividade submunicipal pública: a escala do indicador é que deve mudar (2026-11-12)
+
+Contexto: a V2.3 mostrou que a incompatibilidade de escala (rendimento
+municipal × NDVI de 43 km²) é o obstáculo determinante. A V2.4 investigou
+amplamente fontes com granularidade inferior à municipal.
+
+Fatos verificados em 2026-11-12:
+
+* **CONAB SUTIN** (GeoServer público): 1.618 camadas; 17 de MT; a camada
+  `MT_SOJA_2021` tem 24.634 feições no estado e 17 em Sorriso — com atributos
+  `CD_MUN`, `NM_MUN` e **`AREA_HA`**, **sem** campo de produtividade;
+* **MapBiomas Col. 4**: rota GCS oficial retorna **HTTP 403** (2017–2025);
+  asset GEE exige conta não configurada; página de downloads informa suspensão
+  temporária do download de GeoTIFF;
+* **IMEA**: host responde, páginas internas retornam **HTTP 500**;
+* **INCRA/SIGEF/CAR**: sem resposta (DNS/TCP);
+* **WorldCover**: cropland (classe 40) em 10 m para 2020 e 2021, acquired;
+* **ZARC**: janelas de plantio, sem produtividade.
+
+Decisão:
+
+1. **Não existe fonte oficial pública e reproduzível de produtividade
+   (kg/ha) de soja/milho em Sorriso abaixo da escala municipal.** A
+   incompatibilidade de escala da V2.3 **não** se resolve com fonte de
+   produtividade mais fina — resolve-se **mudando a escala do indicador
+   geoespacial** para a unidade do alvo.
+2. A geometria cadastral (INCRA/SIGEF/CAR), mesmo quando acessível, **não** é
+   observação de produção e não pode ser usada como rótulo.
+3. A CONAB SUTIN passa a ser a **referência submunicipal de área de cultura**
+   (soja/MT 2021), útil para mascarar NDVI por cultura **nesse ano**, e não
+   como referência de produtividade.
+4. Os bloqueios (MapBiomas/GEE, IMEA, SIGS, INCRA) são registrados como
+   **necessidades de acesso institucional**, com procedimento manual legítimo
+   documentado.
+
+Consequências: a V2.3 permanece válida como estudo exploratório de
+referência; a V2.4 constrói a escala municipal do indicador, que é a
+alternativa metodologicamente defensável.
+
+## D57 — Escala municipal do indicador: agregação por blocos sobre a área agrícola do município (2026-11-12)
+
+Contexto: para comparar o indicador geoespacial com o alvo municipal, o
+indicador deve ser agregado na **mesma unidade territorial** do alvo.
+
+Fatos de engenharia verificados:
+
+* grade municipal em `EPSG:32721`, 20 m, **5.878 × 11.008 px** (64,7 M px na
+  bbox de ~24.400 km², que contém os 9.293 km² do polígono);
+* o município atravessa **dois tiles** (`21LXG` ao norte, `21LXF` ao sul) —
+  o mosaico determinístico `first_valid_wins` (D44) é reaplicado;
+* custo medido: ~1,04 GB de download por data (2 bandas de 10 m) e ~9,3 GB
+  para 9 datas;
+* processamento por **16 blocos**, com acumuladores por bloco (soma,
+  contagem, soma de quadrados e histograma de 2.001 bins) — o raster
+  municipal **nunca** é materializado em memória;
+* recorte territorial: só entram centros de célula **dentro do polígono**
+  municipal (a bbox inclui ~15.000 km² de fora).
+
+Decisão:
+
+1. O indicador municipal é calculado **por blocos**, sobre a máscara agrícola
+   (WorldCover, classe 40) **e** o polígono do município.
+2. O processamento produz **estatísticas agregadas**, não rasters municipais
+   (a prioridade é a estatística, conforme a restrição da V2.1).
+3. Os nomes são **genéricos**: `ndvi_all_cropland` (toda a área agrícola) e
+   `ndvi_temporary_cropland` quando a máscara permitir separar temporária de
+   perene. **Não** se usa `ndvi_soja`/`ndvi_milho` sem identificação de
+   cultura por produto específico — a referência de cultura disponível é a
+   CONAB SUTIN, válida apenas para 2021 em MT.
+4. A comparação AOI × município é feita como **medida quantitativa de
+   representatividade** (diferença e estabilidade por ano), e **não** como
+   validação de produtividade.
+
+Consequências: o SADEN passa a ter um indicador na mesma escala do alvo
+(IBGE municipal), eliminando a incompatibilidade de escala — mas ainda sem
+relação causal ou preditiva demonstrada.
+
 ## D46 — IBGE/SIDRA (PAM 5457) como base observada de referência; CONAB como contexto (2026-11-11)
 
 Contexto: a V2.2 precisava de dados **observados** de produtividade para
