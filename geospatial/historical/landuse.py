@@ -26,6 +26,7 @@ from __future__ import annotations
 
 import json
 import os
+import time
 from typing import Any
 
 import numpy as np
@@ -123,7 +124,9 @@ def read_worldcover_year(
             meta = {
                 "url": url,
                 "crs": str(ds.crs),
-                "transform": list(ds.transform)[:6],
+                # o transform deve ser o da JANELA recortada (não o do
+                # dataset inteiro) — sem isso o mapeamento célula→pixel erra
+                "transform": list(window_transform(ds.transform, window))[:6],
                 "res": ds.res,
                 "width": ds.width,
                 "height": ds.height,
@@ -259,8 +262,14 @@ def read_worldcover_block(
     year: int,
     bbox: list[float],
     tile: str | None = None,
+    retries: int = 3,
 ) -> dict[str, Any]:
-    """Lê a classe WorldCover de uma janela (usado no processamento por blocos)."""
+    """Lê a classe WorldCover de uma janela (usado no processamento por blocos).
+
+    A leitura é remota e pode devolver janela vazia/parcial em falha
+    transitória; por isso o resultado é validado (classe 10..100 presente) e
+    refeito até ``retries`` vezes.
+    """
     import rasterio
     from rasterio.windows import from_bounds
 
@@ -269,20 +278,28 @@ def read_worldcover_block(
     network.configure_tls()
     tile = tile or worldcover_tile_name(bbox)
     url = WORLDCOVER_URLS[year].format(tile=tile)
-    with rasterio.Env(GDAL_DISABLE_READDIR_ON_OPEN="EMPTY_DIR"):
-        with rasterio.open(url) as ds:
-            window = from_bounds(*bbox, transform=ds.transform)
-            data = ds.read(1, window=window)
-            meta = {
-                "url": url,
-                "crs": str(ds.crs),
-                "transform": list(window_transform(ds.transform, window))[:6],
-                "res": ds.res,
-                "width": ds.width,
-                "height": ds.height,
-                "nodata": ds.nodata,
-            }
-    return {"year": year, "data": data, "meta": meta}
+    last: dict[str, Any] = {}
+    for attempt in range(retries):
+        with rasterio.Env(GDAL_DISABLE_READDIR_ON_OPEN="EMPTY_DIR"):
+            with rasterio.open(url) as ds:
+                window = from_bounds(*bbox, transform=ds.transform)
+                data = ds.read(1, window=window)
+                meta = {
+                    "url": url,
+                    "crs": str(ds.crs),
+                    # o transform deve ser o da JANELA recortada (não o do
+                    # dataset inteiro) — sem isso o mapeamento célula→pixel erra
+                    "transform": list(window_transform(ds.transform, window))[:6],
+                    "res": ds.res,
+                    "width": ds.width,
+                    "height": ds.height,
+                    "nodata": ds.nodata,
+                }
+        last = {"year": year, "data": data, "meta": meta}
+        if data.size and np.unique(data).size > 1 and int(data.max()) > 0:
+            return last
+        time.sleep(2.0 * (attempt + 1))
+    return last
 
 
 def window_transform(transform: Any, window: Any) -> Any:

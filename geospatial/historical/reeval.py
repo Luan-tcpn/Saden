@@ -149,7 +149,8 @@ def analyze_pairs(
         y = _to_float(row.get(y_field))
         if x is None or y is None:
             continue
-        rows.append((float(row.get("pam_reference_year") or row.get("year") or 0), x, y))
+        year = row.get("pam_reference_year") or row.get("year") or 0
+        rows.append((float(year), x, y))
     rows.sort(key=lambda r: r[0])
     years = [r[0] for r in rows]
     xs = [r[1] for r in rows]
@@ -167,6 +168,8 @@ def analyze_pairs(
         ) if len(rows) >= 4 else None,
         "yield_mean": float(np.mean(ys)) if ys else None,
         "indicator_mean": float(np.mean(xs)) if xs else None,
+        "indicator_sd": float(np.std(xs, ddof=1)) if len(xs) > 1 else None,
+        "yield_sd": float(np.std(ys, ddof=1)) if len(ys) > 1 else None,
     }
 
 
@@ -183,7 +186,8 @@ def walk_forward(
         y = _to_float(row.get(y_field))
         if x is None or y is None:
             continue
-        rows.append((float(row.get("pam_reference_year") or row.get("year") or 0), x, y))
+        year = row.get("pam_reference_year") or row.get("year") or 0
+        rows.append((float(year), x, y))
     rows.sort(key=lambda r: r[0])
     if len(rows) <= min_train:
         return {"status": "insufficient_pairs", "n": len(rows), "models": {}}
@@ -276,3 +280,102 @@ def group_pairs(
             continue
         groups[(str(row.get("crop")), str(row.get("mask_variant")))].append(row)
     return groups
+
+
+def group_pairs_by_mode(
+    dataset: Sequence[dict[str, Any]],
+    mode: str,
+    status: str = "paired_usable",
+) -> dict[tuple[str, str], list[dict[str, Any]]]:
+    """Agrupa os pares de uma fatia de pareamento por (cultura, máscara)."""
+    groups: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
+    for row in dataset:
+        if row.get("status") != status:
+            continue
+        if str(row.get("pairing_mode")) != mode:
+            continue
+        groups[(str(row.get("crop")), str(row.get("mask_variant")))].append(row)
+    return groups
+
+
+def representativity(
+    municipal_rows: Sequence[dict[str, Any]],
+    aoi_rows: Sequence[dict[str, Any]],
+    mask_variant: str = "stable",
+) -> dict[str, Any]:
+    """Representatividade da AOI em relação ao município (Fase 2, §4.6).
+
+    Compara, mês a mês, o NDVI agrícola **municipal** (máscara `mask_variant`)
+    com o NDVI da **AOI** da V2.3, e mede a estabilidade dessa diferença ao
+    longo de 2017–2025. A conclusão fica restrita ao que os dados mostram: a
+    AOI é uma sub-região (0,4654% da área municipal) e o seu NDVI **não**
+    representa a estatística municipal.
+    """
+    municipal: dict[str, float] = {}
+    for row in municipal_rows:
+        if str(row.get("mask_variant")) != mask_variant:
+            continue
+        value = _to_float(row.get("ndvi_mean"))
+        month = str(row.get("month"))
+        if value is not None and month:
+            municipal[month] = value
+
+    aoi: dict[str, float] = {}
+    aoi_coverage: dict[str, float] = {}
+    for row in aoi_rows:
+        if str(row.get("status")) != "observed":
+            continue
+        value = _to_float(row.get("ndvi_mean"))
+        month = str(row.get("month"))
+        if value is not None and month:
+            aoi[month] = value
+            coverage = _to_float(row.get("valid_fraction"))
+            aoi_coverage[month] = coverage if coverage is not None else 0.0
+
+    common = sorted(set(municipal) & set(aoi))
+    if not common:
+        return {"status": "sem meses comuns", "n_months": 0}
+    diffs = [municipal[m] - aoi[m] for m in common]
+    years = sorted({m[:4] for m in common})
+    by_year: dict[str, dict[str, float]] = {}
+    for year in years:
+        months = [m for m in common if m.startswith(year)]
+        year_diffs = [municipal[m] - aoi[m] for m in months]
+        by_year[year] = {
+            "n_months": len(months),
+            "municipal_mean": float(np.mean([municipal[m] for m in months])),
+            "aoi_mean": float(np.mean([aoi[m] for m in months])),
+            "mean_difference": float(np.mean(year_diffs)),
+            "max_abs_difference": float(np.max(np.abs(year_diffs))),
+        }
+    return {
+        "status": "ok",
+        "n_months": len(common),
+        "months": common,
+        "municipal_mean": float(np.mean([municipal[m] for m in common])),
+        "aoi_mean": float(np.mean([aoi[m] for m in common])),
+        "mean_difference": float(np.mean(diffs)),
+        "sd_difference": float(np.std(diffs, ddof=1)) if len(diffs) > 1 else None,
+        "min_difference": float(np.min(diffs)),
+        "max_difference": float(np.max(diffs)),
+        "pearson_r": pearson(
+            [municipal[m] for m in common], [aoi[m] for m in common]
+        ),
+        "spearman_rho": spearman(
+            [municipal[m] for m in common], [aoi[m] for m in common]
+        ),
+        "by_year": by_year,
+        "mean_yearly_difference": float(
+            np.mean([v["mean_difference"] for v in by_year.values()])
+        ),
+        "sd_yearly_difference": (
+            float(np.std([v["mean_difference"] for v in by_year.values()], ddof=1))
+            if len(by_year) > 1
+            else None
+        ),
+        "note": (
+            "A AOI cobre 0,4654% da área do município; a diferença média "
+            "mensal e sua estabilidade por ano medem a representatividade — "
+            "não validam produtividade."
+        ),
+    }

@@ -667,16 +667,40 @@ def cmd_municipal_series(args: argparse.Namespace) -> dict[str, Any]:
     from agri.geometry_compat import municipality_geometry
 
     municipality_cells = muni.municipality_mask(grid, municipality_geometry())
+    # WorldCover: uma leitura por ano (bbox municipal) com cache local — evitar
+    # dezenas de requisições remotas (o servidor limita a taxa e devolvia
+    # janelas vazias, o que zerava as máscaras).
+    wc_cache_dir = os.path.join(HERE, "artifacts", "worldcover_cache")
+    os.makedirs(wc_cache_dir, exist_ok=True)
+    municipality_bbox = grid["municipality_bbox_wgs84"]
+    wc_payloads: dict[int, dict[str, Any]] = {}
+    for year in (2020, 2021):
+        npy_path = os.path.join(wc_cache_dir, f"wc_{year}.npy")
+        meta_path = os.path.join(wc_cache_dir, f"wc_{year}.json")
+        if os.path.exists(npy_path) and os.path.exists(meta_path):
+            with open(meta_path, encoding="utf-8") as handle:
+                meta = json.load(handle)
+            wc_payloads[year] = {"data": np.load(npy_path), "meta": meta}
+            continue
+        payload = lu.read_worldcover_block(year, municipality_bbox)
+        np.save(npy_path, payload["data"])
+        with open(meta_path, "w", encoding="utf-8") as handle:
+            json.dump(payload["meta"], handle, ensure_ascii=False, indent=2)
+        wc_payloads[year] = payload
+        print(
+            f"[municipal] WorldCover {year} lido: {payload['data'].shape} "
+            f"(cache local)"
+        )
+
     variant_masks: dict[tuple[int, int], dict[str, np.ndarray]] = {}
     for block in blocks:
-        bbox = lu.block_bounds_wgs84(grid, block)
-        payload20 = lu.read_worldcover_block(2020, bbox)
-        payload21 = lu.read_worldcover_block(2021, bbox)
         subgrid = lu.block_subgrid(grid, block)
-        # máscaras reamostradas para a grade de 20 m do bloco (mesmo método
-        # validado na AOI: centro da célula -> pixel WorldCover)
-        crop20 = lu.cropland_grid_mask(payload20["data"], payload20["meta"], subgrid)
-        crop21 = lu.cropland_grid_mask(payload21["data"], payload21["meta"], subgrid)
+        crop20 = lu.cropland_grid_mask(
+            wc_payloads[2020]["data"], wc_payloads[2020]["meta"], subgrid
+        )
+        crop21 = lu.cropland_grid_mask(
+            wc_payloads[2021]["data"], wc_payloads[2021]["meta"], subgrid
+        )
         variant_masks[(block["row_off"], block["col_off"])] = mser.mask_variants(
             crop20, crop21
         )
@@ -688,19 +712,27 @@ def cmd_municipal_series(args: argparse.Namespace) -> dict[str, Any]:
             continue
         if all((month, variant) in done for variant in mser.MASK_VARIANTS):
             continue
-        item_xg = mser.find_tile_item(client, "sentinel-2-c1-l2a", date, mser.TILE_XG)
+        # a cena principal é **exatamente** a item auditada na série de
+        # referência (V2.3) — garante comparabilidade radiométrica
+        item_xg, collection = mser.find_item_by_id(client, entry["item_id"])
         if item_xg is None:
-            item_xg = mser.find_tile_item(client, "sentinel-2-l2a", date, mser.TILE_XG)
-        item_xf = mser.find_tile_item(client, "sentinel-2-c1-l2a", date, mser.TILE_XF)
-        if item_xf is None:
-            item_xf = mser.find_tile_item(client, "sentinel-2-l2a", date, mser.TILE_XF)
+            item_xg = mser.find_tile_item(client, "sentinel-2-c1-l2a", date, mser.TILE_XG)
+            if item_xg is None:
+                item_xg = mser.find_tile_item(
+                    client, "sentinel-2-l2a", date, mser.TILE_XG
+                )
+            collection = (
+                "sentinel-2-c1-l2a"
+                if item_xg is not None and "_T21LXG_" in str(item_xg.id)
+                else "sentinel-2-l2a"
+            )
         if item_xg is None:
             print(f"[municipal] {month}: item do tile 21LXG nao encontrado")
             continue
-        collection = (
-            "sentinel-2-c1-l2a"
-            if "_T21LXG_" in str(item_xg.id)
-            else "sentinel-2-l2a"
+        # tile complementar (21LXF) na mesma data e com o mesmo
+        # reprocessamento — mosaico first_valid_wins (D44)
+        item_xf = mser.find_complementary_item(
+            client, date, mser.TILE_XF, reference_item_id=str(item_xg.id)
         )
         profile = radio.item_radiometry(item_xg, collection)
         result = mser.process_month(
@@ -711,6 +743,7 @@ def cmd_municipal_series(args: argparse.Namespace) -> dict[str, Any]:
             profile,
             variant_masks,
             municipality_cells,
+            workers=args.workers,
         )
         for variant, stats in result["variants"].items():
             if (month, variant) in done:
@@ -728,9 +761,9 @@ def cmd_municipal_series(args: argparse.Namespace) -> dict[str, Any]:
                     "mask_year": (
                         "2020+2021" if variant in ("stable", "broad") else variant[-4:]
                     ),
-                    "agricultural_pixels": stats["count"],
+                    "agricultural_pixels": stats.get("agricultural_pixels"),
                     "valid_pixels": stats["count"],
-                    "valid_fraction": 1.0 if stats["count"] else None,
+                    "valid_fraction": stats.get("valid_fraction"),
                     "ndvi_mean": stats["mean"],
                     "ndvi_median": stats["quantiles"].get("p50"),
                     "ndvi_std": stats["std"],
@@ -826,11 +859,19 @@ def cmd_pair(args: argparse.Namespace) -> dict[str, Any]:
         "rows": len(dataset),
         "paired_usable": len(usable),
         "usable_by_crop_and_mask": by_crop,
+        "usable_by_mode": {
+            mode: sum(
+                1
+                for row in usable
+                if str(row.get("pairing_mode")) == mode
+            )
+            for mode in sorted({str(row.get("pairing_mode")) for row in dataset})
+        },
         "csv": os.path.relpath(out_csv, HERE).replace("\\", "/"),
         "primary_protocol": {
             "mask_variant": "stable",
-            "risk_level": season.PRIMARY_RISK,
-            "risk_justification": season.PRIMARY_RISK_JUSTIFICATION,
+            "max_risk": season.PRIMARY_MAX_RISK,
+            "risk_justification": season.PRIMARY_MAX_RISK_JUSTIFICATION,
             "window_rule": (
                 "janela modal entre as combinações oficiais de solo/ciclo da "
                 "safra (as demais ficam como sensibilidade)"
@@ -885,24 +926,31 @@ def cmd_reeval(args: argparse.Namespace) -> dict[str, Any]:
     with open(dataset_csv, newline="", encoding="utf-8-sig") as handle:
         dataset = list(_csv.DictReader(handle))
 
-    groups = reeval.group_pairs(dataset)
+    # Cada combinação (fatia, cultura, máscara, indicador) é um teste da
+    # família; a correção de Holm é aplicada sobre o conjunto inteiro.
     results: dict[str, Any] = {}
     p_values: dict[str, float] = {}
-    for (crop, variant), pairs in sorted(groups.items()):
-        key = f"{crop}|{variant}"
-        for field, label in (
-            ("ndvi_municipal_mean", "ndvi_municipal"),
-            ("ndvi_aoi_mean", "ndvi_aoi"),
-        ):
-            analysis = reeval.analyze_pairs(
-                pairs, field, permutations=args.permutations
-            )
-            analysis["walk_forward"] = reeval.walk_forward(
-                pairs, field, min_train=args.min_train
-            )
-            results[f"{key}|{label}"] = analysis
-            if analysis.get("permutation_p") is not None:
-                p_values[f"{key}|{label}"] = analysis["permutation_p"]
+    for mode in ("zarc_sazonal", "ano_civil_v23"):
+        groups = reeval.group_pairs_by_mode(dataset, mode)
+        for (crop, variant), pairs in sorted(groups.items()):
+            key = f"{mode}|{crop}|{variant}"
+            for field, label in (
+                ("ndvi_mean", "ndvi_municipal"),
+                ("ndvi_aoi_mean", "ndvi_aoi"),
+            ):
+                analysis = reeval.analyze_pairs(
+                    pairs, field, permutations=args.permutations
+                )
+                analysis["walk_forward"] = reeval.walk_forward(
+                    pairs, field, min_train=args.min_train
+                )
+                analysis["pairing_mode"] = mode
+                analysis["crop"] = crop
+                analysis["mask_variant"] = variant
+                analysis["indicator"] = label
+                results[f"{key}|{label}"] = analysis
+                if analysis.get("permutation_p") is not None:
+                    p_values[f"{key}|{label}"] = analysis["permutation_p"]
 
     corrected = reeval.holm_correction(p_values)
     for key, value in corrected.items():
@@ -919,14 +967,19 @@ def cmd_reeval(args: argparse.Namespace) -> dict[str, Any]:
     manifest = {
         "generated_at": _now(),
         "results": results,
-        "primary_analysis": "soja|stable|ndvi_municipal",
+        "primary_analysis": "zarc_sazonal|soja|stable|ndvi_municipal",
         "protocol": {
+            "primary_mode": "zarc_sazonal",
             "primary_mask": "stable",
-            "primary_indicator": "ndvi_municipal_mean",
-            "sensitivity": "máscaras (wc2020/wc2021/broad) e indicador da AOI",
+            "primary_indicator": "ndvi_mean",
+            "sensitivity": (
+                "máscaras (wc2020/wc2021/broad), indicador da AOI e fatia "
+                "ano_civil_v23 (réplica da V2.3 e controle do efeito escala)"
+            ),
             "permutations": args.permutations,
             "min_train": args.min_train,
             "multiple_comparisons": "correção de Holm aplicada à família de testes",
+            "family_size": len(p_values),
         },
         "v23_reference": v23,
         "note": (
@@ -934,13 +987,34 @@ def cmd_reeval(args: argparse.Namespace) -> dict[str, Any]:
             "fixa, detrendizado, walk-forward com os mesmos baselines)."
         ),
     }
+
+    # representatividade AOI x município (Fase 2, §4.6)
+    municipal_csv = os.path.join(PROCESSED_DIR, "municipal_ndvi_monthly.csv")
+    aoi_csv = os.path.join(PROCESSED_DIR, "sentinel2_historical_monthly.csv")
+    if os.path.exists(municipal_csv) and os.path.exists(aoi_csv):
+        import csv as _csv2
+
+        with open(municipal_csv, newline="", encoding="utf-8-sig") as handle:
+            municipal_rows = list(_csv2.DictReader(handle))
+        with open(aoi_csv, newline="", encoding="utf-8-sig") as handle:
+            aoi_rows = list(_csv2.DictReader(handle))
+        manifest["representativity_aoi_vs_municipal"] = reeval.representativity(
+            municipal_rows, aoi_rows, mask_variant="stable"
+        )
+        manifest["representativity_by_mask"] = {
+            variant: reeval.representativity(
+                municipal_rows, aoi_rows, mask_variant=variant
+            )
+            for variant in ("wc2020", "wc2021", "broad")
+        }
     path = _write_json(manifest, os.path.join(MANIFEST_DIR, "reevaluation.json"))
     summary_csv = os.path.join(MANIFEST_DIR, "reevaluation_summary.csv")
     with open(summary_csv, "w", newline="", encoding="utf-8-sig") as handle:
         writer = _csv.DictWriter(
             handle,
             fieldnames=[
-                "key", "n", "pearson_r", "spearman_rho", "permutation_p",
+                "key", "mode", "crop", "mask", "indicator", "n",
+                "pearson_r", "spearman_rho", "permutation_p",
                 "holm_p", "ci95_low", "ci95_high", "r_detrended",
                 "wf_mae_ols_ndvi", "wf_mae_media", "wf_mae_ultimo",
                 "wf_mae_tendencia", "ndvi_beats_baselines",
@@ -954,6 +1028,10 @@ def cmd_reeval(args: argparse.Namespace) -> dict[str, Any]:
             writer.writerow(
                 {
                     "key": key,
+                    "mode": analysis.get("pairing_mode"),
+                    "crop": analysis.get("crop"),
+                    "mask": analysis.get("mask_variant"),
+                    "indicator": analysis.get("indicator"),
                     "n": analysis.get("n"),
                     "pearson_r": analysis.get("pearson_r"),
                     "spearman_rho": analysis.get("spearman_rho"),
@@ -1040,6 +1118,7 @@ def main(argv: list[str] | None = None) -> int:
     p_ms.add_argument("--blocks", type=int, default=16)
     p_ms.add_argument("--months", nargs="+", default=None, help="meses (MM) a processar")
     p_ms.add_argument("--max-months", type=int, default=0)
+    p_ms.add_argument("--workers", type=int, default=4, help="threads por mês (I/O)")
     p_ms.set_defaults(func=cmd_municipal_series)
 
     p_mu = sub.add_parser("municipal", help="NDVI municipal sobre a área agrícola")

@@ -15,7 +15,7 @@ from historical import reeval
 
 
 class DecendRuleTest(unittest.TestCase):
-    """Regra oficial do MAPA: três decêndios por mês (1–10, 11–20, 21–fim)."""
+    """Regra oficial do MAPA: três decêndios por mês (1-10, 11-20, 21-fim)."""
 
     def test_month_and_segment(self):
         self.assertEqual(season.decend_month(1), 1)
@@ -44,6 +44,53 @@ class DecendRuleTest(unittest.TestCase):
             season.decend_to_dates(2023, 37)
         with self.assertRaises(ValueError):
             season.decend_to_dates(2023, 0)
+
+    def test_all_36_decends_are_covered(self):
+        """Os 36 decêndios do ano cobrem exatamente os 12 meses."""
+        seen = set()
+        for decend in range(1, 37):
+            seen.add(season.decend_month(decend))
+        self.assertEqual(seen, set(range(1, 13)))
+
+
+class RiskLabelTest(unittest.TestCase):
+    """O campo ``decendios_com_risco`` guarda rótulos textuais de risco."""
+
+    def test_parse_textual_risk_labels(self):
+        self.assertEqual(season.parse_risk_label("baixo"), 20)
+        self.assertEqual(season.parse_risk_label("medio"), 30)
+        self.assertEqual(season.parse_risk_label("alto"), 40)
+        self.assertEqual(season.parse_risk_label("muito_baixo"), 10)
+        self.assertIsNone(season.parse_risk_label(""))
+
+    def test_recommended_decends_use_official_threshold(self):
+        text = "26:alto;27:medio;28:baixo;29:baixo;30:baixo"
+        self.assertEqual(season.recommended_decends(text, max_risk=20), [28, 29, 30])
+        self.assertEqual(
+            season.recommended_decends(text, max_risk=30), [27, 28, 29, 30]
+        )
+        self.assertEqual(
+            season.recommended_decends(text, max_risk=40), [26, 27, 28, 29, 30]
+        )
+
+
+class DecendYearAnchorTest(unittest.TestCase):
+    """Âncora de ano dos decêndios dentro da safra (correção V2.5)."""
+
+    def test_first_and_second_year_split(self):
+        self.assertEqual(season.decend_year(1, 2019, 2020), 2020)
+        self.assertEqual(season.decend_year(12, 2019, 2020), 2020)
+        self.assertEqual(season.decend_year(13, 2019, 2020), 2019)
+        self.assertEqual(season.decend_year(36, 2019, 2020), 2019)
+
+    def test_portaria_precedes_window(self):
+        """A portaria que publica a recomendação precede a janela."""
+        # Milho 2ª Safra da safra 2016/17: portaria de 09-12-2016 e janela
+        # recomendada em janeiro-fevereiro (deve ser de 2017, não de 2016).
+        self.assertEqual(season.decend_year(1, 2016, 2017), 2017)
+        start, _ = season.decend_to_dates(season.decend_year(1, 2016, 2017), 1)
+        self.assertEqual(start, "2017-01-01")
+        self.assertGreater(start, "2016-12-09")
 
 
 class PamYearRelationTest(unittest.TestCase):
@@ -75,7 +122,10 @@ class WindowTest(unittest.TestCase):
                 "cod_solo": "1",
                 "cod_clima": "",
                 "portaria": "port.63",
-                "decendios_com_risco": "29:20;30:20;31:20;32:20;33:20;34:20;35:20;36:20",
+                "decendios_com_risco": (
+                    "29:baixo;30:baixo;31:baixo;32:baixo;"
+                    "33:baixo;34:baixo;35:baixo;36:baixo"
+                ),
             },
             {
                 "safra": "2019/20",
@@ -86,7 +136,10 @@ class WindowTest(unittest.TestCase):
                 "cod_solo": "1",
                 "cod_clima": "",
                 "portaria": "port.63",
-                "decendios_com_risco": "29:20;30:20;31:20;32:20;33:20;34:20;35:20;36:20",
+                "decendios_com_risco": (
+                    "29:baixo;30:baixo;31:baixo;32:baixo;"
+                    "33:baixo;34:baixo;35:baixo;36:baixo"
+                ),
             },
             {
                 "safra": "2019/20",
@@ -97,7 +150,7 @@ class WindowTest(unittest.TestCase):
                 "cod_solo": "1",
                 "cod_clima": "",
                 "portaria": "port.99",
-                "decendios_com_risco": "1:20;2:20;3:20;4:20;5:20",
+                "decendios_com_risco": "1:baixo;2:baixo;3:baixo;4:baixo;5:baixo",
             },
         ]
 
@@ -105,20 +158,23 @@ class WindowTest(unittest.TestCase):
         windows = season.build_windows(self._rows(), "soja")
         self.assertEqual(len(windows), 2)  # duas combinações de solo/ciclo
         for window in windows:
-            self.assertEqual(window["months"], [10, 11, 12])
+            self.assertEqual(window["months"], ["2019-10", "2019-11", "2019-12"])
             self.assertTrue(window["start_date"].startswith("2019-10"))
             self.assertTrue(window["end_date"].startswith("2019-12"))
 
-    def test_second_saison_window_is_january_february(self):
+    def test_second_saison_window_is_january_february_of_second_year(self):
         windows = season.build_windows(self._rows(), "milho_2")
         self.assertEqual(len(windows), 1)
-        self.assertEqual(windows[0]["months"], [1, 2])
+        # 2ª safra da safra 2019/20 é plantada em jan-fev de 2020
+        self.assertEqual(windows[0]["months"], ["2020-01", "2020-02"])
+        self.assertTrue(windows[0]["start_date"].startswith("2020-01"))
 
     def test_consensus_window_takes_modal_combination(self):
         windows = season.build_windows(self._rows(), "soja")
         window = pairing.consensus_window(windows, "2019/20")
         self.assertIsNotNone(window)
-        self.assertEqual(window["months"], [10, 11, 12])
+        self.assertEqual(window["months"], ["2019-10", "2019-11", "2019-12"])
+        self.assertEqual(window["official_combinations"], 2)
 
 
 class PairingTest(unittest.TestCase):
@@ -128,7 +184,7 @@ class PairingTest(unittest.TestCase):
                 "safra": "2019/20", "safra_ini": "2019", "safra_fin": "2020",
                 "cultura": "Soja", "cod_ciclo": "20", "cod_solo": "1",
                 "cod_clima": "", "portaria": "port.63",
-                "decendios_com_risco": "29:20;30:20;31:20",
+                "decendios_com_risco": "29:baixo;30:baixo;31:baixo",
             }
         ]
 
@@ -155,9 +211,20 @@ class PairingTest(unittest.TestCase):
 
     def _aoi(self):
         return [
-            {"month": "2019-10", "ndvi_mean": "0.52", "valid_fraction": "0.98"},
-            {"month": "2019-11", "ndvi_mean": "0.53", "valid_fraction": "0.98"},
-            {"month": "2020-10", "ndvi_mean": "0.55", "valid_fraction": "0.99"},
+            {"month": "2019-01", "status": "observed", "ndvi_mean": "0.50",
+             "valid_fraction": "0.98"},
+            {"month": "2019-02", "status": "observed", "ndvi_mean": "0.51",
+             "valid_fraction": "0.98"},
+            {"month": "2019-10", "status": "observed", "ndvi_mean": "0.52",
+             "valid_fraction": "0.98"},
+            {"month": "2019-11", "status": "observed", "ndvi_mean": "0.53",
+             "valid_fraction": "0.98"},
+            {"month": "2020-01", "status": "observed", "ndvi_mean": "0.54",
+             "valid_fraction": "0.99"},
+            {"month": "2020-10", "status": "observed", "ndvi_mean": "0.55",
+             "valid_fraction": "0.99"},
+            {"month": "2020-11", "status": "observed", "ndvi_mean": "0.56",
+             "valid_fraction": "0.99"},
         ]
 
     def test_dataset_uses_harvest_year(self):
@@ -175,7 +242,9 @@ class PairingTest(unittest.TestCase):
         dataset = pairing.build_paired_dataset(
             self._zarc(), self._municipal(), self._aoi(), self._pam()
         )
-        soja = [r for r in dataset if r["crop"] == "soja" and r["mask_variant"] == "stable"][0]
+        soja = [
+            r for r in dataset if r["crop"] == "soja" and r["mask_variant"] == "stable"
+        ][0]
         self.assertTrue(soja["mask_retrospective"])
         self.assertEqual(soja["quality_flag"], "paired_with_retrospective_mask")
 
@@ -183,18 +252,47 @@ class PairingTest(unittest.TestCase):
         dataset = pairing.build_paired_dataset(
             self._zarc(), self._municipal(), self._aoi(), self._pam()
         )
-        soja = [r for r in dataset if r["crop"] == "soja"]
+        soja = [
+            r for r in dataset
+            if r["crop"] == "soja" and r["pairing_mode"] == "zarc_sazonal"
+        ]
         # uma linha por (safra, variante) — não uma por combinação ZARC
         self.assertEqual(len({r["mask_variant"] for r in soja}), len(soja))
+        self.assertEqual(len({r["pam_reference_year"] for r in soja}), 1)
 
     def test_missing_yield_is_excluded_not_dropped(self):
         dataset = pairing.build_paired_dataset(
             self._zarc(), self._municipal(), self._aoi(), []
         )
-        soja = [r for r in dataset if r["crop"] == "soja"]
+        soja = [
+            r for r in dataset
+            if r["crop"] == "soja" and r["pairing_mode"] == "zarc_sazonal"
+        ]
         self.assertTrue(soja)
         self.assertEqual(soja[0]["status"], "excluded")
         self.assertIn("rendimento", soja[0]["exclusion_reason"])
+
+    def test_window_uses_absolute_months(self):
+        dataset = pairing.build_paired_dataset(
+            self._zarc(), self._municipal(), self._aoi(), self._pam()
+        )
+        soja = [
+            r for r in dataset
+            if r["crop"] == "soja" and r["pairing_mode"] == "zarc_sazonal"
+        ][0]
+        self.assertEqual(soja["window_months"], "2019-10;2019-11")
+
+    def test_civil_year_slice_reproduces_v23_rule(self):
+        """A fatia de ano civil cobre todos os anos com rendimento da PAM."""
+        dataset = pairing.build_paired_dataset(
+            self._zarc(), self._municipal(), self._aoi(), self._pam()
+        )
+        civil = [r for r in dataset if r["pairing_mode"] == "ano_civil_v23"]
+        self.assertTrue(civil)
+        self.assertEqual({r["pam_reference_year"] for r in civil}, {2020})
+        # na fatia civil o indicador da AOI vem da série da AOI
+        row = [r for r in civil if r["crop"] == "soja"][0]
+        self.assertIsNotNone(row["ndvi_aoi_mean"])
 
 
 class StatisticsTest(unittest.TestCase):
@@ -261,9 +359,9 @@ class StatisticsTest(unittest.TestCase):
 
 class MaskVariantTest(unittest.TestCase):
     def test_variants(self):
-        wc20 = np.array([[40, 30], [40, 10]], dtype="uint8")
-        wc21 = np.array([[40, 40], [30, 10]], dtype="uint8")
-        variants = mser.mask_variants(wc20, wc21)
+        crop20 = np.array([[True, False], [True, False]])
+        crop21 = np.array([[True, True], [False, False]])
+        variants = mser.mask_variants(crop20, crop21)
         self.assertEqual(int(variants["wc2020"].sum()), 2)
         self.assertEqual(int(variants["wc2021"].sum()), 2)
         self.assertEqual(int(variants["stable"].sum()), 1)   # interseção

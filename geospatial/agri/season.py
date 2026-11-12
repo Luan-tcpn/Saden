@@ -4,6 +4,8 @@ Este módulo fixa, **antes** de qualquer análise de correlação:
 
 * a conversão de decêndios em datas (regra oficial do MAPA: três decêndios por
   mês — dias 1–10, 11–20 e 21–último dia);
+* a **âncora de ano** de cada decêndio dentro da safra (correção V2.5: os
+  decêndios de janeiro–abril pertencem ao **segundo** ano da safra);
 * as janelas de plantio aplicáveis a Sorriso por cultura e safra, preservando
   as alternativas de solo, ciclo e nível de risco (nenhuma é arbitrada);
 * a correspondência entre safra e ano de referência da PAM, com a regra
@@ -13,6 +15,18 @@ Este módulo fixa, **antes** de qualquer análise de correlação:
   descrevessem a mesma produção.
 
 Nada aqui observa plantio real: o ZARC é recomendação de risco.
+
+Correções aplicadas na V2.5 em relação à ingestão da V2.4
+(`agri/zarc.py` → `zarc_planting_windows.csv`):
+
+1. O campo ``decendios_com_risco`` guarda o risco por **rótulo textual**
+   (``muito_baixo``/``baixo``/``medio``/``alto``), e não por código numérico.
+2. A âncora de ano dos decêndios 1–12 é o **segundo** ano da safra
+   (``safra_fin``), e a dos decêndios 13–36 é o primeiro (``safra_ini``).
+   A verificação é objetiva: a data da portaria que publica a recomendação
+   deve **preceder** o início da janela recomendada — com a regra antiga
+   (todos os decêndios em ``safra_ini``) há 165 violações nas culturas-piloto
+   e com a regra nova há **zero**.
 """
 
 from __future__ import annotations
@@ -24,24 +38,40 @@ from collections import defaultdict
 from typing import Any, Iterable, Sequence
 
 # Cultura do SADEN → rótulos do ZARC (nomenclatura real do conjunto).
+# "Milho" é o rótulo das safras até 2023/24; "Milho 1ª Safra" o das
+# seguintes. As variantes "consorciado com Braquiária" são outro sistema de
+# manejo e ficam de fora (D49 — culturas-piloto).
 CROP_LABELS: dict[str, list[str]] = {
     "soja": ["Soja"],
     "milho": ["Milho", "Milho 1ª Safra"],
     "milho_2": ["Milho 2ª Safra"],
 }
 
-# Nível de risco do ZARC (código → descrição). As janelas são recalculadas por
-# nível: o resultado muda se a escolha de risco mudar.
-RISK_LEVELS = {10: "muito_baixo", 20: "baixo", 30: "medio", 40: "alto"}
+# Nível de risco do ZARC: código → rótulo (o CSV normalizado usa rótulos).
+RISK_LEVELS: dict[int, str] = {
+    10: "muito_baixo",
+    20: "baixo",
+    30: "medio",
+    40: "alto",
+}
+RISK_BY_LABEL: dict[str, int] = {v: k for k, v in RISK_LEVELS.items()}
+RISK_BY_LABEL.update({"muito baixo": 10, "médio": 30, "medio": 30})
 
-# Nível de risco adotado na análise principal e justification agronômica.
-PRIMARY_RISK = 20
-PRIMARY_RISK_JUSTIFICATION = (
-    "Janela recomendada do ZARC com risco baixo (20): é a faixa em que a "
-    "recomendação oficial éconsidered aceitável para a maioria das condições "
-    "de solo/ciclomanage — alternativa de risco (10/30/40) é reportada como "
-    "sensibilidade, não descartada."
+# Risco máximo da **janela recomendada** na análise principal.
+# A janela oficial do ZARC é a dos decêndios de risco *muito baixo ou baixo*
+# (≤ 20%); este é o critério oficial do MAPA, não uma escolha guiada pela
+# correlação. Os riscos ≤ 30% e ≤ 40% são cenários de sensibilidade.
+PRIMARY_MAX_RISK = 20
+PRIMARY_MAX_RISK_JUSTIFICATION = (
+    "Janela recomendada oficial do ZARC: decêndios com risco muito baixo ou "
+    "baixo (≤ 20%). É a faixa em que a recomendação do MAPA é considerada "
+    "aceitável — não a faixa de maior correlação com o rendimento. As "
+    "extensões ≤ 30% e ≤ 40% são cenários de sensibilidade."
 )
+SENSITIVITY_MAX_RISKS: tuple[int, ...] = (30, 40)
+
+# Âncora de ano dos decêndios: 1–12 → segundo ano da safra; 13–36 → primeiro.
+DECEND_YEAR_SPLIT = 12
 
 
 def decend_month(decend: int) -> int:
@@ -75,8 +105,21 @@ def decend_to_dates(year: int, decend: int) -> tuple[str, str]:
     )
 
 
+def decend_year(decend: int, safra_ini: int, safra_fin: int) -> int:
+    """Ano civil de um decêndio dentro da safra (correção V2.5).
+
+    Os decêndios 1–12 (janeiro–abril) pertencem ao **segundo** ano da safra e
+    os decêndios 13–36 (maio–dezembro) ao **primeiro**. A regra é verificável:
+    a portaria que publica a recomendação é anterior ao início da janela
+    recomendada — o que só vale com esta âncora.
+    """
+    if not 1 <= decend <= 36:
+        raise ValueError(f"decendio fora de 1..36: {decend}")
+    return safra_fin if decend <= DECEND_YEAR_SPLIT else safra_ini
+
+
 def decend_months(decends: Iterable[int]) -> list[int]:
-    """Meses cobertos por um conjunto de decêndios (ordenados)."""
+    """Meses (1–12) cobertos por um conjunto de decêndios (ordenados)."""
     return sorted({decend_month(d) for d in decends})
 
 
@@ -85,8 +128,22 @@ def read_zarc_rows(path: str) -> list[dict[str, Any]]:
         return list(csv.DictReader(handle))
 
 
+def parse_risk_label(text: str) -> int | None:
+    """Rótulo textual de risco → código (10/20/30/40)."""
+    key = str(text or "").strip().lower()
+    if not key:
+        return None
+    if key in RISK_BY_LABEL:
+        return RISK_BY_LABEL[key]
+    try:
+        value = int(float(key))
+    except ValueError:
+        return None
+    return value if value in RISK_LEVELS else None
+
+
 def _risk_decends(text: str) -> dict[int, list[int]]:
-    """Extrai ``decend: risco`` do campo ``decendios_com_risco``."""
+    """Extrai ``decend: risco`` do campo ``decendios_com_risco`` (rótulo)."""
     out: dict[int, list[int]] = defaultdict(list)
     for chunk in str(text or "").split(";"):
         if ":" not in chunk:
@@ -94,17 +151,29 @@ def _risk_decends(text: str) -> dict[int, list[int]]:
         decend_text, risk_text = chunk.split(":", 1)
         try:
             decend = int(decend_text)
-            risk = int(risk_text)
         except ValueError:
+            continue
+        risk = parse_risk_label(risk_text)
+        if risk is None:
             continue
         out[risk].append(decend)
     return out
 
 
+def recommended_decends(text: str, max_risk: int = PRIMARY_MAX_RISK) -> list[int]:
+    """Decêndios da janela oficial: risco **muito baixo ou baixo** (≤ max_risk)."""
+    risks = _risk_decends(text)
+    decends: set[int] = set()
+    for risk, values in risks.items():
+        if risk <= max_risk:
+            decends.update(values)
+    return sorted(decends)
+
+
 def build_windows(
     rows: Sequence[dict[str, Any]],
     crop: str,
-    risk: int = PRIMARY_RISK,
+    max_risk: int = PRIMARY_MAX_RISK,
 ) -> list[dict[str, Any]]:
     """Janelas de plantio por safra para uma cultura e um nível de risco.
 
@@ -116,53 +185,62 @@ def build_windows(
     for row in rows:
         if str(row.get("cultura")) not in labels:
             continue
-        risks = _risk_decends(row.get("decendios_com_risco", ""))
-        decends = risks.get(risk)
+        decends = recommended_decends(row.get("decendios_com_risco", ""), max_risk)
         if not decends:
             continue
+        safra_ini = int(row["safra_ini"])
+        safra_fin = int(row["safra_fin"])
         key = (
             row.get("safra"),
             row.get("cod_ciclo"),
             row.get("cod_solo"),
             row.get("portaria"),
         )
-        entry = grouped.setdefault(
-            key,
-            {
+        entry = grouped.get(key)
+        if entry is None:
+            dates = [
+                decend_to_dates(decend_year(d, safra_ini, safra_fin), d) for d in decends
+            ]
+            months = sorted(
+                {
+                    f"{decend_year(d, safra_ini, safra_fin):04d}-{decend_month(d):02d}"
+                    for d in decends
+                }
+            )
+            entry = {
                 "safra": row.get("safra"),
-                "safra_ini": row.get("safra_ini"),
-                "safra_fin": row.get("safra_fin"),
+                "safra_ini": safra_ini,
+                "safra_fin": safra_fin,
                 "cultura": row.get("cultura"),
                 "crop": crop,
                 "cod_ciclo": row.get("cod_ciclo"),
                 "cod_solo": row.get("cod_solo"),
                 "cod_clima": row.get("cod_clima"),
                 "portaria": row.get("portaria"),
-                "risk": risk,
-                "decends": sorted(decends),
-                "months": decend_months(decends),
+                "max_risk": max_risk,
+                "decends": decends,
+                "months": months,
+                "start_date": min(d[0] for d in dates),
+                "end_date": max(d[1] for d in dates),
                 "combinations": 0,
-            },
-        )
+            }
+            grouped[key] = entry
         entry["combinations"] += 1
-    windows = list(grouped.values())
-    for window in windows:
-        year = int(window["safra_ini"])
-        start, _ = decend_to_dates(year, window["decends"][0])
-        _, end = decend_to_dates(year, window["decends"][-1])
-        window["start_date"] = start
-        window["end_date"] = end
-    return sorted(windows, key=lambda w: (w["safra"], str(w["cod_ciclo"]), str(w["cod_solo"])))
+    return sorted(
+        grouped.values(),
+        key=lambda w: (str(w["safra"]), str(w["cod_ciclo"]), str(w["cod_solo"])),
+    )
 
 
 def pam_year_candidates(safra: str, crop: str) -> dict[str, Any]:
     """Anos de referência PAM candidatos para uma safra.
 
-    Regra (revisada na V2.5): a safra ``Y/Y+1`` tem plantio no ano ``Y`` e
-    colheita **no ano civil ``Y+1``** (soja e milho 1ª: plantio set–dez,
-    colheita jan–fev do ano seguinte; milho 2ª: plantio jan–fev, colheita
-    mai–jun do mesmo ano ``Y+1``). O ano de plantio ``Y`` é preservado como
-    alternativa de menor confiança.
+    Regra (revista na V2.5): a safra ``Y/Y+1`` tem plantio na segunda metade de
+    ``Y`` (soja e milho 1ª: set–dez) e colheita em ``Y+1``; o **milho 2ª
+    safra** é plantado em jan–fev de ``Y+1`` e colhido em mai–jun de ``Y+1``.
+    Em todos os casos o ano de referência da PAM é o **ano de colheita**
+    (``safra_fin``), que é também o ano civil dos decêndios de janeiro–abril da
+    janela.
 
     Para o **milho**, a PAM publica o **total do ano** (1ª + 2ª safras): a
     correspondência com a janela de uma safra específica é, portanto,
@@ -172,16 +250,19 @@ def pam_year_candidates(safra: str, crop: str) -> dict[str, Any]:
         year = int(str(safra).split("/")[0])
     except (ValueError, IndexError):
         return {"primary": None, "alternative": None, "confidence": "none"}
+    harvest_year = year + 1
     if crop == "milho_2":
-        # plantio em jan-fev de Y+1, colheita em mai-jun de Y+1
         return {
-            "primary": year + 1,
-            "alternative": year,
+            "primary": harvest_year,
+            "alternative": harvest_year - 1,
             "confidence": "media",
-            "ambiguity": "PAM publica o total anual de milho (1ª + 2ª safras)",
+            "ambiguity": (
+                "PAM publica o total anual de milho (1ª + 2ª safras); a "
+                "safra 2ª não está desagregada"
+            ),
         }
     return {
-        "primary": year + 1,
+        "primary": harvest_year,
         "alternative": year,
         "confidence": "media_alta" if crop == "soja" else "media",
         "ambiguity": None,
@@ -191,18 +272,16 @@ def pam_year_candidates(safra: str, crop: str) -> dict[str, Any]:
 def window_months_by_year(
     windows: Sequence[dict[str, Any]],
     crop: str,
-) -> dict[str, list[int]]:
-    """Meses da janelarecommended, por ano-safra (ano do plantio)."""
-    out: dict[str, list[int]] = {}
+) -> dict[str, list[str]]:
+    """Meses ``YYYY-MM`` da janela recomendada, por safra."""
+    out: dict[str, list[str]] = {}
     for window in windows:
-        months = list(window["months"])
-        if crop == "milho_2":
-            # a 2ª safra é plantada em jan-fev do ano seguinte
-            year = int(window["safra_ini"]) + 1
-            out[f"{year}"] = sorted(set(out.get(f"{year}", [])) | set(months))
-        else:
-            year = int(window["safra_ini"])
-            out[f"{year}"] = sorted(set(out.get(f"{year}", [])) | set(months))
+        out.setdefault(str(window["safra"]), [])
+        for month in window["months"]:
+            if month not in out[str(window["safra"])]:
+                out[str(window["safra"])].append(month)
+    for key in out:
+        out[key] = sorted(out[key])
     return out
 
 

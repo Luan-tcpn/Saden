@@ -62,10 +62,14 @@ MONTHLY_FIELDS = [
 ]
 
 
-def mask_variants(wc2020: np.ndarray, wc2021: np.ndarray) -> dict[str, np.ndarray]:
-    """Quatro máscaras agrícolas a partir das duas classificações anuais."""
-    crop20 = wc2020 == lu.WORLDCOVER_CROPLAND
-    crop21 = wc2021 == lu.WORLDCOVER_CROPLAND
+def mask_variants(crop2020: np.ndarray, crop2021: np.ndarray) -> dict[str, np.ndarray]:
+    """Quatro máscaras agrícolas a partir de dois mapas de lavoura (booleanos).
+
+    ``crop2020``/``crop2021`` são máscaras de *cropland* (classe 40 do WorldCover)
+    já reamostradas para a grade de trabalho — não as classes brutas.
+    """
+    crop20 = np.asarray(crop2020, dtype=bool)
+    crop21 = np.asarray(crop2021, dtype=bool)
     return {
         "wc2020": crop20,
         "wc2021": crop21,
@@ -115,6 +119,60 @@ def find_tile_item(client: Any, collection: str, date: str, tile: str) -> Any | 
     ).items():
         if pcatalog.tile_code(candidate) == tile:
             return candidate
+    return None
+
+
+def processing_index(item_id: str) -> str | None:
+    """Índice de reprocessamento do identificador (``..._0_L2A`` → ``0``)."""
+    parts = str(item_id or "").split("_")
+    for part in parts:
+        if part.isdigit():
+            return part
+    return None
+
+
+def find_item_by_id(client: Any, item_id: str) -> tuple[Any | None, str | None]:
+    """Busca o item exato pelo identificador (nas coleções C1 e original)."""
+    for collection in ("sentinel-2-c1-l2a", "sentinel-2-l2a"):
+        found = list(
+            client.search(collections=[collection], ids=[str(item_id)], limit=5).items()
+        )
+        if found:
+            return found[0], collection
+    return None, None
+
+
+def find_complementary_item(
+    client: Any,
+    date: str,
+    tile: str,
+    reference_item_id: str | None = None,
+) -> Any | None:
+    """Item do tile complementar na mesma data, com reprocessamento pareado.
+
+    Quando o item de referência existe (``..._0_L2A``), procura-se o item do
+    outro tile **com o mesmo índice de reprocessamento** — assim as cenas do
+    mosaico pertencem à mesma passagem e ao mesmo processamento.
+    """
+    wanted = processing_index(reference_item_id) if reference_item_id else None
+    for collection in ("sentinel-2-c1-l2a", "sentinel-2-l2a"):
+        candidates = [
+            candidate
+            for candidate in client.search(
+                collections=[collection],
+                bbox=grid_bbox_municipality(),
+                datetime=f"{date}T00:00:00Z/{date}T23:59:59Z",
+                limit=30,
+            ).items()
+            if pcatalog.tile_code(candidate) == tile
+        ]
+        if not candidates:
+            continue
+        if wanted is not None:
+            for candidate in candidates:
+                if processing_index(candidate.id) == wanted:
+                    return candidate
+        return candidates[0]
     return None
 
 
@@ -178,6 +236,58 @@ def _read_mosaic(
     return red, nir, scl, tiles_used
 
 
+def _process_block(
+    grid: dict[str, Any],
+    block: dict[str, Any],
+    masks: dict[str, np.ndarray],
+    item_xg: Any,
+    item_xf: Any | None,
+    profile: dict[str, Any],
+    municipality_cells: np.ndarray,
+) -> dict[str, Any]:
+    """Processa um bloco: NDVI, contagem agrícola e obstrução."""
+    union = masks["broad"]
+    box = _cells_bbox(union)
+    if box is None:
+        return {"empty": True}
+    sub = _sub_block(block, box)
+    lat_min, _lat_max = _block_lat_range(grid, sub)
+    need_xf = lat_min < TILE_XF_MAX_LAT
+    red, nir, scl, used = _read_mosaic(
+        grid, sub, item_xg, item_xf if need_xf else None
+    )
+    if red is None or np.all(np.isnan(red)):
+        return {"empty": True, "tiles": used}
+    ndvi = muni.ndvi_from_reflectance(
+        red, nir, float(profile["scale"]), float(profile["offset"])
+    )
+    valid = muni.scl_keep(scl) & np.isfinite(ndvi)
+    inside = municipality_cells[
+        sub["row_off"] : sub["row_off"] + sub["height"],
+        sub["col_off"] : sub["col_off"] + sub["width"],
+    ]
+    from s2_poc.timeseries import obstruction_fraction
+
+    block_obstruction = obstruction_fraction(scl)
+    per_variant: dict[str, dict[str, Any]] = {}
+    agricultural_counts: dict[str, int] = {}
+    for variant in MASK_VARIANTS:
+        variant_mask = masks[variant][
+            box[0] : box[0] + box[2], box[1] : box[1] + box[3]
+        ]
+        agricultural = variant_mask & inside
+        agricultural_counts[variant] = int(agricultural.sum())
+        per_variant[variant] = muni.accumulate_ndvi(ndvi, valid, agricultural)
+    return {
+        "empty": False,
+        "tiles": used,
+        "per_variant": per_variant,
+        "agricultural_counts": agricultural_counts,
+        "obstruction_fraction": float(block_obstruction["obstruction_fraction"]),
+        "inside_count": int(inside.sum()),
+    }
+
+
 def process_month(
     grid: dict[str, Any],
     blocks: list[dict[str, Any]],
@@ -186,54 +296,77 @@ def process_month(
     profile: dict[str, Any],
     variant_masks: dict[str, dict[tuple[int, int], np.ndarray]],
     municipality_cells: np.ndarray,
+    workers: int = 4,
 ) -> dict[str, Any]:
-    """Processa um mês: NDVI sobre a área agrícola, por variante de máscara."""
+    """Processa um mês: NDVI sobre a área agrícola, por variante de máscara.
+
+    Para cada variante são acumulados: as estatísticas do NDVI válido, o total
+    de pixels agrícolas (denominador da **cobertura**) e a fração obstruída
+    ponderada pela área agrícola de cada bloco.
+
+    Os blocos são processados em paralelo (``workers`` threads): a leitura de
+    COG remoto é limitada por I/O, não por CPU. A ordem de acumulação é a
+    ordem dos blocos, de modo que o resultado numérico é idêntico ao
+    sequencial.
+    """
+    from concurrent.futures import ThreadPoolExecutor
+
     accumulators: dict[str, list[dict[str, Any]]] = {v: [] for v in MASK_VARIANTS}
-    obstruction_acc: list[dict[str, Any]] = []
+    agricultural_counts: dict[str, int] = {v: 0 for v in MASK_VARIANTS}
+    obstruction_weighted: list[tuple[float, int]] = []
     tiles_used: set[str] = set()
 
+    todo: list[tuple[dict[str, Any], dict[str, np.ndarray]]] = []
     for block in blocks:
         masks = variant_masks.get((block["row_off"], block["col_off"]))
         if masks is None:
             continue
-        union = masks["broad"]
-        box = _cells_bbox(union)
-        if box is None:
-            continue
-        sub = _sub_block(block, box)
-        lat_min, _lat_max = _block_lat_range(grid, sub)
-        need_xf = lat_min < TILE_XF_MAX_LAT
-        red, nir, scl, used = _read_mosaic(
-            grid, sub, item_xg, item_xf if need_xf else None
-        )
-        tiles_used.update(used)
-        if red is None or np.all(np.isnan(red)):
-            continue
-        ndvi = muni.ndvi_from_reflectance(
-            red, nir, float(profile["scale"]), float(profile["offset"])
-        )
-        valid = muni.scl_keep(scl) & np.isfinite(ndvi)
-        inside = municipality_cells[
-            sub["row_off"] : sub["row_off"] + sub["height"],
-            sub["col_off"] : sub["col_off"] + sub["width"],
-        ]
-        from s2_poc.timeseries import obstruction_fraction
+        todo.append((block, masks))
 
-        obstruction_acc.append(obstruction_fraction(scl))
+    def work(item):
+        block, masks = item
+        return _process_block(
+            grid,
+            block,
+            masks,
+            item_xg,
+            item_xf,
+            profile,
+            municipality_cells,
+        )
+
+    if workers > 1 and len(todo) > 1:
+        with ThreadPoolExecutor(max_workers=workers) as pool:
+            results = list(pool.map(work, todo))
+    else:
+        results = [work(item) for item in todo]
+
+    for result in results:
+        tiles_used.update(result.get("tiles") or [])
+        if result.get("empty"):
+            continue
         for variant in MASK_VARIANTS:
-            variant_mask = masks[variant][
-                box[0] : box[0] + box[2], box[1] : box[1] + box[3]
-            ]
-            accumulators[variant].append(
-                muni.accumulate_ndvi(ndvi, valid, variant_mask & inside)
-            )
+            accumulators[variant].append(result["per_variant"][variant])
+            agricultural_counts[variant] += result["agricultural_counts"][variant]
+        obstruction_weighted.append(
+            (result["obstruction_fraction"], result["inside_count"])
+        )
 
+    total_obstruction_weight = sum(weight for _frac, weight in obstruction_weighted)
     results: dict[str, Any] = {"tiles_used": sorted(tiles_used), "variants": {}}
     for variant, accs in accumulators.items():
         merged = muni.merge_accumulators(accs)
+        total_agricultural = agricultural_counts[variant]
+        merged["agricultural_pixels"] = total_agricultural
+        merged["valid_fraction"] = (
+            merged["count"] / total_agricultural if total_agricultural else None
+        )
         merged["obstruction_fraction"] = (
-            float(np.mean([o["obstruction_fraction"] for o in obstruction_acc]))
-            if obstruction_acc
+            float(
+                sum(frac * weight for frac, weight in obstruction_weighted)
+                / total_obstruction_weight
+            )
+            if total_obstruction_weight
             else None
         )
         results["variants"][variant] = merged

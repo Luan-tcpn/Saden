@@ -1,0 +1,37 @@
+{
+  "generated_at": "2026-11-12T05:19:03.160375+00:00",
+  "rows": 228,
+  "paired_usable": 16,
+  "usable_by_crop_and_mask": {
+    "soja|stable": 2,
+    "soja|wc2020": 2,
+    "soja|wc2021": 2,
+    "soja|broad": 2,
+    "milho|stable": 2,
+    "milho|wc2020": 2,
+    "milho|wc2021": 2,
+    "milho|broad": 2
+  },
+  "usable_by_mode": {
+    "ano_civil_v23": 8,
+    "zarc_sazonal": 8
+  },
+  "csv": "data/processed/municipal_seasonal_productivity_dataset.csv",
+  "primary_protocol": {
+    "mask_variant": "stable",
+    "max_risk": 20,
+    "risk_justification": "Janela recomendada oficial do ZARC: decêndios com risco muito baixo ou baixo (≤ 20%). É a faixa em que a recomendação do MAPA é considerada aceitável — não a faixa de maior correlação com o rendimento. As extensões ≤ 30% e ≤ 40% são cenários de sensibilidade.",
+    "window_rule": "janela modal entre as combinações oficiais de solo/ciclo da safra (as demais ficam como sensibilidade)",
+    "note": "Fixado antes da análise de correlação; não é o subconjunto de maior correlação."
+  },
+  "semantics": {
+    "milho": "A PAM publica o rendimento total do milho do ano (1ª + 2ª safras); as janelas de safra são cenários, não observações independentes.",
+    "mask": "Máscara WorldCover (2020/2021) aplicada retroativamente aos anos anteriores — proxy espacial, não informação histórica."
+  },
+  "sources": {
+    "zarc": "data/processed/zarc_planting_windows.csv",
+    "municipal_ndvi": "data/processed/municipal_ndvi_monthly.csv",
+    "aoi_ndvi": "data/processed/sentinel2_historical_monthly.csv",
+    "pam": "data/processed/productivity_observations.csv"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "generated_at": "2026-11-12T04:41:08.825830+00:00",
+  "municipality": "5107925",
+  "grid": {
+    "crs": "EPSG:32721",
+    "res": 20.0,
+    "width": 5878,
+    "height": 11008
+  },
+  "blocks": 4,
+  "mask_variants": [
+    "wc2020",
+    "wc2021",
+    "stable",
+    "broad"
+  ],
+  "mask_source": "ESA WorldCover 10 m — classe 40 (Cropland), 2020 e 2021",
+  "months_processed": [
+    "2017-01"
+  ],
+  "rows": 4,
+  "csv": "data/processed/municipal_ndvi_monthly.csv",
+  "tile_rule": "Mosaico first_valid_wins (D44): 21LXG tem prioridade; 21LXF e lido apenas nos blocos abaixo de -12,657 graus.",
+  "limitations": [
+    "Mascara agricola existe apenas para 2020 e 2021 (WorldCover): aplicada retroativamente aos demais anos (proxy, nao informacao historica).",
+    "Cobertura por tile varia; blocos fora do footprint ficam sem dado."
+  ]
+}
