@@ -95,3 +95,35 @@ Verificado em **2026-09-08** por teste real de endpoint. Status atualizado em `d
 Os preços do SADEN são **referência internacional convertida** (futuro CBOT/ICE × PTAX venda), não o preço físico regional.
 Fatores: saca 60kg = 2,20462 bu (grãos); café 60kg = 132,277 lb; algodão direto R$/libra-peso.
 Toda tela e todo relatório exibem fonte, data do dado e `retrieved_at`.
+
+
+## V2.7 - fontes efetivamente usadas (2026-11-14)
+
+### Ativa (integrada)
+
+| Fonte | Uso | Observacao |
+|---|---|---|
+| **Embrapa Solos / GeoInfo** (WCS 2.0.1, `https://geoinfo.dados.embrapa.br/geoserver/ows`) | CAD territorial (agua disponivel do solo) | 506 camadas no `GetCapabilities`; 6 camadas `aw_*` (0-5, 5-15, 15-30, 30-60, 60-100, 100-200 cm); ~90 m; unidade **mm/cm**; EPSG:4326; no-data -9999 |
+| **Embrapa Soja** (sistemas de producao; Fehr & Caviness 1977; Schneider et al. 1987; Martorano et al. 2012) | parametros fenologicos da soja | R1 = 92,5 °C·dia; R5 = 554 °C·dia (Tb = 10 °C) |
+| **Embrapa Milho e Sorgo** (exigencias termicas por grupo; estagios R1-R6) | parametros fenologicos do milho | 780/860/1.050 °C·dia ate a polinizacao; R3 ~20-25 d, R5 ~36 d, R6 ~50-60 d apos a polinizacao |
+| **Embrapa, documento 258** (milho 2a safra) | ciclo total | 120-150 dias; 2.200-3.300 °C·dia |
+
+### Bloqueada (documentada, nao contornada)
+
+| Fonte | Motivo | Conduta da V2.7 |
+|---|---|---|
+| **ERA5-Land (CDS)** | credencial ausente (`CDS_API_KEY` / `~/.cdsapirc` / pacote `cdsapi`) | nenhuma conta criada, nenhuma credencial solicitada, nenhum segredo gravado; NASA POWER permanece como base e INMET como validacao independente (D83) |
+| **CHIRPS / ARCO** | sem resolucao DNS | nao repetido |
+| **Artigo primario CGM (2008) e CRAN `fwildclusterboot`** | inacessiveis deste ambiente | as duas hipoteses nulas do bootstrap sao **reportadas** e a politica e declarada (D81) |
+
+### Citacao e licenca da CAD
+
+Vasques, G.M., Dart, R.O., Cintra, L.C., Baca, J.F.M. (2021). *Soil Available
+Water Maps for Brazil at 0-5, 5-15, 15-30, 30-60, 60-100 and 100-200 cm
+Depth Intervals with 90 m Spatial Resolution*. Version 2021. Embrapa Solos,
+Rio de Janeiro, Brazil. Licenca **CC BY-NC 3.0 BR** (uso nao-comercial),
+extraida do registro ISO 19115 do catalogo.
+
+> Ressalva: o `DescribeCoverage` declara a unidade do campo como
+> `GRAY_INDEX`/`W.m-2.Sr-1` (modelo generico do GeoServer). A unidade
+> autoritativa e a do titulo oficial e da citacao (**mm/cm**).

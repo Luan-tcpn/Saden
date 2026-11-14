@@ -249,3 +249,22 @@ Relatório: `geospatial/reports/V2_3_EXPLORATORY_PRODUCTIVITY_STUDY.md`.
 | Escala municipal do indicador | DONE | 16 blocos, mosaico de 2 tiles, recorte pelo polígono; piloto 2017-03: 0,5668 (AOI 0,5282) |
 | Testes | DONE | **181/181** offline |
 | Veredito | **CAMINHO B** | referência fina indisponível; escala municipal harmonizável |
+
+
+## V2.7 - Robustez estatistica, validacao espacial e agronomia (2026-11-14)
+
+| Item | Estado | Evidencia |
+|---|---|---|
+| Dependencia espacial caracterizada | DONE | r(T) = 0,834 e r(P) = 0,630 na banda de 400-425 km; a limitacao "55 km" foi **refutada** (D76) |
+| Inferencia agrupada (4 esquemas) + Conley + bootstrap wild + Holm | DONE | 12 familias de 21 hipoteses; 4/21 (bloco 250 km) a 13/21 (municipio) |
+| Bootstrap wild calibrado por Monte Carlo | DONE | tamanho ~nominal para >= 10 grupos; conservador com 5; **defeito real corrigido** (D79, D80) |
+| Politica de nulidade do bootstrap | DONE | as duas variantes sao reportadas; politica declarada (D81) |
+| Janela fenologica de enchimento de graos | DONE | requisitos termicos publicados; 84 municipios, 1.027 linhas recalculadas (D78) |
+| CAD territorial oficial | DONE | Embrapa Solos (Vasques et al. 2021), 90 m, CC BY-NC 3.0 BR; CAD 0-100 cm de 126 a 240 mm (D82) |
+| ERA5-Land nativo | BLOCKED | credencial CDS ausente; nenhuma conta criada, nenhuma credencial solicitada (D83) |
+| Ampliacao do painel | ADIADA | decisao de escopo: a robustez estatistica precede a escala |
+| Testes | DONE | **309/309** offline (262 da V2.6 + 47 novos); 10/10 externos |
+| Veredito | **CAMINHO A** | nenhuma integracao ao produto; a Ridge permanece unica na previsao de precos |
+
+Relatorio: `docs/V2_7_ROBUSTNESS_REPORT.md`. Checkpoints:
+`docs/execution/v2.7/`. Decisoes D76-D84.

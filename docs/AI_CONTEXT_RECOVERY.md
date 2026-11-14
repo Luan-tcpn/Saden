@@ -372,3 +372,39 @@ por **célula da grade** (não por município) para corrigir a
 pseudo-replicação espacial; acesso ao ERA5-Land nativo; janela de exposição
 do **enchimento de grãos**; CAD por município (Embrapa Solos); ampliação do
 painel; e **não** integrar ao Ridge sem ganho **temporal** demonstrado.
+
+
+## V2.7 - estado final (2026-11-14)
+
+| Item | Valor |
+|---|---|
+| Branch | `v2/agroclimatic-robustness` (base `d87addb` = V2.6) |
+| Foco | inferencia espacial, validacao territorial por blocos, janela fenologica, CAD oficial |
+| Testes | **309/309** offline (262 da V2.6 + 47 novos); 10/10 externos |
+| Modulos novos | `geospatial/agroclimate/{robust,spatial,spatial_inference,phenology,soil}.py`; CLI `geospatial/run_robustness.py` |
+| Manifests | `geospatial/data/manifests/v27_*` (12 arquivos) |
+| Decisoes | D76-D84 (em `docs/DECISIONS.md` e `docs/execution/v2.7/DECISIONS_V2_7.md`) |
+| Relatorio | `docs/V2_7_ROBUSTNESS_REPORT.md` |
+
+**Os 5 fatos que um novo agente precisa saber:**
+
+1. O bootstrap wild da V2.7 usa **um peso de Rademacher por grupo** (CGM
+   2008). A versao anterior (peso por observacao) estava errada e foi
+   corrigida (D80). Nao voltar a essa variante.
+2. A escala de agrupamento conservadora e o **bloco espacial de 250 km**
+   (46 grupos), calibrada pelo correlograma - nao a celula de 55 km (D76).
+3. A inferencia e reportada em **12 familias de Holm** (21 hipoteses cada):
+   municipio 13, celula 12, bloco 4, UF 0, Conley 8-10, bootstrap wild 3-13.
+   O intervalo honesto e **4 a 13**; a leitura conservadora e 4-6.
+4. A CAD oficial do solo esta disponivel (WCS da Embrapa Solos, mm/cm) e e
+   **2-3x maior** que os cenarios da V2.6; a conversao correta e
+   `Σ AW(mm/cm) x espessura(cm)` (D82).
+5. **ERA5-Land esta bloqueado** por credencial CDS ausente: nao criar
+   conta, nao pedir credencial, nao gravar segredo (D83).
+
+**Ambiente:** `geospatial\.venv\Scripts\python.exe` (Python 3.12.10).
+Sem `scipy` - toda a estatistica e NumPy puro. O Python do sistema **nao**
+tem as dependencias.
+
+**Retomada:** `docs/execution/v2.7/RECOVERY.md` (comandos de cada
+experimento; todos sao retomaveis).

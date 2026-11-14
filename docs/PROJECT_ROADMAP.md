@@ -837,3 +837,22 @@ Branch `v2/agroclimatic-productivity-panel`, derivada de
 | 5 | Ampliação do painel (Nordeste; mais Centro-Oeste) | mais municípios por estrato e melhor controle regional |
 | 6 | Teste da hipótese clima → produtividade → **preço** | hipótese, não conclusão: a V2.7 deve quantificar estoques, câmbio, demanda e logística |
 | 7 | Integração ao Ridge | **não** recomendada sem ganho **temporal** demonstrado |
+
+
+### V2.7 - executada (2026-11-14)
+
+| Prioridade | Item | Resultado |
+|---|---|---|
+| 1 | Erro-padrad agrupado por **unidade espacial correta** | escala calibrada pelo correlograma: **bloco de 250 km** (46 grupos); a limitacao "55 km" foi refutada (D76) |
+| 2 | Acesso ao **ERA5-Land nativo** | **bloqueado** - credencial CDS ausente; NASA POWER permanece como base (D83) |
+| 3 | Janela de exposicao do **enchimento de graos** | implementada com requisitos termicos publicados (R5 = 554 °C·dia na soja; VT+22,5 d a VT+55 d no milho); 84 municipios, 1.027 linhas recalculadas (D78) |
+| 4 | **CAD territorial** (Embrapa Solos, Vasques et al. 2021) | 6 camadas oficiais a 90 m, licenca CC BY-NC 3.0 BR; CAD 0-100 cm de 126 a 240 mm (mediana 159) - 2-3x os cenarios da V2.6 (D82) |
+| 5 | Ampliacao do painel | **adiada** - a robustez estatistica precede a escala; exige o diagnostico de cobertura completo (D69) |
+| 6 | Teste clima -> produtividade -> **preco** | nao executado - escopo da V2.7 e produtividade/generalizacao territorial; a **Ridge** permanece unica na previsao de precos |
+| 7 | Integracao ao Ridge | **nao** recomendada - nenhum ganho temporal demonstrado |
+
+**Numeros da V2.7:** 309/309 testes offline; 12 familias de Holm; 4-13
+hipoteses sobreviventes conforme o esquema (conservador: 4-6);
+poder do bootstrap wild: 100% com >= 10 grupos, 46% com 5 grupos.
+
+**Caminho final: A.** Nenhuma integracao ao produto.

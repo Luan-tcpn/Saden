@@ -389,3 +389,50 @@ significativa com o rendimento municipal (p Holm = 0,0036, contra 1,000 do
 NDVI), **validada também na via de observação** do INMET; elas **não**
 superam a média histórica na validação temporal, mas **superam** na validação
 territorial. Nada foi integrado ao Ridge de preços.
+
+
+---
+
+## V2.7 - Robustez estatistica, validacao espacial e agronomia
+
+> Branch `v2/agroclimatic-robustness`. Modulo **isolado**: nao altera a V1,
+> nao integra o produto e nao toca na previsao de precos (a Ridge Regression
+> permanece como unico modelo da V1).
+
+### Modulos novos (`geospatial/agroclimate/`)
+
+| Modulo | Papel |
+|---|---|
+| `robust.py` | distribuicoes (t e normal) em NumPy puro, `cluster_vcov` (CR1/CR2), `two_way_cluster_vcov`, `conley_vcov`, `wild_cluster_bootstrap` (+ forma vetorizada), politica de nulidade |
+| `spatial.py` | celula MERRA-2, blocos espaciais, correlograma, divisoes por grupo e relatorio de vazamento |
+| `spatial_inference.py` | transformacao *within*, equivalencia com LSDV, inferencia agrupada, Conley e bootstrap wild sobre o estimador *within* |
+| `phenology.py` | perfis fenologicos publicados e janelas de enchimento de graos (datas aproximadas por soma termica real) |
+| `soil.py` | integracao da agua disponivel do solo (mm/cm -> mm) e comparacao com os cenarios da V2.6 |
+
+### CLI
+
+```powershell
+& geospatial\.venv\Scripts\python.exe geospatial\run_robustness.py dependence   # correlograma
+& geospatial\.venv\Scripts\python.exe geospatial\run_robustness.py diagnose    # grupos de agrupamento
+& geospatial\.venv\Scripts\python.exe geospatial\run_robustness.py infer --block-km 250 --null-policy auto
+& geospatial\.venv\Scripts\python.exe geospatial\run_robustness.py spatial --block-km 250
+```
+
+### Scripts de experimento (`tools/`)
+
+`calibrate_wild_bootstrap.py` (calibracao Monte Carlo) ·
+`validate_v27_stats.py` (16 verificacoes das implementacoes) ·
+`s27_wcs_probe.py` / `s27_cad_metadata.py` (metadados da Embrapa Solos) ·
+`s27_cad_sample.py` (amostra de CAD) · `s27_phenology_window.py` (experimento
+fenologico).
+
+### Como rodar os testes
+
+```powershell
+& geospatial\.venv\Scripts\python.exe -m unittest discover -s geospatial\tests -t geospatial
+```
+
+> **Atencao:** use **sempre** `geospatial\.venv\Scripts\python.exe`. O
+> Python do sistema nao tem as dependencias (numpy, rasterio, shapely) e
+> falha com `ModuleNotFoundError`. `scipy` nao e necessario: toda a
+> estatistica e NumPy puro (D74/D84).

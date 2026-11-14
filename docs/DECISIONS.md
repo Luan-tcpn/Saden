@@ -1,4 +1,4 @@
-# SADEN — Decisões de arquitetura (ADR resumido)
+﻿# SADEN — Decisões de arquitetura (ADR resumido)
 
 ## D1 — Backend Node.js + Express + SQLite (better-sqlite3)
 Deploy único, zero-config de banco (arquivo `data/saden.db`), ideal para TCC executável no Windows.
@@ -1335,3 +1335,110 @@ Consequências: a resolucao espacial da reanálise é registrada como limitaçã
 principal do painel (pseudo-replicação espacial entre municípios vizinhos),
 e o erro-padrão é agrupado por município — agrupamento espacial por célula
 da grade fica como melhoria metodológica pendente.
+
+
+---
+
+## D76 - A dependência espacial excede a resolução nominal da grade (2026-11-14)
+
+Contexto: a V2.6 agrupou o erro-padrão por município e registrou a resolução
+nominal de 55 km (MERRA-2) como limitação. A auditoria da V2.7 mostrou que
+NASA POWER **interpola** a coordenada solicitada (0% de dias com séries
+idênticas entre municípios da mesma célula; diferença média de temperatura
+de 0,32 a 1,90 °C) e que a correlação das anomalias anuais ainda é 0,834
+(temperatura) e 0,630 (precipitação) na banda de 400-425 km.
+
+Decisão: a célula nominal de 55 km **não** é a unidade de agrupamento
+adequada; a escala de dependência é calibrada pelo correlograma e fixada em
+**blocos espaciais de 250 km** (46 grupos), usada como esquema conservador
+de referência. A inferência é reportada em quatro esquemas (município,
+célula, bloco, UF) e por Conley, sem escolha *a posteriori*.
+
+Consequências: o erro-padrão do déficit hídrico da soja cresce de 0,0723
+(município) para 0,2404 (bloco 250 km) e o número de hipóteses que
+sobrevivem a Holm cai de 13 para 4. Detalhes em
+`docs/execution/v2.7/DECISIONS_V2_7.md`.
+
+## D77 - Esquemas de inferência pré-declarados e Holm sobre a família completa (2026-11-14)
+
+Decisão: família de **21 hipóteses** (3 culturas × 7 variáveis) com correção
+de **Holm** (FWER) aplicada separadamente a cada esquema; Conley e bootstrap
+wild são procedimentos **alternativos**, não combináveis. Nenhum critério,
+banda ou esquema é ajustado para obter significância.
+
+Consequências: 12 famílias reportadas no manifesto `v27_robust_inference.json`
+(município 13 · célula 12 · bloco 250 km 4 · UF 0 · Conley 150/250/400/600 km
+10/8/8/8 · bootstrap wild 13/12/6/3).
+
+## D78 - Janela fenológica é experimento, com requisitos térmicos publicados (2026-11-14)
+
+Decisão: o ZARC é janela de plantio por risco, não calendário fenológico. A
+janela de enchimento de grãos é construída com requisitos térmicos
+publicados (soja R1 = 92,5 e R5 = 554 °C·dia; milho 780/860/1.050 °C·dia até
+a polinização; janelas de 45 dias na soja e de VT+22,5 d a VT+55 d no
+milho) e datas aproximadas pela soma térmica real. O milho 2ª safra, sem
+estágio publicado com precisão suficiente, permanece na janela do ZARC.
+
+Consequências: em 84 municípios e 1.027 linhas, a janela fenológica mantém
+5/5 variáveis significativas na soja e torna precipitação e temperatura
+significativas no milho (que não eram na janela do ZARC). Coeficientes não
+são comparáveis entre janelas (a exposição muda).
+
+## D79 - Calibração do bootstrap wild por Monte Carlo (2026-11-14)
+
+Decisão: o bootstrap wild só pode ser usado se o seu tamanho nominal for
+demonstrado. A V2.7 calibra com dois DGP (erro agrupado; painel município ×
+ano com efeitos fixos e erro AR(1) intracluster), 3 sementes e taxas de
+rejeição em 1%/5%/10% com incerteza de Monte Carlo.
+
+Consequências: tamanho próximo do nominal para ≥ 10 grupos; conservador com
+5 grupos (poder 46%).
+
+## D80 - Correção dos pesos do bootstrap wild: um peso por grupo (2026-11-14)
+
+Decisão: o bootstrap wild usa **um peso de Rademacher por grupo e por
+replicação** (Cameron, Gelbach & Miller, 2008). A implementação herdada da
+sessão anterior sorteava um peso **por observação**, apesar de o texto
+afirmar o contrário, o que não preserva a dependência intracluster.
+
+Consequências: p-valores do bootstrap recalculados; a forma vetorizada
+(≈1000× mais rápida) foi verificada como numericamente idêntica à forma em
+laço; a variante por observação foi mantida apenas para comparação.
+
+## D81 - Política de nulidade do bootstrap declarada, não implícita (2026-11-14)
+
+Decisão: reportar **os dois** p-valores do bootstrap (nulidade imposta e
+irrestrita) e declarar a política usada (`--null-policy`), porque a
+convenção de troca entre as duas não pôde ser verificada no artigo primário
+neste ambiente.
+
+Consequências: o manifesto grava `p_value_imposed` e
+`p_value_unrestricted` em cada resultado.
+
+## D82 - CAD territorial geoespacial da Embrapa Solos (2026-11-14)
+
+Decisão: a CAD pode ser derivada de fonte oficial (Embrapa Solos/GeoInfo;
+Vasques et al., 2021; 90 m; **CC BY-NC 3.0 BR**). As camadas são declaradas
+em **mm/cm**; a CAD do perfil em mm é a **integração**
+`Σ AW(mm/cm) × espessura(cm)` — nunca uma multiplicação direta. Ausência de
+dado válido permanece ausência.
+
+Consequências: em 10 municípios, a CAD de 0-100 cm fica entre 126,0 e
+239,9 mm (mediana 158,9) — os cenários da V2.6 (35/50/70 mm) são
+**conservadores** frente ao dado oficial. A CAD entra como linha
+experimental.
+
+## D83 - ERA5-Land permanece bloqueado; NASA POWER é a base (2026-11-14)
+
+Decisão: o acesso nativo ao CDS exige credencial não configurada. Não se
+cria conta, não se pede credencial por chat, não se guarda segredo no Git. O
+bloqueio é documentado e a V2.7 prossegue com NASA POWER (reanálise) e INMET
+(observação independente). CHIRPS e ARCO seguem sem resolução DNS.
+
+## D84 - Artefatos grandes fora do Git; manifests versionados (2026-11-14)
+
+Decisão: estendida de D74. A base diária (1,07 GB), o painel (27,3 MB) e a
+resposta bruta do WCS (2,5 MB) ficam fora do Git e são regeneráveis por
+comando; os manifests `v27_*` são versionados. Os scripts de sondagem da
+sessão anterior (`tmp/v27_*.py`) permanecem fora do Git até a consolidação
+final.

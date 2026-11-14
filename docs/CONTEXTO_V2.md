@@ -336,3 +336,38 @@ Relatório: `geospatial/reports/V2_2_PRODUCTIVITY_DATA_COMPATIBILITY.md`.
    intocado.
 5. Robustez operacional da V1 (TLS, SMTP, backup, monitoramento) segue como
    trilha independente de maior valor para produção.
+
+
+### 10.8 V2.7 - robustez estatistica, validacao espacial e agronomia (branch `v2/agroclimatic-robustness`)
+
+**Pergunta da etapa:** os resultados territoriais da V2.6 (ganho de 1,7% a
+6,3%) sobrevivem a uma inferencia que controle a dependencia espacial real
+da base meteorologica?
+
+**O que foi discovering:**
+
+1. A limitacao "55 km" da V2.6 esta **refutada**: NASA POWER interpola a
+   coordenada solicitada (0% de dias identicos na mesma celula nominal) e a
+   correlacao das anomalias anuais ainda e 0,834 (T) e 0,630 (P) na banda
+   de 400-425 km. A escala de agrupamento correta e o **bloco espacial de
+   250 km** (46 grupos).
+2. Os 12 efeitos fixos da V2.6 sao reproduzidos **bit a bit**.
+3. Com o agrupamento conservador, **4 de 21** hipoteses sobrevivem a Holm
+   (contra 13 na V2.6): `soja|deficiency_total_mm`, `soja|temp_media_c`,
+   `milho|temp_media_c`, `milho|et0_total_mm`.
+4. O **bootstrap wild** herdado tinha defeito real (pesos por **observacao**,
+   nao por grupo) e foi corrigido e calibrado por Monte Carlo.
+5. A **janela fenologica** (enchimento de graos, com requisitos termicos
+   publicados) confirma a soja e revela precipitação e temperatura
+   significativas no milho.
+6. A **CAD oficial** (Embrapa Solos, Vasques et al. 2021, CC BY-NC 3.0 BR)
+   e 2-3x maior que os cenarios de 35/50/70 mm da V2.6.
+7. **ERA5-Land** segue bloqueado (credencial ausente) - bloqueio documentado.
+
+**Estado:** 309/309 testes offline; 10/10 externos. Decisoes D76-D84.
+Relatorio: `docs/V2_7_ROBUSTNESS_REPORT.md`. Checkpoints:
+`docs/execution/v2.7/`.
+
+**Nao foi feito (e por que):** ampliacao do painel (decisao de escopo: a
+robustez estatistica precede a escala) e acesso ao CDS (credencial
+ausente; nao se cria conta em nome do usuario).

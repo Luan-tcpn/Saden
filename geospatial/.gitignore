@@ -29,3 +29,7 @@ data/processed/zarc_panel.csv
 data/processed/pam_panel.csv
 data/processed/panel_municipalities.geojson
 data/manifests/climate_quality_full.json
+# V2.7 - capabilities bruta do WCS da Embrapa Solos (~2,5 MB): e regeneravel
+# por `tools/s27_wcs_probe.py`; a versao extraida (camadas, unidade, licenca)
+# fica no manifesto versionado `v27_cad_wcs_probe.json`.
+data/processed/embrapa_solos_wcs_capabilities.xml
