@@ -1,0 +1,165 @@
+{
+  "stage": "all",
+  "generated_at": "2026-11-14T18:50:47.983471+00:00",
+  "validate": {
+    "ok": true,
+    "files": {
+      "municipalities": {
+        "path": "geospatial/data/processed/panel_municipalities_v35.csv",
+        "exists": true,
+        "bytes": 282659,
+        "sha256": "eb19e2526e313169a48082a601fb34cf7a1af65384f6023f581f4451984710f2"
+      },
+      "panel_base_legacy": {
+        "path": "geospatial/data/processed/agroclimatic_productivity_panel.csv",
+        "exists": true,
+        "bytes": 28623247,
+        "sha256": "f33a09445d24151d2653b3b1c474183f228479e2c478aa6c02a87b27340242d6"
+      },
+      "panel_base_sp": {
+        "path": "geospatial/data/processed/panel_sp_v35.csv",
+        "exists": true,
+        "bytes": 14145519,
+        "sha256": "65127a2d9aaa42edfa72cc518d36ebd25b88c043a5074d226a520be5698a96d2"
+      }
+    },
+    "problems": [],
+    "climate_files": [
+      {
+        "path": "geospatial/data/processed/climate_daily.csv",
+        "exists": true,
+        "bytes": 1129245635,
+        "sha256": "0addb4e57fadd4bc97a66f852fad76086f9be4c55e4348d4e9a02231a61eb0ca"
+      },
+      {
+        "path": "geospatial/data/processed/climate_daily_sp.csv",
+        "exists": true,
+        "bytes": 348444374,
+        "sha256": "3b0f874fd9b38f53bfc5652b8581b301eb2370e902deeb2be1752aa772ea110b"
+      }
+    ],
+    "cad_files": [
+      {
+        "path": "geospatial/data/manifests/v30_cad_polygon.json",
+        "exists": true,
+        "municipalities": 1296,
+        "sha256": "9ed8c3acaa058a6eaa151792229bfc080ec1347d18967a95a71b72bc01860e9a"
+      },
+      {
+        "path": "geospatial/data/manifests/v35_cad_polygon_sp.json",
+        "exists": true,
+        "municipalities": 584,
+        "sha256": "5b2bae80dee2591c439758de6d328186df6874e8003e641e5f00ee8d7226a31e"
+      }
+    ],
+    "registry": {
+      "municipalities_in_scope": 2425,
+      "duplicates": [],
+      "excluded_non_municipal": [
+        {
+          "ibge_code": "4300001",
+          "municipality": "Área Operacional \"Lagoa Mirim\"",
+          "state": "RS"
+        },
+        {
+          "ibge_code": "4300002",
+          "municipality": "Área Operacional \"Lagoa dos Patos\"",
+          "state": "RS"
+        }
+      ],
+      "n_excluded": 2,
+      "suspicious_codes": 0
+    }
+  },
+  "build": {
+    "generated_at": "2026-11-14T18:51:28.798207+00:00",
+    "config": "C:\\Users\\luanf\\OneDrive\\Área de Trabalho\\Saden_AgroClima\\config\\panel_v35.json",
+    "config_version": "v3.5",
+    "municipalities_requested": 14,
+    "municipalities_in_output": 14,
+    "window_rows": 204,
+    "water_rows": 816,
+    "skipped": {
+      "sem_centroide": 0,
+      "janela_curta": 0
+    },
+    "climate": {
+      "duplicate_code_day_rows": 0,
+      "n_days": 3653,
+      "required_source": "NASA-POWER",
+      "discarded_other_source_rows": {
+        "INMET": 10229
+      }
+    },
+    "outputs": {
+      "panel": "geospatial/data/processed/panel_canonical_windows.csv",
+      "panel_sha256": "bbf26aa17999ec7d27f8a8fd204b8664d73466180f8a76d5d032dc63dab19593",
+      "water": "geospatial/data/processed/panel_canonical_water.csv",
+      "water_sha256": "e4e76a72c744fb816abe49f4545005161f135dcb5674fc71c6e07c9ef042763e"
+    },
+    "elapsed_s": 39.4
+  },
+  "verify": {
+    "status": "ok",
+    "rows_built": 204,
+    "rows_reference": 30207,
+    "rows_shared": 204,
+    "only_built": 0,
+    "only_reference": 30003,
+    "max_abs_difference": 0.0,
+    "tolerance": 1e-06,
+    "within_tolerance": true,
+    "by_column": {
+      "precip_acumulada_mm_corrected": {
+        "n": 204,
+        "max_abs_diff": 0.0,
+        "n_exact": 204
+      },
+      "temp_media_c_corrected": {
+        "n": 204,
+        "max_abs_diff": 0.0,
+        "n_exact": 204
+      },
+      "degree_days_total_corrected": {
+        "n": 204,
+        "max_abs_diff": 0.0,
+        "n_exact": 204
+      },
+      "extreme_heat_days_corrected": {
+        "n": 204,
+        "max_abs_diff": 0.0,
+        "n_exact": 204
+      },
+      "et0_total_mm_corrected": {
+        "n": 204,
+        "max_abs_diff": 0.0,
+        "n_exact": 204
+      },
+      "deficiency_total_mm_corrected": {
+        "n": 204,
+        "max_abs_diff": 0.0,
+        "n_exact": 204
+      },
+      "excess_total_mm_corrected": {
+        "n": 204,
+        "max_abs_diff": 0.0,
+        "n_exact": 204
+      },
+      "deficiency_cad_0_60": {
+        "n": 204,
+        "max_abs_diff": 0.0,
+        "n_exact": 204
+      },
+      "deficiency_cad_0_100": {
+        "n": 204,
+        "max_abs_diff": 0.0,
+        "n_exact": 204
+      },
+      "deficiency_cad_0_200": {
+        "n": 204,
+        "max_abs_diff": 0.0,
+        "n_exact": 204
+      }
+    }
+  }
+}

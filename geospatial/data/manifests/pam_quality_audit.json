@@ -1,0 +1,343 @@
+{
+  "generated_at": "2026-11-14T18:52:03.263997+00:00",
+  "source": {
+    "institution": "IBGE — Produção Agrícola Municipal (PAM)",
+    "dataset": "SIDRA tabela 5457",
+    "variables": [
+      "quantidade_produzida_t",
+      "area_colhida_ha",
+      "area_plantada_ha",
+      "rendimento_medio_kg_ha"
+    ],
+    "files": {
+      "pam_panel.csv": {
+        "rows": 128160,
+        "bytes": 448844629
+      },
+      "pam_panel_sp.csv": {
+        "rows": 46440,
+        "bytes": 93633859
+      }
+    },
+    "raw_rows": 174600,
+    "safra_field": "vazio para PAM (a PAM é anual; a separação 1ª/2ª safra não existe na fonte)"
+  },
+  "keys": {
+    "canonical": [
+      "geography_code",
+      "reference_year",
+      "crop_code"
+    ],
+    "n_cells": 43650,
+    "duplicates": 0,
+    "unknown_uf_rows": 0,
+    "duplicate_examples": []
+  },
+  "flag_counts": {
+    "sem_area": 7507,
+    "area_ausente": 778,
+    "plantado_sem_colheita": 85,
+    "extremo_mad": 99,
+    "rendimento_divergente": 66
+  },
+  "outliers": {
+    "by_group": {
+      "milho|MT": {
+        "n": 1244,
+        "median": 5820.0,
+        "mad_scaled": 1109.7260999999999,
+        "p01": 2901.04,
+        "p99": 8100.0
+      },
+      "soja|MT": {
+        "n": 1133,
+        "median": 3420.0,
+        "mad_scaled": 302.4504,
+        "p01": 2600.0,
+        "p99": 4200.0
+      },
+      "soja|GO": {
+        "n": 1940,
+        "median": 3445.5,
+        "mad_scaled": 377.32169999999996,
+        "p01": 2183.53,
+        "p99": 4489.4699999999975
+      },
+      "milho|GO": {
+        "n": 1975,
+        "median": 5733.0,
+        "mad_scaled": 1377.3354,
+        "p01": 2271.04,
+        "p99": 9639.619999999999
+      },
+      "soja|MS": {
+        "n": 690,
+        "median": 3214.0,
+        "mad_scaled": 572.2836,
+        "p01": 540.0500000000001,
+        "p99": 4503.960000000001
+      },
+      "milho|MS": {
+        "n": 656,
+        "median": 4500.0,
+        "mad_scaled": 1364.7332999999999,
+        "p01": 971.5,
+        "p99": 8790.200000000004
+      },
+      "soja|PR": {
+        "n": 3457,
+        "median": 3434.0,
+        "mad_scaled": 542.6315999999999,
+        "p01": 650.56,
+        "p99": 4444.960000000001
+      },
+      "milho|PR": {
+        "n": 3539,
+        "median": 5614.0,
+        "mad_scaled": 1974.8231999999998,
+        "p01": 1261.74,
+        "p99": 11414.72
+      },
+      "soja|RS": {
+        "n": 3851,
+        "median": 2800.0,
+        "mad_scaled": 1037.82,
+        "p01": 540.0,
+        "p99": 4200.0
+      },
+      "milho|RS": {
+        "n": 4381,
+        "median": 5000.0,
+        "mad_scaled": 2965.2,
+        "p01": 900.0,
+        "p99": 11580.39999999999
+      },
+      "milho|BA": {
+        "n": 3154,
+        "median": 700.0,
+        "mad_scaled": 756.8673,
+        "p01": 13.0,
+        "p99": 9479.82
+      },
+      "soja|BA": {
+        "n": 192,
+        "median": 3600.0,
+        "mad_scaled": 627.1397999999999,
+        "p01": 591.0,
+        "p99": 4539.870000000002
+      },
+      "soja|SP": {
+        "n": 4040,
+        "median": 3000.0,
+        "mad_scaled": 741.3,
+        "p01": 1350.0,
+        "p99": 4653.420000000003
+      },
+      "milho|SP": {
+        "n": 5028,
+        "median": 4958.5,
+        "mad_scaled": 1544.1279,
+        "p01": 1800.0,
+        "p99": 9004.379999999997
+      }
+    },
+    "n_extreme": 99
+  },
+  "coverage_by_uf_crop": {
+    "BA|soja": {
+      "cells": 3753,
+      "with_positive_yield": 192,
+      "no_area": 3552,
+      "planted_not_harvested": 0,
+      "yield_zero_with_area": 0,
+      "yield_divergent": 0,
+      "extreme": 0
+    },
+    "BA|milho": {
+      "cells": 3753,
+      "with_positive_yield": 3154,
+      "no_area": 527,
+      "planted_not_harvested": 63,
+      "yield_zero_with_area": 0,
+      "yield_divergent": 66,
+      "extreme": 98
+    },
+    "GO|soja": {
+      "cells": 2214,
+      "with_positive_yield": 1940,
+      "no_area": 268,
+      "planted_not_harvested": 0,
+      "yield_zero_with_area": 0,
+      "yield_divergent": 0,
+      "extreme": 1
+    },
+    "GO|milho": {
+      "cells": 2214,
+      "with_positive_yield": 1975,
+      "no_area": 231,
+      "planted_not_harvested": 2,
+      "yield_zero_with_area": 0,
+      "yield_divergent": 0,
+      "extreme": 0
+    },
+    "MS|soja": {
+      "cells": 711,
+      "with_positive_yield": 690,
+      "no_area": 21,
+      "planted_not_harvested": 0,
+      "yield_zero_with_area": 0,
+      "yield_divergent": 0,
+      "extreme": 0
+    },
+    "MS|milho": {
+      "cells": 711,
+      "with_positive_yield": 656,
+      "no_area": 54,
+      "planted_not_harvested": 1,
+      "yield_zero_with_area": 0,
+      "yield_divergent": 0,
+      "extreme": 0
+    },
+    "MT|soja": {
+      "cells": 1278,
+      "with_positive_yield": 1133,
+      "no_area": 137,
+      "planted_not_harvested": 0,
+      "yield_zero_with_area": 0,
+      "yield_divergent": 0,
+      "extreme": 0
+    },
+    "MT|milho": {
+      "cells": 1278,
+      "with_positive_yield": 1244,
+      "no_area": 26,
+      "planted_not_harvested": 0,
+      "yield_zero_with_area": 0,
+      "yield_divergent": 0,
+      "extreme": 0
+    },
+    "PR|soja": {
+      "cells": 3591,
+      "with_positive_yield": 3457,
+      "no_area": 133,
+      "planted_not_harvested": 1,
+      "yield_zero_with_area": 0,
+      "yield_divergent": 0,
+      "extreme": 0
+    },
+    "PR|milho": {
+      "cells": 3591,
+      "with_positive_yield": 3539,
+      "no_area": 52,
+      "planted_not_harvested": 0,
+      "yield_zero_with_area": 0,
+      "yield_divergent": 0,
+      "extreme": 0
+    },
+    "RS|soja": {
+      "cells": 4473,
+      "with_positive_yield": 3851,
+      "no_area": 608,
+      "planted_not_harvested": 4,
+      "yield_zero_with_area": 0,
+      "yield_divergent": 0,
+      "extreme": 0
+    },
+    "RS|milho": {
+      "cells": 4473,
+      "with_positive_yield": 4381,
+      "no_area": 80,
+      "planted_not_harvested": 2,
+      "yield_zero_with_area": 0,
+      "yield_divergent": 0,
+      "extreme": 0
+    },
+    "SP|soja": {
+      "cells": 5805,
+      "with_positive_yield": 4040,
+      "no_area": 1406,
+      "planted_not_harvested": 3,
+      "yield_zero_with_area": 0,
+      "yield_divergent": 0,
+      "extreme": 0
+    },
+    "SP|milho": {
+      "cells": 5805,
+      "with_positive_yield": 5028,
+      "no_area": 412,
+      "planted_not_harvested": 9,
+      "yield_zero_with_area": 0,
+      "yield_divergent": 0,
+      "extreme": 0
+    }
+  },
+  "territorial_crosswalk": {
+    "pam_municipalities": {
+      "BA": 417,
+      "GO": 246,
+      "MS": 79,
+      "MT": 142,
+      "PR": 399,
+      "RS": 497,
+      "SP": 645
+    },
+    "registry_municipalities": {
+      "BA": 417,
+      "GO": 246,
+      "MS": 79,
+      "MT": 142,
+      "PR": 399,
+      "RS": 499,
+      "SP": 645
+    },
+    "only_in_pam": {},
+    "only_in_registry": {
+      "RS": [
+        "4300001",
+        "4300002"
+      ]
+    },
+    "n_only_in_pam": 0,
+    "n_only_in_registry": 2,
+    "names_only_in_pam": {}
+  },
+  "year_presence": {
+    "years": [
+      "2017",
+      "2018",
+      "2019",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "2025"
+    ],
+    "n_years": 9,
+    "n_municipalities": 2425,
+    "n_with_partial_series": 0,
+    "partial_series": {}
+  },
+  "impact_on_panel": {
+    "panel": "v35_panel_windows.csv",
+    "panel_rows_checked": 30207,
+    "panel_rows_with_flagged_source": 27,
+    "share": 0.0009,
+    "by_flag": {
+      "extremo_mad": 25,
+      "rendimento_divergente": 2
+    },
+    "by_state": {
+      "BA": 106,
+      "PR": 7665,
+      "RS": 4394,
+      "MS": 1566,
+      "MT": 2261,
+      "GO": 3410,
+      "SP": 10805
+    },
+    "by_state_affected": {
+      "BA": 27
+    }
+  }
+}

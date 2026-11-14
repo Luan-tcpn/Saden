@@ -1,0 +1,388 @@
+{
+  "generated_at": "2026-11-14T19:10:31.123916+00:00",
+  "alpha": 0.05,
+  "estimator": "within(municipio, ano) + CR1 agrupado em UF x ano",
+  "design_inventory": {
+    "soja": {
+      "rows": 12517,
+      "rows_usable": 12517,
+      "municipalities": 1732,
+      "years": 8,
+      "uf_year_clusters": 48,
+      "mean_cluster_size": 260.77,
+      "naive_rows_if_assumed_independent": 12517
+    },
+    "milho": {
+      "rows": 12013,
+      "rows_usable": 12013,
+      "municipalities": 1645,
+      "years": 8,
+      "uf_year_clusters": 56,
+      "mean_cluster_size": 214.52,
+      "naive_rows_if_assumed_independent": 12013
+    },
+    "milho_2": {
+      "rows": 5677,
+      "rows_usable": 5677,
+      "municipalities": 1071,
+      "years": 9,
+      "uf_year_clusters": 41,
+      "mean_cluster_size": 138.46,
+      "naive_rows_if_assumed_independent": 5677
+    }
+  },
+  "mde": {
+    "soja|deficit": {
+      "n": 12517,
+      "n_clusters": 48,
+      "df": 47,
+      "beta": -2.2736471619531784,
+      "se": 0.3995529275647358,
+      "mde_80": 1.1431514620243386,
+      "mde_90": 1.323145674781365,
+      "ci95_half_width": 0.8037968117613143,
+      "unit": "kg/ha por unidade da exposição"
+    },
+    "soja|precipitacao": {
+      "n": 12517,
+      "n_clusters": 48,
+      "df": 47,
+      "beta": 0.8900418300209636,
+      "se": 0.20822827884250275,
+      "mde_80": 0.5957570198382588,
+      "mde_90": 0.6895615762269348,
+      "ci95_half_width": 0.4189012646516818,
+      "unit": "kg/ha por unidade da exposição"
+    },
+    "soja|et0": {
+      "n": 12517,
+      "n_clusters": 48,
+      "df": 47,
+      "beta": -0.9358228643681065,
+      "se": 0.46626248474039006,
+      "mde_80": 1.334012603453442,
+      "mde_90": 1.5440587402456298,
+      "ci95_half_width": 0.9379991305845503,
+      "unit": "kg/ha por unidade da exposição"
+    },
+    "soja|graus_dia": {
+      "n": 12517,
+      "n_clusters": 48,
+      "df": 47,
+      "beta": 0.11103507270390914,
+      "se": 0.17150978500865366,
+      "mde_80": 0.49070260272928773,
+      "mde_90": 0.5679658802652977,
+      "ci95_half_width": 0.3450331830029909,
+      "unit": "kg/ha por unidade da exposição"
+    },
+    "soja|calor_extremo": {
+      "n": 12517,
+      "n_clusters": 48,
+      "df": 47,
+      "beta": -12.110891352747162,
+      "se": 4.200731540495197,
+      "mde_80": 12.018613982776543,
+      "mde_90": 13.910997480611229,
+      "ci95_half_width": 8.450781827316646,
+      "unit": "kg/ha por unidade da exposição"
+    },
+    "soja|temperature": {
+      "n": 12517,
+      "n_clusters": 48,
+      "df": 47,
+      "beta": -262.0731600224315,
+      "se": 70.89047604902284,
+      "mde_80": 202.82306985702638,
+      "mde_90": 234.75845200072834,
+      "ci95_half_width": 142.613242705409,
+      "unit": "kg/ha por unidade da exposição"
+    },
+    "milho|deficit": {
+      "n": 12013,
+      "n_clusters": 56,
+      "df": 55,
+      "beta": -1.7939542055365416,
+      "se": 0.7407780247292771,
+      "mde_80": 2.112884281001688,
+      "mde_90": 2.445440920545376,
+      "ci95_half_width": 1.4845523360339463,
+      "unit": "kg/ha por unidade da exposição"
+    },
+    "milho|precipitacao": {
+      "n": 12013,
+      "n_clusters": 56,
+      "df": 55,
+      "beta": 0.8492307091180711,
+      "se": 0.5257626265726358,
+      "mde_80": 1.4996065651778214,
+      "mde_90": 1.7356365855804345,
+      "ci95_half_width": 1.0536518490312907,
+      "unit": "kg/ha por unidade da exposição"
+    },
+    "milho|et0": {
+      "n": 12013,
+      "n_clusters": 56,
+      "df": 55,
+      "beta": -2.0306426366395645,
+      "se": 0.9187138612505253,
+      "mde_80": 2.6204018091438437,
+      "mde_90": 3.032838982224588,
+      "ci95_half_width": 1.8411437209745443,
+      "unit": "kg/ha por unidade da exposição"
+    },
+    "milho|graus_dia": {
+      "n": 12013,
+      "n_clusters": 56,
+      "df": 55,
+      "beta": -0.6151039844838649,
+      "se": 0.3621592688983204,
+      "mde_80": 1.0329688529218626,
+      "mde_90": 1.1955526032814112,
+      "ci95_half_width": 0.7257833935554904,
+      "unit": "kg/ha por unidade da exposição"
+    },
+    "milho|calor_extremo": {
+      "n": 12013,
+      "n_clusters": 56,
+      "df": 55,
+      "beta": -12.906926514472696,
+      "se": 6.064911716958974,
+      "mde_80": 17.298645754386023,
+      "mde_90": 20.02135970160134,
+      "ci95_half_width": 12.154354687480856,
+      "unit": "kg/ha por unidade da exposição"
+    },
+    "milho|temperature": {
+      "n": 12013,
+      "n_clusters": 56,
+      "df": 55,
+      "beta": -210.27556265226832,
+      "se": 106.2730520780057,
+      "mde_80": 303.11733573866854,
+      "mde_90": 350.82637662987054,
+      "ci95_half_width": 212.97595562114316,
+      "unit": "kg/ha por unidade da exposição"
+    },
+    "milho_2|deficit": {
+      "n": 5677,
+      "n_clusters": 41,
+      "df": 40,
+      "beta": -1.3040322530738042,
+      "se": 1.1709659645738841,
+      "mde_80": 3.362751000827098,
+      "mde_90": 3.8924693717068033,
+      "ci95_half_width": 2.3666104938865207,
+      "unit": "kg/ha por unidade da exposição"
+    },
+    "milho_2|precipitacao": {
+      "n": 5677,
+      "n_clusters": 41,
+      "df": 40,
+      "beta": -0.08430768951466652,
+      "se": 1.1176913290592565,
+      "mde_80": 3.2097582245078433,
+      "mde_90": 3.715376361915529,
+      "ci95_half_width": 2.25893843912037,
+      "unit": "kg/ha por unidade da exposição"
+    },
+    "milho_2|et0": {
+      "n": 5677,
+      "n_clusters": 41,
+      "df": 40,
+      "beta": -0.5151289802102746,
+      "se": 1.2913673615240835,
+      "mde_80": 3.708516744960063,
+      "mde_90": 4.292701969509003,
+      "ci95_half_width": 2.609950794221065,
+      "unit": "kg/ha por unidade da exposição"
+    },
+    "milho_2|graus_dia": {
+      "n": 5677,
+      "n_clusters": 41,
+      "df": 40,
+      "beta": -0.16447027083694324,
+      "se": 0.32139778244911166,
+      "mde_80": 0.9229821765038727,
+      "mde_90": 1.068375223675186,
+      "ci95_half_width": 0.649569148606908,
+      "unit": "kg/ha por unidade da exposição"
+    },
+    "milho_2|calor_extremo": {
+      "n": 5677,
+      "n_clusters": 41,
+      "df": 40,
+      "beta": -8.910986467211076,
+      "se": 7.748172639879163,
+      "mde_80": 22.251009924798545,
+      "mde_90": 25.75610700896962,
+      "ci95_half_width": 15.65964104230414,
+      "unit": "kg/ha por unidade da exposição"
+    },
+    "milho_2|temperature": {
+      "n": 5677,
+      "n_clusters": 41,
+      "df": 40,
+      "beta": -85.54479007722453,
+      "se": 150.94222791144588,
+      "mde_80": 433.47214465024695,
+      "mde_90": 501.7549756506344,
+      "ci95_half_width": 305.0656221898234,
+      "unit": "kg/ha por unidade da exposição"
+    }
+  },
+  "monte_carlo": {
+    "soja": {
+      "type_i_error": 0.0775,
+      "power_at_mde": 0.8825,
+      "simulations": 400,
+      "cluster_sd": 279.76724890985076,
+      "idiosyncratic_sd": 448.8915570180563
+    },
+    "milho": {
+      "type_i_error": 0.06,
+      "power_at_mde": 0.915,
+      "simulations": 400,
+      "cluster_sd": 528.3515055639767,
+      "idiosyncratic_sd": 995.6380955154651
+    },
+    "milho_2": {
+      "type_i_error": 0.1025,
+      "power_at_mde": 0.94,
+      "simulations": 400,
+      "cluster_sd": 402.88585190719994,
+      "idiosyncratic_sd": 868.6203174627002
+    }
+  },
+  "design_scenarios": {
+    "soja": {
+      "icc": 0.27976115442778604,
+      "mean_cluster_size": 260.7708333333333,
+      "n_clusters": 48,
+      "scenarios": {
+        "municipios_x2": {
+          "n_clusters": 48,
+          "mean_size": 521.5416666666666,
+          "se_factor": 0.9975529928714141
+        },
+        "municipios_x5": {
+          "n_clusters": 48,
+          "mean_size": 1303.8541666666665,
+          "se_factor": 0.9960819031278224
+        },
+        "anos_9_para_15": {
+          "n_clusters": 80,
+          "mean_size": 260.7708333333333,
+          "se_factor": 0.7745966692414834
+        },
+        "ufs_7_para_10": {
+          "n_clusters": 68,
+          "mean_size": 260.7708333333333,
+          "se_factor": 0.840168050416806
+        },
+        "municipios_x2_e_anos_15": {
+          "n_clusters": 80,
+          "mean_size": 521.5416666666666,
+          "se_factor": 0.7727012256700706
+        },
+        "se_atual": {
+          "n_clusters": 48,
+          "mean_size": 260.7708333333333,
+          "se_factor": 1.0
+        }
+      },
+      "variance_components": {
+        "between_var": 78269.7135625864,
+        "within_var": 201503.62996209486,
+        "mean_cluster_size": 260.7708333333333,
+        "icc": 0.27976115442778604
+      }
+    },
+    "milho": {
+      "icc": 0.2197293847276043,
+      "mean_cluster_size": 214.51785714285714,
+      "n_clusters": 56,
+      "scenarios": {
+        "municipios_x2": {
+          "n_clusters": 56,
+          "mean_size": 429.0357142857143,
+          "se_factor": 0.9959206582432906
+        },
+        "municipios_x5": {
+          "n_clusters": 56,
+          "mean_size": 1072.5892857142858,
+          "se_factor": 0.9934650129849562
+        },
+        "anos_9_para_15": {
+          "n_clusters": 93,
+          "mean_size": 214.51785714285714,
+          "se_factor": 0.7759835936631706
+        },
+        "ufs_7_para_10": {
+          "n_clusters": 80,
+          "mean_size": 214.51785714285714,
+          "se_factor": 0.8366600265340756
+        },
+        "municipios_x2_e_anos_15": {
+          "n_clusters": 93,
+          "mean_size": 429.0357142857143,
+          "se_factor": 0.772818091387019
+        },
+        "se_atual": {
+          "n_clusters": 56,
+          "mean_size": 214.51785714285714,
+          "se_factor": 1.0
+        }
+      },
+      "variance_components": {
+        "between_var": 279155.3134317209,
+        "within_var": 991295.2172416624,
+        "mean_cluster_size": 214.51785714285714,
+        "icc": 0.2197293847276043
+      }
+    },
+    "milho_2": {
+      "icc": 0.17704382183639672,
+      "mean_cluster_size": 138.46341463414635,
+      "n_clusters": 41,
+      "scenarios": {
+        "municipios_x2": {
+          "n_clusters": 41,
+          "mean_size": 276.9268292682927,
+          "se_factor": 0.9918466743202184
+        },
+        "municipios_x5": {
+          "n_clusters": 41,
+          "mean_size": 692.3170731707318,
+          "se_factor": 0.9869223477944574
+        },
+        "anos_9_para_15": {
+          "n_clusters": 68,
+          "mean_size": 138.46341463414635,
+          "se_factor": 0.7764928695555345
+        },
+        "ufs_7_para_10": {
+          "n_clusters": 58,
+          "mean_size": 138.46341463414635,
+          "se_factor": 0.8407714027749386
+        },
+        "municipios_x2_e_anos_15": {
+          "n_clusters": 68,
+          "mean_size": 276.9268292682927,
+          "se_factor": 0.7701618703020201
+        },
+        "se_atual": {
+          "n_clusters": 41,
+          "mean_size": 138.46341463414635,
+          "se_factor": 1.0
+        }
+      },
+      "variance_components": {
+        "between_var": 162317.00966699026,
+        "within_var": 754501.2559090022,
+        "mean_cluster_size": 138.46341463414635,
+        "icc": 0.17704382183639672
+      }
+    }
+  }
+}

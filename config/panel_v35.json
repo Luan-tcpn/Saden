@@ -1,0 +1,55 @@
+{
+  "version": "v3.5",
+  "description": "Configuracao canonica do painel agroclimatico (construida na consolidacao). As entradas historicas permanecem reproduziveis pelos scripts legacy.",
+  "period": {
+    "start_year": 2016,
+    "end_year": 2025,
+    "climate_start": "2016-01-01",
+    "climate_end": "2025-12-31"
+  },
+  "states": ["MT", "GO", "MS", "PR", "RS", "BA", "SP"],
+  "crops": ["soja", "milho", "milho_2"],
+  "crop_product_codes": {
+    "soja": "40124",
+    "milho": "40122"
+  },
+  "sources": {
+    "productivity": "IBGE/SIDRA tabela 5457 (PAM)",
+    "climate": "NASA POWER (comunidade AG), endpoint temporal/daily/point",
+    "zarc": "MAPA/ZARC — tabua de risco por municipio, cultura e safra",
+    "cad": "Embrapa Solos GeoInfo WCS (CC BY-NC 3.0 BR)",
+    "geometry": "IBGE — malhas municipais 2025"
+  },
+  "inputs": {
+    "municipalities": "geospatial/data/processed/panel_municipalities_v35.csv",
+    "panel_base_legacy": "geospatial/data/processed/agroclimatic_productivity_panel.csv",
+    "panel_base_sp": "geospatial/data/processed/panel_sp_v35.csv",
+    "climate_files": [
+      "geospatial/data/processed/climate_daily.csv",
+      "geospatial/data/processed/climate_daily_sp.csv"
+    ],
+    "cad": [
+      "geospatial/data/manifests/v30_cad_polygon.json",
+      "geospatial/data/manifests/v35_cad_polygon_sp.json"
+    ],
+    "water_scenario": {
+      "soja": "cad_0_100",
+      "milho": "cad_0_60",
+      "milho_2": "cad_0_60"
+    }
+  },
+  "reference_outputs": {
+    "panel_windows": "geospatial/data/processed/v35_panel_windows.csv",
+    "water_variables": "geospatial/data/processed/v35_water_variables.csv"
+  },
+  "rules": {
+    "exclude_municipality_name_patterns": ["Área Operacional"],
+    "require_status": "paired_usable",
+    "require_climate_source": "NASA-POWER",
+    "min_window_days": 30,
+    "coverage_reference_cad_mm": 50.0,
+    "cad_scenarios_cm": [60, 100, 200],
+    "soil_profile": "tipo2_medio",
+    "et_method": "fao56_penman_monteith"
+  }
+}

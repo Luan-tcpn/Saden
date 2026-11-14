@@ -2316,6 +2316,132 @@ repositório. UFs com muita agricultura e pouca soja ficam sub-representadas.
 apenas o grupo Sul). Escolher estado por proximidade de onde o bloco hídrico
 "funcionou" é proibido por D111.
 
+## D120 - A etapa seguinte é consolidação técnica, não expansão científica (2026-11-14)
+
+**Contexto.** V3.1–V3.5 produziram resultados, mas também três caminhos de
+construção do painel, um defeito de janela já corrigido e nenhum teste de
+reprodução em ambiente limpo.
+
+**Decisão.** Abrir `maintenance/technical-consolidation` a partir de `32dfb88`.
+Nenhuma hipótese agroclimática nova. Nenhuma UF nova. Nenhum modelo novo.
+
+**Consequências.** A numeração de decisões salta de D119 para D120 sem pular
+conteúdo: D116–D119 já estavam ocupadas pela V3.5.
+
+## D121 - Unidades operacionais do IBGE são excluídas por regra explícita (2026-11-14)
+
+**Contexto.** O cadastro municipal usado pelo painel contém 1.787 registros para
+as 7 UFs, dos quais dois não são municípios: `4300001` "Área Operacional Lagoa
+Mirim" e `4300002` "Área Operacional Lagoa dos Patos". A PAM não os lista.
+
+**Evidência.** Zero linhas no painel analítico (0 de 30.207). Impacto científico
+nulo; impacto de engenharia real (o cadastro mistura unidades territoriais).
+
+**Decisão.** Excluir por padrão de nome declarado na configuração
+(`exclude_municipality_name_patterns`). Não reescrever o cadastro histórico.
+
+**Consequências.** O cadastro canônico tem 2.425 municípios, não 2.427.
+
+## D122 - Flags de qualidade da PAM não geram exclusão (2026-11-14)
+
+**Contexto.** A auditoria marcou 7.507 células `sem_area`, 85
+`plantado_sem_colheita`, 66 `rendimento_divergente` e 99 `extremo_mad`.
+
+**Decisão.** Nenhuma exclusão automática. `sem_area` significa "não produziu";
+`plantado_sem_colheita` significa "perdeu a safra" — as duas são informação, não
+erro. Divergências de 1% são arredondamento da fonte.
+
+**Consequências.** 27 das 30.207 linhas analíticas (0,09%) vêm de células com
+flag, todas em BA. Nenhuma inferência muda.
+
+## D123 - A fonte de clima é declarada na configuração, não herdada da ordem do arquivo (2026-11-14)
+
+**Contexto.** `climate_daily.csv` contém **duas fontes sob a mesma chave**
+(município, dia): NASA-POWER e INMET, com **627.381 pares conflitantes** e
+valores diferentes. Além disso, 2.020 linhas do painel base estão marcadas
+`paired_usable` **sendo INMET** — utilizáveis na aparência, nunca usadas.
+
+**Evidência.** O filtro existia (linha 127 de `v31_rebuild_panel.py` e linha 162
+do loader), mas não era declarado. Uma deduplicação por "primeira ocorrência"
+acertaria por acidente de ordenação.
+
+**Decisão.** `rules.require_climate_source` na configuração; o pipeline conta e
+reporta as linhas descartadas (`discarded_other_source_rows`).
+
+**Consequências.** Nenhum resultado muda (o filtro já era aplicado), mas o
+contrato passa a ser explícito. As 2.020 linhas INMET permanecem no painel
+histórico como **armadilha documentada**: filtrar só por `status` mistura fontes.
+
+## D124 - O excedente hídrico é superestimado na implementação de referência e não será corrigido retroativamente (2026-11-14)
+
+**Contexto.** Replicação independente do balanço T&M. Quando um mês de saldo
+positivo satura a CAD a partir de armazenamento parcial, a implementação de
+referência atribui o saldo inteiro ao excedente. Caso de prova (CAD 50, ARM 40,
+P 20, ETP 5): excedente correto 5 mm; implementação devolve 15 mm.
+
+**Causa.** O teste `storage >= cad` é avaliado **depois** de `storage` já ter
+sido limitado à CAD, de modo que a condição fica verdadeira em todo mês que
+satura o solo.
+
+**Evidência.** Erro de +10 mm no caso de prova. Déficit, armazenamento e ETR
+**não** são afetados. Em 45 janelas reais verificadas, o gatilho não ocorreu.
+
+**Decisão.** Não corrigir a biblioteca. Corrigir mudaria artefatos publicados e
+quebraria a reprodução bit-a-bit da V3.5. A formulação correta está em
+`tools/independent_replication/water_balance_reference.py`, com testes.
+
+**Consequências.** As variáveis de excedente já haviam sido classificadas como
+não sustentadas na V3.3 (`mantida_apenas_bruta`, `sem_evidencia_em_nenhum`).
+Nenhuma conclusão publicada depende delas. Uso futuro de excedente deve usar a
+formulação independente.
+
+## D125 - O erro tipo I é liberal com 41-56 clusters (2026-11-14)
+
+**Contexto.** Monte Carlo de 400 réplicas por cultura, com a estrutura de
+dependência observada e o estimador dos relatórios (within + CR1 em UF × ano).
+
+**Evidência.** Erro tipo I observado: **7,8% (soja), 6,0% (milho) e 10,3%
+(milho 2ª)** onde se declara 5%. ICC entre 0,18 e 0,28.
+
+**Decisão.** Manter o estimador (é o que sustenta os resultados publicados) e
+declarar a liberalidade. Todo resultado futuro deve reportar também o p-valor
+por wild cluster bootstrap e concluir apenas quando os dois concordarem.
+
+**Consequências.** p-valores entre 0,01 e 0,05 são mais frágeis do que aparentam.
+A calibração por bootstrap ainda não está no fluxo oficial — é a lacuna
+metodológica mais barata de fechar (`tools/calibrate_wild_bootstrap.py`).
+
+## D126 - Acrescentar municípios nas UFs atuais não aumenta o poder (2026-11-14)
+
+**Contexto.** Os clusters UF × ano já contêm 139 a 261 municípios cada.
+
+**Evidência.** Com o ICC observado, dobrar os municípios reduz o erro-padrão em
+**0,2% a 0,8%**; quintuplicar, em **0,4% a 1,3%**. Acrescentar anos (9→15)
+reduz **22%**; acrescentar UFs (7→10), **16%**.
+
+**Decisão.** Expansão de cobertura só se justifica quando acrescenta **clusters
+novos** (UF ou ano), não municípios dentro das UFs existentes. MG continua sendo
+a escolha correta (D119), por esse motivo e não por volume.
+
+**Consequências.** Reorienta o critério de expansão: o que importa é a dimensão
+que varia, não a contagem de linhas.
+
+## D127 - Ponto de entrada único para o painel, com legacy preservado (2026-11-14)
+
+**Contexto.** Três caminhos concorrentes (`v31_rebuild`, `v33_water`,
+`v35_build`) construíam o mesmo painel sem configuração declarativa.
+
+**Decisão.** `tools/pipeline/build_panel.py` é o caminho oficial, alimentado por
+`config/panel_v35.json`. Ele **não reimplementa cálculo**: chama as funções já
+validadas. Os scripts históricos não foram convertidos em wrappers, para não
+perder a capacidade de reproduzir os artefatos de cada versão.
+
+**Evidência de equivalência.** Reprodução bit-a-bit do painel V3.5: diferença
+máxima 0,000 em 10 variáveis × 204 linhas, em 7 UFs.
+
+**Consequências.** `SADEN_DATA_ROOT` permite que um clone limpo leia os 6,3 GB
+de derivados de um arquivo externo, sem copiá-los para o repositório.
+
 
 
 
