@@ -68,18 +68,23 @@ def _clean(value):
     return value
 
 
-def _row(crop, family, config, arm, entry):
-    return {
+def _row(crop, family, variant, config, arm, entry):
+    row = {
         "crop": crop,
         "family": family,
+        "variant": variant,
         "config": config,
         "arm": arm,
         "train_size_mean": round(entry.get("train_size_mean", 0.0), 1),
         "mae_modelo": round(entry["model"]["mae_kg_ha"], 4),
-        "mae_baseline": round(entry["baseline"]["mae_kg_ha"], 4),
+        "mae_baseline_global": round(entry["baseline"]["mae_kg_ha"], 4),
         "gain_percent": round(entry["gain_percent"], 4),
         "n": entry["model"]["n"],
     }
+    for name, baseline in entry.get("baselines", {}).items():
+        row[f"mae_baseline_{name}"] = round(baseline["mae_kg_ha"], 4)
+        row[f"gain_vs_{name}"] = round(baseline["gain_percent"], 4)
+    return row
 
 
 def main() -> int:
@@ -91,6 +96,7 @@ def main() -> int:
 
     crops = ("soja",) if args.quick else CROPS
     families = ("B_meteorologicos",) if args.quick else FAMILIES
+    variants = ("climate_only",) if args.quick else gen.MODEL_VARIANTS
 
     os.environ["SADEN_V27_BLOCK_KM"] = str(args.block_km)
     rows = rr.prepare(rr.load_panel())
@@ -102,7 +108,9 @@ def main() -> int:
             "Fatorial 2x2 espaco x tempo sobre a grade de dobras do P5, com "
             "controle de tamanho por reamostragem estratificada por bloco. "
             "SS=espaco e tempo compartilhados; SE=espaco separado (P3); "
-            "TS=tempo separado; TE=ambos (P5). Teste identico nos 4 bracos."
+            "TS=tempo separado; TE=ambos (P5). Teste identico nos 4 bracos. "
+            "Linhas de base (global/UF/UF-ano) e variantes de modelo "
+            "(so clima; clima + dummies de UF) construidas do mesmo treino."
         ),
         "crops": {},
     }
@@ -115,55 +123,71 @@ def main() -> int:
         crop_out: dict = {"n_rows": len(subset), "families": {}}
         for family in families:
             variables = rr.MODELS[family]
-            full = gen.factorial_holdout(
-                subset, variables, seed=rr.SEED, n_boot=1000
-            )
-            equal = gen.factorial_holdout(
-                subset,
-                variables,
-                seed=rr.SEED,
-                size_fraction=0.64,
-                n_repeats=args.repeats,
-                n_boot=1000,
-            )
-            curve = {}
-            for fraction in LEARNING_FRACTIONS:
-                curve[str(fraction)] = gen.factorial_holdout(
+            family_out: dict = {"variables": list(variables), "variants": {}}
+            for variant in variants:
+                full = gen.factorial_holdout(
+                    subset, variables, seed=rr.SEED, n_boot=1000, variant=variant
+                )
+                equal = gen.factorial_holdout(
                     subset,
                     variables,
                     seed=rr.SEED,
-                    size_fraction=fraction,
-                    n_repeats=3,
-                    n_boot=200,
+                    size_fraction=0.64,
+                    n_repeats=args.repeats,
+                    n_boot=1000,
+                    variant=variant,
                 )
-            crop_out["families"][family] = {
-                "variables": list(variables),
-                "full": _clean(full),
-                "equal_size_0.64": _clean(equal),
-                "learning_curve": _clean(curve),
-            }
-            for arm, entry in full.get("arms", {}).items():
-                if entry.get("status") == "ok":
-                    csv_rows.append(_row(crop, family, "full", arm, entry))
-            for arm, entry in equal.get("arms", {}).items():
-                if entry.get("status") == "ok":
-                    csv_rows.append(_row(crop, family, "equal_0.64", arm, entry))
-            for fraction, result in curve.items():
-                for arm, entry in result.get("arms", {}).items():
+                curve = {}
+                if variant == "climate_only":
+                    for fraction in LEARNING_FRACTIONS:
+                        curve[str(fraction)] = gen.factorial_holdout(
+                            subset,
+                            variables,
+                            seed=rr.SEED,
+                            size_fraction=fraction,
+                            n_repeats=3,
+                            n_boot=200,
+                            variant=variant,
+                        )
+                family_out["variants"][variant] = {
+                    "full": _clean(full),
+                    "equal_size_0.64": _clean(equal),
+                    "learning_curve": _clean(curve),
+                }
+                for arm, entry in full.get("arms", {}).items():
                     if entry.get("status") == "ok":
                         csv_rows.append(
-                            _row(crop, family, f"size_{fraction}", arm, entry)
+                            _row(crop, family, variant, "full", arm, entry)
                         )
-            arms = full.get("arms", {})
-            print(
-                f"{crop:<8} {family:<16} full: "
-                + " ".join(
-                    f"{a}={arms[a]['model']['mae_kg_ha']:.1f}"
-                    for a in ("SS", "SE", "TS", "TE")
-                    if arms.get(a, {}).get("status") == "ok"
-                ),
-                flush=True,
-            )
+                for arm, entry in equal.get("arms", {}).items():
+                    if entry.get("status") == "ok":
+                        csv_rows.append(
+                            _row(crop, family, variant, "equal_0.64", arm, entry)
+                        )
+                for fraction, result in curve.items():
+                    for arm, entry in result.get("arms", {}).items():
+                        if entry.get("status") == "ok":
+                            csv_rows.append(
+                                _row(
+                                    crop,
+                                    family,
+                                    variant,
+                                    f"size_{fraction}",
+                                    arm,
+                                    entry,
+                                )
+                            )
+                arms = full.get("arms", {})
+                print(
+                    f"{crop:<8} {family:<16} {variant:<19} "
+                    + " ".join(
+                        f"{a}={arms[a]['model']['mae_kg_ha']:.1f}"
+                        for a in ("SS", "SE", "TS", "TE")
+                        if arms.get(a, {}).get("status") == "ok"
+                    ),
+                    flush=True,
+                )
+            crop_out["families"][family] = family_out
         manifest["crops"][crop] = crop_out
     manifest["elapsed_s"] = round(time.time() - started, 1)
     os.makedirs(os.path.dirname(OUT_JSON), exist_ok=True)
@@ -173,16 +197,22 @@ def main() -> int:
     fields = [
         "crop",
         "family",
+        "variant",
         "config",
         "arm",
         "train_size_mean",
         "mae_modelo",
-        "mae_baseline",
+        "mae_baseline_global",
         "gain_percent",
         "n",
     ]
+    for name in gen.BASELINES:
+        if name == "global":
+            continue
+        fields.append(f"mae_baseline_{name}")
+        fields.append(f"gain_vs_{name}")
     with open(OUT_CSV, "w", newline="", encoding="utf-8-sig") as handle:
-        writer = csv.DictWriter(handle, fieldnames=fields)
+        writer = csv.DictWriter(handle, fieldnames=fields, extrasaction="ignore")
         writer.writeheader()
         for row in csv_rows:
             writer.writerow(row)

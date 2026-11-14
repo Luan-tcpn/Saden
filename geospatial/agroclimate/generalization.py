@@ -53,6 +53,33 @@ ARMS: tuple[tuple[str, bool, bool], ...] = (
     ("TE", True, True),
 )
 
+# Linhas de base alternativas, todas construídas **do mesmo conjunto de
+# treino** que o modelo:
+#
+# ``global``     média de todo o treino (convenção da V2.6/V2.7);
+# ``state``      média por UF; cai para a global quando a UF está ausente
+#                (é o caso do leave-one-UF-out);
+# ``state_year`` média por UF e ano, que absorve o choque regional do ano;
+#                cai para a média da UF e depois para a global.
+#
+# A comparação com ``state_year`` é a mais exigente: se o modelo não supera
+# essa referência, o ganho atribuído ao clima é, na prática, a recuperação de
+# um efeito de região-e-ano que a média agregada não captura.
+BASELINES: tuple[str, ...] = ("global", "state", "state_year")
+
+# Variantes do modelo, para que a comparação com as linhas de base seja justa:
+#
+# ``climate_only``        ``y ~ 1 + clima`` (é o modelo da V2.6/V2.7);
+# ``climate_plus_state``  ``y ~ 1 + clima + dummies de UF``. Sem o termo
+#                         regional o modelo é estruturalmente incapaz de
+#                         reproduzir o nível de produtividade da UF, e perde
+#                         para a média da UF por construção — não porque o
+#                         clima não ajude, mas porque falta informação.
+#
+# A pergunta correta é se o clima acrescenta algo **além da região**, e para
+# isso o modelo precisa receber a mesma informação que a linha de base.
+MODEL_VARIANTS: tuple[str, ...] = ("climate_only", "climate_plus_state")
+
 TARGET = "yield_kg_ha"
 
 
@@ -70,19 +97,56 @@ def _matrix(rows: Sequence[dict[str, Any]], variables: Sequence[str]) -> np.ndar
     )
 
 
+def _design(
+    x_climate: np.ndarray,
+    state: np.ndarray | None,
+    variant: str,
+    columns: Sequence[int] | None = None,
+) -> tuple[np.ndarray, list[int]]:
+    """Monta o design com intercepto e, opcionalmente, dummies de UF.
+
+    ``columns`` são os códigos de UF que viram colunas. Devolve o design e a
+    lista de colunas efetivamente usada, para que o teste seja transformado
+    com exatamente as mesmas colunas do treino. Estados ausentes do treino
+    ficam com todas as dummies em zero e caem no intercepto — o análogo da
+    queda para a média global nas linhas de base.
+    """
+    pieces = [np.ones((x_climate.shape[0], 1))]
+    if x_climate.shape[1] > 0:
+        pieces.append(x_climate)
+    used: list[int] = []
+    if variant == "climate_plus_state" and state is not None:
+        if columns is None:
+            present = sorted({int(s) for s in state.tolist() if s >= 0})
+            # a primeira UF é a referência (evita colinearidade com o intercepto)
+            used = present[1:]
+        else:
+            used = list(columns)
+        for code in used:
+            pieces.append((state == code).astype("float64").reshape(-1, 1))
+    elif columns is not None:
+        used = []
+    return np.hstack(pieces), used
+
+
 def _fit_predict(
     x_train: np.ndarray,
     y_train: np.ndarray,
     x_test: np.ndarray,
+    state_train: np.ndarray | None = None,
+    state_test: np.ndarray | None = None,
+    variant: str = "climate_only",
 ) -> np.ndarray | None:
     """OLS com intercepto, ajustado no treino e aplicado ao teste."""
-    if x_train.shape[0] <= x_train.shape[1] + 1:
+    if variant not in MODEL_VARIANTS:
+        raise ValueError(f"variante de modelo desconhecida: {variant!r}")
+    train_design, columns = _design(x_train, state_train, variant)
+    if train_design.shape[0] <= train_design.shape[1]:
         return None
-    if float(np.std(x_train, axis=0).max()) == 0.0:
+    if float(np.std(x_train, axis=0).max() if x_train.size else 0.0) == 0.0:
         return None
-    design = np.column_stack([np.ones(x_train.shape[0]), x_train])
-    beta, *_ = np.linalg.lstsq(design, y_train, rcond=None)
-    test_design = np.column_stack([np.ones(x_test.shape[0]), x_test])
+    beta, *_ = np.linalg.lstsq(train_design, y_train, rcond=None)
+    test_design, _ = _design(x_test, state_test, variant, columns=columns)
     return test_design @ beta
 
 
@@ -184,6 +248,55 @@ def _summarize(absolute: np.ndarray, squared: np.ndarray, relative: np.ndarray) 
     }
 
 
+def _baseline_predictions(
+    y_train: np.ndarray,
+    state_train: np.ndarray,
+    year_train: np.ndarray,
+    state_test: np.ndarray,
+    year_test: np.ndarray,
+    n_states: int,
+    n_years: int,
+) -> dict[str, np.ndarray]:
+    """Linhas de base construídas **apenas** com o conjunto de treino.
+
+    A UF e o ano do registro de teste são atributos conhecidos no momento da
+    previsão (não são o alvo), por isso podem ser usados para consultar a
+    média correspondente no treino. Quando a célula não existe no treino, cai
+    para a média da UF e, se necessário, para a média global — nunca para
+    informação do teste.
+    """
+    global_mean = float(np.mean(y_train))
+    valid_state = state_train >= 0
+    counts = np.bincount(state_train[valid_state], minlength=n_states).astype("float64")
+    sums = np.bincount(
+        state_train[valid_state], weights=y_train[valid_state], minlength=n_states
+    )
+    state_mean = np.where(counts > 0, sums / np.maximum(counts, 1.0), global_mean)
+    n_cells = n_states * n_years
+    combined_train = state_train * n_years + year_train
+    counts_cell = np.bincount(combined_train[valid_state], minlength=n_cells).astype(
+        "float64"
+    )
+    sums_cell = np.bincount(
+        combined_train[valid_state], weights=y_train[valid_state], minlength=n_cells
+    )
+    cell_mean = np.where(
+        counts_cell > 0,
+        sums_cell / np.maximum(counts_cell, 1.0),
+        np.repeat(state_mean, n_years),
+    )
+    state_prediction = np.where(
+        state_test >= 0, state_mean[np.maximum(state_test, 0)], global_mean
+    )
+    combined_test = np.maximum(state_test, 0) * n_years + year_test
+    cell_prediction = np.where(state_test >= 0, cell_mean[combined_test], global_mean)
+    return {
+        "global": np.full(state_test.size, global_mean),
+        "state": state_prediction,
+        "state_year": cell_prediction,
+    }
+
+
 def factorial_holdout(
     rows: Sequence[dict[str, Any]],
     variables: Sequence[str],
@@ -193,12 +306,17 @@ def factorial_holdout(
     size_fraction: float | None = None,
     n_repeats: int = 1,
     n_boot: int = 1000,
+    variant: str = "climate_only",
 ) -> dict[str, Any]:
     """Fatorial 2×2 espaço × tempo com controle opcional de tamanho.
 
     ``size_fraction`` fixa o treino de **cada** braço em
     ``size_fraction × n_linhas``, reamostrado ``n_repeats`` vezes com sementes
     distintas. ``None`` usa o treino integral de cada braço.
+
+    ``variant`` escolhe o modelo: ``climate_only`` (o da V2.6/V2.7) ou
+    ``climate_plus_state`` (com dummies de UF, para comparar com a média da
+    UF em igualdade de informação).
     """
     from . import analysis  # import tardio evita ciclo
 
@@ -247,9 +365,15 @@ def factorial_holdout(
     abs_err: dict[str, list[np.ndarray]] = {a: [] for a, _, _ in ARMS}
     sq_err: dict[str, list[np.ndarray]] = {a: [] for a, _, _ in ARMS}
     rel_err: dict[str, list[np.ndarray]] = {a: [] for a, _, _ in ARMS}
-    abs_base: dict[str, list[np.ndarray]] = {a: [] for a, _, _ in ARMS}
-    sq_base: dict[str, list[np.ndarray]] = {a: [] for a, _, _ in ARMS}
-    rel_base: dict[str, list[np.ndarray]] = {a: [] for a, _, _ in ARMS}
+    abs_base: dict[tuple[str, str], list[np.ndarray]] = {
+        (a, name): [] for a, _, _ in ARMS for name in BASELINES
+    }
+    sq_base: dict[tuple[str, str], list[np.ndarray]] = {
+        (a, name): [] for a, _, _ in ARMS for name in BASELINES
+    }
+    rel_base: dict[tuple[str, str], list[np.ndarray]] = {
+        (a, name): [] for a, _, _ in ARMS for name in BASELINES
+    }
     observed_parts: list[np.ndarray] = []
     block_parts: list[np.ndarray] = []
     year_parts: list[np.ndarray] = []
@@ -265,6 +389,8 @@ def factorial_holdout(
             block_parts.append(block_ids[test_mask])
             year_parts.append(year_ids[test_mask])
             x_test = x_all[test_mask]
+            state_test = state_codes[test_mask]
+            year_test = year_codes[test_mask]
             safe_observed = np.where(observed_cell == 0, np.nan, observed_cell)
             for arm_index, (arm, space_separated, time_separated) in enumerate(ARMS):
                 pool_mask = ~test_mask
@@ -284,9 +410,9 @@ def factorial_holdout(
                 cell_abs: list[np.ndarray] = []
                 cell_sq: list[np.ndarray] = []
                 cell_rel: list[np.ndarray] = []
-                cell_abs_b: list[np.ndarray] = []
-                cell_sq_b: list[np.ndarray] = []
-                cell_rel_b: list[np.ndarray] = []
+                cell_base: dict[str, dict[str, list[np.ndarray]]] = {
+                    name: {"abs": [], "sq": [], "rel": []} for name in BASELINES
+                }
                 cell_sizes: list[int] = []
                 for repeat in range(n_repeats):
                     # semente estável: depende de braço, repetição e célula
@@ -300,18 +426,34 @@ def factorial_holdout(
                         chosen = stratified_subsample(pools, target_size, draw_rng)
                     else:
                         chosen = pool_index
-                    fitted = _fit_predict(x_all[chosen], y_all[chosen], x_test)
+                    fitted = _fit_predict(
+                        x_all[chosen],
+                        y_all[chosen],
+                        x_test,
+                        state_train=state_codes[chosen],
+                        state_test=state_test,
+                        variant=variant,
+                    )
                     if fitted is None:
                         continue
                     error = fitted - observed_cell
-                    baseline_value = float(np.mean(y_all[chosen]))
-                    base_error = np.full(observed_cell.size, baseline_value) - observed_cell
                     cell_abs.append(np.abs(error))
                     cell_sq.append(np.square(error))
                     cell_rel.append(np.abs(error) / safe_observed)
-                    cell_abs_b.append(np.abs(base_error))
-                    cell_sq_b.append(np.square(base_error))
-                    cell_rel_b.append(np.abs(base_error) / safe_observed)
+                    baseline_values = _baseline_predictions(
+                        y_all[chosen],
+                        state_codes[chosen],
+                        year_codes[chosen],
+                        state_test,
+                        year_test,
+                        len(state_names),
+                        len(year_names),
+                    )
+                    for name, values in baseline_values.items():
+                        base_error = values - observed_cell
+                        cell_base[name]["abs"].append(np.abs(base_error))
+                        cell_base[name]["sq"].append(np.square(base_error))
+                        cell_base[name]["rel"].append(np.abs(base_error) / safe_observed)
                     cell_sizes.append(int(chosen.size))
                     kept = state_codes[chosen]
                     kept = kept[kept >= 0]
@@ -324,9 +466,10 @@ def factorial_holdout(
                 abs_err[arm].append(np.mean(cell_abs, axis=0))
                 sq_err[arm].append(np.mean(cell_sq, axis=0))
                 rel_err[arm].append(np.mean(cell_rel, axis=0))
-                abs_base[arm].append(np.mean(cell_abs_b, axis=0))
-                sq_base[arm].append(np.mean(cell_sq_b, axis=0))
-                rel_base[arm].append(np.mean(cell_rel_b, axis=0))
+                for name in BASELINES:
+                    abs_base[(arm, name)].append(np.mean(cell_base[name]["abs"], axis=0))
+                    sq_base[(arm, name)].append(np.mean(cell_base[name]["sq"], axis=0))
+                    rel_base[(arm, name)].append(np.mean(cell_base[name]["rel"], axis=0))
                 train_sizes[arm].append(int(np.mean(cell_sizes)))
 
     out: dict[str, Any] = {
@@ -356,9 +499,6 @@ def factorial_holdout(
         absolute = np.concatenate(abs_err[arm])
         squared = np.concatenate(sq_err[arm])
         relative = np.concatenate(rel_err[arm])
-        absolute_base = np.concatenate(abs_base[arm])
-        squared_base = np.concatenate(sq_base[arm])
-        relative_base = np.concatenate(rel_base[arm])
         if absolute.size != observed.size:
             out["arms"][arm] = {
                 "status": "length_mismatch",
@@ -366,16 +506,31 @@ def factorial_holdout(
                 "n_observed": int(observed.size),
             }
             continue
+        model = _summarize(absolute, squared, relative)
+        baseline_entries: dict[str, Any] = {}
+        for name in BASELINES:
+            if not abs_base[(arm, name)]:
+                continue
+            entry = _summarize(
+                np.concatenate(abs_base[(arm, name)]),
+                np.concatenate(sq_base[(arm, name)]),
+                np.concatenate(rel_base[(arm, name)]),
+            )
+            entry["gain_percent"] = 100.0 * (
+                entry["mae_kg_ha"] - model["mae_kg_ha"]
+            ) / entry["mae_kg_ha"]
+            baseline_entries[name] = entry
         entry = {
             "status": "ok",
             "train_size_mean": float(np.mean(train_sizes[arm])),
             "train_size_min": int(np.min(train_sizes[arm])),
-            "model": _summarize(absolute, squared, relative),
-            "baseline": _summarize(absolute_base, squared_base, relative_base),
+            "model": model,
+            "baselines": baseline_entries,
+            # compatibilidade com a convenção publicada (média global)
+            "baseline": baseline_entries.get("global", {}),
         }
-        entry["gain_percent"] = 100.0 * (
-            entry["baseline"]["mae_kg_ha"] - entry["model"]["mae_kg_ha"]
-        ) / entry["baseline"]["mae_kg_ha"]
+        if "global" in baseline_entries:
+            entry["gain_percent"] = baseline_entries["global"]["gain_percent"]
         total_state = float(state_counts[arm].sum())
         if total_state > 0:
             entry["train_state_share"] = {
@@ -389,7 +544,12 @@ def factorial_holdout(
                 for name, value in zip(year_names, year_counts[arm])
             }
         entry["_abs"] = absolute
-        entry["_abs_base"] = absolute_base
+        entry["_abs_base"] = np.concatenate(abs_base[(arm, "global")])
+        entry["_abs_baselines"] = {
+            name: np.concatenate(abs_base[(arm, name)])
+            for name in BASELINES
+            if abs_base[(arm, name)]
+        }
         out["arms"][arm] = entry
 
     # diferenças pareadas com bootstrap por bloco
@@ -423,6 +583,17 @@ def factorial_holdout(
             ),
         }
 
+    # o modelo supera cada linha de base? (mesmos casos, IC por bloco)
+    out["model_vs_baseline"] = {}
+    for arm, _, _ in ARMS:
+        entry = out["arms"].get(arm, {})
+        if entry.get("status") != "ok":
+            continue
+        for name, values in entry["_abs_baselines"].items():
+            out["model_vs_baseline"][f"{arm}_vs_{name}"] = block_bootstrap_difference(
+                entry["_abs"], values, out["test_blocks"], n_boot=n_boot, seed=seed
+            )
+
     # decomposição por ano do erro de cada braço (mecanismo)
     out["by_year"] = {}
     for arm, _, _ in ARMS:
@@ -431,6 +602,7 @@ def factorial_holdout(
             continue
         errors = entry.pop("_abs")
         base_errors = entry.pop("_abs_base")
+        entry.pop("_abs_baselines", None)
         per_year = {}
         for year in sorted(set(out["test_years"].tolist())):
             mask = out["test_years"] == year

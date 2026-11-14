@@ -61,6 +61,7 @@ def make_panel(
                         "yield_kg_ha": float(
                             100.0
                             + 3.0 * b
+                            + 40.0 * (b % 3)  # nível regional (UF) distinto
                             + 2.0 * y
                             + 10.0 * x1
                             - 4.0 * x2
@@ -242,6 +243,112 @@ class BlockBootstrapTest(unittest.TestCase):
         )
         self.assertAlmostEqual(result["delta_mae"], 5.0, places=9)
         self.assertGreater(result["ci95"][0], 4.0)
+
+
+class BaselineTest(unittest.TestCase):
+    """As linhas de base usam apenas o treino e caem para referências menos
+    específicas quando a célula não existe."""
+
+    def test_baseline_predictions_values_and_fallbacks(self):
+        y = np.array([10.0, 20.0, 30.0, 40.0])
+        state_train = np.array([0, 0, 1, 1])
+        year_train = np.array([0, 1, 1, 1])
+        prediction = generalization._baseline_predictions(
+            y,
+            state_train,
+            year_train,
+            state_test=np.array([0, 1, 0]),
+            year_test=np.array([1, 0, 1]),
+            n_states=2,
+            n_years=2,
+        )
+        # média global = 25
+        self.assertTrue(np.allclose(prediction["global"], [25.0, 25.0, 25.0]))
+        # média por UF: s0 = 15, s1 = 35
+        self.assertTrue(np.allclose(prediction["state"], [15.0, 35.0, 15.0]))
+        # UF-ano: (s0, ano1) = 20; (s1, ano0) não existe -> cai para 35
+        self.assertTrue(np.allclose(prediction["state_year"], [20.0, 35.0, 20.0]))
+
+    def test_unknown_state_falls_back_to_global_mean(self):
+        y = np.array([10.0, 30.0])
+        prediction = generalization._baseline_predictions(
+            y,
+            state_train=np.array([0, 0]),
+            year_train=np.array([0, 0]),
+            state_test=np.array([-1]),
+            year_test=np.array([0]),
+            n_states=1,
+            n_years=1,
+        )
+        self.assertTrue(np.allclose(prediction["state"], [20.0]))
+        self.assertTrue(np.allclose(prediction["state_year"], [20.0]))
+
+    def test_state_year_equals_state_when_year_is_absent(self):
+        """No braço que remove o ano, a célula UF-ano não existe no treino."""
+        rows = make_panel()
+        result = generalization.factorial_holdout(
+            rows, ["x1", "x2"], seed=20261113, n_boot=100
+        )
+        for arm in ("TS", "TE"):
+            entry = result["arms"][arm]
+            self.assertAlmostEqual(
+                entry["baselines"]["state"]["mae_kg_ha"],
+                entry["baselines"]["state_year"]["mae_kg_ha"],
+                places=9,
+                msg=arm,
+            )
+
+    def test_state_baseline_is_not_worse_than_global_when_year_is_shared(self):
+        """Com o ano compartilhado, a média por UF tem mais informação."""
+        rows = make_panel()
+        result = generalization.factorial_holdout(
+            rows, ["x1", "x2"], seed=20261113, n_boot=100
+        )
+        entry = result["arms"]["SE"]
+        self.assertLess(
+            entry["baselines"]["state"]["mae_kg_ha"],
+            entry["baselines"]["global"]["mae_kg_ha"],
+        )
+
+
+class ModelVariantTest(unittest.TestCase):
+    def test_state_dummies_improve_over_state_baseline(self):
+        """Com a mesma informação regional, o clima deve acrescentar algo."""
+        rows = make_panel()
+        result = generalization.factorial_holdout(
+            rows,
+            ["x1", "x2"],
+            seed=20261113,
+            n_boot=100,
+            variant="climate_plus_state",
+        )
+        entry = result["arms"]["SS"]
+        self.assertLess(
+            entry["model"]["mae_kg_ha"], entry["baselines"]["state"]["mae_kg_ha"]
+        )
+
+    def test_unknown_variant_is_rejected(self):
+        with self.assertRaises(ValueError):
+            generalization._fit_predict(
+                np.ones((5, 1)), np.ones(5), np.ones((1, 1)), variant="nao_existe"
+            )
+
+    def test_design_drops_reference_category(self):
+        x = np.zeros((6, 1))
+        state = np.array([0, 0, 1, 1, 2, 2])
+        design, used = generalization._design(x, state, "climate_plus_state")
+        self.assertEqual(used, [1, 2])
+        self.assertEqual(design.shape[1], 4)  # intercepto + clima + 2 dummies
+
+    def test_design_handles_unseen_state(self):
+        x = np.zeros((4, 1))
+        state = np.array([0, 0, 1, 1])
+        _, used = generalization._design(x, state, "climate_plus_state")
+        test_design, _ = generalization._design(
+            np.zeros((1, 1)), np.array([9]), "climate_plus_state", columns=used
+        )
+        # UF desconhecida: todas as dummies em zero (cai no intercepto)
+        self.assertTrue(np.allclose(test_design[0, 2:], 0.0))
 
 
 class ReproducibilityTest(unittest.TestCase):
