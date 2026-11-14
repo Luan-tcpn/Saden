@@ -105,8 +105,8 @@ Com dummies de UF no modelo (informação regional igualada):
 | Cultura | SS | SE | TS | TE | efeito espaço | efeito tempo |
 |---|---|---|---|---|---|---|
 | soja | 552,8 | 559,4 | 588,9 | 604,3 | −6,5 [−14,6;+3,6] | **−36,1 [−46,2;−23,2]** |
-| milho | 1422,3 | 1592,5 | 1444,5 | 1647,5 | **−169,7 [−332,5;−27,2]** | −22,1 [−40,1;−5,8] |
-| milho 2ª | 1165,1 | 1205,1 | 1177,9 | 1233,7 | −39,6 [−68,5;+0,5] | −11,9 [−28,5;−3,9] |
+| milho | 1493,3 | 1662,9 | 1515,3 | 1717,8 | **−169,7 [−332,5;−27,2]** | −22,1 [−40,1;−5,8] |
+| milho 2ª | 1165,8 | 1205,3 | 1177,6 | 1234,0 | −39,6 [−68,5;+0,5] | −11,9 [−28,5;−3,9] |
 
 **Leitura.** Os dois fatores não são intercambiáveis: a soja perde informação
 de **ano** e é insensível ao bloco; o milho perde informação de **bloco** e é
@@ -151,8 +151,9 @@ Classificação: **parcialmente robusto**, dependente da família de variáveis
 
 * Ganho de +14,5% a +17,0% contra a média nacional, **preservado** no P5 e no
   controle de tamanho.
-* Contra a média da UF, o modelo com dummies regionais supera em −165,8 a
-  −267,2 kg/ha em todos os braços. **Resiste a todas as linhas de base.**
+* Contra a média da UF, o modelo com dummies regionais supera em −163,7 a
+  −267,2 kg/ha nos quatro braços (SS −165,8; SE −262,2; TS −163,7; TE −267,2).
+  **Resiste a todas as linhas de base.**
 * Ressalva: a média agregada é particularmente fraca para a 2ª safra
   (MAE ≈ 1,47 t/ha), então parte do ganho é heterogeneidade regional que a
   média nacional não captura.
