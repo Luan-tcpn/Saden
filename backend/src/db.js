@@ -206,6 +206,77 @@ function migrate(database) {
   `);
   seedCommodities(database);
   seedSources(database);
+  upgradeAlerts(database);
+}
+
+// Migração aditiva e idempotente dos alertas (v1.1 → product release 1).
+// Não remove nem renomeia nada: a V1.1 continua funcionando com commodity_key
+// e `active`, e as colunas novas são preenchidas por backfill.
+function columnExists(database, table, column) {
+  return database
+    .prepare(`PRAGMA table_info(${table})`)
+    .all()
+    .some((row) => row.name === column);
+}
+
+function addColumn(database, table, definition) {
+  const name = definition.trim().split(/\s+/)[0];
+  if (!columnExists(database, table, name)) {
+    database.exec(`ALTER TABLE ${table} ADD COLUMN ${definition}`);
+  }
+}
+
+function upgradeAlerts(database) {
+  // --- regras
+  addColumn(database, 'alerts', 'series_id TEXT');
+  addColumn(database, 'alerts', 'condition TEXT');
+  addColumn(database, 'alerts', 'currency TEXT');
+  addColumn(database, 'alerts', 'unit TEXT');
+  addColumn(database, 'alerts', 'instrument TEXT');
+  addColumn(database, 'alerts', 'market TEXT');
+  addColumn(database, 'alerts', 'source TEXT');
+  addColumn(database, 'alerts', 'price_type TEXT');
+  addColumn(database, 'alerts', 'status TEXT');
+  addColumn(database, 'alerts', 'last_evaluated_at TEXT');
+  addColumn(database, 'alerts', 'triggered_at TEXT');
+  addColumn(database, 'alerts', 'last_price REAL');
+  addColumn(database, 'alerts', 'last_observation_date TEXT');
+  addColumn(database, 'alerts', 'updated_at TEXT');
+
+  // --- eventos
+  addColumn(database, 'alert_events', "event_type TEXT NOT NULL DEFAULT 'evaluation'");
+  addColumn(database, 'alert_events', 'observation_date TEXT');
+  addColumn(database, 'alert_events', 'observed_price REAL');
+  addColumn(database, 'alert_events', 'read_at TEXT');
+
+  // --- backfill das regras legadas
+  database.prepare("UPDATE alerts SET condition = kind WHERE condition IS NULL AND kind IN ('price_above','price_below')").run();
+  database
+    .prepare("UPDATE alerts SET status = CASE WHEN active = 1 THEN 'active' ELSE 'paused' END WHERE status IS NULL")
+    .run();
+  database.prepare("UPDATE alerts SET updated_at = created_at WHERE updated_at IS NULL").run();
+  database.prepare("UPDATE alert_events SET event_type = 'evaluation' WHERE event_type IS NULL").run();
+
+  const commodities = database.prepare('SELECT key, yahoo_symbol, unit_br FROM commodities').all();
+  // Helper local (evita ciclo de require com services/seriesService).
+  const slug = (unit) => {
+    const known = { 'R$/sc 60kg': 'sc60', 'R$/saca 60kg': 'sc60', 'R$/lp': 'lp', 'R$/lb': 'lp' };
+    const key = String(unit || '').trim();
+    return known[key] || key.replace(/[^a-z0-9]+/gi, '').toLowerCase() || 'unit';
+  };
+  const updateSeries = database.prepare('UPDATE alerts SET series_id = ? WHERE series_id IS NULL AND commodity_key = ?');
+  for (const c of commodities) {
+    updateSeries.run(`yahoo:${c.yahoo_symbol}:brl:${slug(c.unit_br)}`, c.key);
+  }
+
+  // --- índices (inclui a chave de idempotência dos eventos)
+  database.exec(`
+    CREATE INDEX IF NOT EXISTS idx_alerts_series ON alerts(series_id);
+    CREATE INDEX IF NOT EXISTS idx_alerts_status ON alerts(status);
+    CREATE UNIQUE INDEX IF NOT EXISTS idx_alert_events_unique
+      ON alert_events(alert_id, event_type, observation_date);
+    CREATE INDEX IF NOT EXISTS idx_alert_events_read ON alert_events(read_at);
+  `);
 }
 
 function seedCommodities(database) {

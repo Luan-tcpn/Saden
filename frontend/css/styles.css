@@ -355,3 +355,48 @@ table.data th { color: var(--muted); font-weight: 600; }
   .main { padding: 0; max-width: none; }
   .report { border: 0; }
 }
+
+/* ---- Alertas de preço (product release 1) ---- */
+.badge {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--earth-100);
+  color: var(--earth-700);
+  font-size: 11px;
+  font-weight: 600;
+  vertical-align: middle;
+}
+.pill {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.pill.ok { color: var(--ok); border-color: var(--ok); background: var(--green-100); }
+.pill.warn { color: var(--amber); border-color: var(--amber); }
+.al-series-info { margin-top: 12px; }
+.series-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px 16px;
+  margin: 0;
+}
+.series-grid dt { font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+.series-grid dd { margin: 2px 0 0; font-size: 13px; }
+.series-grid code { font-size: 12px; }
+table.data tr.row-unread td { background: var(--green-100); }
+
+/* Tabelas largas rolam dentro do próprio bloco; o body nunca rola na horizontal.
+   (Corrigido no product release 1: a tabela de alertas tem 7 colunas.) */
+#al-list, #al-events, #places-list, #sources-table, #compare-table, #metrics-table, #report-body {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+#al-list table.data, #al-events table.data { min-width: 560px; }
+#al-list code, #al-events code, .series-grid code { word-break: break-all; }
+.unit-hint { white-space: nowrap; font-weight: 600; }

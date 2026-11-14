@@ -784,82 +784,209 @@
       <h2>Fontes</h2><ul>${rep.sources.map((s) => `<li><strong>${esc(s.name)}</strong> (${esc(s.status)}) — <span>${esc(s.base_url)}</span></li>`).join('')}</ul>`;
   }
 
-  // ---------------- alertas ----------------
+  // ---------------- alertas de preço ----------------
+  // Série com identidade estável (series_id), condição explícita e disparo
+  // único. Toda a informação de mercado vem do backend; nada é inventado aqui.
   let alertsBound = false;
+  let alertSeries = [];
+
+  const fmtPrice = (v) => (v == null || v === '' ? '—' : `R$ ${fmtBRL(Number(v))}`);
+
+  const CONDITION_TEXT = {
+    price_above: '≥',
+    price_below: '≤',
+  };
+
+  function currentSeries() {
+    return alertSeries.find((s) => s.series_id === $('al-series').value) || null;
+  }
+
+  function renderSeriesInfo() {
+    const s = currentSeries();
+    if (!s) {
+      $('al-series-info').innerHTML = '';
+      return;
+    }
+    $('al-unit-inline').textContent = `(${s.unit})`;
+    const fresh = s.freshness_status === 'fresh';
+    const unknown = s.freshness_status === 'unknown';
+    const pill = unknown ? 'warn' : fresh ? 'ok' : 'warn';
+    const label = unknown ? 'sem observação' : fresh ? 'atualizada' : `desatualizada (${s.age_days}d)`;
+    $('al-series-info').innerHTML = `
+      <dl class="series-grid">
+        <div><dt>Série</dt><dd><code>${esc(s.series_id)}</code></dd></div>
+        <div><dt>Mercado</dt><dd>${esc(s.market)}</dd></div>
+        <div><dt>Instrumento</dt><dd>${esc(s.instrument)}</dd></div>
+        <div><dt>Fonte</dt><dd>${esc(s.source_label)}</dd></div>
+        <div><dt>Última observação</dt><dd>${esc(s.observation_date || '—')} · ${esc(fmtPrice(s.last_price))} ${esc(s.unit)}</dd></div>
+        <div><dt>Situação do dado</dt><dd><span class="pill ${pill}">${esc(label)}</span></dd></div>
+      </dl>
+      <p class="meta">${esc(s.limitations[0])} ${esc(s.limitations[1])}</p>`;
+  }
+
+  async function loadAlertSeries() {
+    const { series } = await Api().seriesList();
+    alertSeries = series;
+    $('al-series').innerHTML = series
+      .map(
+        (s) =>
+          `<option value="${esc(s.series_id)}">${esc(s.commodity_name)} — ${esc(s.market)} · ${esc(s.unit)}</option>`
+      )
+      .join('');
+    renderSeriesInfo();
+  }
+
+  async function createAlert() {
+    const s = currentSeries();
+    if (!s) {
+      setStatus('al-form-status', 'error', 'Selecione uma série de preço.');
+      return;
+    }
+    const condition = $('al-condition').value;
+    const threshold = Number($('al-threshold').value);
+    if (!Number.isFinite(threshold) || threshold <= 0) {
+      setStatus('al-form-status', 'error', 'Informe um limite numérico maior que zero.');
+      return;
+    }
+    // Explica antes de criar: a última observação já satisfaz a condição.
+    const price = Number(s.last_price);
+    const fresh = s.freshness_status === 'fresh';
+    const meets =
+      fresh && Number.isFinite(price) && (condition === 'price_above' ? price >= threshold : price <= threshold);
+    if (meets) {
+      const ok = window.confirm(
+        `A última observação já satisfaz a condição:\n\n` +
+          `${s.commodity_name}: R$ ${fmtBRL(price)} ${s.unit} em ${s.observation_date}\n` +
+          `Condição: preço ${CONDITION_TEXT[condition]} R$ ${fmtBRL(threshold)}\n\n` +
+          `Se criar agora, o alerta dispara na primeira verificação e ficará como “disparado” ` +
+          `(disparo único) até você reativar. Criar mesmo assim?`
+      );
+      if (!ok) {
+        setStatus('al-form-status', '', 'Criação cancelada.');
+        return;
+      }
+    }
+    setStatus('al-form-status', 'loading', 'Criando alerta…');
+    try {
+      const res = await Api().alertCreate({
+        series_id: s.series_id,
+        condition,
+        threshold,
+        label: $('al-label').value.trim() || null,
+      });
+      $('al-threshold').value = '';
+      $('al-label').value = '';
+      setStatus(
+        'al-form-status',
+        'ok',
+        res.would_trigger_now
+          ? 'Alerta criado. A condição já está satisfeita — use “Verificar agora” para registrar o evento.'
+          : 'Alerta criado. Ele será avaliado nas próximas atualizações de preço.'
+      );
+      await Promise.all([loadAlerts(), loadAlertFeed()]);
+    } catch (err) {
+      setStatus('al-form-status', 'error', err.message);
+    }
+  }
+
+  async function loadAlerts() {
+    try {
+      const { alerts, unread_events } = await Api().alerts();
+      const badge = $('al-unread-badge');
+      badge.textContent = unread_events > 0 ? `${unread_events} novo(s)` : '';
+      badge.classList.toggle('hidden', !(unread_events > 0));
+
+      $('al-list').innerHTML = alerts.length
+        ? `<table class="data"><thead><tr>
+             <th>Rótulo</th><th>Série</th><th>Condição</th><th>Limite</th>
+             <th>Último preço</th><th>Estado</th><th>Ações</th>
+           </tr></thead><tbody>${alerts
+             .map((a) => {
+               const state =
+                 a.status === 'triggered'
+                   ? '<span class="pill warn">disparado</span>'
+                   : a.status === 'paused'
+                     ? '<span class="pill">pausado</span>'
+                     : '<span class="pill ok">ativo</span>';
+               const cond = `${esc(a.condition_label || a.kind_label)} ${esc(CONDITION_TEXT[a.condition] || '')}`;
+               return `<tr>
+                 <td>${esc(a.label || '—')}</td>
+                 <td><code>${esc(a.series_id || a.commodity_key)}</code><br/><span class="meta">${esc((a.series && a.series.market) || '')}</span></td>
+                 <td>${cond}</td>
+                 <td>${esc(a.threshold)} <span class="meta">${esc(a.unit || '')}</span></td>
+                 <td>${esc(fmtPrice(a.last_price))}<br/><span class="meta">${esc(a.last_observation_date || '')}</span></td>
+                 <td>${state}${a.triggered_at ? `<br/><span class="meta">${esc(new Date(a.triggered_at + 'Z').toLocaleString('pt-BR'))}</span>` : ''}</td>
+                 <td>
+                   <button class="btn" data-al-toggle="${esc(a.id)}" data-active="${a.active ? 0 : 1}" type="button">${a.active ? 'Pausar' : 'Reativar'}</button>
+                   <button class="btn" data-al-del="${esc(a.id)}" type="button">Excluir</button>
+                 </td>
+               </tr>`;
+             })
+             .join('')}</tbody></table>`
+        : '<p class="meta">Nenhum alerta criado. Escolha uma série, uma condição e um limite acima.</p>';
+    } catch (err) {
+      $('al-list').innerHTML = `<p class="status error">Falha ao carregar alertas: ${esc(err.message)}</p>`;
+    }
+  }
+
+  async function loadAlertFeed() {
+    try {
+      const { events } = await Api().alertFeed(false);
+      $('al-events').innerHTML = events.length
+        ? `<table class="data"><thead><tr>
+             <th>Quando</th><th>Série</th><th>Condição</th><th>Observado</th><th>Observação</th><th>Leitura</th>
+           </tr></thead><tbody>${events
+             .map(
+               (e) => `<tr class="${e.read ? '' : 'row-unread'}">
+                 <td>${esc(new Date((e.created_at || '').replace(' ', 'T') + 'Z').toLocaleString('pt-BR'))}</td>
+                 <td>${esc(e.label || e.series_id || e.commodity_key)}</td>
+                 <td>${esc(CONDITION_TEXT[e.condition] || '')} ${esc(e.threshold)} ${esc(e.unit || '')}</td>
+                 <td><strong>${esc(fmtPrice(e.observed_price))}</strong></td>
+                 <td>${esc(e.observation_date || '—')}</td>
+                 <td>${e.read ? 'lido' : '<strong>novo</strong>'}</td>
+               </tr>`
+             )
+             .join('')}</tbody></table>`
+        : '<p class="meta">Nenhum evento disparado ainda. Os alertas são avaliados quando os preços são atualizados (ao consultar) e em “Verificar agora”.</p>';
+    } catch (err) {
+      $('al-events').innerHTML = `<p class="status error">Falha ao carregar eventos: ${esc(err.message)}</p>`;
+    }
+  }
 
   function initAlerts() {
     if (!alertsBound) {
       alertsBound = true;
-      $('al-commodity').innerHTML = state.commodities
-        .map((c) => `<option value="${esc(c.key)}">${esc(c.name)}</option>`)
-        .join('');
-      $('btn-al-create').addEventListener('click', async () => {
-        setStatus('al-form-status', 'loading', 'Criando alerta…');
+      $('al-series').addEventListener('change', renderSeriesInfo);
+      $('btn-al-create').addEventListener('click', createAlert);
+      $('btn-al-evaluate').addEventListener('click', async () => {
+        setStatus('al-status', 'loading', 'Avaliando séries com alertas ativos…');
         try {
-          const kind = $('al-kind').value;
-          const body = {
-            commodity_key: $('al-commodity').value,
-            kind,
-            threshold: Number($('al-threshold').value),
-            label: $('al-label').value.trim() || null,
-          };
-          if (kind === 'rain_above') {
-            body.latitude = state.lat;
-            body.longitude = state.lon;
-          }
-          await Api().alertCreate(body);
-          setStatus('al-form-status', 'ok', 'Alerta criado.');
-          $('al-threshold').value = '';
-          $('al-label').value = '';
-          await loadAlerts();
+          const res = await Api().alertEvaluate();
+          const fresh = res.series.filter((s) => s.fresh).length;
+          setStatus(
+            'al-status',
+            'ok',
+            `${res.evaluated} alerta(s) avaliado(s) em ${fresh} série(s) atualizada(s) · ` +
+              `${res.events_created} evento(s) novo(s) · ${new Date(res.evaluated_at).toLocaleString('pt-BR')}.`
+          );
+          await Promise.all([loadAlerts(), loadAlertFeed()]);
         } catch (err) {
-          setStatus('al-form-status', 'error', err.message);
+          setStatus('al-status', 'error', err.message);
         }
       });
-      $('btn-al-check').addEventListener('click', async () => {
-        setStatus('al-status', 'loading', 'Avaliando alertas ativos…');
+      $('btn-al-read').addEventListener('click', async () => {
         try {
-          const res = await Api().alertCheck();
-          const rows = res.results
-            .map(
-              (r) =>
-                `<tr><td>${esc(r.alert.label || r.alert.kind_label)}</td><td>${esc(r.alert.commodity_key)}</td>` +
-                `<td>${r.triggered ? '<strong>DISPARADO</strong>' : 'não'}</td><td>${r.value != null ? esc(r.value) : '—'}</td><td>${esc(r.detail || '')}</td></tr>`
-            )
-            .join('');
-          $('al-events').innerHTML = res.results.length
-            ? `<table class="data"><thead><tr><th>Alerta</th><th>Commodity</th><th>Estado</th><th>Valor</th><th>Detalhe</th></tr></thead><tbody>${rows}</tbody></table>`
-            : '<p class="meta">Nenhum alerta ativo para avaliar.</p>';
-          setStatus('al-status', 'ok', `${res.evaluated} alerta(s) avaliado(s) em ${new Date(res.evaluated_at).toLocaleString('pt-BR')}.`);
-          await loadAlerts();
+          const res = await Api().alertMarkRead();
+          setStatus('al-status', 'ok', `${res.updated} evento(s) marcado(s) como lido(s).`);
+          await Promise.all([loadAlerts(), loadAlertFeed()]);
         } catch (err) {
           setStatus('al-status', 'error', err.message);
         }
       });
     }
-    $('al-coords-note').textContent =
-      `Alertas de chuva usam a localidade atual: ${state.place || ''} (${state.lat.toFixed(4)}, ${state.lon.toFixed(4)}). ` +
-      `Ajuste a localidade no Dashboard antes de criar.`;
-    loadAlerts();
-  }
-
-  async function loadAlerts() {
-    try {
-      const { alerts } = await Api().alerts();
-      $('al-list').innerHTML = alerts.length
-        ? `<table class="data"><thead><tr><th>Rótulo</th><th>Commodity</th><th>Condição</th><th>Limite</th><th>Ativo</th><th>Ações</th></tr></thead><tbody>${alerts
-            .map(
-              (a) =>
-                `<tr><td>${esc(a.label || '—')}</td><td>${esc(a.commodity_key)}</td><td>${esc(a.kind_label)}</td>` +
-                `<td>${esc(a.threshold)}</td><td>${a.active ? 'sim' : 'não'}</td>` +
-                `<td><button class="btn" data-al-toggle="${esc(a.id)}" data-active="${a.active ? 0 : 1}" type="button">${a.active ? 'Desativar' : 'Ativar'}</button> ` +
-                `<button class="btn" data-al-del="${esc(a.id)}" type="button">Excluir</button></td></tr>`
-            )
-            .join('')}</tbody></table>`
-        : '<p class="meta">Nenhum alerta criado.</p>';
-    } catch (err) {
-      $('al-list').innerHTML = `<p class="status error">Falha: ${esc(err.message)}</p>`;
-    }
+    loadAlertSeries()
+      .then(() => Promise.all([loadAlerts(), loadAlertFeed()]))
+      .catch((err) => setStatus('al-form-status', 'error', `Falha ao carregar séries: ${err.message}`));
   }
 
   document.addEventListener('click', (e) => {
@@ -867,8 +994,8 @@
     if (t) {
       Api()
         .alertToggle(t.getAttribute('data-al-toggle'), t.getAttribute('data-active') === '1')
-        .then(() => {
-          loadAlerts();
+        .then(async () => {
+          await Promise.all([loadAlerts(), loadAlertFeed()]);
           setStatus('al-status', 'ok', 'Alerta atualizado.');
         })
         .catch((err) => setStatus('al-status', 'error', err.message));
@@ -878,8 +1005,8 @@
     if (d) {
       Api()
         .alertDelete(d.getAttribute('data-al-del'))
-        .then(() => {
-          loadAlerts();
+        .then(async () => {
+          await Promise.all([loadAlerts(), loadAlertFeed()]);
           setStatus('al-status', 'ok', 'Alerta excluído.');
         })
         .catch((err) => setStatus('al-status', 'error', err.message));

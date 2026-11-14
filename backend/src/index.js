@@ -54,6 +54,7 @@ app.use('/api/prices', require('./routes/prices'));
 app.use('/api/weather', require('./routes/weather'));
 app.use('/api/geo', require('./routes/geo'));
 app.use('/api/forecast', require('./routes/forecast'));
+app.use('/api/series', require('./routes/series'));
 app.use('/api/alerts', require('./routes/alerts'));
 app.use('/api/places', require('./routes/places'));
 app.use('/api/landcover', require('./routes/landcover'));

@@ -4,6 +4,7 @@ const { connect, cacheGet, cacheSet } = require('../db');
 const config = require('../config');
 const yahoo = require('../integrations/yahooProvider');
 const bcb = require('../integrations/bcbProvider');
+const alertEngine = require('./alertEngine');
 const { toBRL, converter } = require('./fxService');
 const { notFound } = require('../utils/errors');
 
@@ -57,6 +58,9 @@ async function getSeries(commodityKey, range = '1y') {
   }
 
   persistObservations(commodityKey, commodity.unit_br, points);
+  // Motor de alertas: avaliado contra as observações recém-persistidas.
+  // Best-effort — falha aqui nunca impede a resposta de preço (ver alertEngine).
+  const alerts = alertEngine.runAfterPriceRefresh(commodityKey);
 
   const payload = {
     cached: false,
