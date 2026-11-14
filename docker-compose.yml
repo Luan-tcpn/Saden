@@ -1,4 +1,4 @@
-# SADEN — execução reproduzível da Release 2 (web + worker).
+# SADEN — execução reproduzível da v1.2.1 (web + worker + backup).
 # Uso:
 #   $env:JWT_SECRET = "segredo-forte-aqui"   # PowerShell (obrigatório)
 #   docker compose build
@@ -8,10 +8,18 @@
 # Topologia suportada: **um host** com volume local para o SQLite.
 # O worker e o web compartilham o mesmo arquivo de banco — não use este compose
 # com SQLite em volume de rede (SMB/NFS), onde as garantias de lock não valem.
+#
+# Persistência:
+#   data       -> bind mount (${SADEN_DATA_DIR:-./data}), para inspeção e
+#                 restauração no host. Em Linux, o diretório precisa ser
+#                 gravável pelo uid 1000 (usuário `node` da imagem):
+#                   sudo chown -R 1000:1000 ./data
+#   backups    -> volume NOMEADO (saden-backups), independente do diretório do
+#                 projeto e imune a `docker compose down`.
 services:
   saden:
     build: .
-    image: saden:r2
+    image: saden:1.2.1
     ports:
       - "3001:3001"
     environment:
@@ -40,7 +48,7 @@ services:
   # o web está saudável — o web é o dono das migrations, então não há migração
   # concorrente nos dois processos.
   saden-worker:
-    image: saden:r2
+    image: saden:1.2.1
     command: ["node", "backend/src/worker/index.js"]
     environment:
       NODE_ENV: production
@@ -52,6 +60,10 @@ services:
       SADEN_WORKER_MIN_SERIES_MS: ${SADEN_WORKER_MIN_SERIES_MS:-3600000}
       SADEN_WORKER_LOCK_TTL_MS: ${SADEN_WORKER_LOCK_TTL_MS:-300000}
       SADEN_STALE_AFTER_DAYS: ${SADEN_STALE_AFTER_DAYS:-4}
+      SADEN_WORKER_RUNS_KEEP: ${SADEN_WORKER_RUNS_KEEP:-500}
+      # Monitor externo (opcional). Vazio = desabilitado. Contém token: use .env,
+      # nunca comite e nunca passe pela linha de comando em produção.
+      SADEN_MONITOR_PING_URL: ${SADEN_MONITOR_PING_URL:-}
     volumes:
       - ${SADEN_DATA_DIR:-./data}:/app/data
     depends_on:
@@ -64,3 +76,32 @@ services:
       timeout: 10s
       start_period: 40s
       retries: 3
+
+  # Backup verificado do SQLite. Serviço próprio (não dentro do web) para não
+  # acoplar a rotina ao ciclo de vida da aplicação. O banco é montado somente
+  # leitura: um bug no backup não pode escrever no dado de produção.
+  saden-backup:
+    image: saden:1.2.1
+    command:
+      - sh
+      - -c
+      - >-
+        while true; do
+        node backend/scripts/backup.js --db data/saden.db --out-dir /app/backups
+        --retention $${SADEN_BACKUP_RETENTION:-14};
+        sleep $${SADEN_BACKUP_INTERVAL_SECONDS:-86400};
+        done
+    environment:
+      NODE_ENV: production
+      SADEN_BACKUP_RETENTION: ${SADEN_BACKUP_RETENTION:-14}
+      SADEN_BACKUP_INTERVAL_SECONDS: ${SADEN_BACKUP_INTERVAL_SECONDS:-86400}
+    volumes:
+      - ${SADEN_DATA_DIR:-./data}:/app/data:ro
+      - saden-backups:/app/backups
+    depends_on:
+      saden:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  saden-backups:

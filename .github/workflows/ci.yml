@@ -1,4 +1,4 @@
-name: ci
+﻿name: ci
 
 on:
   push:
@@ -14,16 +14,16 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          # Versão suportada pelo projeto (módulo nativo better-sqlite3).
+          # VersÃ£o suportada pelo projeto (mÃ³dulo nativo better-sqlite3).
           node-version-file: .nvmrc
           cache: npm
           cache-dependency-path: backend/package-lock.json
-      - name: instalação limpa
+      - name: instalaÃ§Ã£o limpa
         working-directory: backend
         run: npm ci
-      - name: versão do runtime
+      - name: versÃ£o do runtime
         run: node --version
-      - name: suite completa (unitários + integração + worker)
+      - name: suite completa (unitÃ¡rios + integraÃ§Ã£o + worker)
         working-directory: backend
         run: npm test
 
@@ -38,10 +38,10 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
           cache-dependency-path: backend/package-lock.json
-      - name: instalação limpa
+      - name: instalaÃ§Ã£o limpa
         working-directory: backend
         run: npm ci
-      - name: sobe web (banco temporário)
+      - name: sobe web (banco temporÃ¡rio)
         env:
           DATABASE_PATH: tmp/e2e-saden.db
           PORT: 3100
@@ -57,14 +57,14 @@ jobs:
         env:
           BASE_URL: http://127.0.0.1:3100
           DATABASE_PATH: tmp/e2e-saden.db
-          # Chrome pré-instalado no runner do GitHub.
+          # Chrome prÃ©-instalado no runner do GitHub.
           CHROME_PATH: /usr/bin/google-chrome
         run: node tests/e2e/alerts.e2e.mjs
-      - name: diagnóstico do e2e
+      - name: diagnÃ³stico do e2e
         if: always()
         continue-on-error: true
         run: |
-          echo "## diagnóstico e2e" >> "$GITHUB_STEP_SUMMARY"
+          echo "## diagnÃ³stico e2e" >> "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
           (google-chrome --version 2>&1 || true) >> "$GITHUB_STEP_SUMMARY"
           (ls -l /usr/bin/google-chrome* 2>&1 || true) >> "$GITHUB_STEP_SUMMARY"
@@ -81,9 +81,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: build das imagens (via compose)
-        # A imagem é construída pelo compose porque o serviço worker referencia
-        # a mesma tag (`saden:r2`).
-        # JWT_SECRET é exigido pela interpolação do compose (valor de CI, sem uso real).
+        # A imagem Ã© construÃ­da pelo compose porque o serviÃ§o worker referencia
+        # a mesma tag (`saden:1.2.1`).
+        # JWT_SECRET Ã© exigido pela interpolaÃ§Ã£o do compose (valor de CI, sem uso real).
         env:
           JWT_SECRET: ci-secret-nao-producao
         run: docker compose build
@@ -91,13 +91,13 @@ jobs:
         env:
           JWT_SECRET: ci-secret-nao-producao
         run: docker compose config --quiet
-      # Os containers são criados com `docker run` (e não `compose up`) para que
-      # esta etapa não dependa de interpolação/estado do compose no runner.
-      # O compose em si é validado no passo anterior e no ensaio de staging.
+      # Os containers sÃ£o criados com `docker run` (e nÃ£o `compose up`) para que
+      # esta etapa nÃ£o dependa de interpolaÃ§Ã£o/estado do compose no runner.
+      # O compose em si Ã© validado no passo anterior e no ensaio de staging.
       - name: sobe web
         run: |
-          # Volume NOMEADO, não bind mount: o container roda como usuário `node`
-          # (uid 1000) e não consegue escrever em diretório criado pelo runner
+          # Volume NOMEADO, nÃ£o bind mount: o container roda como usuÃ¡rio `node`
+          # (uid 1000) e nÃ£o consegue escrever em diretÃ³rio criado pelo runner
           # (uid 1001). Com volume nomeado o Docker herda o dono da imagem.
           docker volume create saden-ci-data
           docker run -d --name saden-web -p 3001:3001 \
@@ -105,12 +105,12 @@ jobs:
             -e NODE_ENV=production \
             -e DATABASE_PATH=data/saden.db \
             -v saden-ci-data:/app/data \
-            saden:r2
+            saden:1.2.1
           for i in $(seq 1 60); do
             if curl -fsS http://127.0.0.1:3001/api/health > /dev/null; then echo "web ok"; exit 0; fi
             sleep 2
           done
-          echo "web não respondeu"; docker logs saden-web; exit 1
+          echo "web nÃ£o respondeu"; docker logs saden-web; exit 1
       - name: sobe worker
         run: |
           docker run -d --name saden-worker \
@@ -118,16 +118,16 @@ jobs:
             -e NODE_ENV=production \
             -e DATABASE_PATH=data/saden.db \
             -v saden-ci-data:/app/data \
-            saden:r2 node backend/src/worker/index.js
+            saden:1.2.1 node backend/src/worker/index.js
       - name: health do worker
         run: |
           for i in $(seq 1 40); do
             code=$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:3001/api/health/worker || true)
-            if [ "$code" = "200" ]; then echo "worker saudável"; exit 0; fi
+            if [ "$code" = "200" ]; then echo "worker saudÃ¡vel"; exit 0; fi
             sleep 2
           done
-          echo "worker não ficou saudável"; docker logs saden-worker; exit 1
-      - name: persistência e idempotência
+          echo "worker nÃ£o ficou saudÃ¡vel"; docker logs saden-worker; exit 1
+      - name: persistÃªncia e idempotÃªncia
         run: |
           set -e
           TOKEN=$(curl -fsS -X POST http://127.0.0.1:3001/api/auth/register \

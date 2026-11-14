@@ -962,22 +962,30 @@
              <th>Último preço</th><th>Estado</th><th>Ações</th>
            </tr></thead><tbody>${alerts
              .map((a) => {
-               const state =
-                 a.status === 'triggered'
+               const legacy = a.legacy === true;
+               const state = legacy
+                 ? '<span class="pill">legado</span>'
+                 : a.status === 'triggered'
                    ? '<span class="pill warn">disparado</span>'
                    : a.status === 'paused'
                      ? '<span class="pill">pausado</span>'
                      : '<span class="pill ok">ativo</span>';
                const cond = `${esc(a.condition_label || a.kind_label)} ${esc(CONDITION_TEXT[a.condition] || '')}`;
+               const notice = legacy
+                 ? '<br/><span class="meta">não avaliado nesta versão</span>'
+                 : '';
+               const toggle = legacy
+                 ? '<button class="btn" type="button" disabled title="Tipo de alerta da V1.1">Não suportado</button>'
+                 : `<button class="btn" data-al-toggle="${esc(a.id)}" data-active="${a.active ? 0 : 1}" type="button">${a.active ? 'Pausar' : 'Reativar'}</button>`;
                return `<tr>
                  <td>${esc(a.label || '—')}</td>
                  <td><code>${esc(a.series_id || a.commodity_key)}</code><br/><span class="meta">${esc((a.series && a.series.market) || '')}</span></td>
                  <td>${cond}</td>
                  <td>${esc(a.threshold)} <span class="meta">${esc(a.unit || '')}</span></td>
                  <td>${esc(fmtPrice(a.last_price))}<br/><span class="meta">${esc(a.last_observation_date || '')}</span></td>
-                 <td>${state}${a.triggered_at ? `<br/><span class="meta">${esc(new Date(a.triggered_at + 'Z').toLocaleString('pt-BR'))}</span>` : ''}</td>
+                 <td>${state}${notice}${a.triggered_at ? `<br/><span class="meta">${esc(new Date(a.triggered_at + 'Z').toLocaleString('pt-BR'))}</span>` : ''}</td>
                  <td>
-                   <button class="btn" data-al-toggle="${esc(a.id)}" data-active="${a.active ? 0 : 1}" type="button">${a.active ? 'Pausar' : 'Reativar'}</button>
+                   ${toggle}
                    <button class="btn" data-al-del="${esc(a.id)}" type="button">Excluir</button>
                  </td>
                </tr>`;

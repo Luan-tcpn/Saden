@@ -78,9 +78,15 @@ function alertJson(row) {
   const unread = connect()
     .prepare("SELECT COUNT(*) AS n FROM alert_events WHERE alert_id = ? AND event_type = 'trigger' AND read_at IS NULL")
     .get(row.id).n;
+  // Alerta de chuva da V1.1 continua no histórico, mas nunca é avaliado.
+  // Sem esta marca ele pareceria ativo e funcionando.
+  const isLegacy = LEGACY_ONLY_KINDS.includes(row.condition) || LEGACY_ONLY_KINDS.includes(row.kind);
   return {
     ...base,
     unread_events: unread,
+    supported: !isLegacy,
+    legacy: isLegacy,
+    legacy_reason: isLegacy ? 'Tipo de alerta da V1.1 (chuva). Não é avaliado nesta versão.' : null,
     series: row.series_id
       ? {
           series_id: row.series_id,
@@ -267,6 +273,18 @@ router.patch('/:id', requireAuth, (req, res, next) => {
       status = body.status;
     } else {
       throw badRequest('Informe "active" (true/false) ou "status"');
+    }
+
+    // Reativar um alerta de chuva da V1.1 daria a impressão de monitoramento
+    // ativo que o worker nunca executa. Pausar/apagar continua permitido.
+    const legacyRow =
+      LEGACY_ONLY_KINDS.includes(row.condition) || LEGACY_ONLY_KINDS.includes(row.kind);
+    if (legacyRow && status === 'active') {
+      return res.status(409).json({
+        error: 'unsupported_alert_kind',
+        message:
+          'Este alerta é do tipo chuva (V1.1) e não é avaliado nesta versão. Ele pode ser pausado ou excluído, mas não reativado.',
+      });
     }
 
     db.prepare(

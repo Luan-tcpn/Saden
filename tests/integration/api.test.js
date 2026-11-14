@@ -766,6 +766,51 @@ describe('API SADEN — integração', () => {
     assert.equal(rain.status, 400, 'alerta de chuva não é oferecido');
   });
 
+  it('alerta legado de chuva: histórico preservado, marcado e não reativável', async () => {
+    const T = process.env.SADEN_TEST_TOKEN;
+    const userId = db.connect().prepare("SELECT id FROM users WHERE email = 'teste@saden.local'").get().id;
+
+    // Registro antigo da V1.1, inserido direto (não há API para criar).
+    const info = db
+      .connect()
+      .prepare(
+        "INSERT INTO alerts(user_id, commodity_key, kind, condition, threshold, active, status) VALUES(?,'soja','rain_above','rain_above',10,0,'paused')"
+      )
+      .run(userId);
+    const legacyId = Number(info.lastInsertRowid);
+
+    const { status, data } = await api('/api/alerts', { token: T });
+    assert.equal(status, 200);
+    const row = data.alerts.find((a) => a.id === legacyId);
+    assert.ok(row, 'registro histórico continua listado');
+    assert.equal(row.legacy, true);
+    assert.equal(row.supported, false);
+    assert.match(row.legacy_reason, /V1\.1/);
+
+    const reactivate = await api(`/api/alerts/${legacyId}`, {
+      method: 'PATCH',
+      token: T,
+      body: { active: true },
+    });
+    assert.equal(reactivate.status, 409);
+    assert.equal(reactivate.data.error, 'unsupported_alert_kind');
+
+    const stillPaused = db.connect().prepare('SELECT status, active FROM alerts WHERE id = ?').get(legacyId);
+    assert.equal(stillPaused.status, 'paused');
+    assert.equal(stillPaused.active, 0);
+
+    // Pausar (ou manter pausado) continua permitido, sem gerar eventos falsos.
+    const eventsBefore = db.connect().prepare('SELECT COUNT(*) n FROM alert_events WHERE alert_id = ?').get(legacyId).n;
+    const pause = await api(`/api/alerts/${legacyId}`, { method: 'PATCH', token: T, body: { active: false } });
+    assert.equal(pause.status, 200);
+    assert.equal(pause.data.alert.legacy, true);
+    const eventsAfter = db.connect().prepare('SELECT COUNT(*) n FROM alert_events WHERE alert_id = ?').get(legacyId).n;
+    assert.equal(eventsAfter, eventsBefore, 'alerta legado nunca gera evento');
+
+    const removed = await api(`/api/alerts/${legacyId}`, { method: 'DELETE', token: T });
+    assert.ok([200, 204].includes(removed.status), 'exclusão continua disponível');
+  });
+
   it('alerta: isolamento entre usuários (alertas e eventos)', async () => {
     const T = process.env.SADEN_TEST_TOKEN;
     seedPrice('cafe', 200, 'R$/sc 60kg');

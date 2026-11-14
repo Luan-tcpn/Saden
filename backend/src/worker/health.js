@@ -11,7 +11,14 @@ const { connect } = require('../db');
 const config = require('./config');
 const scheduler = require('./scheduler');
 
-const RUNS_KEEP = 500;
+// Retenção do histórico de execuções. Com um ciclo por dia útil, 500 registros
+// cobrem ~23 meses — mais que suficiente para auditoria e para as métricas de
+// 7 dias. Cada linha tem ~200 bytes, então 500 linhas ≈ 100 KB: não vale a
+// complexidade de arquivar. Ajustável para quem quiser mais histórico.
+const RUNS_KEEP = (() => {
+  const value = Number(process.env.SADEN_WORKER_RUNS_KEEP);
+  return Number.isFinite(value) && value >= 10 ? Math.floor(value) : 500;
+})();
 
 function beat(owner) {
   connect()

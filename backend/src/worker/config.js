@@ -41,5 +41,9 @@ module.exports = {
   // Saúde: sem heartbeat por 3 intervalos = processo considerado ausente.
   heartbeatStaleMs: num('SADEN_WORKER_HEARTBEAT_STALE_MS', 3 * 20 * 1000),
 
+  // Monitor externo (heartbeat). Vazio = desabilitado. Curto de propósito:
+  // o monitor nunca pode atrasar a avaliação de preços.
+  monitorTimeoutMs: num('SADEN_MONITOR_TIMEOUT_MS', 5000),
+
   startedAt: startedAt.toISOString(),
 };

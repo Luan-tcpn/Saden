@@ -13,6 +13,7 @@ const { connect } = require('../db');
 const seriesService = require('../services/seriesService');
 const alertEngine = require('../services/alertEngine');
 const config = require('./config');
+const monitor = require('./monitor');
 
 function nowIso() {
   return new Date().toISOString();
@@ -127,6 +128,10 @@ async function runCycle({ owner = 'inline', force = false, now = new Date() } = 
   const runId = Number(runInfo.lastInsertRowid);
   const started = Date.now();
 
+  // Sinal de início para o monitor externo. Se o processo morrer no meio do
+  // ciclo, o sinal final não chega e o serviço alerta por ausência. Nunca lança.
+  const monitorStart = await monitor.ping('start');
+
   const seriesIds = force ? activeSeriesIds() : dueSeries(now);
   const summary = {
     run_id: runId,
@@ -229,7 +234,16 @@ async function runCycle({ owner = 'inline', force = false, now = new Date() } = 
     runId
   );
 
-  return { ...summary, status, duration_ms: duration };
+  // Sinal final: sucesso quando houve ciclo sem falha de série; falha quando
+  // nada foi avaliado. `partial` conta como sucesso — houve trabalho útil.
+  const monitorEnd = await monitor.ping(status === 'failed' ? 'fail' : 'success');
+
+  return {
+    ...summary,
+    status,
+    duration_ms: duration,
+    monitor: { start: monitor.describe(monitorStart), end: monitor.describe(monitorEnd) },
+  };
 }
 
 /** Métricas agregadas para o painel operacional (sem dados pessoais). */
