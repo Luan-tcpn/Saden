@@ -60,6 +60,16 @@ jobs:
           # Chrome pré-instalado no runner do GitHub.
           CHROME_PATH: /usr/bin/google-chrome
         run: node tests/e2e/alerts.e2e.mjs
+      - name: diagnóstico do e2e
+        if: always()
+        continue-on-error: true
+        run: |
+          echo "## diagnóstico e2e" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          (google-chrome --version 2>&1 || true) >> "$GITHUB_STEP_SUMMARY"
+          (ls -l /usr/bin/google-chrome* 2>&1 || true) >> "$GITHUB_STEP_SUMMARY"
+          (tail -n 20 tmp/e2e-chrome.log 2>&1 || echo "sem log do chrome") >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
       - name: log do servidor em caso de falha
         if: failure()
         run: tail -n 100 tmp/e2e-server.log
@@ -86,12 +96,15 @@ jobs:
       # O compose em si é validado no passo anterior e no ensaio de staging.
       - name: sobe web
         run: |
-          mkdir -p tmp/ci-data
+          # Volume NOMEADO, não bind mount: o container roda como usuário `node`
+          # (uid 1000) e não consegue escrever em diretório criado pelo runner
+          # (uid 1001). Com volume nomeado o Docker herda o dono da imagem.
+          docker volume create saden-ci-data
           docker run -d --name saden-web -p 3001:3001 \
             -e JWT_SECRET=ci-secret-nao-producao \
             -e NODE_ENV=production \
             -e DATABASE_PATH=data/saden.db \
-            -v "$PWD/tmp/ci-data:/app/data" \
+            -v saden-ci-data:/app/data \
             saden:r2
           for i in $(seq 1 60); do
             if curl -fsS http://127.0.0.1:3001/api/health > /dev/null; then echo "web ok"; exit 0; fi
@@ -104,7 +117,7 @@ jobs:
             -e JWT_SECRET=ci-secret-nao-producao \
             -e NODE_ENV=production \
             -e DATABASE_PATH=data/saden.db \
-            -v "$PWD/tmp/ci-data:/app/data" \
+            -v saden-ci-data:/app/data \
             saden:r2 node backend/src/worker/index.js
       - name: health do worker
         run: |

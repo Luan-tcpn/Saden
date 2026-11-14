@@ -185,7 +185,7 @@ async function main() {
       const out = fs.openSync(chromeLog, 'a');
       browser = spawn(chrome, args, { stdio: ['ignore', out, out] });
       try {
-        await fetchJson(`http://127.0.0.1:${PORT}/json/version`, 120);
+        await fetchJson(`http://127.0.0.1:${PORT}/json/version`, 240);
         break;
       } catch (error) {
         browser.kill();
