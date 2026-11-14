@@ -1,0 +1,506 @@
+{
+  "generated_at": "2026-11-14T04:36:00Z",
+  "method": "Janela fenologica de enchimento de graos derivada de requisitos termicos publicados (Embrapa); recalculo dos indicadores com o mesmo construtor do painel; reestimacao dos efeitos fixos nas duas janelas.",
+  "sample": {
+    "n_municipalities": 84,
+    "n_rows_panel_sample": 1027,
+    "n_rows_computed": 1027,
+    "n_skipped": 0,
+    "duration_days_soja": 45.0
+  },
+  "profiles": {
+    "soja_medio": {
+      "phenology_profile": "soja_medio",
+      "crop": "soja",
+      "label": "Soja — perfil de maturação média (R1 → R5)",
+      "base_temperature_c": 10.0,
+      "upper_temperature_c": 30.0,
+      "thermal_profile_key": "soja_gilmore",
+      "stages": [
+        {
+          "key": "R1",
+          "label": "Início do florescimento (R1)",
+          "degree_days": 92.5,
+          "source": "Schneider et al. (1987) / Martorano et al. (2012), via Embrapa Soja",
+          "note": "Soma térmica desde a emergência com Tb = 10 °C"
+        },
+        {
+          "key": "R5",
+          "label": "Início do enchimento de grãos (R5)",
+          "degree_days": 554.0,
+          "source": "Martorano et al. (2012), via Embrapa Soja",
+          "note": "Soma térmica desde a emergência com Tb = 10 °C"
+        }
+      ],
+      "source": "Embrapa Soja — Sistemas de Produção (escala de Fehr & Caviness, 1977); requisitos térmicos de Schneider et al. (1987) e Martorano et al. (2012)",
+      "limitations": "Perfil de maturação média; sem identificação de cultivar na PAM, é um cenário. O valor de 554 °C·dia é específico do conjunto de referência."
+    },
+    "milho_grupo_i": {
+      "phenology_profile": "milho_grupo_i",
+      "crop": "milho",
+      "label": "Milho — grupo I (superprecoce), 780 °C·dia até a polinização",
+      "base_temperature_c": 10.0,
+      "upper_temperature_c": 30.0,
+      "thermal_profile_key": "milho_embrapa",
+      "stages": [
+        {
+          "key": "VT",
+          "label": "Pendoamento (VT) / início da polinização",
+          "degree_days": 780.0,
+          "source": "Embrapa Milho e Sorgo — exigências térmicas por grupo",
+          "note": "Emergence → início da polinização"
+        }
+      ],
+      "source": "Embrapa Milho e Sorgo — exigências térmicas por grupo de maturação: Tmax ≤ 30 °C, Tmin ≥ 10 °C, Tb = 10 °C; 780–830 °C·dia (superprecoces), 831–890 (precoces), 890–1.200 (normais)",
+      "limitations": "Grupo I do ZARC (superprecoce); sem identificação de cultivar."
+    },
+    "milho_grupo_ii": {
+      "phenology_profile": "milho_grupo_ii",
+      "crop": "milho",
+      "label": "Milho — grupo II (precoce), 860 °C·dia até a polinização",
+      "base_temperature_c": 10.0,
+      "upper_temperature_c": 30.0,
+      "thermal_profile_key": "milho_embrapa",
+      "stages": [
+        {
+          "key": "VT",
+          "label": "Pendoamento (VT) / início da polinização",
+          "degree_days": 860.0,
+          "source": "Embrapa Milho e Sorgo — exigências térmicas por grupo",
+          "note": "Ponto médio do intervalo 831–890 °C·dia do grupo II"
+        }
+      ],
+      "source": "Embrapa Milho e Sorgo — exigências térmicas por grupo de maturação: Tmax ≤ 30 °C, Tmin ≥ 10 °C, Tb = 10 °C; 780–830 °C·dia (superprecoces), 831–890 (precoces), 890–1.200 (normais)",
+      "limitations": "Ponto médio do grupo II (precoce); sem identificação de cultivar."
+    },
+    "milho_grupo_iii": {
+      "phenology_profile": "milho_grupo_iii",
+      "crop": "milho",
+      "label": "Milho — grupo III (normal/tardio), 1.050 °C·dia até a polinização",
+      "base_temperature_c": 10.0,
+      "upper_temperature_c": 30.0,
+      "thermal_profile_key": "milho_embrapa",
+      "stages": [
+        {
+          "key": "VT",
+          "label": "Pendoamento (VT) / início da polinização",
+          "degree_days": 1050.0,
+          "source": "Embrapa Milho e Sorgo — exigências térmicas por grupo",
+          "note": "Ponto médio do intervalo 890–1.200 °C·dia do grupo III"
+        }
+      ],
+      "source": "Embrapa Milho e Sorgo — exigências térmicas por grupo de maturação: Tmax ≤ 30 °C, Tmin ≥ 10 °C, Tb = 10 °C; 780–830 °C·dia (superprecoces), 831–890 (precoces), 890–1.200 (normais)",
+      "limitations": "Ponto médio do grupo III (normal/tardio); sem identificação de cultivar."
+    },
+    "milho_2_safra": {
+      "phenology_profile": "milho_2_safra",
+      "crop": "milho_2",
+      "label": "Milho 2ª safra — ciclo total de 2.500 °C·dia",
+      "base_temperature_c": 10.0,
+      "upper_temperature_c": 30.0,
+      "thermal_profile_key": "milho_embrapa",
+      "stages": [
+        {
+          "key": "ciclo_total",
+          "label": "Ciclo total (emergência → maturação fisiológica)",
+          "degree_days": 2500.0,
+          "source": "Embrapa (documento 258, milho 2ª safra): 2.200–3.300 °C·dia",
+          "note": "Ponto médio do intervalo publicado"
+        }
+      ],
+      "source": "Embrapa — documento 258 (milho 2ª safra): ciclo total de 120–150 dias e 2.200–3.300 °C·dia",
+      "limitations": "Valor pontual no meio do intervalo publicado; refere-se ao ciclo total, não a um subrange específico."
+    }
+  },
+  "grain_filling_definitions": {
+    "soja": {
+      "start_stage": "R5",
+      "start_offset_days": 0.0,
+      "duration_days": 45.0,
+      "source": "Embrapa Soja (escala de Fehr & Caviness, 1977; requisitos térmicos de Martorano et al., 2012)",
+      "note": "Início = R5 (554 °C·dia, publicado). Duração de 45 dias é um cenário explícito (o material consultado apresenta faixa de aproximadamente 40–60 dias entre R5 e R8); a sensibilidade é medida com 30/45/60 dias."
+    },
+    "milho": {
+      "start_stage": "VT",
+      "start_offset_days": 22.5,
+      "duration_days": 32.5,
+      "source": "Embrapa Milho e Sorgo (estádios R1–R6 após a polinização)",
+      "note": "Início = R3 (estádio-leiteoso), ≈20–25 dias após a polinização (ponto médio 22,5); fim = R6 (maturidade fisiológica), ≈50–60 dias após a polinização (ponto médio 55)."
+    }
+  },
+  "coverage": {
+    "soja": {
+      "n_rows": 519,
+      "n_municipalities": 71,
+      "n_years": 8,
+      "phenology_window_days_median": 46.0,
+      "phenology_window_days_min": 46.0,
+      "phenology_window_days_max": 46.0,
+      "zarc_window_days_median": 61.0,
+      "stage_date_min": "2017-10-16",
+      "stage_date_max": "2025-01-10",
+      "stage_date_distinct": 260,
+      "n_without_stage": 0
+    },
+    "milho": {
+      "n_rows": 508,
+      "n_municipalities": 73,
+      "n_years": 8,
+      "phenology_window_days_median": 33.0,
+      "phenology_window_days_min": 33.0,
+      "phenology_window_days_max": 33.0,
+      "zarc_window_days_median": 61.0,
+      "stage_date_min": "2017-10-21",
+      "stage_date_max": "2025-01-11",
+      "stage_date_distinct": 305,
+      "n_without_stage": 0
+    }
+  },
+  "estimates_zarc": {
+    "milho|precip_acumulada_mm": {
+      "status": "ok",
+      "n": 508,
+      "coefficient": 0.0743208512841429,
+      "std_error_clustered": 0.4438600334777261,
+      "t_statistic": 0.16744208912396363,
+      "p_value": 0.8674916180708899,
+      "n_municipalities": 73,
+      "n_years": 8
+    },
+    "soja|precip_acumulada_mm": {
+      "status": "ok",
+      "n": 519,
+      "coefficient": 0.4906003598085976,
+      "std_error_clustered": 0.1688767134629592,
+      "t_statistic": 2.905079982600467,
+      "p_value": 0.004910561101025878,
+      "n_municipalities": 71,
+      "n_years": 8
+    },
+    "milho|temp_media_c": {
+      "status": "ok",
+      "n": 508,
+      "coefficient": -72.09346616464968,
+      "std_error_clustered": 55.99595847280996,
+      "t_statistic": -1.2874762416944112,
+      "p_value": 0.20205153092545314,
+      "n_municipalities": 73,
+      "n_years": 8
+    },
+    "soja|temp_media_c": {
+      "status": "ok",
+      "n": 519,
+      "coefficient": -125.96643999033229,
+      "std_error_clustered": 32.99486253037555,
+      "t_statistic": -3.8177592003714445,
+      "p_value": 0.0002878976159897933,
+      "n_municipalities": 71,
+      "n_years": 8
+    },
+    "milho|et0_total_mm": {
+      "status": "ok",
+      "n": 508,
+      "coefficient": -2.8074403375261765,
+      "std_error_clustered": 0.8318611857417341,
+      "t_statistic": -3.374890409176749,
+      "p_value": 0.001192641444464134,
+      "n_municipalities": 73,
+      "n_years": 8
+    },
+    "soja|et0_total_mm": {
+      "status": "ok",
+      "n": 519,
+      "coefficient": -0.18476077968859622,
+      "std_error_clustered": 0.28024475143076294,
+      "t_statistic": -0.6592836395519189,
+      "p_value": 0.5118767676481367,
+      "n_municipalities": 71,
+      "n_years": 8
+    },
+    "milho|deficiency_total_mm": {
+      "status": "ok",
+      "n": 508,
+      "coefficient": -1.8090271245116565,
+      "std_error_clustered": 0.7055298553905087,
+      "t_statistic": -2.5640688493761403,
+      "p_value": 0.012432146159742936,
+      "n_municipalities": 73,
+      "n_years": 8
+    },
+    "soja|deficiency_total_mm": {
+      "status": "ok",
+      "n": 519,
+      "coefficient": -0.8792481087789195,
+      "std_error_clustered": 0.31203298481926356,
+      "t_statistic": -2.8178050127879892,
+      "p_value": 0.006280324338185954,
+      "n_municipalities": 71,
+      "n_years": 8
+    },
+    "milho|excess_total_mm": {
+      "status": "ok",
+      "n": 508,
+      "coefficient": 0.044173712613922334,
+      "std_error_clustered": 0.5758925913847251,
+      "t_statistic": 0.07670477668015714,
+      "p_value": 0.9390711544461892,
+      "n_municipalities": 73,
+      "n_years": 8
+    },
+    "soja|excess_total_mm": {
+      "status": "ok",
+      "n": 519,
+      "coefficient": 0.4782829468386582,
+      "std_error_clustered": 0.23874480732387043,
+      "t_statistic": 2.0033229296159774,
+      "p_value": 0.04901535880336699,
+      "n_municipalities": 71,
+      "n_years": 8
+    }
+  },
+  "estimates_phenology": {
+    "milho|precip_acumulada_mm": {
+      "status": "ok",
+      "n": 508,
+      "coefficient": 1.7494445228173685,
+      "std_error_clustered": 0.6939252271574395,
+      "t_statistic": 2.5210850598179073,
+      "p_value": 0.013914397666639735,
+      "n_municipalities": 73,
+      "n_years": 8
+    },
+    "soja|precip_acumulada_mm": {
+      "status": "ok",
+      "n": 519,
+      "coefficient": 1.3142775036159684,
+      "std_error_clustered": 0.2785126549851689,
+      "t_statistic": 4.718914850335813,
+      "p_value": 1.17723264531808e-05,
+      "n_municipalities": 71,
+      "n_years": 8
+    },
+    "milho|temp_media_c": {
+      "status": "ok",
+      "n": 508,
+      "coefficient": -303.149089184962,
+      "std_error_clustered": 83.3116035280504,
+      "t_statistic": -3.6387378990117982,
+      "p_value": 0.0005120222683102666,
+      "n_municipalities": 73,
+      "n_years": 8
+    },
+    "soja|temp_media_c": {
+      "status": "ok",
+      "n": 519,
+      "coefficient": -53.04835655292601,
+      "std_error_clustered": 26.182108110349056,
+      "t_statistic": -2.026130070555987,
+      "p_value": 0.04656387863897485,
+      "n_municipalities": 71,
+      "n_years": 8
+    },
+    "milho|et0_total_mm": {
+      "status": "ok",
+      "n": 508,
+      "coefficient": -14.556872628091067,
+      "std_error_clustered": 3.5322827434831234,
+      "t_statistic": -4.121094964707379,
+      "p_value": 9.957255955190178e-05,
+      "n_municipalities": 73,
+      "n_years": 8
+    },
+    "soja|et0_total_mm": {
+      "status": "ok",
+      "n": 519,
+      "coefficient": -3.9611967895884663,
+      "std_error_clustered": 0.82177866215378,
+      "t_statistic": -4.820272138980417,
+      "p_value": 8.055729549111965e-06,
+      "n_municipalities": 71,
+      "n_years": 8
+    },
+    "milho|deficiency_total_mm": {
+      "status": "ok",
+      "n": 508,
+      "coefficient": -7.2623879629509815,
+      "std_error_clustered": 2.3158835618779827,
+      "t_statistic": -3.135903757208678,
+      "p_value": 0.002480772623695263,
+      "n_municipalities": 73,
+      "n_years": 8
+    },
+    "soja|deficiency_total_mm": {
+      "status": "ok",
+      "n": 519,
+      "coefficient": -3.0764081997454253,
+      "std_error_clustered": 0.5606924384197873,
+      "t_statistic": -5.486801656208774,
+      "p_value": 6.139923200983297e-07,
+      "n_municipalities": 71,
+      "n_years": 8
+    },
+    "milho|excess_total_mm": {
+      "status": "ok",
+      "n": 508,
+      "coefficient": 1.3810364251126472,
+      "std_error_clustered": 0.6347702946726257,
+      "t_statistic": 2.1756475321909927,
+      "p_value": 0.03286509533729955,
+      "n_municipalities": 73,
+      "n_years": 8
+    },
+    "soja|excess_total_mm": {
+      "status": "ok",
+      "n": 519,
+      "coefficient": 1.043390647249677,
+      "std_error_clustered": 0.28398311644791063,
+      "t_statistic": 3.6741291535233223,
+      "p_value": 0.00046341954360005507,
+      "n_municipalities": 71,
+      "n_years": 8
+    }
+  },
+  "comparison": [
+    {
+      "hypothesis": "milho|deficiency_total_mm",
+      "n_zarc": 508,
+      "n_fen": 508,
+      "coefficient_zarc": -1.8090271245116565,
+      "coefficient_fen": -7.2623879629509815,
+      "std_error_zarc": 0.7055298553905087,
+      "std_error_fen": 2.3158835618779827,
+      "t_zarc": -2.5640688493761403,
+      "t_fen": -3.135903757208678,
+      "sign_zarc": true,
+      "sign_fen": true,
+      "se_ratio": 3.2824742201676895
+    },
+    {
+      "hypothesis": "milho|et0_total_mm",
+      "n_zarc": 508,
+      "n_fen": 508,
+      "coefficient_zarc": -2.8074403375261765,
+      "coefficient_fen": -14.556872628091067,
+      "std_error_zarc": 0.8318611857417341,
+      "std_error_fen": 3.5322827434831234,
+      "t_zarc": -3.374890409176749,
+      "t_fen": -4.121094964707379,
+      "sign_zarc": true,
+      "sign_fen": true,
+      "se_ratio": 4.2462406036333356
+    },
+    {
+      "hypothesis": "milho|excess_total_mm",
+      "n_zarc": 508,
+      "n_fen": 508,
+      "coefficient_zarc": 0.044173712613922334,
+      "coefficient_fen": 1.3810364251126472,
+      "std_error_zarc": 0.5758925913847251,
+      "std_error_fen": 0.6347702946726257,
+      "t_zarc": 0.07670477668015714,
+      "t_fen": 2.1756475321909927,
+      "sign_zarc": false,
+      "sign_fen": true,
+      "se_ratio": 1.102237299400449
+    },
+    {
+      "hypothesis": "milho|precip_acumulada_mm",
+      "n_zarc": 508,
+      "n_fen": 508,
+      "coefficient_zarc": 0.0743208512841429,
+      "coefficient_fen": 1.7494445228173685,
+      "std_error_zarc": 0.4438600334777261,
+      "std_error_fen": 0.6939252271574395,
+      "t_zarc": 0.16744208912396363,
+      "t_fen": 2.5210850598179073,
+      "sign_zarc": false,
+      "sign_fen": true,
+      "se_ratio": 1.5633874979019986
+    },
+    {
+      "hypothesis": "milho|temp_media_c",
+      "n_zarc": 508,
+      "n_fen": 508,
+      "coefficient_zarc": -72.09346616464968,
+      "coefficient_fen": -303.149089184962,
+      "std_error_zarc": 55.99595847280996,
+      "std_error_fen": 83.3116035280504,
+      "t_zarc": -1.2874762416944112,
+      "t_fen": -3.6387378990117982,
+      "sign_zarc": false,
+      "sign_fen": true,
+      "se_ratio": 1.4878145816274246
+    },
+    {
+      "hypothesis": "soja|deficiency_total_mm",
+      "n_zarc": 519,
+      "n_fen": 519,
+      "coefficient_zarc": -0.8792481087789195,
+      "coefficient_fen": -3.0764081997454253,
+      "std_error_zarc": 0.31203298481926356,
+      "std_error_fen": 0.5606924384197873,
+      "t_zarc": -2.8178050127879892,
+      "t_fen": -5.486801656208774,
+      "sign_zarc": true,
+      "sign_fen": true,
+      "se_ratio": 1.7969011793562557
+    },
+    {
+      "hypothesis": "soja|et0_total_mm",
+      "n_zarc": 519,
+      "n_fen": 519,
+      "coefficient_zarc": -0.18476077968859622,
+      "coefficient_fen": -3.9611967895884663,
+      "std_error_zarc": 0.28024475143076294,
+      "std_error_fen": 0.82177866215378,
+      "t_zarc": -0.6592836395519189,
+      "t_fen": -4.820272138980417,
+      "sign_zarc": false,
+      "sign_fen": true,
+      "se_ratio": 2.932360581093017
+    },
+    {
+      "hypothesis": "soja|excess_total_mm",
+      "n_zarc": 519,
+      "n_fen": 519,
+      "coefficient_zarc": 0.4782829468386582,
+      "coefficient_fen": 1.043390647249677,
+      "std_error_zarc": 0.23874480732387043,
+      "std_error_fen": 0.28398311644791063,
+      "t_zarc": 2.0033229296159774,
+      "t_fen": 3.6741291535233223,
+      "sign_zarc": true,
+      "sign_fen": true,
+      "se_ratio": 1.1894839499594727
+    },
+    {
+      "hypothesis": "soja|precip_acumulada_mm",
+      "n_zarc": 519,
+      "n_fen": 519,
+      "coefficient_zarc": 0.4906003598085976,
+      "coefficient_fen": 1.3142775036159684,
+      "std_error_zarc": 0.1688767134629592,
+      "std_error_fen": 0.2785126549851689,
+      "t_zarc": 2.905079982600467,
+      "t_fen": 4.718914850335813,
+      "sign_zarc": true,
+      "sign_fen": true,
+      "se_ratio": 1.649206982265538
+    },
+    {
+      "hypothesis": "soja|temp_media_c",
+      "n_zarc": 519,
+      "n_fen": 519,
+      "coefficient_zarc": -125.96643999033229,
+      "coefficient_fen": -53.04835655292601,
+      "std_error_zarc": 32.99486253037555,
+      "std_error_fen": 26.182108110349056,
+      "t_zarc": -3.8177592003714445,
+      "t_fen": -2.026130070555987,
+      "sign_zarc": true,
+      "sign_fen": true,
+      "se_ratio": 0.7935207514880666
+    }
+  ],
+  "elapsed_s": 30.0
+}
