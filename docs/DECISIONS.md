@@ -1530,3 +1530,28 @@ classe 22 (−65,0; t=−3,18), que concentra 89% das linhas; no milho o défici
 negativo nas três classes; no milho 2ª safra nenhuma associação sobrevive
 dentro das classes. A duração modal da janela ZARC difere por classe, o que
 mostra que colapsar as classes numa janela modal mistura calendários.
+
+## D90 - Equalização de treino é por célula, não apenas na média (2026-11-14)
+
+Decisão: quando o desenho compara braços com informação diferente, a
+igualdade de tamanho de treino deve ser garantida **em cada célula** (espaço ×
+ano), e não apenas pela média. O alvo de cada célula é o menor conjunto
+disponível entre os braços; células abaixo de um mínimo viável são descartadas
+de **todos** os braços, com a perda registrada.
+
+Motivo: a equalização da V2.8 usava um alvo único. No painel real, o braço
+``TE`` ficou em 5.401 linhas em média (alvo 5.686), com **11 de 25 células**
+abaixo do alvo e mínimo de 4.308 — a média escondia a desigualdade.
+
+Consequência: refeita a comparação com equalização estrita (25/25 células no
+alvo nos quatro braços), as MAEs mudam em ≤ 5,1 kg/ha e os efeitos permanecem
+nos mesmos intervalos: soja −6,3 [−14,3;+3,0] (espaço) e −37,0 [−47,3;−23,8]
+(tempo); milho −171,5 [−331,6;−32,5] e −26,9 [−46,2;−9,0]. A conclusão da
+V2.8 se sustenta.
+
+Ressalva registrada: no milho 2ª safra o efeito espacial passa de
+−39,6 [−68,5;+0,5] (não significativo) para −45,5 [−79,0;−0,8] (exclui zero).
+
+Regra de relato: MAE e RMSE calculados **por repetição** e agregados, com a
+dispersão entre repetições. Repetições de treino não são observações de teste
+independentes e não entram como réplicas no bootstrap.

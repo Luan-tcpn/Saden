@@ -307,17 +307,33 @@ def factorial_holdout(
     n_repeats: int = 1,
     n_boot: int = 1000,
     variant: str = "climate_only",
+    equalize: str = "global",
+    min_cell_train: int = 200,
 ) -> dict[str, Any]:
     """Fatorial 2×2 espaço × tempo com controle opcional de tamanho.
 
-    ``size_fraction`` fixa o treino de **cada** braço em
-    ``size_fraction × n_linhas``, reamostrado ``n_repeats`` vezes com sementes
-    distintas. ``None`` usa o treino integral de cada braço.
+    ``equalize`` define **o que** é equalizado:
+
+    * ``"global"`` (padrão histórico) — um alvo único
+      ``size_fraction × n_linhas``; quando o conjunto disponível de um braço
+      é menor que o alvo, ele é usado integralmente. Isso **não** equaliza
+      por célula: braços com menos material ficam com menos linhas naquelas
+      células.
+    * ``"per_cell"`` — o alvo de cada célula é o **menor** conjunto
+      disponível entre os quatro braços; todos são reamostrados exatamente
+      para esse tamanho. Células cujo alvo fique abaixo de
+      ``min_cell_train`` são descartadas de **todos** os braços e a perda é
+      registrada.
+
+    ``size_fraction`` limita o alvo (``None`` usa o conjunto integral no modo
+    global, ou o mínimo por célula no modo ``per_cell``).
 
     ``variant`` escolhe o modelo: ``climate_only`` (o da V2.6/V2.7) ou
     ``climate_plus_state`` (com dummies de UF, para comparar com a média da
     UF em igualdade de informação).
     """
+    if equalize not in ("global", "per_cell"):
+        raise ValueError(f"modo de equalizacao desconhecido: {equalize!r}")
     from . import analysis  # import tardio evita ciclo
 
     data = [r for r in rows if r.get(TARGET) is not None]
@@ -377,6 +393,8 @@ def factorial_holdout(
     observed_parts: list[np.ndarray] = []
     block_parts: list[np.ndarray] = []
     year_parts: list[np.ndarray] = []
+    # --- preparação das células e dos alvos de treino -----------------------
+    cells: list[dict[str, Any]] = []
     for space_fold in space_folds:
         in_block = np.isin(block_ids, list(space_fold))
         for time_fold in time_folds:
@@ -384,93 +402,143 @@ def factorial_holdout(
             test_mask = in_block & in_time
             if not test_mask.any():
                 continue
-            observed_cell = y_all[test_mask]
-            observed_parts.append(observed_cell)
-            block_parts.append(block_ids[test_mask])
-            year_parts.append(year_ids[test_mask])
-            x_test = x_all[test_mask]
-            state_test = state_codes[test_mask]
-            year_test = year_codes[test_mask]
-            safe_observed = np.where(observed_cell == 0, np.nan, observed_cell)
-            for arm_index, (arm, space_separated, time_separated) in enumerate(ARMS):
-                pool_mask = ~test_mask
+            pool_indices: dict[str, np.ndarray] = {}
+            for arm, space_separated, time_separated in ARMS:
+                mask = ~test_mask
                 if space_separated:
-                    pool_mask &= ~in_block
+                    mask &= ~in_block
                 if time_separated:
-                    pool_mask &= ~in_time
-                pool_index = np.flatnonzero(pool_mask)
-                if pool_index.size == 0:
-                    continue
-                # subconjuntos por bloco, calculados uma vez por célula/braço
-                pool_blocks = block_ids[pool_index]
-                unique_blocks = np.unique(pool_blocks)
-                pools = {
-                    block: pool_index[pool_blocks == block] for block in unique_blocks
+                    mask &= ~in_time
+                pool_indices[arm] = np.flatnonzero(mask)
+            cells.append(
+                {
+                    "test_mask": test_mask,
+                    "pools": pool_indices,
+                    "min_pool": min(int(v.size) for v in pool_indices.values()),
                 }
-                cell_abs: list[np.ndarray] = []
-                cell_sq: list[np.ndarray] = []
-                cell_rel: list[np.ndarray] = []
-                cell_base: dict[str, dict[str, list[np.ndarray]]] = {
-                    name: {"abs": [], "sq": [], "rel": []} for name in BASELINES
-                }
-                cell_sizes: list[int] = []
-                for repeat in range(n_repeats):
-                    # semente estável: depende de braço, repetição e célula
-                    draw_rng = np.random.default_rng(
-                        seed
-                        + 7919 * repeat
-                        + 104729 * arm_index
-                        + 1299709 * len(observed_parts)
-                    )
-                    if target_size is not None and pool_index.size > target_size:
-                        chosen = stratified_subsample(pools, target_size, draw_rng)
-                    else:
-                        chosen = pool_index
-                    fitted = _fit_predict(
-                        x_all[chosen],
-                        y_all[chosen],
-                        x_test,
-                        state_train=state_codes[chosen],
-                        state_test=state_test,
-                        variant=variant,
-                    )
-                    if fitted is None:
-                        continue
-                    error = fitted - observed_cell
-                    cell_abs.append(np.abs(error))
-                    cell_sq.append(np.square(error))
-                    cell_rel.append(np.abs(error) / safe_observed)
-                    baseline_values = _baseline_predictions(
-                        y_all[chosen],
-                        state_codes[chosen],
-                        year_codes[chosen],
-                        state_test,
-                        year_test,
-                        len(state_names),
-                        len(year_names),
-                    )
-                    for name, values in baseline_values.items():
-                        base_error = values - observed_cell
-                        cell_base[name]["abs"].append(np.abs(base_error))
-                        cell_base[name]["sq"].append(np.square(base_error))
-                        cell_base[name]["rel"].append(np.abs(base_error) / safe_observed)
-                    cell_sizes.append(int(chosen.size))
-                    kept = state_codes[chosen]
-                    kept = kept[kept >= 0]
-                    state_counts[arm] += np.bincount(kept, minlength=len(state_names))
-                    year_counts[arm] += np.bincount(
-                        year_codes[chosen], minlength=len(year_names)
-                    )
-                if not cell_abs:
+            )
+    kept_cells: list[dict[str, Any]] = []
+    dropped_cells = 0
+    for cell in cells:
+        if equalize == "per_cell":
+            target = cell["min_pool"]
+            if target_size is not None:
+                target = min(target, target_size)
+            if target < min_cell_train:
+                dropped_cells += 1
+                continue
+            cell["target"] = int(target)
+        kept_cells.append(cell)
+
+    # MAE/RMSE por repetição (as repetições NÃO são observações de teste
+    # independentes; guardamos a variação entre elas em separado)
+    rep_abs_sum: dict[str, np.ndarray] = {
+        a: np.zeros(n_repeats, dtype="float64") for a, _, _ in ARMS
+    }
+    rep_sq_sum: dict[str, np.ndarray] = {
+        a: np.zeros(n_repeats, dtype="float64") for a, _, _ in ARMS
+    }
+    rep_count: dict[str, np.ndarray] = {
+        a: np.zeros(n_repeats, dtype="float64") for a, _, _ in ARMS
+    }
+    cells_below_target: dict[str, int] = {a: 0 for a, _, _ in ARMS}
+    cells_at_target: dict[str, int] = {a: 0 for a, _, _ in ARMS}
+
+    for cell in kept_cells:
+        test_mask = cell["test_mask"]
+        observed_cell = y_all[test_mask]
+        observed_parts.append(observed_cell)
+        block_parts.append(block_ids[test_mask])
+        year_parts.append(year_ids[test_mask])
+        x_test = x_all[test_mask]
+        state_test = state_codes[test_mask]
+        year_test = year_codes[test_mask]
+        safe_observed = np.where(observed_cell == 0, np.nan, observed_cell)
+        for arm_index, (arm, _, _) in enumerate(ARMS):
+            pool_index = cell["pools"][arm]
+            if pool_index.size == 0:
+                continue
+            # subconjuntos por bloco, calculados uma vez por célula/braço
+            pool_blocks = block_ids[pool_index]
+            unique_blocks = np.unique(pool_blocks)
+            pools = {
+                block: pool_index[pool_blocks == block] for block in unique_blocks
+            }
+            if equalize == "per_cell":
+                target = int(cell["target"])
+            else:
+                target = target_size
+            if target is not None and pool_index.size >= target:
+                cells_at_target[arm] += 1
+            else:
+                cells_below_target[arm] += 1
+            cell_abs: list[np.ndarray] = []
+            cell_sq: list[np.ndarray] = []
+            cell_rel: list[np.ndarray] = []
+            cell_base: dict[str, dict[str, list[np.ndarray]]] = {
+                name: {"abs": [], "sq": [], "rel": []} for name in BASELINES
+            }
+            cell_sizes: list[int] = []
+            for repeat in range(n_repeats):
+                # semente estável: depende de braço, repetição e célula
+                draw_rng = np.random.default_rng(
+                    seed
+                    + 7919 * repeat
+                    + 104729 * arm_index
+                    + 1299709 * len(observed_parts)
+                )
+                if target is not None and pool_index.size > target:
+                    chosen = stratified_subsample(pools, target, draw_rng)
+                else:
+                    chosen = pool_index
+                fitted = _fit_predict(
+                    x_all[chosen],
+                    y_all[chosen],
+                    x_test,
+                    state_train=state_codes[chosen],
+                    state_test=state_test,
+                    variant=variant,
+                )
+                if fitted is None:
                     continue
-                abs_err[arm].append(np.mean(cell_abs, axis=0))
-                sq_err[arm].append(np.mean(cell_sq, axis=0))
-                rel_err[arm].append(np.mean(cell_rel, axis=0))
-                for name in BASELINES:
-                    abs_base[(arm, name)].append(np.mean(cell_base[name]["abs"], axis=0))
-                    sq_base[(arm, name)].append(np.mean(cell_base[name]["sq"], axis=0))
-                    rel_base[(arm, name)].append(np.mean(cell_base[name]["rel"], axis=0))
-                train_sizes[arm].append(int(np.mean(cell_sizes)))
+                error = fitted - observed_cell
+                cell_abs.append(np.abs(error))
+                cell_sq.append(np.square(error))
+                cell_rel.append(np.abs(error) / safe_observed)
+                rep_abs_sum[arm][repeat] += float(np.sum(np.abs(error)))
+                rep_sq_sum[arm][repeat] += float(np.sum(np.square(error)))
+                rep_count[arm][repeat] += float(error.size)
+                baseline_values = _baseline_predictions(
+                    y_all[chosen],
+                    state_codes[chosen],
+                    year_codes[chosen],
+                    state_test,
+                    year_test,
+                    len(state_names),
+                    len(year_names),
+                )
+                for name, values in baseline_values.items():
+                    base_error = values - observed_cell
+                    cell_base[name]["abs"].append(np.abs(base_error))
+                    cell_base[name]["sq"].append(np.square(base_error))
+                    cell_base[name]["rel"].append(np.abs(base_error) / safe_observed)
+                cell_sizes.append(int(chosen.size))
+                kept = state_codes[chosen]
+                kept = kept[kept >= 0]
+                state_counts[arm] += np.bincount(kept, minlength=len(state_names))
+                year_counts[arm] += np.bincount(
+                    year_codes[chosen], minlength=len(year_names)
+                )
+            if not cell_abs:
+                continue
+            abs_err[arm].append(np.mean(cell_abs, axis=0))
+            sq_err[arm].append(np.mean(cell_sq, axis=0))
+            rel_err[arm].append(np.mean(cell_rel, axis=0))
+            for name in BASELINES:
+                abs_base[(arm, name)].append(np.mean(cell_base[name]["abs"], axis=0))
+                sq_base[(arm, name)].append(np.mean(cell_base[name]["sq"], axis=0))
+                rel_base[(arm, name)].append(np.mean(cell_base[name]["rel"], axis=0))
+            train_sizes[arm].append(int(np.mean(cell_sizes)))
 
     out: dict[str, Any] = {
         "status": "ok",
@@ -480,6 +548,11 @@ def factorial_holdout(
         "n_states": len({s for s in state_ids.tolist() if s}),
         "n_municipalities": len(set(municipality_ids.tolist())),
         "n_folds": len(space_folds) * len(time_folds),
+        "equalize": equalize,
+        "min_cell_train": min_cell_train,
+        "cells_total": len(cells),
+        "cells_used": len(kept_cells),
+        "cells_dropped": dropped_cells,
         "size_fraction": size_fraction,
         "n_repeats": n_repeats,
         "target_train_size": target_size,
@@ -487,7 +560,15 @@ def factorial_holdout(
         "arms": {},
     }
     if not observed_parts:
-        return {"status": "no_test_rows", "n_rows": n}
+        return {
+            "status": "no_test_rows",
+            "n_rows": n,
+            "equalize": equalize,
+            "min_cell_train": min_cell_train,
+            "cells_total": len(cells),
+            "cells_used": 0,
+            "cells_dropped": dropped_cells,
+        }
     observed = np.concatenate(observed_parts)
     out["test_blocks"] = np.concatenate(block_parts)
     out["test_years"] = np.concatenate(year_parts)
@@ -524,11 +605,40 @@ def factorial_holdout(
             "status": "ok",
             "train_size_mean": float(np.mean(train_sizes[arm])),
             "train_size_min": int(np.min(train_sizes[arm])),
+            "train_size_max": int(np.max(train_sizes[arm])),
+            "train_size_sd": float(np.std(train_sizes[arm], ddof=1))
+            if len(train_sizes[arm]) > 1
+            else 0.0,
+            "cells_at_target": cells_at_target[arm],
+            "cells_below_target": cells_below_target[arm],
             "model": model,
             "baselines": baseline_entries,
             # compatibilidade com a convenção publicada (média global)
             "baseline": baseline_entries.get("global", {}),
         }
+        counts = rep_count[arm]
+        valid = counts > 0
+        if int(valid.sum()) > 0:
+            safe_counts = np.maximum(counts, 1.0)
+            mae_r = rep_abs_sum[arm] / safe_counts
+            rmse_r = np.sqrt(rep_sq_sum[arm] / safe_counts)
+            entry["repeat_metrics"] = {
+                "n_repeats_with_predictions": int(valid.sum()),
+                "mae_per_repeat": [
+                    float(v) if ok else None for v, ok in zip(mae_r, valid)
+                ],
+                "mae_mean": float(np.mean(mae_r[valid])),
+                "mae_sd": float(np.std(mae_r[valid], ddof=1))
+                if int(valid.sum()) > 1
+                else 0.0,
+                "rmse_per_repeat": [
+                    float(v) if ok else None for v, ok in zip(rmse_r, valid)
+                ],
+                "rmse_mean": float(np.mean(rmse_r[valid])),
+                "rmse_sd": float(np.std(rmse_r[valid], ddof=1))
+                if int(valid.sum()) > 1
+                else 0.0,
+            }
         if "global" in baseline_entries:
             entry["gain_percent"] = baseline_entries["global"]["gain_percent"]
         total_state = float(state_counts[arm].sum())

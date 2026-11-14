@@ -1,0 +1,3340 @@
+{
+  "generated_at": "2026-11-14T09:50:54.004186+00:00",
+  "seed": 20261113,
+  "method": "Compara a equalizacao GLOBAL da V2.8 (alvo unico; bracos com menos material ficam abaixo do alvo) com a equalizacao ESTRITA POR CELULA (alvo = menor conjunto disponivel entre os 4 bracos). Mesmo conjunto de teste nos 4 bracos; MAE/RMSE por repeticao.",
+  "n_repeats": 5,
+  "variant": "climate_plus_state",
+  "crops": {
+    "soja": {
+      "n_rows": 8884,
+      "families": {
+        "B_meteorologicos": {
+          "variables": [
+            "precip_acumulada_mm",
+            "temp_media_c"
+          ],
+          "global": {
+            "label": "global",
+            "equalize": "global",
+            "cells_used": 25,
+            "cells_dropped": 0,
+            "test_rows": null,
+            "arms": {
+              "SS": {
+                "train_size_mean": 5686.0,
+                "train_size_min": 5686,
+                "train_size_max": 5686,
+                "train_size_sd": 0.0,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 552.8339,
+                "rmse": 731.6918,
+                "mae_repeat_sd": 0.961,
+                "rmse_repeat_sd": 1.2296,
+                "gain_vs_global_percent": 11.7136,
+                "gain_vs_state_percent": 2.3177
+              },
+              "SE": {
+                "train_size_mean": 5686.0,
+                "train_size_min": 5686,
+                "train_size_max": 5686,
+                "train_size_sd": 0.0,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 559.3839,
+                "rmse": 745.7805,
+                "mae_repeat_sd": 0.7505,
+                "rmse_repeat_sd": 0.8484,
+                "gain_vs_global_percent": 11.2216,
+                "gain_vs_state_percent": 3.3044
+              },
+              "TS": {
+                "train_size_mean": 5686.0,
+                "train_size_min": 5686,
+                "train_size_max": 5686,
+                "train_size_sd": 0.0,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 588.8857,
+                "rmse": 772.6313,
+                "mae_repeat_sd": 0.4769,
+                "rmse_repeat_sd": 0.8148,
+                "gain_vs_global_percent": 7.0145,
+                "gain_vs_state_percent": -0.1704
+              },
+              "TE": {
+                "train_size_mean": 5401.0,
+                "train_size_min": 4308,
+                "train_size_max": 5686,
+                "train_size_sd": 468.8,
+                "cells_at_target": 14,
+                "cells_below_target": 11,
+                "mae": 604.2724,
+                "rmse": 800.0765,
+                "mae_repeat_sd": 0.274,
+                "rmse_repeat_sd": 0.3625,
+                "gain_vs_global_percent": 5.6863,
+                "gain_vs_state_percent": 1.0415
+              }
+            },
+            "paired": {
+              "SS_minus_SE": {
+                "delta_mae": -6.5499,
+                "ci95": [
+                  -14.6144,
+                  3.5795
+                ]
+              },
+              "SS_minus_TS": {
+                "delta_mae": -36.0518,
+                "ci95": [
+                  -46.2191,
+                  -23.1576
+                ]
+              },
+              "SE_minus_TE": {
+                "delta_mae": -44.8886,
+                "ci95": [
+                  -60.6011,
+                  -26.2415
+                ]
+              },
+              "TS_minus_TE": {
+                "delta_mae": -15.3868,
+                "ci95": [
+                  -29.7977,
+                  -2.0821
+                ]
+              },
+              "model_vs_baseline": {
+                "SS_vs_global": {
+                  "delta_mae": -73.3482,
+                  "ci95": [
+                    -125.0358,
+                    -31.8775
+                  ]
+                },
+                "SS_vs_state": {
+                  "delta_mae": -13.117,
+                  "ci95": [
+                    -25.7441,
+                    -0.6444
+                  ]
+                },
+                "SS_vs_state_year": {
+                  "delta_mae": 72.7649,
+                  "ci95": [
+                    2.1283,
+                    133.6758
+                  ]
+                },
+                "SE_vs_global": {
+                  "delta_mae": -70.7059,
+                  "ci95": [
+                    -131.3844,
+                    -19.6075
+                  ]
+                },
+                "SE_vs_state": {
+                  "delta_mae": -19.1161,
+                  "ci95": [
+                    -35.1733,
+                    -4.0371
+                  ]
+                },
+                "SE_vs_state_year": {
+                  "delta_mae": 78.8039,
+                  "ci95": [
+                    11.8978,
+                    135.4248
+                  ]
+                },
+                "TS_vs_global": {
+                  "delta_mae": -44.4233,
+                  "ci95": [
+                    -100.6351,
+                    -3.8389
+                  ]
+                },
+                "TS_vs_state": {
+                  "delta_mae": 1.002,
+                  "ci95": [
+                    -13.5398,
+                    12.9426
+                  ]
+                },
+                "TS_vs_state_year": {
+                  "delta_mae": 1.002,
+                  "ci95": [
+                    -13.5398,
+                    12.9426
+                  ]
+                },
+                "TE_vs_global": {
+                  "delta_mae": -36.4324,
+                  "ci95": [
+                    -100.23,
+                    21.4228
+                  ]
+                },
+                "TE_vs_state": {
+                  "delta_mae": -6.3595,
+                  "ci95": [
+                    -26.836,
+                    10.3498
+                  ]
+                },
+                "TE_vs_state_year": {
+                  "delta_mae": -6.3595,
+                  "ci95": [
+                    -26.836,
+                    10.3498
+                  ]
+                }
+              }
+            }
+          },
+          "per_cell": {
+            "label": "per_cell",
+            "equalize": "per_cell",
+            "cells_used": 25,
+            "cells_dropped": 0,
+            "test_rows": null,
+            "arms": {
+              "SS": {
+                "train_size_mean": 5685.8,
+                "train_size_min": 4308,
+                "train_size_max": 6792,
+                "train_size_sd": 749.6,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 552.6917,
+                "rmse": 731.4187,
+                "mae_repeat_sd": 0.7347,
+                "rmse_repeat_sd": 0.4436,
+                "gain_vs_global_percent": 11.7257,
+                "gain_vs_state_percent": 2.3452
+              },
+              "SE": {
+                "train_size_mean": 5685.8,
+                "train_size_min": 4308,
+                "train_size_max": 6792,
+                "train_size_sd": 749.6,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 558.9593,
+                "rmse": 745.1823,
+                "mae_repeat_sd": 0.4654,
+                "rmse_repeat_sd": 0.7337,
+                "gain_vs_global_percent": 11.2828,
+                "gain_vs_state_percent": 3.316
+              },
+              "TS": {
+                "train_size_mean": 5685.8,
+                "train_size_min": 4308,
+                "train_size_max": 6792,
+                "train_size_sd": 749.6,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 589.7161,
+                "rmse": 773.4171,
+                "mae_repeat_sd": 0.3345,
+                "rmse_repeat_sd": 0.5125,
+                "gain_vs_global_percent": 6.8679,
+                "gain_vs_state_percent": -0.2617
+              },
+              "TE": {
+                "train_size_mean": 5685.8,
+                "train_size_min": 4308,
+                "train_size_max": 6792,
+                "train_size_sd": 749.6,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 604.3608,
+                "rmse": 800.187,
+                "mae_repeat_sd": 0.0,
+                "rmse_repeat_sd": 0.0,
+                "gain_vs_global_percent": 5.6701,
+                "gain_vs_state_percent": 1.037
+              }
+            },
+            "paired": {
+              "SS_minus_SE": {
+                "delta_mae": -6.2676,
+                "ci95": [
+                  -14.3476,
+                  3.0195
+                ]
+              },
+              "SS_minus_TS": {
+                "delta_mae": -37.0244,
+                "ci95": [
+                  -47.2716,
+                  -23.8408
+                ]
+              },
+              "SE_minus_TE": {
+                "delta_mae": -45.4015,
+                "ci95": [
+                  -61.5993,
+                  -26.2166
+                ]
+              },
+              "TS_minus_TE": {
+                "delta_mae": -14.6447,
+                "ci95": [
+                  -27.4914,
+                  -2.4624
+                ]
+              },
+              "model_vs_baseline": {
+                "SS_vs_global": {
+                  "delta_mae": -73.4154,
+                  "ci95": [
+                    -125.1627,
+                    -31.5262
+                  ]
+                },
+                "SS_vs_state": {
+                  "delta_mae": -13.2727,
+                  "ci95": [
+                    -25.8831,
+                    -0.81
+                  ]
+                },
+                "SS_vs_state_year": {
+                  "delta_mae": 72.9969,
+                  "ci95": [
+                    0.9398,
+                    134.4795
+                  ]
+                },
+                "SE_vs_global": {
+                  "delta_mae": -71.0868,
+                  "ci95": [
+                    -131.4631,
+                    -20.642
+                  ]
+                },
+                "SE_vs_state": {
+                  "delta_mae": -19.1705,
+                  "ci95": [
+                    -35.209,
+                    -3.8559
+                  ]
+                },
+                "SE_vs_state_year": {
+                  "delta_mae": 77.9743,
+                  "ci95": [
+                    10.9793,
+                    134.28
+                  ]
+                },
+                "TS_vs_global": {
+                  "delta_mae": -43.4881,
+                  "ci95": [
+                    -100.2764,
+                    -1.2299
+                  ]
+                },
+                "TS_vs_state": {
+                  "delta_mae": 1.5395,
+                  "ci95": [
+                    -13.2751,
+                    13.1987
+                  ]
+                },
+                "TS_vs_state_year": {
+                  "delta_mae": 1.5395,
+                  "ci95": [
+                    -13.2751,
+                    13.1987
+                  ]
+                },
+                "TE_vs_global": {
+                  "delta_mae": -36.3275,
+                  "ci95": [
+                    -100.2852,
+                    21.4759
+                  ]
+                },
+                "TE_vs_state": {
+                  "delta_mae": -6.3331,
+                  "ci95": [
+                    -26.8064,
+                    10.3525
+                  ]
+                },
+                "TE_vs_state_year": {
+                  "delta_mae": -6.3331,
+                  "ci95": [
+                    -26.8064,
+                    10.3525
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "C_thermal": {
+          "variables": [
+            "degree_days_total",
+            "extreme_heat_days"
+          ],
+          "global": {
+            "label": "global",
+            "equalize": "global",
+            "cells_used": 25,
+            "cells_dropped": 0,
+            "test_rows": null,
+            "arms": {
+              "SS": {
+                "train_size_mean": 5686.0,
+                "train_size_min": 5686,
+                "train_size_max": 5686,
+                "train_size_sd": 0.0,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 557.0578,
+                "rmse": 737.6167,
+                "mae_repeat_sd": 0.9625,
+                "rmse_repeat_sd": 1.1505,
+                "gain_vs_global_percent": 11.039,
+                "gain_vs_state_percent": 1.5714
+              },
+              "SE": {
+                "train_size_mean": 5686.0,
+                "train_size_min": 5686,
+                "train_size_max": 5686,
+                "train_size_sd": 0.0,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 564.4452,
+                "rmse": 751.4406,
+                "mae_repeat_sd": 0.7764,
+                "rmse_repeat_sd": 0.8636,
+                "gain_vs_global_percent": 10.4183,
+                "gain_vs_state_percent": 2.4295
+              },
+              "TS": {
+                "train_size_mean": 5686.0,
+                "train_size_min": 5686,
+                "train_size_max": 5686,
+                "train_size_sd": 0.0,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 588.6091,
+                "rmse": 775.5568,
+                "mae_repeat_sd": 0.531,
+                "rmse_repeat_sd": 0.932,
+                "gain_vs_global_percent": 7.0581,
+                "gain_vs_state_percent": -0.1234
+              },
+              "TE": {
+                "train_size_mean": 5401.0,
+                "train_size_min": 4308,
+                "train_size_max": 5686,
+                "train_size_sd": 468.8,
+                "cells_at_target": 14,
+                "cells_below_target": 11,
+                "mae": 607.2376,
+                "rmse": 804.9207,
+                "mae_repeat_sd": 0.2132,
+                "rmse_repeat_sd": 0.3129,
+                "gain_vs_global_percent": 5.2235,
+                "gain_vs_state_percent": 0.5559
+              }
+            },
+            "paired": {
+              "SS_minus_SE": {
+                "delta_mae": -7.3873,
+                "ci95": [
+                  -16.1405,
+                  2.5224
+                ]
+              },
+              "SS_minus_TS": {
+                "delta_mae": -31.5512,
+                "ci95": [
+                  -42.2645,
+                  -19.3153
+                ]
+              },
+              "SE_minus_TE": {
+                "delta_mae": -42.7924,
+                "ci95": [
+                  -57.7006,
+                  -25.8384
+                ]
+              },
+              "TS_minus_TE": {
+                "delta_mae": -18.6285,
+                "ci95": [
+                  -29.6585,
+                  -6.321
+                ]
+              },
+              "model_vs_baseline": {
+                "SS_vs_global": {
+                  "delta_mae": -69.1243,
+                  "ci95": [
+                    -122.0775,
+                    -23.7944
+                  ]
+                },
+                "SS_vs_state": {
+                  "delta_mae": -8.8931,
+                  "ci95": [
+                    -16.4454,
+                    -1.0165
+                  ]
+                },
+                "SS_vs_state_year": {
+                  "delta_mae": 76.9888,
+                  "ci95": [
+                    7.5205,
+                    137.7855
+                  ]
+                },
+                "SE_vs_global": {
+                  "delta_mae": -65.6446,
+                  "ci95": [
+                    -125.52,
+                    -13.1494
+                  ]
+                },
+                "SE_vs_state": {
+                  "delta_mae": -14.0548,
+                  "ci95": [
+                    -23.2888,
+                    -4.2258
+                  ]
+                },
+                "SE_vs_state_year": {
+                  "delta_mae": 83.8652,
+                  "ci95": [
+                    17.1422,
+                    140.2156
+                  ]
+                },
+                "TS_vs_global": {
+                  "delta_mae": -44.6999,
+                  "ci95": [
+                    -100.3795,
+                    0.7388
+                  ]
+                },
+                "TS_vs_state": {
+                  "delta_mae": 0.7254,
+                  "ci95": [
+                    -8.4503,
+                    9.933
+                  ]
+                },
+                "TS_vs_state_year": {
+                  "delta_mae": 0.7254,
+                  "ci95": [
+                    -8.4503,
+                    9.933
+                  ]
+                },
+                "TE_vs_global": {
+                  "delta_mae": -33.4673,
+                  "ci95": [
+                    -99.6954,
+                    26.6747
+                  ]
+                },
+                "TE_vs_state": {
+                  "delta_mae": -3.3944,
+                  "ci95": [
+                    -15.3293,
+                    8.5903
+                  ]
+                },
+                "TE_vs_state_year": {
+                  "delta_mae": -3.3944,
+                  "ci95": [
+                    -15.3293,
+                    8.5903
+                  ]
+                }
+              }
+            }
+          },
+          "per_cell": {
+            "label": "per_cell",
+            "equalize": "per_cell",
+            "cells_used": 25,
+            "cells_dropped": 0,
+            "test_rows": null,
+            "arms": {
+              "SS": {
+                "train_size_mean": 5685.8,
+                "train_size_min": 4308,
+                "train_size_max": 6792,
+                "train_size_sd": 749.6,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 557.2021,
+                "rmse": 737.6438,
+                "mae_repeat_sd": 0.8588,
+                "rmse_repeat_sd": 0.6445,
+                "gain_vs_global_percent": 11.0053,
+                "gain_vs_state_percent": 1.5482
+              },
+              "SE": {
+                "train_size_mean": 5685.8,
+                "train_size_min": 4308,
+                "train_size_max": 6792,
+                "train_size_sd": 749.6,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 564.3944,
+                "rmse": 751.2522,
+                "mae_repeat_sd": 0.4286,
+                "rmse_repeat_sd": 0.6488,
+                "gain_vs_global_percent": 10.4202,
+                "gain_vs_state_percent": 2.3758
+              },
+              "TS": {
+                "train_size_mean": 5685.8,
+                "train_size_min": 4308,
+                "train_size_max": 6792,
+                "train_size_sd": 749.6,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 589.1126,
+                "rmse": 776.2938,
+                "mae_repeat_sd": 0.332,
+                "rmse_repeat_sd": 0.5813,
+                "gain_vs_global_percent": 6.9633,
+                "gain_vs_state_percent": -0.1591
+              },
+              "TE": {
+                "train_size_mean": 5685.8,
+                "train_size_min": 4308,
+                "train_size_max": 6792,
+                "train_size_sd": 749.6,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 607.2568,
+                "rmse": 804.9533,
+                "mae_repeat_sd": 0.0,
+                "rmse_repeat_sd": 0.0,
+                "gain_vs_global_percent": 5.2181,
+                "gain_vs_state_percent": 0.5628
+              }
+            },
+            "paired": {
+              "SS_minus_SE": {
+                "delta_mae": -7.1923,
+                "ci95": [
+                  -16.1592,
+                  2.1363
+                ]
+              },
+              "SS_minus_TS": {
+                "delta_mae": -31.9105,
+                "ci95": [
+                  -42.6445,
+                  -19.4992
+                ]
+              },
+              "SE_minus_TE": {
+                "delta_mae": -42.8625,
+                "ci95": [
+                  -58.0409,
+                  -25.3573
+                ]
+              },
+              "TS_minus_TE": {
+                "delta_mae": -18.1442,
+                "ci95": [
+                  -28.6449,
+                  -6.5089
+                ]
+              },
+              "model_vs_baseline": {
+                "SS_vs_global": {
+                  "delta_mae": -68.905,
+                  "ci95": [
+                    -121.7854,
+                    -23.305
+                  ]
+                },
+                "SS_vs_state": {
+                  "delta_mae": -8.7623,
+                  "ci95": [
+                    -16.595,
+                    -0.7963
+                  ]
+                },
+                "SS_vs_state_year": {
+                  "delta_mae": 77.5073,
+                  "ci95": [
+                    6.2851,
+                    140.0947
+                  ]
+                },
+                "SE_vs_global": {
+                  "delta_mae": -65.6518,
+                  "ci95": [
+                    -125.5715,
+                    -13.6188
+                  ]
+                },
+                "SE_vs_state": {
+                  "delta_mae": -13.7354,
+                  "ci95": [
+                    -22.8008,
+                    -4.107
+                  ]
+                },
+                "SE_vs_state_year": {
+                  "delta_mae": 83.4093,
+                  "ci95": [
+                    16.8036,
+                    139.8681
+                  ]
+                },
+                "TS_vs_global": {
+                  "delta_mae": -44.0916,
+                  "ci95": [
+                    -99.9615,
+                    2.2342
+                  ]
+                },
+                "TS_vs_state": {
+                  "delta_mae": 0.936,
+                  "ci95": [
+                    -8.6366,
+                    10.0294
+                  ]
+                },
+                "TS_vs_state_year": {
+                  "delta_mae": 0.936,
+                  "ci95": [
+                    -8.6366,
+                    10.0294
+                  ]
+                },
+                "TE_vs_global": {
+                  "delta_mae": -33.4315,
+                  "ci95": [
+                    -99.9985,
+                    26.6352
+                  ]
+                },
+                "TE_vs_state": {
+                  "delta_mae": -3.4371,
+                  "ci95": [
+                    -15.4018,
+                    8.6518
+                  ]
+                },
+                "TE_vs_state_year": {
+                  "delta_mae": -3.4371,
+                  "ci95": [
+                    -15.4018,
+                    8.6518
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "D_hidricos": {
+          "variables": [
+            "et0_total_mm",
+            "deficiency_total_mm",
+            "excess_total_mm"
+          ],
+          "global": {
+            "label": "global",
+            "equalize": "global",
+            "cells_used": 25,
+            "cells_dropped": 0,
+            "test_rows": null,
+            "arms": {
+              "SS": {
+                "train_size_mean": 5686.0,
+                "train_size_min": 5686,
+                "train_size_max": 5686,
+                "train_size_sd": 0.0,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 567.7466,
+                "rmse": 748.981,
+                "mae_repeat_sd": 1.2958,
+                "rmse_repeat_sd": 1.4659,
+                "gain_vs_global_percent": 9.332,
+                "gain_vs_state_percent": -0.3173
+              },
+              "SE": {
+                "train_size_mean": 5686.0,
+                "train_size_min": 5686,
+                "train_size_max": 5686,
+                "train_size_sd": 0.0,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 571.8208,
+                "rmse": 757.2267,
+                "mae_repeat_sd": 0.8673,
+                "rmse_repeat_sd": 0.8539,
+                "gain_vs_global_percent": 9.2477,
+                "gain_vs_state_percent": 1.1546
+              },
+              "TS": {
+                "train_size_mean": 5686.0,
+                "train_size_min": 5686,
+                "train_size_max": 5686,
+                "train_size_sd": 0.0,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 614.4987,
+                "rmse": 802.1332,
+                "mae_repeat_sd": 0.642,
+                "rmse_repeat_sd": 0.7306,
+                "gain_vs_global_percent": 2.9702,
+                "gain_vs_state_percent": -4.5273
+              },
+              "TE": {
+                "train_size_mean": 5401.0,
+                "train_size_min": 4308,
+                "train_size_max": 5686,
+                "train_size_sd": 468.8,
+                "cells_at_target": 14,
+                "cells_below_target": 11,
+                "mae": 631.0942,
+                "rmse": 826.4829,
+                "mae_repeat_sd": 0.2973,
+                "rmse_repeat_sd": 0.3576,
+                "gain_vs_global_percent": 1.5,
+                "gain_vs_state_percent": -3.351
+              }
+            },
+            "paired": {
+              "SS_minus_SE": {
+                "delta_mae": -4.0742,
+                "ci95": [
+                  -12.7945,
+                  4.2276
+                ]
+              },
+              "SS_minus_TS": {
+                "delta_mae": -46.7521,
+                "ci95": [
+                  -55.6196,
+                  -37.5606
+                ]
+              },
+              "SE_minus_TE": {
+                "delta_mae": -59.2734,
+                "ci95": [
+                  -73.7019,
+                  -42.1314
+                ]
+              },
+              "TS_minus_TE": {
+                "delta_mae": -16.5955,
+                "ci95": [
+                  -33.3945,
+                  -0.9873
+                ]
+              },
+              "model_vs_baseline": {
+                "SS_vs_global": {
+                  "delta_mae": -58.4355,
+                  "ci95": [
+                    -118.2299,
+                    -12.1307
+                  ]
+                },
+                "SS_vs_state": {
+                  "delta_mae": 1.7957,
+                  "ci95": [
+                    -6.1407,
+                    9.4063
+                  ]
+                },
+                "SS_vs_state_year": {
+                  "delta_mae": 87.6775,
+                  "ci95": [
+                    16.2819,
+                    143.9456
+                  ]
+                },
+                "SE_vs_global": {
+                  "delta_mae": -58.2689,
+                  "ci95": [
+                    -123.9884,
+                    -4.4728
+                  ]
+                },
+                "SE_vs_state": {
+                  "delta_mae": -6.6791,
+                  "ci95": [
+                    -13.5357,
+                    0.7936
+                  ]
+                },
+                "SE_vs_state_year": {
+                  "delta_mae": 91.2409,
+                  "ci95": [
+                    23.4563,
+                    148.0011
+                  ]
+                },
+                "TS_vs_global": {
+                  "delta_mae": -18.8103,
+                  "ci95": [
+                    -80.0293,
+                    25.7833
+                  ]
+                },
+                "TS_vs_state": {
+                  "delta_mae": 26.615,
+                  "ci95": [
+                    16.2423,
+                    37.6591
+                  ]
+                },
+                "TS_vs_state_year": {
+                  "delta_mae": 26.615,
+                  "ci95": [
+                    16.2423,
+                    37.6591
+                  ]
+                },
+                "TE_vs_global": {
+                  "delta_mae": -9.6106,
+                  "ci95": [
+                    -79.0663,
+                    49.8456
+                  ]
+                },
+                "TE_vs_state": {
+                  "delta_mae": 20.4623,
+                  "ci95": [
+                    9.6288,
+                    31.7568
+                  ]
+                },
+                "TE_vs_state_year": {
+                  "delta_mae": 20.4623,
+                  "ci95": [
+                    9.6288,
+                    31.7568
+                  ]
+                }
+              }
+            }
+          },
+          "per_cell": {
+            "label": "per_cell",
+            "equalize": "per_cell",
+            "cells_used": 25,
+            "cells_dropped": 0,
+            "test_rows": null,
+            "arms": {
+              "SS": {
+                "train_size_mean": 5685.8,
+                "train_size_min": 4308,
+                "train_size_max": 6792,
+                "train_size_sd": 749.6,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 567.6849,
+                "rmse": 748.9449,
+                "mae_repeat_sd": 1.2371,
+                "rmse_repeat_sd": 1.2941,
+                "gain_vs_global_percent": 9.331,
+                "gain_vs_state_percent": -0.304
+              },
+              "SE": {
+                "train_size_mean": 5685.8,
+                "train_size_min": 4308,
+                "train_size_max": 6792,
+                "train_size_sd": 749.6,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 571.5359,
+                "rmse": 756.7014,
+                "mae_repeat_sd": 0.3354,
+                "rmse_repeat_sd": 0.651,
+                "gain_vs_global_percent": 9.2867,
+                "gain_vs_state_percent": 1.1406
+              },
+              "TS": {
+                "train_size_mean": 5685.8,
+                "train_size_min": 4308,
+                "train_size_max": 6792,
+                "train_size_sd": 749.6,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 614.4753,
+                "rmse": 802.3337,
+                "mae_repeat_sd": 1.0247,
+                "rmse_repeat_sd": 1.263,
+                "gain_vs_global_percent": 2.9578,
+                "gain_vs_state_percent": -4.4712
+              },
+              "TE": {
+                "train_size_mean": 5685.8,
+                "train_size_min": 4308,
+                "train_size_max": 6792,
+                "train_size_sd": 749.6,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 631.1531,
+                "rmse": 826.5561,
+                "mae_repeat_sd": 0.0,
+                "rmse_repeat_sd": 0.0,
+                "gain_vs_global_percent": 1.4883,
+                "gain_vs_state_percent": -3.3502
+              }
+            },
+            "paired": {
+              "SS_minus_SE": {
+                "delta_mae": -3.8509,
+                "ci95": [
+                  -12.7224,
+                  3.8578
+                ]
+              },
+              "SS_minus_TS": {
+                "delta_mae": -46.7903,
+                "ci95": [
+                  -55.7573,
+                  -37.33
+                ]
+              },
+              "SE_minus_TE": {
+                "delta_mae": -59.6173,
+                "ci95": [
+                  -74.5188,
+                  -42.0034
+                ]
+              },
+              "TS_minus_TE": {
+                "delta_mae": -16.6779,
+                "ci95": [
+                  -32.0577,
+                  -2.1787
+                ]
+              },
+              "model_vs_baseline": {
+                "SS_vs_global": {
+                  "delta_mae": -58.4222,
+                  "ci95": [
+                    -118.6697,
+                    -11.4031
+                  ]
+                },
+                "SS_vs_state": {
+                  "delta_mae": 1.7205,
+                  "ci95": [
+                    -6.6391,
+                    9.4286
+                  ]
+                },
+                "SS_vs_state_year": {
+                  "delta_mae": 87.9902,
+                  "ci95": [
+                    14.9382,
+                    145.3536
+                  ]
+                },
+                "SE_vs_global": {
+                  "delta_mae": -58.5103,
+                  "ci95": [
+                    -123.6124,
+                    -5.5197
+                  ]
+                },
+                "SE_vs_state": {
+                  "delta_mae": -6.594,
+                  "ci95": [
+                    -13.4006,
+                    0.629
+                  ]
+                },
+                "SE_vs_state_year": {
+                  "delta_mae": 90.5508,
+                  "ci95": [
+                    22.3114,
+                    147.5841
+                  ]
+                },
+                "TS_vs_global": {
+                  "delta_mae": -18.729,
+                  "ci95": [
+                    -80.128,
+                    26.8238
+                  ]
+                },
+                "TS_vs_state": {
+                  "delta_mae": 26.2987,
+                  "ci95": [
+                    16.4295,
+                    36.6452
+                  ]
+                },
+                "TS_vs_state_year": {
+                  "delta_mae": 26.2987,
+                  "ci95": [
+                    16.4295,
+                    36.6452
+                  ]
+                },
+                "TE_vs_global": {
+                  "delta_mae": -9.5352,
+                  "ci95": [
+                    -79.0692,
+                    49.8932
+                  ]
+                },
+                "TE_vs_state": {
+                  "delta_mae": 20.4592,
+                  "ci95": [
+                    9.5813,
+                    31.7199
+                  ]
+                },
+                "TE_vs_state_year": {
+                  "delta_mae": 20.4592,
+                  "ci95": [
+                    9.5813,
+                    31.7199
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "milho": {
+      "n_rows": 7616,
+      "families": {
+        "B_meteorologicos": {
+          "variables": [
+            "precip_acumulada_mm",
+            "temp_media_c"
+          ],
+          "global": {
+            "label": "global",
+            "equalize": "global",
+            "cells_used": 25,
+            "cells_dropped": 0,
+            "test_rows": null,
+            "arms": {
+              "SS": {
+                "train_size_mean": 4874.0,
+                "train_size_min": 4874,
+                "train_size_max": 4874,
+                "train_size_sd": 0.0,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 1493.2541,
+                "rmse": 1932.5354,
+                "mae_repeat_sd": 1.9077,
+                "rmse_repeat_sd": 3.3418,
+                "gain_vs_global_percent": 6.631,
+                "gain_vs_state_percent": 6.2435
+              },
+              "SE": {
+                "train_size_mean": 4837.6,
+                "train_size_min": 4692,
+                "train_size_max": 4874,
+                "train_size_sd": 74.3,
+                "cells_at_target": 20,
+                "cells_below_target": 5,
+                "mae": 1662.9499,
+                "rmse": 2121.6902,
+                "mae_repeat_sd": 2.1951,
+                "rmse_repeat_sd": 2.3603,
+                "gain_vs_global_percent": 2.2085,
+                "gain_vs_state_percent": 11.4527
+              },
+              "TS": {
+                "train_size_mean": 4874.0,
+                "train_size_min": 4874,
+                "train_size_max": 4874,
+                "train_size_sd": 0.0,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 1515.3362,
+                "rmse": 1961.402,
+                "mae_repeat_sd": 2.3447,
+                "rmse_repeat_sd": 3.4922,
+                "gain_vs_global_percent": 5.1482,
+                "gain_vs_state_percent": 4.4848
+              },
+              "TE": {
+                "train_size_mean": 4517.7,
+                "train_size_min": 3514,
+                "train_size_max": 4874,
+                "train_size_sd": 500.7,
+                "cells_at_target": 12,
+                "cells_below_target": 13,
+                "mae": 1717.7595,
+                "rmse": 2194.9081,
+                "mae_repeat_sd": 0.5949,
+                "rmse_repeat_sd": 0.8369,
+                "gain_vs_global_percent": -0.0009,
+                "gain_vs_state_percent": 10.3818
+              }
+            },
+            "paired": {
+              "SS_minus_SE": {
+                "delta_mae": -169.6959,
+                "ci95": [
+                  -332.5435,
+                  -27.2323
+                ]
+              },
+              "SS_minus_TS": {
+                "delta_mae": -22.0821,
+                "ci95": [
+                  -40.0739,
+                  -5.8412
+                ]
+              },
+              "SE_minus_TE": {
+                "delta_mae": -54.8096,
+                "ci95": [
+                  -88.9495,
+                  -27.9925
+                ]
+              },
+              "TS_minus_TE": {
+                "delta_mae": -202.4233,
+                "ci95": [
+                  -358.2075,
+                  -64.5818
+                ]
+              },
+              "model_vs_baseline": {
+                "SS_vs_global": {
+                  "delta_mae": -106.0505,
+                  "ci95": [
+                    -235.862,
+                    9.4806
+                  ]
+                },
+                "SS_vs_state": {
+                  "delta_mae": -99.44,
+                  "ci95": [
+                    -216.513,
+                    16.4324
+                  ]
+                },
+                "SS_vs_state_year": {
+                  "delta_mae": -251.4721,
+                  "ci95": [
+                    -624.17,
+                    136.8233
+                  ]
+                },
+                "SE_vs_global": {
+                  "delta_mae": -37.5552,
+                  "ci95": [
+                    -173.9111,
+                    62.9225
+                  ]
+                },
+                "SE_vs_state": {
+                  "delta_mae": -215.0864,
+                  "ci95": [
+                    -371.9652,
+                    -48.5566
+                  ]
+                },
+                "SE_vs_state_year": {
+                  "delta_mae": -69.818,
+                  "ci95": [
+                    -304.7375,
+                    190.6957
+                  ]
+                },
+                "TS_vs_global": {
+                  "delta_mae": -82.2474,
+                  "ci95": [
+                    -215.7421,
+                    38.9114
+                  ]
+                },
+                "TS_vs_state": {
+                  "delta_mae": -71.1509,
+                  "ci95": [
+                    -177.7569,
+                    32.3807
+                  ]
+                },
+                "TS_vs_state_year": {
+                  "delta_mae": -71.1509,
+                  "ci95": [
+                    -177.7569,
+                    32.3807
+                  ]
+                },
+                "TE_vs_global": {
+                  "delta_mae": 0.0152,
+                  "ci95": [
+                    -146.1822,
+                    97.531
+                  ]
+                },
+                "TE_vs_state": {
+                  "delta_mae": -198.9928,
+                  "ci95": [
+                    -356.3011,
+                    -31.6106
+                  ]
+                },
+                "TE_vs_state_year": {
+                  "delta_mae": -198.9928,
+                  "ci95": [
+                    -356.3011,
+                    -31.6106
+                  ]
+                }
+              }
+            }
+          },
+          "per_cell": {
+            "label": "per_cell",
+            "equalize": "per_cell",
+            "cells_used": 25,
+            "cells_dropped": 0,
+            "test_rows": null,
+            "arms": {
+              "SS": {
+                "train_size_mean": 4874.2,
+                "train_size_min": 3514,
+                "train_size_max": 6323,
+                "train_size_sd": 863.7,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 1489.7728,
+                "rmse": 1928.7952,
+                "mae_repeat_sd": 3.3846,
+                "rmse_repeat_sd": 4.754,
+                "gain_vs_global_percent": 6.8191,
+                "gain_vs_state_percent": 6.352
+              },
+              "SE": {
+                "train_size_mean": 4874.2,
+                "train_size_min": 3514,
+                "train_size_max": 6323,
+                "train_size_sd": 863.7,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 1661.2398,
+                "rmse": 2120.6014,
+                "mae_repeat_sd": 5.5051,
+                "rmse_repeat_sd": 5.9072,
+                "gain_vs_global_percent": 2.3493,
+                "gain_vs_state_percent": 11.5093
+              },
+              "TS": {
+                "train_size_mean": 4874.2,
+                "train_size_min": 3514,
+                "train_size_max": 6323,
+                "train_size_sd": 863.7,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 1516.7027,
+                "rmse": 1963.4634,
+                "mae_repeat_sd": 3.7861,
+                "rmse_repeat_sd": 6.2288,
+                "gain_vs_global_percent": 5.093,
+                "gain_vs_state_percent": 4.3943
+              },
+              "TE": {
+                "train_size_mean": 4874.2,
+                "train_size_min": 3514,
+                "train_size_max": 6323,
+                "train_size_sd": 863.7,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 1718.3607,
+                "rmse": 2195.8261,
+                "mae_repeat_sd": 0.0,
+                "rmse_repeat_sd": 0.0,
+                "gain_vs_global_percent": -0.0369,
+                "gain_vs_state_percent": 10.3657
+              }
+            },
+            "paired": {
+              "SS_minus_SE": {
+                "delta_mae": -171.467,
+                "ci95": [
+                  -331.6024,
+                  -32.5273
+                ]
+              },
+              "SS_minus_TS": {
+                "delta_mae": -26.9299,
+                "ci95": [
+                  -46.1913,
+                  -8.9762
+                ]
+              },
+              "SE_minus_TE": {
+                "delta_mae": -57.1209,
+                "ci95": [
+                  -89.7782,
+                  -31.5632
+                ]
+              },
+              "TS_minus_TE": {
+                "delta_mae": -201.658,
+                "ci95": [
+                  -357.6633,
+                  -64.6678
+                ]
+              },
+              "model_vs_baseline": {
+                "SS_vs_global": {
+                  "delta_mae": -109.0238,
+                  "ci95": [
+                    -237.7483,
+                    4.0126
+                  ]
+                },
+                "SS_vs_state": {
+                  "delta_mae": -101.0486,
+                  "ci95": [
+                    -217.8114,
+                    15.2514
+                  ]
+                },
+                "SS_vs_state_year": {
+                  "delta_mae": -239.113,
+                  "ci95": [
+                    -603.699,
+                    144.9289
+                  ]
+                },
+                "SE_vs_global": {
+                  "delta_mae": -39.9664,
+                  "ci95": [
+                    -177.4228,
+                    62.3488
+                  ]
+                },
+                "SE_vs_state": {
+                  "delta_mae": -216.0645,
+                  "ci95": [
+                    -373.033,
+                    -48.1976
+                  ]
+                },
+                "SE_vs_state_year": {
+                  "delta_mae": -72.5003,
+                  "ci95": [
+                    -305.289,
+                    184.7671
+                  ]
+                },
+                "TS_vs_global": {
+                  "delta_mae": -81.3909,
+                  "ci95": [
+                    -215.7433,
+                    39.7292
+                  ]
+                },
+                "TS_vs_state": {
+                  "delta_mae": -69.711,
+                  "ci95": [
+                    -176.624,
+                    34.0915
+                  ]
+                },
+                "TS_vs_state_year": {
+                  "delta_mae": -69.711,
+                  "ci95": [
+                    -176.624,
+                    34.0915
+                  ]
+                },
+                "TE_vs_global": {
+                  "delta_mae": 0.634,
+                  "ci95": [
+                    -145.5877,
+                    97.9679
+                  ]
+                },
+                "TE_vs_state": {
+                  "delta_mae": -198.719,
+                  "ci95": [
+                    -355.7887,
+                    -31.2559
+                  ]
+                },
+                "TE_vs_state_year": {
+                  "delta_mae": -198.719,
+                  "ci95": [
+                    -355.7887,
+                    -31.2559
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "C_thermal": {
+          "variables": [
+            "degree_days_total",
+            "extreme_heat_days"
+          ],
+          "global": {
+            "label": "global",
+            "equalize": "global",
+            "cells_used": 25,
+            "cells_dropped": 0,
+            "test_rows": null,
+            "arms": {
+              "SS": {
+                "train_size_mean": 4874.0,
+                "train_size_min": 4874,
+                "train_size_max": 4874,
+                "train_size_sd": 0.0,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 1523.1648,
+                "rmse": 1960.3414,
+                "mae_repeat_sd": 1.1924,
+                "rmse_repeat_sd": 2.0371,
+                "gain_vs_global_percent": 4.7608,
+                "gain_vs_state_percent": 4.3655
+              },
+              "SE": {
+                "train_size_mean": 4837.6,
+                "train_size_min": 4692,
+                "train_size_max": 4874,
+                "train_size_sd": 74.3,
+                "cells_at_target": 20,
+                "cells_below_target": 5,
+                "mae": 1729.4784,
+                "rmse": 2203.0938,
+                "mae_repeat_sd": 1.7106,
+                "rmse_repeat_sd": 1.9161,
+                "gain_vs_global_percent": -1.7038,
+                "gain_vs_state_percent": 7.9103
+              },
+              "TS": {
+                "train_size_mean": 4874.0,
+                "train_size_min": 4874,
+                "train_size_max": 4874,
+                "train_size_sd": 0.0,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 1540.97,
+                "rmse": 1980.9815,
+                "mae_repeat_sd": 1.8343,
+                "rmse_repeat_sd": 2.6869,
+                "gain_vs_global_percent": 3.5437,
+                "gain_vs_state_percent": 2.869
+              },
+              "TE": {
+                "train_size_mean": 4517.7,
+                "train_size_min": 3514,
+                "train_size_max": 4874,
+                "train_size_sd": 500.7,
+                "cells_at_target": 12,
+                "cells_below_target": 13,
+                "mae": 1780.2703,
+                "rmse": 2269.8904,
+                "mae_repeat_sd": 0.9091,
+                "rmse_repeat_sd": 1.007,
+                "gain_vs_global_percent": -3.64,
+                "gain_vs_state_percent": 7.1205
+              }
+            },
+            "paired": {
+              "SS_minus_SE": {
+                "delta_mae": -206.3136,
+                "ci95": [
+                  -350.805,
+                  -55.1686
+                ]
+              },
+              "SS_minus_TS": {
+                "delta_mae": -17.8052,
+                "ci95": [
+                  -39.8555,
+                  -0.5998
+                ]
+              },
+              "SE_minus_TE": {
+                "delta_mae": -50.7918,
+                "ci95": [
+                  -84.36,
+                  -24.0226
+                ]
+              },
+              "TS_minus_TE": {
+                "delta_mae": -239.3003,
+                "ci95": [
+                  -380.553,
+                  -91.8375
+                ]
+              },
+              "model_vs_baseline": {
+                "SS_vs_global": {
+                  "delta_mae": -76.1397,
+                  "ci95": [
+                    -162.1258,
+                    6.7979
+                  ]
+                },
+                "SS_vs_state": {
+                  "delta_mae": -69.5293,
+                  "ci95": [
+                    -143.1268,
+                    11.0813
+                  ]
+                },
+                "SS_vs_state_year": {
+                  "delta_mae": -221.5614,
+                  "ci95": [
+                    -553.7686,
+                    129.4993
+                  ]
+                },
+                "SE_vs_global": {
+                  "delta_mae": 28.9733,
+                  "ci95": [
+                    -91.5236,
+                    141.0247
+                  ]
+                },
+                "SE_vs_state": {
+                  "delta_mae": -148.5579,
+                  "ci95": [
+                    -283.1969,
+                    -17.1447
+                  ]
+                },
+                "SE_vs_state_year": {
+                  "delta_mae": -3.2895,
+                  "ci95": [
+                    -196.9769,
+                    213.524
+                  ]
+                },
+                "TS_vs_global": {
+                  "delta_mae": -56.6136,
+                  "ci95": [
+                    -144.6807,
+                    30.3659
+                  ]
+                },
+                "TS_vs_state": {
+                  "delta_mae": -45.5171,
+                  "ci95": [
+                    -112.0889,
+                    31.2115
+                  ]
+                },
+                "TS_vs_state_year": {
+                  "delta_mae": -45.5171,
+                  "ci95": [
+                    -112.0889,
+                    31.2115
+                  ]
+                },
+                "TE_vs_global": {
+                  "delta_mae": 62.526,
+                  "ci95": [
+                    -56.1046,
+                    156.9309
+                  ]
+                },
+                "TE_vs_state": {
+                  "delta_mae": -136.482,
+                  "ci95": [
+                    -273.7833,
+                    3.2816
+                  ]
+                },
+                "TE_vs_state_year": {
+                  "delta_mae": -136.482,
+                  "ci95": [
+                    -273.7833,
+                    3.2816
+                  ]
+                }
+              }
+            }
+          },
+          "per_cell": {
+            "label": "per_cell",
+            "equalize": "per_cell",
+            "cells_used": 25,
+            "cells_dropped": 0,
+            "test_rows": null,
+            "arms": {
+              "SS": {
+                "train_size_mean": 4874.2,
+                "train_size_min": 3514,
+                "train_size_max": 6323,
+                "train_size_sd": 863.7,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 1520.6202,
+                "rmse": 1958.1363,
+                "mae_repeat_sd": 2.9097,
+                "rmse_repeat_sd": 4.4179,
+                "gain_vs_global_percent": 4.8897,
+                "gain_vs_state_percent": 4.4129
+              },
+              "SE": {
+                "train_size_mean": 4874.2,
+                "train_size_min": 3514,
+                "train_size_max": 6323,
+                "train_size_sd": 863.7,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 1727.456,
+                "rmse": 2201.9427,
+                "mae_repeat_sd": 5.7363,
+                "rmse_repeat_sd": 6.1849,
+                "gain_vs_global_percent": -1.543,
+                "gain_vs_state_percent": 7.9821
+              },
+              "TS": {
+                "train_size_mean": 4874.2,
+                "train_size_min": 3514,
+                "train_size_max": 6323,
+                "train_size_sd": 863.7,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 1541.2952,
+                "rmse": 1981.0948,
+                "mae_repeat_sd": 2.8487,
+                "rmse_repeat_sd": 5.1461,
+                "gain_vs_global_percent": 3.5541,
+                "gain_vs_state_percent": 2.8441
+              },
+              "TE": {
+                "train_size_mean": 4874.2,
+                "train_size_min": 3514,
+                "train_size_max": 6323,
+                "train_size_sd": 863.7,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 1781.1178,
+                "rmse": 2271.0561,
+                "mae_repeat_sd": 0.0,
+                "rmse_repeat_sd": 0.0,
+                "gain_vs_global_percent": -3.6904,
+                "gain_vs_state_percent": 7.0921
+              }
+            },
+            "paired": {
+              "SS_minus_SE": {
+                "delta_mae": -206.8358,
+                "ci95": [
+                  -348.8609,
+                  -58.8656
+                ]
+              },
+              "SS_minus_TS": {
+                "delta_mae": -20.675,
+                "ci95": [
+                  -43.0531,
+                  -2.678
+                ]
+              },
+              "SE_minus_TE": {
+                "delta_mae": -53.6618,
+                "ci95": [
+                  -84.0409,
+                  -29.4096
+                ]
+              },
+              "TS_minus_TE": {
+                "delta_mae": -239.8226,
+                "ci95": [
+                  -380.9737,
+                  -95.3034
+                ]
+              },
+              "model_vs_baseline": {
+                "SS_vs_global": {
+                  "delta_mae": -78.1765,
+                  "ci95": [
+                    -163.4629,
+                    4.2032
+                  ]
+                },
+                "SS_vs_state": {
+                  "delta_mae": -70.2012,
+                  "ci95": [
+                    -143.8479,
+                    9.9536
+                  ]
+                },
+                "SS_vs_state_year": {
+                  "delta_mae": -208.2657,
+                  "ci95": [
+                    -533.7823,
+                    134.2366
+                  ]
+                },
+                "SE_vs_global": {
+                  "delta_mae": 26.2498,
+                  "ci95": [
+                    -93.0025,
+                    135.0315
+                  ]
+                },
+                "SE_vs_state": {
+                  "delta_mae": -149.8484,
+                  "ci95": [
+                    -286.1683,
+                    -16.3947
+                  ]
+                },
+                "SE_vs_state_year": {
+                  "delta_mae": -6.2841,
+                  "ci95": [
+                    -198.4026,
+                    208.8281
+                  ]
+                },
+                "TS_vs_global": {
+                  "delta_mae": -56.7985,
+                  "ci95": [
+                    -144.9979,
+                    29.3171
+                  ]
+                },
+                "TS_vs_state": {
+                  "delta_mae": -45.1185,
+                  "ci95": [
+                    -111.3213,
+                    30.8655
+                  ]
+                },
+                "TS_vs_state_year": {
+                  "delta_mae": -45.1185,
+                  "ci95": [
+                    -111.3213,
+                    30.8655
+                  ]
+                },
+                "TE_vs_global": {
+                  "delta_mae": 63.3911,
+                  "ci95": [
+                    -55.76,
+                    157.4306
+                  ]
+                },
+                "TE_vs_state": {
+                  "delta_mae": -135.9619,
+                  "ci95": [
+                    -273.3264,
+                    3.9947
+                  ]
+                },
+                "TE_vs_state_year": {
+                  "delta_mae": -135.9619,
+                  "ci95": [
+                    -273.3264,
+                    3.9947
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "D_hidricos": {
+          "variables": [
+            "et0_total_mm",
+            "deficiency_total_mm",
+            "excess_total_mm"
+          ],
+          "global": {
+            "label": "global",
+            "equalize": "global",
+            "cells_used": 25,
+            "cells_dropped": 0,
+            "test_rows": null,
+            "arms": {
+              "SS": {
+                "train_size_mean": 4874.0,
+                "train_size_min": 4874,
+                "train_size_max": 4874,
+                "train_size_sd": 0.0,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 1520.4718,
+                "rmse": 1955.4642,
+                "mae_repeat_sd": 1.9782,
+                "rmse_repeat_sd": 2.406,
+                "gain_vs_global_percent": 4.9292,
+                "gain_vs_state_percent": 4.5346
+              },
+              "SE": {
+                "train_size_mean": 4837.6,
+                "train_size_min": 4692,
+                "train_size_max": 4874,
+                "train_size_sd": 74.3,
+                "cells_at_target": 20,
+                "cells_below_target": 5,
+                "mae": 1733.6471,
+                "rmse": 2196.24,
+                "mae_repeat_sd": 2.9236,
+                "rmse_repeat_sd": 3.1066,
+                "gain_vs_global_percent": -1.949,
+                "gain_vs_state_percent": 7.6883
+              },
+              "TS": {
+                "train_size_mean": 4874.0,
+                "train_size_min": 4874,
+                "train_size_max": 4874,
+                "train_size_sd": 0.0,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 1535.7539,
+                "rmse": 1973.7667,
+                "mae_repeat_sd": 1.7618,
+                "rmse_repeat_sd": 2.5937,
+                "gain_vs_global_percent": 3.8702,
+                "gain_vs_state_percent": 3.1978
+              },
+              "TE": {
+                "train_size_mean": 4517.7,
+                "train_size_min": 3514,
+                "train_size_max": 4874,
+                "train_size_sd": 500.7,
+                "cells_at_target": 12,
+                "cells_below_target": 13,
+                "mae": 1794.8914,
+                "rmse": 2277.4471,
+                "mae_repeat_sd": 0.7379,
+                "rmse_repeat_sd": 0.9439,
+                "gain_vs_global_percent": -4.4912,
+                "gain_vs_state_percent": 6.3577
+              }
+            },
+            "paired": {
+              "SS_minus_SE": {
+                "delta_mae": -213.1753,
+                "ci95": [
+                  -347.6785,
+                  -68.594
+                ]
+              },
+              "SS_minus_TS": {
+                "delta_mae": -15.282,
+                "ci95": [
+                  -31.4918,
+                  -0.5924
+                ]
+              },
+              "SE_minus_TE": {
+                "delta_mae": -61.2443,
+                "ci95": [
+                  -101.2228,
+                  -29.0907
+                ]
+              },
+              "TS_minus_TE": {
+                "delta_mae": -259.1375,
+                "ci95": [
+                  -393.7577,
+                  -107.1982
+                ]
+              },
+              "model_vs_baseline": {
+                "SS_vs_global": {
+                  "delta_mae": -78.8327,
+                  "ci95": [
+                    -146.2341,
+                    -4.8055
+                  ]
+                },
+                "SS_vs_state": {
+                  "delta_mae": -72.2222,
+                  "ci95": [
+                    -137.8618,
+                    15.9896
+                  ]
+                },
+                "SS_vs_state_year": {
+                  "delta_mae": -224.2544,
+                  "ci95": [
+                    -535.2142,
+                    117.3901
+                  ]
+                },
+                "SE_vs_global": {
+                  "delta_mae": 33.142,
+                  "ci95": [
+                    -75.9133,
+                    138.341
+                  ]
+                },
+                "SE_vs_state": {
+                  "delta_mae": -144.3892,
+                  "ci95": [
+                    -280.7034,
+                    2.044
+                  ]
+                },
+                "SE_vs_state_year": {
+                  "delta_mae": 0.8792,
+                  "ci95": [
+                    -188.9608,
+                    212.4817
+                  ]
+                },
+                "TS_vs_global": {
+                  "delta_mae": -61.8297,
+                  "ci95": [
+                    -133.1182,
+                    10.8005
+                  ]
+                },
+                "TS_vs_state": {
+                  "delta_mae": -50.7332,
+                  "ci95": [
+                    -110.4744,
+                    31.848
+                  ]
+                },
+                "TS_vs_state_year": {
+                  "delta_mae": -50.7332,
+                  "ci95": [
+                    -110.4744,
+                    31.848
+                  ]
+                },
+                "TE_vs_global": {
+                  "delta_mae": 77.1472,
+                  "ci95": [
+                    -29.3779,
+                    171.651
+                  ]
+                },
+                "TE_vs_state": {
+                  "delta_mae": -121.8608,
+                  "ci95": [
+                    -251.7681,
+                    16.9368
+                  ]
+                },
+                "TE_vs_state_year": {
+                  "delta_mae": -121.8608,
+                  "ci95": [
+                    -251.7681,
+                    16.9368
+                  ]
+                }
+              }
+            }
+          },
+          "per_cell": {
+            "label": "per_cell",
+            "equalize": "per_cell",
+            "cells_used": 25,
+            "cells_dropped": 0,
+            "test_rows": null,
+            "arms": {
+              "SS": {
+                "train_size_mean": 4874.2,
+                "train_size_min": 3514,
+                "train_size_max": 6323,
+                "train_size_sd": 863.7,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 1517.3959,
+                "rmse": 1952.4365,
+                "mae_repeat_sd": 1.3571,
+                "rmse_repeat_sd": 2.53,
+                "gain_vs_global_percent": 5.0914,
+                "gain_vs_state_percent": 4.6156
+              },
+              "SE": {
+                "train_size_mean": 4874.2,
+                "train_size_min": 3514,
+                "train_size_max": 6323,
+                "train_size_sd": 863.7,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 1733.5514,
+                "rmse": 2197.6289,
+                "mae_repeat_sd": 4.3858,
+                "rmse_repeat_sd": 4.1808,
+                "gain_vs_global_percent": -1.9013,
+                "gain_vs_state_percent": 7.6574
+              },
+              "TS": {
+                "train_size_mean": 4874.2,
+                "train_size_min": 3514,
+                "train_size_max": 6323,
+                "train_size_sd": 863.7,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 1535.1714,
+                "rmse": 1973.288,
+                "mae_repeat_sd": 4.7853,
+                "rmse_repeat_sd": 6.1308,
+                "gain_vs_global_percent": 3.9373,
+                "gain_vs_state_percent": 3.2301
+              },
+              "TE": {
+                "train_size_mean": 4874.2,
+                "train_size_min": 3514,
+                "train_size_max": 6323,
+                "train_size_sd": 863.7,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 1795.6033,
+                "rmse": 2278.5251,
+                "mae_repeat_sd": 0.0,
+                "rmse_repeat_sd": 0.0,
+                "gain_vs_global_percent": -4.5337,
+                "gain_vs_state_percent": 6.3365
+              }
+            },
+            "paired": {
+              "SS_minus_SE": {
+                "delta_mae": -216.1555,
+                "ci95": [
+                  -348.1729,
+                  -74.8415
+                ]
+              },
+              "SS_minus_TS": {
+                "delta_mae": -17.7755,
+                "ci95": [
+                  -34.6897,
+                  -2.1099
+                ]
+              },
+              "SE_minus_TE": {
+                "delta_mae": -62.0519,
+                "ci95": [
+                  -98.0889,
+                  -31.0308
+                ]
+              },
+              "TS_minus_TE": {
+                "delta_mae": -260.4319,
+                "ci95": [
+                  -394.6978,
+                  -110.3695
+                ]
+              },
+              "model_vs_baseline": {
+                "SS_vs_global": {
+                  "delta_mae": -81.4008,
+                  "ci95": [
+                    -149.1531,
+                    -7.3491
+                  ]
+                },
+                "SS_vs_state": {
+                  "delta_mae": -73.4255,
+                  "ci95": [
+                    -139.9979,
+                    15.3467
+                  ]
+                },
+                "SS_vs_state_year": {
+                  "delta_mae": -211.49,
+                  "ci95": [
+                    -515.8922,
+                    124.1241
+                  ]
+                },
+                "SE_vs_global": {
+                  "delta_mae": 32.3451,
+                  "ci95": [
+                    -74.4579,
+                    137.0186
+                  ]
+                },
+                "SE_vs_state": {
+                  "delta_mae": -143.753,
+                  "ci95": [
+                    -280.8005,
+                    3.7388
+                  ]
+                },
+                "SE_vs_state_year": {
+                  "delta_mae": -0.1888,
+                  "ci95": [
+                    -190.6312,
+                    209.6715
+                  ]
+                },
+                "TS_vs_global": {
+                  "delta_mae": -62.9223,
+                  "ci95": [
+                    -133.3204,
+                    8.2762
+                  ]
+                },
+                "TS_vs_state": {
+                  "delta_mae": -51.2423,
+                  "ci95": [
+                    -110.8066,
+                    31.748
+                  ]
+                },
+                "TS_vs_state_year": {
+                  "delta_mae": -51.2423,
+                  "ci95": [
+                    -110.8066,
+                    31.748
+                  ]
+                },
+                "TE_vs_global": {
+                  "delta_mae": 77.8766,
+                  "ci95": [
+                    -28.2225,
+                    172.0629
+                  ]
+                },
+                "TE_vs_state": {
+                  "delta_mae": -121.4765,
+                  "ci95": [
+                    -251.4381,
+                    17.3823
+                  ]
+                },
+                "TE_vs_state_year": {
+                  "delta_mae": -121.4765,
+                  "ci95": [
+                    -251.4381,
+                    17.3823
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "milho_2": {
+      "n_rows": 2902,
+      "families": {
+        "B_meteorologicos": {
+          "variables": [
+            "precip_acumulada_mm",
+            "temp_media_c"
+          ],
+          "global": {
+            "label": "global",
+            "equalize": "global",
+            "cells_used": 25,
+            "cells_dropped": 0,
+            "test_rows": null,
+            "arms": {
+              "SS": {
+                "train_size_mean": 1857.0,
+                "train_size_min": 1857,
+                "train_size_max": 1857,
+                "train_size_sd": 0.0,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 1165.7564,
+                "rmse": 1496.902,
+                "mae_repeat_sd": 2.0742,
+                "rmse_repeat_sd": 2.7611,
+                "gain_vs_global_percent": 15.4371,
+                "gain_vs_state_percent": 12.4516
+              },
+              "SE": {
+                "train_size_mean": 1846.4,
+                "train_size_min": 1804,
+                "train_size_max": 1857,
+                "train_size_sd": 21.6,
+                "cells_at_target": 20,
+                "cells_below_target": 5,
+                "mae": 1205.3433,
+                "rmse": 1549.0745,
+                "mae_repeat_sd": 1.0037,
+                "rmse_repeat_sd": 1.5773,
+                "gain_vs_global_percent": 16.4621,
+                "gain_vs_state_percent": 17.8677
+              },
+              "TS": {
+                "train_size_mean": 1857.0,
+                "train_size_min": 1857,
+                "train_size_max": 1857,
+                "train_size_sd": 0.0,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 1177.6327,
+                "rmse": 1506.742,
+                "mae_repeat_sd": 2.2147,
+                "rmse_repeat_sd": 2.3376,
+                "gain_vs_global_percent": 15.0822,
+                "gain_vs_state_percent": 12.2068
+              },
+              "TE": {
+                "train_size_mean": 1702.4,
+                "train_size_min": 1418,
+                "train_size_max": 1857,
+                "train_size_sd": 197.0,
+                "cells_at_target": 15,
+                "cells_below_target": 10,
+                "mae": 1234.0465,
+                "rmse": 1582.0022,
+                "mae_repeat_sd": 0.7633,
+                "rmse_repeat_sd": 1.4485,
+                "gain_vs_global_percent": 15.8196,
+                "gain_vs_state_percent": 17.7969
+              }
+            },
+            "paired": {
+              "SS_minus_SE": {
+                "delta_mae": -39.587,
+                "ci95": [
+                  -68.4637,
+                  0.4908
+                ]
+              },
+              "SS_minus_TS": {
+                "delta_mae": -11.8764,
+                "ci95": [
+                  -28.4997,
+                  -3.9454
+                ]
+              },
+              "SE_minus_TE": {
+                "delta_mae": -28.7032,
+                "ci95": [
+                  -43.8457,
+                  -14.9593
+                ]
+              },
+              "TS_minus_TE": {
+                "delta_mae": -56.4138,
+                "ci95": [
+                  -94.9659,
+                  -5.7652
+                ]
+              },
+              "model_vs_baseline": {
+                "SS_vs_global": {
+                  "delta_mae": -212.8101,
+                  "ci95": [
+                    -337.0871,
+                    -82.2158
+                  ]
+                },
+                "SS_vs_state": {
+                  "delta_mae": -165.7994,
+                  "ci95": [
+                    -281.5235,
+                    -19.0873
+                  ]
+                },
+                "SS_vs_state_year": {
+                  "delta_mae": -202.687,
+                  "ci95": [
+                    -379.8927,
+                    59.2889
+                  ]
+                },
+                "SE_vs_global": {
+                  "delta_mae": -237.5261,
+                  "ci95": [
+                    -339.5388,
+                    -106.2359
+                  ]
+                },
+                "SE_vs_state": {
+                  "delta_mae": -262.2196,
+                  "ci95": [
+                    -408.8704,
+                    -33.6953
+                  ]
+                },
+                "SE_vs_state_year": {
+                  "delta_mae": -170.3891,
+                  "ci95": [
+                    -328.1876,
+                    60.1931
+                  ]
+                },
+                "TS_vs_global": {
+                  "delta_mae": -209.158,
+                  "ci95": [
+                    -333.0389,
+                    -78.1595
+                  ]
+                },
+                "TS_vs_state": {
+                  "delta_mae": -163.739,
+                  "ci95": [
+                    -281.0202,
+                    -17.0876
+                  ]
+                },
+                "TS_vs_state_year": {
+                  "delta_mae": -163.739,
+                  "ci95": [
+                    -281.0202,
+                    -17.0876
+                  ]
+                },
+                "TE_vs_global": {
+                  "delta_mae": -231.909,
+                  "ci95": [
+                    -329.2227,
+                    -102.1715
+                  ]
+                },
+                "TE_vs_state": {
+                  "delta_mae": -267.1697,
+                  "ci95": [
+                    -413.6944,
+                    -35.3367
+                  ]
+                },
+                "TE_vs_state_year": {
+                  "delta_mae": -267.1697,
+                  "ci95": [
+                    -413.6944,
+                    -35.3367
+                  ]
+                }
+              }
+            }
+          },
+          "per_cell": {
+            "label": "per_cell",
+            "equalize": "per_cell",
+            "cells_used": 25,
+            "cells_dropped": 0,
+            "test_rows": null,
+            "arms": {
+              "SS": {
+                "train_size_mean": 1857.3,
+                "train_size_min": 1418,
+                "train_size_max": 2318,
+                "train_size_sd": 331.8,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 1164.1306,
+                "rmse": 1495.4871,
+                "mae_repeat_sd": 3.4582,
+                "rmse_repeat_sd": 4.2851,
+                "gain_vs_global_percent": 15.6365,
+                "gain_vs_state_percent": 12.6979
+              },
+              "SE": {
+                "train_size_mean": 1857.3,
+                "train_size_min": 1418,
+                "train_size_max": 2318,
+                "train_size_sd": 331.8,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 1209.6292,
+                "rmse": 1554.2956,
+                "mae_repeat_sd": 4.5132,
+                "rmse_repeat_sd": 5.4979,
+                "gain_vs_global_percent": 16.1644,
+                "gain_vs_state_percent": 17.5451
+              },
+              "TS": {
+                "train_size_mean": 1857.3,
+                "train_size_min": 1418,
+                "train_size_max": 2318,
+                "train_size_sd": 331.8,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 1179.9131,
+                "rmse": 1508.8848,
+                "mae_repeat_sd": 1.5966,
+                "rmse_repeat_sd": 2.4634,
+                "gain_vs_global_percent": 14.8793,
+                "gain_vs_state_percent": 12.0417
+              },
+              "TE": {
+                "train_size_mean": 1857.3,
+                "train_size_min": 1418,
+                "train_size_max": 2318,
+                "train_size_sd": 331.8,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 1233.6528,
+                "rmse": 1581.3085,
+                "mae_repeat_sd": 0.0,
+                "rmse_repeat_sd": 0.0,
+                "gain_vs_global_percent": 15.8383,
+                "gain_vs_state_percent": 17.8009
+              }
+            },
+            "paired": {
+              "SS_minus_SE": {
+                "delta_mae": -45.4986,
+                "ci95": [
+                  -79.0019,
+                  -0.7938
+                ]
+              },
+              "SS_minus_TS": {
+                "delta_mae": -15.7825,
+                "ci95": [
+                  -31.8004,
+                  -8.3489
+                ]
+              },
+              "SE_minus_TE": {
+                "delta_mae": -24.0236,
+                "ci95": [
+                  -40.5393,
+                  -11.9032
+                ]
+              },
+              "TS_minus_TE": {
+                "delta_mae": -53.7397,
+                "ci95": [
+                  -92.5375,
+                  -1.1377
+                ]
+              },
+              "model_vs_baseline": {
+                "SS_vs_global": {
+                  "delta_mae": -215.7679,
+                  "ci95": [
+                    -341.2323,
+                    -81.1122
+                  ]
+                },
+                "SS_vs_state": {
+                  "delta_mae": -169.3209,
+                  "ci95": [
+                    -285.6779,
+                    -19.5724
+                  ]
+                },
+                "SS_vs_state_year": {
+                  "delta_mae": -209.8126,
+                  "ci95": [
+                    -394.9457,
+                    61.1393
+                  ]
+                },
+                "SE_vs_global": {
+                  "delta_mae": -233.2287,
+                  "ci95": [
+                    -334.233,
+                    -104.9256
+                  ]
+                },
+                "SE_vs_state": {
+                  "delta_mae": -257.3896,
+                  "ci95": [
+                    -401.9517,
+                    -31.4879
+                  ]
+                },
+                "SE_vs_state_year": {
+                  "delta_mae": -170.6976,
+                  "ci95": [
+                    -328.1106,
+                    64.1303
+                  ]
+                },
+                "TS_vs_global": {
+                  "delta_mae": -206.2508,
+                  "ci95": [
+                    -331.0567,
+                    -74.9739
+                  ]
+                },
+                "TS_vs_state": {
+                  "delta_mae": -161.5334,
+                  "ci95": [
+                    -279.3846,
+                    -17.4379
+                  ]
+                },
+                "TS_vs_state_year": {
+                  "delta_mae": -161.5334,
+                  "ci95": [
+                    -279.3846,
+                    -17.4379
+                  ]
+                },
+                "TE_vs_global": {
+                  "delta_mae": -232.1601,
+                  "ci95": [
+                    -329.6593,
+                    -102.5174
+                  ]
+                },
+                "TE_vs_state": {
+                  "delta_mae": -267.1579,
+                  "ci95": [
+                    -413.7985,
+                    -35.1438
+                  ]
+                },
+                "TE_vs_state_year": {
+                  "delta_mae": -267.1579,
+                  "ci95": [
+                    -413.7985,
+                    -35.1438
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "C_thermal": {
+          "variables": [
+            "degree_days_total",
+            "extreme_heat_days"
+          ],
+          "global": {
+            "label": "global",
+            "equalize": "global",
+            "cells_used": 25,
+            "cells_dropped": 0,
+            "test_rows": null,
+            "arms": {
+              "SS": {
+                "train_size_mean": 1857.0,
+                "train_size_min": 1857,
+                "train_size_max": 1857,
+                "train_size_sd": 0.0,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 1253.5565,
+                "rmse": 1632.6127,
+                "mae_repeat_sd": 2.2263,
+                "rmse_repeat_sd": 3.2945,
+                "gain_vs_global_percent": 9.0681,
+                "gain_vs_state_percent": 5.8577
+              },
+              "SE": {
+                "train_size_mean": 1846.4,
+                "train_size_min": 1804,
+                "train_size_max": 1857,
+                "train_size_sd": 21.6,
+                "cells_at_target": 20,
+                "cells_below_target": 5,
+                "mae": 1297.7173,
+                "rmse": 1694.9056,
+                "mae_repeat_sd": 0.8122,
+                "rmse_repeat_sd": 0.7986,
+                "gain_vs_global_percent": 10.06,
+                "gain_vs_state_percent": 11.5733
+              },
+              "TS": {
+                "train_size_mean": 1857.0,
+                "train_size_min": 1857,
+                "train_size_max": 1857,
+                "train_size_sd": 0.0,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 1271.9308,
+                "rmse": 1651.8346,
+                "mae_repeat_sd": 1.2374,
+                "rmse_repeat_sd": 0.7725,
+                "gain_vs_global_percent": 8.2824,
+                "gain_vs_state_percent": 5.1769
+              },
+              "TE": {
+                "train_size_mean": 1702.4,
+                "train_size_min": 1418,
+                "train_size_max": 1857,
+                "train_size_sd": 197.0,
+                "cells_at_target": 15,
+                "cells_below_target": 10,
+                "mae": 1331.3381,
+                "rmse": 1735.3233,
+                "mae_repeat_sd": 0.5854,
+                "rmse_repeat_sd": 0.9918,
+                "gain_vs_global_percent": 9.1829,
+                "gain_vs_state_percent": 11.316
+              }
+            },
+            "paired": {
+              "SS_minus_SE": {
+                "delta_mae": -44.1608,
+                "ci95": [
+                  -94.2164,
+                  9.892
+                ]
+              },
+              "SS_minus_TS": {
+                "delta_mae": -18.3742,
+                "ci95": [
+                  -33.9658,
+                  -9.4576
+                ]
+              },
+              "SE_minus_TE": {
+                "delta_mae": -33.6208,
+                "ci95": [
+                  -49.3294,
+                  -19.1725
+                ]
+              },
+              "TS_minus_TE": {
+                "delta_mae": -59.4074,
+                "ci95": [
+                  -114.6295,
+                  5.6545
+                ]
+              },
+              "model_vs_baseline": {
+                "SS_vs_global": {
+                  "delta_mae": -125.0099,
+                  "ci95": [
+                    -207.0714,
+                    -42.2066
+                  ]
+                },
+                "SS_vs_state": {
+                  "delta_mae": -77.9992,
+                  "ci95": [
+                    -142.8101,
+                    20.203
+                  ]
+                },
+                "SS_vs_state_year": {
+                  "delta_mae": -114.8868,
+                  "ci95": [
+                    -259.3935,
+                    96.4614
+                  ]
+                },
+                "SE_vs_global": {
+                  "delta_mae": -145.1521,
+                  "ci95": [
+                    -228.8327,
+                    -68.8651
+                  ]
+                },
+                "SE_vs_state": {
+                  "delta_mae": -169.8456,
+                  "ci95": [
+                    -270.3664,
+                    4.9527
+                  ]
+                },
+                "SE_vs_state_year": {
+                  "delta_mae": -78.0151,
+                  "ci95": [
+                    -183.0218,
+                    95.0112
+                  ]
+                },
+                "TS_vs_global": {
+                  "delta_mae": -114.86,
+                  "ci95": [
+                    -194.7041,
+                    -34.3801
+                  ]
+                },
+                "TS_vs_state": {
+                  "delta_mae": -69.441,
+                  "ci95": [
+                    -134.0411,
+                    23.2749
+                  ]
+                },
+                "TS_vs_state_year": {
+                  "delta_mae": -69.441,
+                  "ci95": [
+                    -134.0411,
+                    23.2749
+                  ]
+                },
+                "TE_vs_global": {
+                  "delta_mae": -134.6174,
+                  "ci95": [
+                    -213.548,
+                    -58.1701
+                  ]
+                },
+                "TE_vs_state": {
+                  "delta_mae": -169.8781,
+                  "ci95": [
+                    -274.7055,
+                    8.1885
+                  ]
+                },
+                "TE_vs_state_year": {
+                  "delta_mae": -169.8781,
+                  "ci95": [
+                    -274.7055,
+                    8.1885
+                  ]
+                }
+              }
+            }
+          },
+          "per_cell": {
+            "label": "per_cell",
+            "equalize": "per_cell",
+            "cells_used": 25,
+            "cells_dropped": 0,
+            "test_rows": null,
+            "arms": {
+              "SS": {
+                "train_size_mean": 1857.3,
+                "train_size_min": 1418,
+                "train_size_max": 2318,
+                "train_size_sd": 331.8,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 1254.1339,
+                "rmse": 1632.5395,
+                "mae_repeat_sd": 3.5404,
+                "rmse_repeat_sd": 3.1196,
+                "gain_vs_global_percent": 9.114,
+                "gain_vs_state_percent": 5.9483
+              },
+              "SE": {
+                "train_size_mean": 1857.3,
+                "train_size_min": 1418,
+                "train_size_max": 2318,
+                "train_size_sd": 331.8,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 1298.8002,
+                "rmse": 1696.5197,
+                "mae_repeat_sd": 5.1923,
+                "rmse_repeat_sd": 6.3056,
+                "gain_vs_global_percent": 9.9842,
+                "gain_vs_state_percent": 11.4667
+              },
+              "TS": {
+                "train_size_mean": 1857.3,
+                "train_size_min": 1418,
+                "train_size_max": 2318,
+                "train_size_sd": 331.8,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 1273.0229,
+                "rmse": 1652.4127,
+                "mae_repeat_sd": 2.067,
+                "rmse_repeat_sd": 2.7105,
+                "gain_vs_global_percent": 8.1622,
+                "gain_vs_state_percent": 5.1007
+              },
+              "TE": {
+                "train_size_mean": 1857.3,
+                "train_size_min": 1418,
+                "train_size_max": 2318,
+                "train_size_sd": 331.8,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 1331.2228,
+                "rmse": 1735.1089,
+                "mae_repeat_sd": 0.0,
+                "rmse_repeat_sd": 0.0,
+                "gain_vs_global_percent": 9.1819,
+                "gain_vs_state_percent": 11.2998
+              }
+            },
+            "paired": {
+              "SS_minus_SE": {
+                "delta_mae": -44.6663,
+                "ci95": [
+                  -94.9233,
+                  10.5426
+                ]
+              },
+              "SS_minus_TS": {
+                "delta_mae": -18.889,
+                "ci95": [
+                  -37.3145,
+                  -7.965
+                ]
+              },
+              "SE_minus_TE": {
+                "delta_mae": -32.4226,
+                "ci95": [
+                  -50.6718,
+                  -17.0821
+                ]
+              },
+              "TS_minus_TE": {
+                "delta_mae": -58.1999,
+                "ci95": [
+                  -114.8628,
+                  11.5578
+                ]
+              },
+              "model_vs_baseline": {
+                "SS_vs_global": {
+                  "delta_mae": -125.7646,
+                  "ci95": [
+                    -207.8771,
+                    -42.8193
+                  ]
+                },
+                "SS_vs_state": {
+                  "delta_mae": -79.3176,
+                  "ci95": [
+                    -144.3622,
+                    19.2064
+                  ]
+                },
+                "SS_vs_state_year": {
+                  "delta_mae": -119.8093,
+                  "ci95": [
+                    -270.371,
+                    101.7405
+                  ]
+                },
+                "SE_vs_global": {
+                  "delta_mae": -144.0578,
+                  "ci95": [
+                    -230.4462,
+                    -68.0052
+                  ]
+                },
+                "SE_vs_state": {
+                  "delta_mae": -168.2186,
+                  "ci95": [
+                    -267.7374,
+                    4.5084
+                  ]
+                },
+                "SE_vs_state_year": {
+                  "delta_mae": -81.5267,
+                  "ci95": [
+                    -187.7315,
+                    95.6333
+                  ]
+                },
+                "TS_vs_global": {
+                  "delta_mae": -113.141,
+                  "ci95": [
+                    -192.1988,
+                    -30.316
+                  ]
+                },
+                "TS_vs_state": {
+                  "delta_mae": -68.4237,
+                  "ci95": [
+                    -134.423,
+                    26.2097
+                  ]
+                },
+                "TS_vs_state_year": {
+                  "delta_mae": -68.4237,
+                  "ci95": [
+                    -134.423,
+                    26.2097
+                  ]
+                },
+                "TE_vs_global": {
+                  "delta_mae": -134.5901,
+                  "ci95": [
+                    -213.684,
+                    -58.3418
+                  ]
+                },
+                "TE_vs_state": {
+                  "delta_mae": -169.5879,
+                  "ci95": [
+                    -274.4142,
+                    8.4724
+                  ]
+                },
+                "TE_vs_state_year": {
+                  "delta_mae": -169.5879,
+                  "ci95": [
+                    -274.4142,
+                    8.4724
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "D_hidricos": {
+          "variables": [
+            "et0_total_mm",
+            "deficiency_total_mm",
+            "excess_total_mm"
+          ],
+          "global": {
+            "label": "global",
+            "equalize": "global",
+            "cells_used": 25,
+            "cells_dropped": 0,
+            "test_rows": null,
+            "arms": {
+              "SS": {
+                "train_size_mean": 1857.0,
+                "train_size_min": 1857,
+                "train_size_max": 1857,
+                "train_size_sd": 0.0,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 1279.4509,
+                "rmse": 1670.4456,
+                "mae_repeat_sd": 3.0951,
+                "rmse_repeat_sd": 3.6469,
+                "gain_vs_global_percent": 7.1898,
+                "gain_vs_state_percent": 3.9131
+              },
+              "SE": {
+                "train_size_mean": 1846.4,
+                "train_size_min": 1804,
+                "train_size_max": 1857,
+                "train_size_sd": 21.6,
+                "cells_at_target": 20,
+                "cells_below_target": 5,
+                "mae": 1334.4783,
+                "rmse": 1744.3657,
+                "mae_repeat_sd": 0.2341,
+                "rmse_repeat_sd": 0.2621,
+                "gain_vs_global_percent": 7.5122,
+                "gain_vs_state_percent": 9.0684
+              },
+              "TS": {
+                "train_size_mean": 1857.0,
+                "train_size_min": 1857,
+                "train_size_max": 1857,
+                "train_size_sd": 0.0,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 1299.5275,
+                "rmse": 1690.2618,
+                "mae_repeat_sd": 1.4161,
+                "rmse_repeat_sd": 2.0999,
+                "gain_vs_global_percent": 6.2925,
+                "gain_vs_state_percent": 3.1195
+              },
+              "TE": {
+                "train_size_mean": 1702.4,
+                "train_size_min": 1418,
+                "train_size_max": 1857,
+                "train_size_sd": 197.0,
+                "cells_at_target": 15,
+                "cells_below_target": 10,
+                "mae": 1383.7203,
+                "rmse": 1806.4578,
+                "mae_repeat_sd": 0.8248,
+                "rmse_repeat_sd": 1.2017,
+                "gain_vs_global_percent": 5.6097,
+                "gain_vs_state_percent": 7.8267
+              }
+            },
+            "paired": {
+              "SS_minus_SE": {
+                "delta_mae": -55.0274,
+                "ci95": [
+                  -112.8588,
+                  10.7574
+                ]
+              },
+              "SS_minus_TS": {
+                "delta_mae": -20.0766,
+                "ci95": [
+                  -34.0582,
+                  -10.2433
+                ]
+              },
+              "SE_minus_TE": {
+                "delta_mae": -49.242,
+                "ci95": [
+                  -67.6284,
+                  -21.3818
+                ]
+              },
+              "TS_minus_TE": {
+                "delta_mae": -84.1929,
+                "ci95": [
+                  -166.982,
+                  6.838
+                ]
+              },
+              "model_vs_baseline": {
+                "SS_vs_global": {
+                  "delta_mae": -99.1156,
+                  "ci95": [
+                    -191.3514,
+                    -20.9484
+                  ]
+                },
+                "SS_vs_state": {
+                  "delta_mae": -52.1049,
+                  "ci95": [
+                    -116.7107,
+                    37.5044
+                  ]
+                },
+                "SS_vs_state_year": {
+                  "delta_mae": -88.9925,
+                  "ci95": [
+                    -221.0731,
+                    122.2164
+                  ]
+                },
+                "SE_vs_global": {
+                  "delta_mae": -108.3911,
+                  "ci95": [
+                    -215.3047,
+                    -35.4731
+                  ]
+                },
+                "SE_vs_state": {
+                  "delta_mae": -133.0847,
+                  "ci95": [
+                    -213.4252,
+                    27.1801
+                  ]
+                },
+                "SE_vs_state_year": {
+                  "delta_mae": -41.2541,
+                  "ci95": [
+                    -127.1887,
+                    114.0542
+                  ]
+                },
+                "TS_vs_global": {
+                  "delta_mae": -87.2633,
+                  "ci95": [
+                    -184.4298,
+                    -8.396
+                  ]
+                },
+                "TS_vs_state": {
+                  "delta_mae": -41.8443,
+                  "ci95": [
+                    -113.6492,
+                    40.3705
+                  ]
+                },
+                "TS_vs_state_year": {
+                  "delta_mae": -41.8443,
+                  "ci95": [
+                    -113.6492,
+                    40.3705
+                  ]
+                },
+                "TE_vs_global": {
+                  "delta_mae": -82.2352,
+                  "ci95": [
+                    -202.626,
+                    -7.1213
+                  ]
+                },
+                "TE_vs_state": {
+                  "delta_mae": -117.4959,
+                  "ci95": [
+                    -191.1225,
+                    26.8194
+                  ]
+                },
+                "TE_vs_state_year": {
+                  "delta_mae": -117.4959,
+                  "ci95": [
+                    -191.1225,
+                    26.8194
+                  ]
+                }
+              }
+            }
+          },
+          "per_cell": {
+            "label": "per_cell",
+            "equalize": "per_cell",
+            "cells_used": 25,
+            "cells_dropped": 0,
+            "test_rows": null,
+            "arms": {
+              "SS": {
+                "train_size_mean": 1857.3,
+                "train_size_min": 1418,
+                "train_size_max": 2318,
+                "train_size_sd": 331.8,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 1276.0549,
+                "rmse": 1665.9629,
+                "mae_repeat_sd": 4.9517,
+                "rmse_repeat_sd": 4.4132,
+                "gain_vs_global_percent": 7.5254,
+                "gain_vs_state_percent": 4.3044
+              },
+              "SE": {
+                "train_size_mean": 1857.3,
+                "train_size_min": 1418,
+                "train_size_max": 2318,
+                "train_size_sd": 331.8,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 1336.9982,
+                "rmse": 1748.4603,
+                "mae_repeat_sd": 6.4215,
+                "rmse_repeat_sd": 8.5224,
+                "gain_vs_global_percent": 7.3368,
+                "gain_vs_state_percent": 8.8629
+              },
+              "TS": {
+                "train_size_mean": 1857.3,
+                "train_size_min": 1418,
+                "train_size_max": 2318,
+                "train_size_sd": 331.8,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 1300.8187,
+                "rmse": 1691.3756,
+                "mae_repeat_sd": 1.6596,
+                "rmse_repeat_sd": 2.4974,
+                "gain_vs_global_percent": 6.1569,
+                "gain_vs_state_percent": 3.0287
+              },
+              "TE": {
+                "train_size_mean": 1857.3,
+                "train_size_min": 1418,
+                "train_size_max": 2318,
+                "train_size_sd": 331.8,
+                "cells_at_target": 25,
+                "cells_below_target": 0,
+                "mae": 1383.3388,
+                "rmse": 1805.5898,
+                "mae_repeat_sd": 0.0,
+                "rmse_repeat_sd": 0.0,
+                "gain_vs_global_percent": 5.6265,
+                "gain_vs_state_percent": 7.8272
+              }
+            },
+            "paired": {
+              "SS_minus_SE": {
+                "delta_mae": -60.9433,
+                "ci95": [
+                  -121.901,
+                  8.2115
+                ]
+              },
+              "SS_minus_TS": {
+                "delta_mae": -24.7638,
+                "ci95": [
+                  -39.0591,
+                  -14.7509
+                ]
+              },
+              "SE_minus_TE": {
+                "delta_mae": -46.3406,
+                "ci95": [
+                  -63.381,
+                  -18.2993
+                ]
+              },
+              "TS_minus_TE": {
+                "delta_mae": -82.5201,
+                "ci95": [
+                  -167.1195,
+                  11.7511
+                ]
+              },
+              "model_vs_baseline": {
+                "SS_vs_global": {
+                  "delta_mae": -103.8435,
+                  "ci95": [
+                    -193.7552,
+                    -23.4577
+                  ]
+                },
+                "SS_vs_state": {
+                  "delta_mae": -57.3965,
+                  "ci95": [
+                    -120.7284,
+                    34.3434
+                  ]
+                },
+                "SS_vs_state_year": {
+                  "delta_mae": -97.8883,
+                  "ci95": [
+                    -239.1103,
+                    123.0292
+                  ]
+                },
+                "SE_vs_global": {
+                  "delta_mae": -105.8597,
+                  "ci95": [
+                    -214.9419,
+                    -31.3988
+                  ]
+                },
+                "SE_vs_state": {
+                  "delta_mae": -130.0205,
+                  "ci95": [
+                    -209.2109,
+                    27.2551
+                  ]
+                },
+                "SE_vs_state_year": {
+                  "delta_mae": -43.3286,
+                  "ci95": [
+                    -130.9573,
+                    114.8515
+                  ]
+                },
+                "TS_vs_global": {
+                  "delta_mae": -85.3452,
+                  "ci95": [
+                    -182.4761,
+                    -6.0854
+                  ]
+                },
+                "TS_vs_state": {
+                  "delta_mae": -40.6278,
+                  "ci95": [
+                    -112.3593,
+                    42.3848
+                  ]
+                },
+                "TS_vs_state_year": {
+                  "delta_mae": -40.6278,
+                  "ci95": [
+                    -112.3593,
+                    42.3848
+                  ]
+                },
+                "TE_vs_global": {
+                  "delta_mae": -82.4741,
+                  "ci95": [
+                    -203.0999,
+                    -7.5849
+                  ]
+                },
+                "TE_vs_state": {
+                  "delta_mae": -117.4719,
+                  "ci95": [
+                    -191.1058,
+                    27.6817
+                  ]
+                },
+                "TE_vs_state_year": {
+                  "delta_mae": -117.4719,
+                  "ci95": [
+                    -191.1058,
+                    27.6817
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "elapsed_s": 27.9
+}
