@@ -10,6 +10,18 @@ histórico e investigar a heterogeneidade espacial do milho com validação TE
 
 **Fase atual:** concluída (fases 0–9 do roadmap).
 
+## Commits
+
+| commit | conteúdo |
+|---|---|
+| `2028efc` | reconstrução de todas as variáveis ambientais da janela (D100) |
+| `7867100` | modelos TE com janela corrigida, tendência espacial e vizinhos (D101–D103) |
+
+**Bundle de recuperação:** `SADEN_V3_1_RECOVERY_2026-11-14`, criado **fora** do
+repositório. O `BUNDLE_INFO.txt` dessa pasta registra tamanho, SHA-256, número
+de refs e o commit final — ele não pode referenciar o próprio hash dentro do
+commit, portanto essa informação fica fora do Git, como na V3.0.
+
 ## Estado
 
 | item | valor |
