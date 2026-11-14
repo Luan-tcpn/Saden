@@ -4,3 +4,5 @@ data/*.db*
 logs/*.log
 tmp/*
 .DS_Store
+__pycache__/
+*.pyc

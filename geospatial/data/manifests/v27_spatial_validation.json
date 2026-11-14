@@ -1,0 +1,1458 @@
+{
+  "generated_at": "2026-11-14T04:43:36.899185+00:00",
+  "seed": 20261113,
+  "block_km": 250.0,
+  "protocols": {},
+  "crops": {
+    "soja": {
+      "P1_municipio_v26": {
+        "description": "Holdout por municipio (protocolo da V2.6): dobras de municipios inteiros, sem vazar anos entre treino e teste.",
+        "group_key": "ibge_code",
+        "n_groups": 1225,
+        "models": {
+          "B_meteorologicos": {
+            "status": "ok",
+            "n_folds": 5,
+            "group_key": "ibge_code",
+            "n_groups": 1225,
+            "n_predictions": 8884,
+            "models": {
+              "media_historica": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 621.3287471744691,
+                "rmse_kg_ha": 800.3301267339144,
+                "mape_percent": 31.759196289340107
+              },
+              "ultimo_valor": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 1034.2827555155336,
+                "rmse_kg_ha": 1295.8222384843389,
+                "mape_percent": 53.648241830852804
+              },
+              "tendencia": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 617.6239538096277,
+                "rmse_kg_ha": 798.4566660225836,
+                "mape_percent": 31.53781339768551
+              },
+              "modelo": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 596.6081197629213,
+                "rmse_kg_ha": 771.8718724279632,
+                "mape_percent": 30.21140815166843
+              }
+            },
+            "best_by_mae": "modelo"
+          },
+          "C_thermal": {
+            "status": "ok",
+            "n_folds": 5,
+            "group_key": "ibge_code",
+            "n_groups": 1225,
+            "n_predictions": 8884,
+            "models": {
+              "media_historica": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 621.3287471744691,
+                "rmse_kg_ha": 800.3301267339144,
+                "mape_percent": 31.759196289340107
+              },
+              "ultimo_valor": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 1034.2827555155336,
+                "rmse_kg_ha": 1295.8222384843389,
+                "mape_percent": 53.648241830852804
+              },
+              "tendencia": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 617.6239538096277,
+                "rmse_kg_ha": 798.4566660225836,
+                "mape_percent": 31.53781339768551
+              },
+              "modelo": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 606.9882148201883,
+                "rmse_kg_ha": 778.3701088532716,
+                "mape_percent": 30.67264586373367
+              }
+            },
+            "best_by_mae": "modelo"
+          },
+          "D_hidricos": {
+            "status": "ok",
+            "n_folds": 5,
+            "group_key": "ibge_code",
+            "n_groups": 1225,
+            "n_predictions": 8884,
+            "models": {
+              "media_historica": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 621.3287471744691,
+                "rmse_kg_ha": 800.3301267339144,
+                "mape_percent": 31.759196289340107
+              },
+              "ultimo_valor": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 1034.2827555155336,
+                "rmse_kg_ha": 1295.8222384843389,
+                "mape_percent": 53.648241830852804
+              },
+              "tendencia": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 617.6239538096277,
+                "rmse_kg_ha": 798.4566660225836,
+                "mape_percent": 31.53781339768551
+              },
+              "modelo": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 611.1208460844589,
+                "rmse_kg_ha": 780.0003460451198,
+                "mape_percent": 30.799268524987834
+              }
+            },
+            "best_by_mae": "modelo"
+          }
+        },
+        "gains_vs_media_historica": {
+          "B_meteorologicos": {
+            "gain_percent": 3.978671117981638,
+            "mae_modelo": 596.6081197629213,
+            "mae_media_historica": 621.3287471744691,
+            "n_predictions": 8884
+          },
+          "C_thermal": {
+            "gain_percent": 2.308042629525064,
+            "mae_modelo": 606.9882148201883,
+            "mae_media_historica": 621.3287471744691,
+            "n_predictions": 8884
+          },
+          "D_hidricos": {
+            "gain_percent": 1.6429146625568583,
+            "mae_modelo": 611.1208460844589,
+            "mae_media_historica": 621.3287471744691,
+            "n_predictions": 8884
+          }
+        }
+      },
+      "P2_celula_grade": {
+        "description": "Grouped por celula MERRA-2: todos os municipios de uma célula ficam na mesma dobra (nenhum par compartilha a célula entre treino e teste).",
+        "group_key": "grid_cell_id",
+        "n_groups": 383,
+        "models": {
+          "B_meteorologicos": {
+            "status": "ok",
+            "n_folds": 5,
+            "group_key": "grid_cell_id",
+            "n_groups": 383,
+            "n_predictions": 8884,
+            "models": {
+              "media_historica": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 622.2030486099446,
+                "rmse_kg_ha": 801.4728668487403,
+                "mape_percent": 31.817064867608085
+              },
+              "ultimo_valor": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 1034.2827555155336,
+                "rmse_kg_ha": 1295.8222384843389,
+                "mape_percent": 53.64824183085282
+              },
+              "tendencia": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 618.4855327869578,
+                "rmse_kg_ha": 799.5556222372138,
+                "mape_percent": 31.597119492270714
+              },
+              "modelo": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 597.3472300352955,
+                "rmse_kg_ha": 772.8183054200898,
+                "mape_percent": 30.259520225925822
+              }
+            },
+            "best_by_mae": "modelo"
+          },
+          "C_thermal": {
+            "status": "ok",
+            "n_folds": 5,
+            "group_key": "grid_cell_id",
+            "n_groups": 383,
+            "n_predictions": 8884,
+            "models": {
+              "media_historica": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 622.2030486099446,
+                "rmse_kg_ha": 801.4728668487403,
+                "mape_percent": 31.817064867608085
+              },
+              "ultimo_valor": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 1034.2827555155336,
+                "rmse_kg_ha": 1295.8222384843389,
+                "mape_percent": 53.64824183085282
+              },
+              "tendencia": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 618.4855327869578,
+                "rmse_kg_ha": 799.5556222372138,
+                "mape_percent": 31.597119492270714
+              },
+              "modelo": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 607.6126006939384,
+                "rmse_kg_ha": 779.520732771229,
+                "mape_percent": 30.729231168364144
+              }
+            },
+            "best_by_mae": "modelo"
+          },
+          "D_hidricos": {
+            "status": "ok",
+            "n_folds": 5,
+            "group_key": "grid_cell_id",
+            "n_groups": 383,
+            "n_predictions": 8884,
+            "models": {
+              "media_historica": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 622.2030486099446,
+                "rmse_kg_ha": 801.4728668487403,
+                "mape_percent": 31.817064867608085
+              },
+              "ultimo_valor": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 1034.2827555155336,
+                "rmse_kg_ha": 1295.8222384843389,
+                "mape_percent": 53.64824183085282
+              },
+              "tendencia": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 618.4855327869578,
+                "rmse_kg_ha": 799.5556222372138,
+                "mape_percent": 31.597119492270714
+              },
+              "modelo": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 611.6324821395616,
+                "rmse_kg_ha": 781.1273866106715,
+                "mape_percent": 30.85418973077131
+              }
+            },
+            "best_by_mae": "modelo"
+          }
+        },
+        "gains_vs_media_historica": {
+          "B_meteorologicos": {
+            "gain_percent": 3.9948082270215735,
+            "mae_modelo": 597.3472300352955,
+            "mae_media_historica": 622.2030486099446,
+            "n_predictions": 8884
+          },
+          "C_thermal": {
+            "gain_percent": 2.3449656745659784,
+            "mae_modelo": 607.6126006939384,
+            "mae_media_historica": 622.2030486099446,
+            "n_predictions": 8884
+          },
+          "D_hidricos": {
+            "gain_percent": 1.6988933908309491,
+            "mae_modelo": 611.6324821395616,
+            "mae_media_historica": 622.2030486099446,
+            "n_predictions": 8884
+          }
+        }
+      },
+      "P3_bloco_espacial": {
+        "description": "Grouped por bloco espacial: blocos de 250 km; a dobra é unitária, de modo que vizinhos imediatos ficam em dobras distintas.",
+        "group_key": "spatial_block_id",
+        "n_groups": 46,
+        "models": {
+          "B_meteorologicos": {
+            "status": "ok",
+            "n_folds": 5,
+            "group_key": "spatial_block_id",
+            "n_groups": 46,
+            "n_predictions": 8884,
+            "models": {
+              "media_historica": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 630.1314635280983,
+                "rmse_kg_ha": 812.4681447734606,
+                "mape_percent": 32.241772396380654
+              },
+              "ultimo_valor": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 1034.2827555155336,
+                "rmse_kg_ha": 1295.8222384843389,
+                "mape_percent": 53.648241830852804
+              },
+              "tendencia": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 629.9956004858171,
+                "rmse_kg_ha": 813.5749374516387,
+                "mape_percent": 32.151353683277826
+              },
+              "modelo": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 612.7243896972628,
+                "rmse_kg_ha": 789.6088384358367,
+                "mape_percent": 30.914463436840972
+              }
+            },
+            "best_by_mae": "modelo"
+          },
+          "C_thermal": {
+            "status": "ok",
+            "n_folds": 5,
+            "group_key": "spatial_block_id",
+            "n_groups": 46,
+            "n_predictions": 8884,
+            "models": {
+              "media_historica": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 630.1314635280983,
+                "rmse_kg_ha": 812.4681447734606,
+                "mape_percent": 32.241772396380654
+              },
+              "ultimo_valor": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 1034.2827555155336,
+                "rmse_kg_ha": 1295.8222384843389,
+                "mape_percent": 53.648241830852804
+              },
+              "tendencia": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 629.9956004858171,
+                "rmse_kg_ha": 813.5749374516387,
+                "mape_percent": 32.151353683277826
+              },
+              "modelo": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 620.7335884208154,
+                "rmse_kg_ha": 795.4171154335482,
+                "mape_percent": 31.327612312709785
+              }
+            },
+            "best_by_mae": "modelo"
+          },
+          "D_hidricos": {
+            "status": "ok",
+            "n_folds": 5,
+            "group_key": "spatial_block_id",
+            "n_groups": 46,
+            "n_predictions": 8884,
+            "models": {
+              "media_historica": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 630.1314635280983,
+                "rmse_kg_ha": 812.4681447734606,
+                "mape_percent": 32.241772396380654
+              },
+              "ultimo_valor": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 1034.2827555155336,
+                "rmse_kg_ha": 1295.8222384843389,
+                "mape_percent": 53.648241830852804
+              },
+              "tendencia": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 629.9956004858171,
+                "rmse_kg_ha": 813.5749374516387,
+                "mape_percent": 32.151353683277826
+              },
+              "modelo": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 624.7495994131709,
+                "rmse_kg_ha": 797.0711639169334,
+                "mape_percent": 31.422966288481156
+              }
+            },
+            "best_by_mae": "modelo"
+          }
+        },
+        "gains_vs_media_historica": {
+          "B_meteorologicos": {
+            "gain_percent": 2.7624511452536327,
+            "mae_modelo": 612.7243896972628,
+            "mae_media_historica": 630.1314635280983,
+            "n_predictions": 8884
+          },
+          "C_thermal": {
+            "gain_percent": 1.4914149905583622,
+            "mae_modelo": 620.7335884208154,
+            "mae_media_historica": 630.1314635280983,
+            "n_predictions": 8884
+          },
+          "D_hidricos": {
+            "gain_percent": 0.8540859211813275,
+            "mae_modelo": 624.7495994131709,
+            "mae_media_historica": 630.1314635280983,
+            "n_predictions": 8884
+          }
+        }
+      },
+      "P4_leave_one_uf_out": {
+        "description": "Leave-one-UF-out: uma UF inteira e testada por vez.",
+        "group_key": "state",
+        "n_groups": 5,
+        "models": {
+          "B_meteorologicos": {
+            "status": "ok",
+            "n_folds": 5,
+            "group_key": "state",
+            "n_groups": 5,
+            "n_predictions": 8884,
+            "models": {
+              "media_historica": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 670.0610479121069,
+                "rmse_kg_ha": 865.1633516570698,
+                "mape_percent": 34.29636036849574
+              },
+              "ultimo_valor": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 975.1911301215669,
+                "rmse_kg_ha": 1267.4192604343466,
+                "mape_percent": 51.75572667621476
+              },
+              "tendencia": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 678.6816280767116,
+                "rmse_kg_ha": 876.8724321836731,
+                "mape_percent": 34.576578691000535
+              },
+              "modelo": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 681.8192390222531,
+                "rmse_kg_ha": 897.2775174703814,
+                "mape_percent": 35.50098141166966
+              }
+            },
+            "best_by_mae": "media_historica"
+          },
+          "C_thermal": {
+            "status": "ok",
+            "n_folds": 5,
+            "group_key": "state",
+            "n_groups": 5,
+            "n_predictions": 8884,
+            "models": {
+              "media_historica": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 670.0610479121069,
+                "rmse_kg_ha": 865.1633516570698,
+                "mape_percent": 34.29636036849574
+              },
+              "ultimo_valor": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 975.1911301215669,
+                "rmse_kg_ha": 1267.4192604343466,
+                "mape_percent": 51.75572667621476
+              },
+              "tendencia": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 678.6816280767116,
+                "rmse_kg_ha": 876.8724321836731,
+                "mape_percent": 34.576578691000535
+              },
+              "modelo": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 675.1104908597028,
+                "rmse_kg_ha": 876.3412470593086,
+                "mape_percent": 34.86404959001476
+              }
+            },
+            "best_by_mae": "media_historica"
+          },
+          "D_hidricos": {
+            "status": "ok",
+            "n_folds": 5,
+            "group_key": "state",
+            "n_groups": 5,
+            "n_predictions": 8884,
+            "models": {
+              "media_historica": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 670.0610479121069,
+                "rmse_kg_ha": 865.1633516570698,
+                "mape_percent": 34.29636036849574
+              },
+              "ultimo_valor": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 975.1911301215669,
+                "rmse_kg_ha": 1267.4192604343466,
+                "mape_percent": 51.75572667621476
+              },
+              "tendencia": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 678.6816280767116,
+                "rmse_kg_ha": 876.8724321836731,
+                "mape_percent": 34.576578691000535
+              },
+              "modelo": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 668.0271539708464,
+                "rmse_kg_ha": 865.7515335001042,
+                "mape_percent": 34.49916521350082
+              }
+            },
+            "best_by_mae": "modelo"
+          }
+        },
+        "gains_vs_media_historica": {
+          "B_meteorologicos": {
+            "gain_percent": -1.754794006722881,
+            "mae_modelo": 681.8192390222531,
+            "mae_media_historica": 670.0610479121069,
+            "n_predictions": 8884
+          },
+          "C_thermal": {
+            "gain_percent": -0.7535795377644874,
+            "mae_modelo": 675.1104908597028,
+            "mae_media_historica": 670.0610479121069,
+            "n_predictions": 8884
+          },
+          "D_hidricos": {
+            "gain_percent": 0.30353860257928816,
+            "mae_modelo": 668.0271539708464,
+            "mae_media_historica": 670.0610479121069,
+            "n_predictions": 8884
+          }
+        }
+      }
+    },
+    "milho": {
+      "P1_municipio_v26": {
+        "description": "Holdout por municipio (protocolo da V2.6): dobras de municipios inteiros, sem vazar anos entre treino e teste.",
+        "group_key": "ibge_code",
+        "n_groups": 1063,
+        "models": {
+          "B_meteorologicos": {
+            "status": "ok",
+            "n_folds": 5,
+            "group_key": "ibge_code",
+            "n_groups": 1063,
+            "n_predictions": 7616,
+            "models": {
+              "media_historica": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1578.109744461175,
+                "rmse_kg_ha": 2044.5287645916653,
+                "mape_percent": 61.78241019933222
+              },
+              "ultimo_valor": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1742.6771271008404,
+                "rmse_kg_ha": 2191.388168290342,
+                "mape_percent": 72.23384726985164
+              },
+              "tendencia": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1573.9964533189059,
+                "rmse_kg_ha": 2034.613260580753,
+                "mape_percent": 60.54275330459888
+              },
+              "modelo": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1552.520280155638,
+                "rmse_kg_ha": 1973.5334009607286,
+                "mape_percent": 58.81864402840622
+              }
+            },
+            "best_by_mae": "modelo"
+          },
+          "C_thermal": {
+            "status": "ok",
+            "n_folds": 5,
+            "group_key": "ibge_code",
+            "n_groups": 1063,
+            "n_predictions": 7616,
+            "models": {
+              "media_historica": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1578.109744461175,
+                "rmse_kg_ha": 2044.5287645916653,
+                "mape_percent": 61.78241019933222
+              },
+              "ultimo_valor": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1742.6771271008404,
+                "rmse_kg_ha": 2191.388168290342,
+                "mape_percent": 72.23384726985164
+              },
+              "tendencia": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1573.9964533189059,
+                "rmse_kg_ha": 2034.613260580753,
+                "mape_percent": 60.54275330459888
+              },
+              "modelo": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1512.1784843397713,
+                "rmse_kg_ha": 1938.1129017436342,
+                "mape_percent": 60.69534117860622
+              }
+            },
+            "best_by_mae": "modelo"
+          },
+          "D_hidricos": {
+            "status": "ok",
+            "n_folds": 5,
+            "group_key": "ibge_code",
+            "n_groups": 1063,
+            "n_predictions": 7616,
+            "models": {
+              "media_historica": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1578.109744461175,
+                "rmse_kg_ha": 2044.5287645916653,
+                "mape_percent": 61.78241019933222
+              },
+              "ultimo_valor": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1742.6771271008404,
+                "rmse_kg_ha": 2191.388168290342,
+                "mape_percent": 72.23384726985164
+              },
+              "tendencia": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1573.9964533189059,
+                "rmse_kg_ha": 2034.613260580753,
+                "mape_percent": 60.54275330459888
+              },
+              "modelo": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1477.763098986989,
+                "rmse_kg_ha": 1897.346529662623,
+                "mape_percent": 58.31235066075339
+              }
+            },
+            "best_by_mae": "modelo"
+          }
+        },
+        "gains_vs_media_historica": {
+          "B_meteorologicos": {
+            "gain_percent": 1.6215262845534446,
+            "mae_modelo": 1552.520280155638,
+            "mae_media_historica": 1578.109744461175,
+            "n_predictions": 7616
+          },
+          "C_thermal": {
+            "gain_percent": 4.177862810416592,
+            "mae_modelo": 1512.1784843397713,
+            "mae_media_historica": 1578.109744461175,
+            "n_predictions": 7616
+          },
+          "D_hidricos": {
+            "gain_percent": 6.35866078556204,
+            "mae_modelo": 1477.763098986989,
+            "mae_media_historica": 1578.109744461175,
+            "n_predictions": 7616
+          }
+        }
+      },
+      "P2_celula_grade": {
+        "description": "Grouped por celula MERRA-2: todos os municipios de uma célula ficam na mesma dobra (nenhum par compartilha a célula entre treino e teste).",
+        "group_key": "grid_cell_id",
+        "n_groups": 363,
+        "models": {
+          "B_meteorologicos": {
+            "status": "ok",
+            "n_folds": 5,
+            "group_key": "grid_cell_id",
+            "n_groups": 363,
+            "n_predictions": 7616,
+            "models": {
+              "media_historica": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1583.4600809454528,
+                "rmse_kg_ha": 2051.0113861274726,
+                "mape_percent": 61.86646708898176
+              },
+              "ultimo_valor": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1749.5379464285713,
+                "rmse_kg_ha": 2202.9931412951532,
+                "mape_percent": 73.084646347062
+              },
+              "tendencia": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1579.984201759459,
+                "rmse_kg_ha": 2041.687103798989,
+                "mape_percent": 60.64679476867077
+              },
+              "modelo": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1560.1757787119764,
+                "rmse_kg_ha": 1983.9421936258511,
+                "mape_percent": 58.96192295405083
+              }
+            },
+            "best_by_mae": "modelo"
+          },
+          "C_thermal": {
+            "status": "ok",
+            "n_folds": 5,
+            "group_key": "grid_cell_id",
+            "n_groups": 363,
+            "n_predictions": 7616,
+            "models": {
+              "media_historica": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1583.4600809454528,
+                "rmse_kg_ha": 2051.0113861274726,
+                "mape_percent": 61.86646708898176
+              },
+              "ultimo_valor": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1749.5379464285713,
+                "rmse_kg_ha": 2202.9931412951532,
+                "mape_percent": 73.084646347062
+              },
+              "tendencia": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1579.984201759459,
+                "rmse_kg_ha": 2041.687103798989,
+                "mape_percent": 60.64679476867077
+              },
+              "modelo": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1520.909410061471,
+                "rmse_kg_ha": 1949.133840579097,
+                "mape_percent": 60.91744403371535
+              }
+            },
+            "best_by_mae": "modelo"
+          },
+          "D_hidricos": {
+            "status": "ok",
+            "n_folds": 5,
+            "group_key": "grid_cell_id",
+            "n_groups": 363,
+            "n_predictions": 7616,
+            "models": {
+              "media_historica": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1583.4600809454528,
+                "rmse_kg_ha": 2051.0113861274726,
+                "mape_percent": 61.86646708898176
+              },
+              "ultimo_valor": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1749.5379464285713,
+                "rmse_kg_ha": 2202.9931412951532,
+                "mape_percent": 73.084646347062
+              },
+              "tendencia": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1579.984201759459,
+                "rmse_kg_ha": 2041.687103798989,
+                "mape_percent": 60.64679476867077
+              },
+              "modelo": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1486.705432443512,
+                "rmse_kg_ha": 1908.475667439479,
+                "mape_percent": 58.530524322950626
+              }
+            },
+            "best_by_mae": "modelo"
+          }
+        },
+        "gains_vs_media_historica": {
+          "B_meteorologicos": {
+            "gain_percent": 1.4704697967235028,
+            "mae_modelo": 1560.1757787119764,
+            "mae_media_historica": 1583.4600809454528,
+            "n_predictions": 7616
+          },
+          "C_thermal": {
+            "gain_percent": 3.95025246526165,
+            "mae_modelo": 1520.909410061471,
+            "mae_media_historica": 1583.4600809454528,
+            "n_predictions": 7616
+          },
+          "D_hidricos": {
+            "gain_percent": 6.110330766543251,
+            "mae_modelo": 1486.705432443512,
+            "mae_media_historica": 1583.4600809454528,
+            "n_predictions": 7616
+          }
+        }
+      },
+      "P3_bloco_espacial": {
+        "description": "Grouped por bloco espacial: blocos de 250 km; a dobra é unitária, de modo que vizinhos imediatos ficam em dobras distintas.",
+        "group_key": "spatial_block_id",
+        "n_groups": 49,
+        "models": {
+          "B_meteorologicos": {
+            "status": "ok",
+            "n_folds": 5,
+            "group_key": "spatial_block_id",
+            "n_groups": 49,
+            "n_predictions": 7616,
+            "models": {
+              "media_historica": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1701.0762729585801,
+                "rmse_kg_ha": 2197.9666824394044,
+                "mape_percent": 63.941233732033574
+              },
+              "ultimo_valor": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1759.5392594537816,
+                "rmse_kg_ha": 2204.1887623162447,
+                "mape_percent": 74.07316377893835
+              },
+              "tendencia": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1699.101299972648,
+                "rmse_kg_ha": 2189.663619502378,
+                "mape_percent": 63.12506857862675
+              },
+              "modelo": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1678.0314642245785,
+                "rmse_kg_ha": 2145.1115330637463,
+                "mape_percent": 59.92871071842435
+              }
+            },
+            "best_by_mae": "modelo"
+          },
+          "C_thermal": {
+            "status": "ok",
+            "n_folds": 5,
+            "group_key": "spatial_block_id",
+            "n_groups": 49,
+            "n_predictions": 7616,
+            "models": {
+              "media_historica": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1701.0762729585801,
+                "rmse_kg_ha": 2197.9666824394044,
+                "mape_percent": 63.941233732033574
+              },
+              "ultimo_valor": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1759.5392594537816,
+                "rmse_kg_ha": 2204.1887623162447,
+                "mape_percent": 74.07316377893835
+              },
+              "tendencia": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1699.101299972648,
+                "rmse_kg_ha": 2189.663619502378,
+                "mape_percent": 63.12506857862675
+              },
+              "modelo": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1612.5415222771958,
+                "rmse_kg_ha": 2071.055160714863,
+                "mape_percent": 61.838954739301535
+              }
+            },
+            "best_by_mae": "modelo"
+          },
+          "D_hidricos": {
+            "status": "ok",
+            "n_folds": 5,
+            "group_key": "spatial_block_id",
+            "n_groups": 49,
+            "n_predictions": 7616,
+            "models": {
+              "media_historica": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1701.0762729585801,
+                "rmse_kg_ha": 2197.9666824394044,
+                "mape_percent": 63.941233732033574
+              },
+              "ultimo_valor": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1759.5392594537816,
+                "rmse_kg_ha": 2204.1887623162447,
+                "mape_percent": 74.07316377893835
+              },
+              "tendencia": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1699.101299972648,
+                "rmse_kg_ha": 2189.663619502378,
+                "mape_percent": 63.12506857862675
+              },
+              "modelo": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1593.9261854060562,
+                "rmse_kg_ha": 2046.7878003324115,
+                "mape_percent": 59.71372334105559
+              }
+            },
+            "best_by_mae": "modelo"
+          }
+        },
+        "gains_vs_media_historica": {
+          "B_meteorologicos": {
+            "gain_percent": 1.3547193092007102,
+            "mae_modelo": 1678.0314642245785,
+            "mae_media_historica": 1701.0762729585801,
+            "n_predictions": 7616
+          },
+          "C_thermal": {
+            "gain_percent": 5.204631449441193,
+            "mae_modelo": 1612.5415222771958,
+            "mae_media_historica": 1701.0762729585801,
+            "n_predictions": 7616
+          },
+          "D_hidricos": {
+            "gain_percent": 6.298958445065146,
+            "mae_modelo": 1593.9261854060562,
+            "mae_media_historica": 1701.0762729585801,
+            "n_predictions": 7616
+          }
+        }
+      },
+      "P4_leave_one_uf_out": {
+        "description": "Leave-one-UF-out: uma UF inteira e testada por vez.",
+        "group_key": "state",
+        "n_groups": 6,
+        "models": {
+          "B_meteorologicos": {
+            "status": "ok",
+            "n_folds": 5,
+            "group_key": "state",
+            "n_groups": 6,
+            "n_predictions": 7616,
+            "models": {
+              "media_historica": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1584.4035031019614,
+                "rmse_kg_ha": 2054.7973318810523,
+                "mape_percent": 61.69781036844528
+              },
+              "ultimo_valor": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1814.3656775210084,
+                "rmse_kg_ha": 2263.429808041244,
+                "mape_percent": 76.063183525251
+              },
+              "tendencia": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1588.845690968014,
+                "rmse_kg_ha": 2052.8799064229306,
+                "mape_percent": 60.97360279524588
+              },
+              "modelo": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1637.9788965729429,
+                "rmse_kg_ha": 2069.081793822103,
+                "mape_percent": 60.86254972805999
+              }
+            },
+            "best_by_mae": "media_historica"
+          },
+          "C_thermal": {
+            "status": "ok",
+            "n_folds": 5,
+            "group_key": "state",
+            "n_groups": 6,
+            "n_predictions": 7616,
+            "models": {
+              "media_historica": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1584.4035031019614,
+                "rmse_kg_ha": 2054.7973318810523,
+                "mape_percent": 61.69781036844528
+              },
+              "ultimo_valor": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1814.3656775210084,
+                "rmse_kg_ha": 2263.429808041244,
+                "mape_percent": 76.063183525251
+              },
+              "tendencia": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1588.845690968014,
+                "rmse_kg_ha": 2052.8799064229306,
+                "mape_percent": 60.97360279524588
+              },
+              "modelo": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1563.782052971941,
+                "rmse_kg_ha": 2008.781933850433,
+                "mape_percent": 62.405347817890544
+              }
+            },
+            "best_by_mae": "modelo"
+          },
+          "D_hidricos": {
+            "status": "ok",
+            "n_folds": 5,
+            "group_key": "state",
+            "n_groups": 6,
+            "n_predictions": 7616,
+            "models": {
+              "media_historica": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1584.4035031019614,
+                "rmse_kg_ha": 2054.7973318810523,
+                "mape_percent": 61.69781036844528
+              },
+              "ultimo_valor": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1814.3656775210084,
+                "rmse_kg_ha": 2263.429808041244,
+                "mape_percent": 76.063183525251
+              },
+              "tendencia": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1588.845690968014,
+                "rmse_kg_ha": 2052.8799064229306,
+                "mape_percent": 60.97360279524588
+              },
+              "modelo": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1505.7204862682902,
+                "rmse_kg_ha": 1941.6395086359887,
+                "mape_percent": 59.622095675704166
+              }
+            },
+            "best_by_mae": "modelo"
+          }
+        },
+        "gains_vs_media_historica": {
+          "B_meteorologicos": {
+            "gain_percent": -3.381423568307631,
+            "mae_modelo": 1637.9788965729429,
+            "mae_media_historica": 1584.4035031019614,
+            "n_predictions": 7616
+          },
+          "C_thermal": {
+            "gain_percent": 1.3015276783753276,
+            "mae_modelo": 1563.782052971941,
+            "mae_media_historica": 1584.4035031019614,
+            "n_predictions": 7616
+          },
+          "D_hidricos": {
+            "gain_percent": 4.966097126118744,
+            "mae_modelo": 1505.7204862682902,
+            "mae_media_historica": 1584.4035031019614,
+            "n_predictions": 7616
+          }
+        }
+      }
+    },
+    "milho_2": {
+      "P1_municipio_v26": {
+        "description": "Holdout por municipio (protocolo da V2.6): dobras de municipios inteiros, sem vazar anos entre treino e teste.",
+        "group_key": "ibge_code",
+        "n_groups": 505,
+        "models": {
+          "B_meteorologicos": {
+            "status": "ok",
+            "n_folds": 5,
+            "group_key": "ibge_code",
+            "n_groups": 505,
+            "n_predictions": 2902,
+            "models": {
+              "media_historica": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1366.202709966046,
+                "rmse_kg_ha": 1797.2561722828816,
+                "mape_percent": 35.6788295963989
+              },
+              "ultimo_valor": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1655.6688490696072,
+                "rmse_kg_ha": 2082.6487891576953,
+                "mape_percent": 47.81081160949866
+              },
+              "tendencia": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1339.2973904070618,
+                "rmse_kg_ha": 1747.1399258022782,
+                "mape_percent": 35.22184279600228
+              },
+              "modelo": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1166.7288119740608,
+                "rmse_kg_ha": 1489.6263281132124,
+                "mape_percent": 29.036364173486838
+              }
+            },
+            "best_by_mae": "modelo"
+          },
+          "C_thermal": {
+            "status": "ok",
+            "n_folds": 5,
+            "group_key": "ibge_code",
+            "n_groups": 505,
+            "n_predictions": 2902,
+            "models": {
+              "media_historica": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1366.202709966046,
+                "rmse_kg_ha": 1797.2561722828816,
+                "mape_percent": 35.6788295963989
+              },
+              "ultimo_valor": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1655.6688490696072,
+                "rmse_kg_ha": 2082.6487891576953,
+                "mape_percent": 47.81081160949866
+              },
+              "tendencia": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1339.2973904070618,
+                "rmse_kg_ha": 1747.1399258022782,
+                "mape_percent": 35.22184279600228
+              },
+              "modelo": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1238.9885498728659,
+                "rmse_kg_ha": 1611.369110925348,
+                "mape_percent": 30.673420141689434
+              }
+            },
+            "best_by_mae": "modelo"
+          },
+          "D_hidricos": {
+            "status": "ok",
+            "n_folds": 5,
+            "group_key": "ibge_code",
+            "n_groups": 505,
+            "n_predictions": 2902,
+            "models": {
+              "media_historica": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1366.202709966046,
+                "rmse_kg_ha": 1797.2561722828816,
+                "mape_percent": 35.6788295963989
+              },
+              "ultimo_valor": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1655.6688490696072,
+                "rmse_kg_ha": 2082.6487891576953,
+                "mape_percent": 47.81081160949866
+              },
+              "tendencia": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1339.2973904070618,
+                "rmse_kg_ha": 1747.1399258022782,
+                "mape_percent": 35.22184279600228
+              },
+              "modelo": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1251.196425539886,
+                "rmse_kg_ha": 1636.8479735830344,
+                "mape_percent": 31.282592886199183
+              }
+            },
+            "best_by_mae": "modelo"
+          }
+        },
+        "gains_vs_media_historica": {
+          "B_meteorologicos": {
+            "gain_percent": 14.600607694369364,
+            "mae_modelo": 1166.7288119740608,
+            "mae_media_historica": 1366.202709966046,
+            "n_predictions": 2902
+          },
+          "C_thermal": {
+            "gain_percent": 9.311514255182662,
+            "mae_modelo": 1238.9885498728659,
+            "mae_media_historica": 1366.202709966046,
+            "n_predictions": 2902
+          },
+          "D_hidricos": {
+            "gain_percent": 8.417951712964937,
+            "mae_modelo": 1251.196425539886,
+            "mae_media_historica": 1366.202709966046,
+            "n_predictions": 2902
+          }
+        }
+      },
+      "P2_celula_grade": {
+        "description": "Grouped por celula MERRA-2: todos os municipios de uma célula ficam na mesma dobra (nenhum par compartilha a célula entre treino e teste).",
+        "group_key": "grid_cell_id",
+        "n_groups": 194,
+        "models": {
+          "B_meteorologicos": {
+            "status": "ok",
+            "n_folds": 5,
+            "group_key": "grid_cell_id",
+            "n_groups": 194,
+            "n_predictions": 2902,
+            "models": {
+              "media_historica": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1366.1882974771122,
+                "rmse_kg_ha": 1797.3529981714753,
+                "mape_percent": 35.6138300670118
+              },
+              "ultimo_valor": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1637.5072363886975,
+                "rmse_kg_ha": 2072.912042757473,
+                "mape_percent": 47.51335235941798
+              },
+              "tendencia": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1338.5187015769968,
+                "rmse_kg_ha": 1745.9439788863508,
+                "mape_percent": 35.1445557333974
+              },
+              "modelo": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1171.9714420618982,
+                "rmse_kg_ha": 1496.9645195537635,
+                "mape_percent": 29.03506235634194
+              }
+            },
+            "best_by_mae": "modelo"
+          },
+          "C_thermal": {
+            "status": "ok",
+            "n_folds": 5,
+            "group_key": "grid_cell_id",
+            "n_groups": 194,
+            "n_predictions": 2902,
+            "models": {
+              "media_historica": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1366.1882974771122,
+                "rmse_kg_ha": 1797.3529981714753,
+                "mape_percent": 35.6138300670118
+              },
+              "ultimo_valor": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1637.5072363886975,
+                "rmse_kg_ha": 2072.912042757473,
+                "mape_percent": 47.51335235941798
+              },
+              "tendencia": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1338.5187015769968,
+                "rmse_kg_ha": 1745.9439788863508,
+                "mape_percent": 35.1445557333974
+              },
+              "modelo": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1244.6328907857987,
+                "rmse_kg_ha": 1616.4123353536845,
+                "mape_percent": 30.71104702723118
+              }
+            },
+            "best_by_mae": "modelo"
+          },
+          "D_hidricos": {
+            "status": "ok",
+            "n_folds": 5,
+            "group_key": "grid_cell_id",
+            "n_groups": 194,
+            "n_predictions": 2902,
+            "models": {
+              "media_historica": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1366.1882974771122,
+                "rmse_kg_ha": 1797.3529981714753,
+                "mape_percent": 35.6138300670118
+              },
+              "ultimo_valor": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1637.5072363886975,
+                "rmse_kg_ha": 2072.912042757473,
+                "mape_percent": 47.51335235941798
+              },
+              "tendencia": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1338.5187015769968,
+                "rmse_kg_ha": 1745.9439788863508,
+                "mape_percent": 35.1445557333974
+              },
+              "modelo": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1259.028248588038,
+                "rmse_kg_ha": 1644.0359905094895,
+                "mape_percent": 31.332029836399084
+              }
+            },
+            "best_by_mae": "modelo"
+          }
+        },
+        "gains_vs_media_historica": {
+          "B_meteorologicos": {
+            "gain_percent": 14.21596538148269,
+            "mae_modelo": 1171.9714420618982,
+            "mae_media_historica": 1366.1882974771122,
+            "n_predictions": 2902
+          },
+          "C_thermal": {
+            "gain_percent": 8.897412378351154,
+            "mae_modelo": 1244.6328907857987,
+            "mae_media_historica": 1366.1882974771122,
+            "n_predictions": 2902
+          },
+          "D_hidricos": {
+            "gain_percent": 7.84372469643918,
+            "mae_modelo": 1259.028248588038,
+            "mae_media_historica": 1366.1882974771122,
+            "n_predictions": 2902
+          }
+        }
+      },
+      "P3_bloco_espacial": {
+        "description": "Grouped por bloco espacial: blocos de 250 km; a dobra é unitária, de modo que vizinhos imediatos ficam em dobras distintas.",
+        "group_key": "spatial_block_id",
+        "n_groups": 30,
+        "models": {
+          "B_meteorologicos": {
+            "status": "ok",
+            "n_folds": 5,
+            "group_key": "spatial_block_id",
+            "n_groups": 30,
+            "n_predictions": 2902,
+            "models": {
+              "media_historica": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1442.8903310142414,
+                "rmse_kg_ha": 1883.1685460861995,
+                "mape_percent": 37.89085326302191
+              },
+              "ultimo_valor": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1667.55099931082,
+                "rmse_kg_ha": 2089.3044837233297,
+                "mape_percent": 48.207395918549636
+              },
+              "tendencia": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1410.3086766207143,
+                "rmse_kg_ha": 1827.6201250085026,
+                "mape_percent": 37.222436393229124
+              },
+              "modelo": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1197.981088855404,
+                "rmse_kg_ha": 1527.373386176085,
+                "mape_percent": 30.634165773505767
+              }
+            },
+            "best_by_mae": "modelo"
+          },
+          "C_thermal": {
+            "status": "ok",
+            "n_folds": 5,
+            "group_key": "spatial_block_id",
+            "n_groups": 30,
+            "n_predictions": 2902,
+            "models": {
+              "media_historica": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1442.8903310142414,
+                "rmse_kg_ha": 1883.1685460861995,
+                "mape_percent": 37.89085326302191
+              },
+              "ultimo_valor": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1667.55099931082,
+                "rmse_kg_ha": 2089.3044837233297,
+                "mape_percent": 48.207395918549636
+              },
+              "tendencia": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1410.3086766207143,
+                "rmse_kg_ha": 1827.6201250085026,
+                "mape_percent": 37.222436393229124
+              },
+              "modelo": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1251.0158383595697,
+                "rmse_kg_ha": 1630.3447883220333,
+                "mape_percent": 31.240707904005433
+              }
+            },
+            "best_by_mae": "modelo"
+          },
+          "D_hidricos": {
+            "status": "ok",
+            "n_folds": 5,
+            "group_key": "spatial_block_id",
+            "n_groups": 30,
+            "n_predictions": 2902,
+            "models": {
+              "media_historica": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1442.8903310142414,
+                "rmse_kg_ha": 1883.1685460861995,
+                "mape_percent": 37.89085326302191
+              },
+              "ultimo_valor": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1667.55099931082,
+                "rmse_kg_ha": 2089.3044837233297,
+                "mape_percent": 48.207395918549636
+              },
+              "tendencia": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1410.3086766207143,
+                "rmse_kg_ha": 1827.6201250085026,
+                "mape_percent": 37.222436393229124
+              },
+              "modelo": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1281.90811445852,
+                "rmse_kg_ha": 1672.242729948216,
+                "mape_percent": 32.61640312295559
+              }
+            },
+            "best_by_mae": "modelo"
+          }
+        },
+        "gains_vs_media_historica": {
+          "B_meteorologicos": {
+            "gain_percent": 16.973517452756433,
+            "mae_modelo": 1197.981088855404,
+            "mae_media_historica": 1442.8903310142414,
+            "n_predictions": 2902
+          },
+          "C_thermal": {
+            "gain_percent": 13.29792628936661,
+            "mae_modelo": 1251.0158383595697,
+            "mae_media_historica": 1442.8903310142414,
+            "n_predictions": 2902
+          },
+          "D_hidricos": {
+            "gain_percent": 11.156926697440909,
+            "mae_modelo": 1281.90811445852,
+            "mae_media_historica": 1442.8903310142414,
+            "n_predictions": 2902
+          }
+        }
+      },
+      "P4_leave_one_uf_out": {
+        "description": "Leave-one-UF-out: uma UF inteira e testada por vez.",
+        "group_key": "state",
+        "n_groups": 4,
+        "models": {
+          "B_meteorologicos": {
+            "status": "insufficient_municipalities",
+            "n_municipalities": 505,
+            "n_groups": 4,
+            "group_key": "state"
+          },
+          "C_thermal": {
+            "status": "insufficient_municipalities",
+            "n_municipalities": 505,
+            "n_groups": 4,
+            "group_key": "state"
+          },
+          "D_hidricos": {
+            "status": "insufficient_municipalities",
+            "n_municipalities": 505,
+            "n_groups": 4,
+            "group_key": "state"
+          }
+        }
+      }
+    }
+  }
+}
