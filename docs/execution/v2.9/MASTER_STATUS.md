@@ -1,7 +1,7 @@
 # SADEN V2.9 — Status da execução
 
 > Etapa: **V2.9 — Regionalização agroclimática, heterogeneidade espacial do
-> milho, CAD e classes de ciclo**. Atualizado em: 2026-11-14.
+> milho, CAD e classes de ciclo ZARC**. Atualizado em: 2026-11-14.
 
 ## Objetivo
 
@@ -19,7 +19,7 @@ culturas o resultado é generalizável**.
 | Bundle V2.8 | `..\SADEN_V2_8_RECOVERY_2026-11-14\`, SHA-256 `73297BAB…46890AA8`, *okay*, 26 refs |
 | V1 / `main` | `3f7ad33` (tag `v1-final`) — intactas |
 | Suíte de referência | **338/338** ao abrir a V2.9 |
-| Suíte atual | **345/345** |
+| Suíte atual | **354/354** |
 
 ## Estado das fases
 
@@ -27,39 +27,47 @@ culturas o resultado é generalizável**.
 |---|---|---|
 | 0 | Auditoria, bundle, branch, suíte de referência | **concluída** |
 | 1 | Auditoria da equalização da V2.8 | **concluída** (D90) |
-| 2 | Modelo regional de referência e valor incremental do clima | pendente |
-| 3 | Heterogeneidade espacial do milho | pendente |
-| 4 | CAD e balanço hídrico | pendente |
-| 5 | Dicionário e classes de ciclo do ZARC | pendente |
-| 6 | Cobertura territorial | pendente |
-| 7 | Síntese científica | pendente |
-| 8 | Validação e publicação | pendente |
+| 2 | Modelo regional de referência e valor incremental do clima | **concluída** (D91) |
+| 3 | Heterogeneidade espacial do milho e escala do bloco | **concluída** (D92) |
+| 4 | CAD: estratégia, piloto, amostra estratificada, balanço | **concluída** (D93) |
+| 5 | Dicionário ZARC e teste de interação por classe | **concluída** (D94) |
+| 6 | Cobertura territorial | **concluída** (D95) |
+| 7 | Síntese científica | **concluída** |
+| 8 | Validação final, bundle e publicação | **em curso** |
 
-## Resultado da Fase 1 (D90)
+## Achados centrais
 
-A equalização da V2.8 era **global**, não por célula. Medido no painel real:
+1. **Equalização:** a V2.8 era global, não por célula (TE 5.401 linhas em
+   média, 11/25 células abaixo do alvo). Com equalização estrita, MAEs mudam
+   em ≤ 5,1 kg/ha e os efeitos ficam nos mesmos ICs — a conclusão se sustenta.
+2. **Valor incremental do clima (M2−M1):** na soja só existe com o ano
+   compartilhado (−13,3 em SS, −19,2 em SE; −6,3 n.s. em TE); a família
+   hídrica **piora** em TS/TE (+26,3 e +20,5). No milho 2ª safra a família
+   meteorológica acrescenta nos quatro braços (TE −267,2).
+3. **Milho e o bloco:** efeito −170,8 a 250 km, concentrado em PR (+421), BA
+   (+291) e MS (+171); ~0 em GO/MT e negativo em RS — heterogeneidade dentro
+   da UF. A 150 km o efeito é −47,1; a 600 km há só 14–15 blocos (poder baixo).
+4. **ZARC:** dicionário oficial obtido (20/21/22 = Grupo I/II/III; não é
+   cultivar). O teste formal **retira** a "inversão de sinal" da temperatura
+   na soja (p=0,38); o déficit difere (p=0,003).
+5. **CAD:** `scaleFactor=0.2` reduz o volume 60× (450 m); piloto valida contra
+   a amostra de 90 m da V2.7 (112–201 mm, mediana 161,5). Amostra
+   estratificada por UF em curso.
 
-| Cultura | braço | alvo | média | mínimo | células abaixo do alvo |
-|---|---|---|---|---|---|
-| soja | SS/SE/TS | 5.686 | 5.686 | — | 0 |
-| soja | **TE** | 5.686 | **5.401** | **4.308** | **11/25** |
-| milho | TE | 4.874 | 4.874 | 3.514 | 13/25 |
-| milho 2ª | TE | 1.857 | 1.857 | 1.418 | 10/25 |
+## Manifestos
 
-Com **equalização estrita por célula** (alvo = menor conjunto entre os quatro
-braços, 25/25 células atingindo o alvo), as MAEs mudam em ≤ 5 kg/ha e todos os
-efeitos permanecem dentro do mesmo IC — **a conclusão da V2.8 se sustenta**.
-Uma única comparação limítrofe muda de status: milho 2ª, `SS−SE` passa de
-−39,6 [−68,5;+0,5] para −45,5 [−79,0;−0,8] (deixa de incluir zero).
+`v29_equalization_audit.json` · `v29_nested_models.json` ·
+`v29_block_scale.json` · `v29_zarc_dictionary.json` ·
+`v29_cycle_interaction.json` · `v29_coverage.json` · `v29_cad_expansion.json`
+(parcial) · `v29_cad_stratified.json` · `v29_cad_balance_panel.json`.
 
 ## Próxima ação executável
 
-Fase 2: modelos aninhados M0 (média global) → M1 (UF) → M2 (UF + clima) com o
-mesmo conjunto de treino, IC por bloco, e o valor incremental do clima medido
-como M2 − M1 por cultura e por UF.
+Concluir a amostra estratificada de CAD, rodar o balanço hídrico por município,
+preencher os números de CAD/cobertura no relatório e publicar.
 
-## Bloqueios conhecidos
+## Bloqueios
 
-- CAD em escala de painel: cobertura de 5/1.296 municípios; exige extração WCS.
-- Rótulo das classes de ciclo: dicionário de dados do ZARC não coletado.
+- Cobertura completa de CAD: ~5 h de requisições (plano validado; retomável).
+- Profundidade radicular por cultura: sem fonte cultivar-específica.
 - ERA5-Land: credencial CDS ausente (D83). CHIRPS/ARCO: sem DNS.

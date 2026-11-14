@@ -83,4 +83,90 @@ em todas as células; conjunto de teste idêntico entre braços; células abaixo
 do mínimo caem para todos; modo inválido rejeitado; métricas por repetição
 coerentes com a MAE agregada. Suíte total: **345/345**.
 
-**Checkpoint.** (commit da fase 0+1)
+**Checkpoint.** `3818baa`.
+
+### Fase 2 — modelos aninhados (D91)
+
+`tools/s29_nested_models.py`. M0 (média global) → M1 (média da UF) → M2 (UF +
+clima), mesmo treino e mesmo teste, equalização por célula, 5 repetições.
+`climate_only` mantido como M0b.
+
+Valor incremental do clima (`M2 − M1`), família B:
+
+| Cultura | SS | SE | TS | TE |
+|---|---|---|---|---|
+| soja | −13,3 [−25,9;−0,8] | −19,2 [−35,2;−3,9] | +1,5 n.s. | −6,3 n.s. |
+| milho | −101,0 n.s. | −216,1 [−373,0;−48,2] | −69,7 n.s. | −198,7 [−355,8;−31,3] |
+| milho 2ª | −169,3 | −257,4 | −161,5 | **−267,2 [−413,8;−35,1]** |
+
+Família hídrica na soja: SS +1,7 n.s.; SE −6,6 n.s.; TS **+26,3
+[+16,4;+36,6]** e TE **+20,5 [+9,6;+31,7]** — o modelo é pior que a média da
+UF quando o ano é retirado.
+
+Fallback de UF instrumentado: 0,0% em todos os braços (toda UF de teste tem
+linhas no treino). A decomposição por UF (`by_state`) foi acrescentada ao
+módulo.
+
+**Checkpoint.** `a843ab0` (junto com a Fase 3).
+
+### Fase 3 — heterogeneidade do milho e escala do bloco (D92)
+
+`tools/s29_block_scale.py`: fatorial repetido em 150/250/400/600 km.
+
+Efeito espacial do milho: −47,1 (150 km, 107 blocos), −170,8 (250, 49),
+−152,4 (400, 26), −415,1 (600, 15). A soja é insensível em 150–400 km; o
+valor de −87,0 em 600 km tem 14 blocos e não sustenta conclusão.
+
+Efeito do bloco por UF (250 km): PR +421,4, BA +291,0, MS +170,9, GO +29,7,
+MT +17,3, RS −96,7 → heterogeneidade **dentro** da UF.
+
+### Fase 4 — CAD (D93)
+
+Sondagem do WCS: serviço disponível (0,07 MB / 0,3 s para 0,1°). Testes de
+redução de resolução: `scaleFactor=0.2` → 0,066 MB (60× menor, ~450 m);
+`scaleFactor>1` aumenta a resolução (inútil aqui); `scalesize` → HTTP 404.
+
+`tools/s29_cad_expand.py`: aquisição por bbox municipal, 6 camadas, estatística
+por camada e CAD **por pixel** em 0–60/0–100/0–200 cm. Correção: a versão
+inicial aplicava as seis camadas a qualquer profundidade (a "0–100" saía com
+o valor de 0–200); corrigido antes de qualquer conclusão.
+
+Piloto estratificado (18 municípios): CAD 0–100 entre 112,1 e 200,6 mm,
+mediana 161,5 — compatível com a amostra da V2.7 (126–240; mediana 159).
+
+Custo medido ~15 s/município → cobertura completa dos 1.296 exigiria ~5 h.
+Optou-se por **amostra estratificada por UF e porte** (120 municípios) em
+manifesto próprio (`v29_cad_stratified.json`), com o plano de cobertura
+completa documentado.
+
+### Fase 5 — ZARC (D94)
+
+Dicionário oficial localizado no Portal de Dados Abertos do MAPA
+(`dicionario-de-dados-tabua-de-risco-2026.pdf`, consultado em 2026-11-14,
+CC-BY): `Cod_Ciclo` 13 Perene, 19 Semiperene, 20 Grupo I, 21 Grupo II,
+22 Grupo III, 24 Grupo IV, 25 Grupo V, 26 Grupo VI; `Cod_Solo` 1/2/3 e 11–16.
+
+Novo módulo `geospatial/agroclimate/cycle.py` (rótulos + `interaction_test`).
+
+Teste formal de interação: soja déficit **−1,194 (t=−3,16; p=0,003)**;
+soja temperatura −3,98 (t=−0,88; p=0,38); milho precipitação −1,017 (p=0,046,
+marginal); demais não significativos. **Correção da V2.8:** a "inversão de
+sinal" da temperatura na soja não existe — era artefato de estimar cada
+classe separadamente. Nota de correção aposta em §13 do relatório da V2.8.
+
+**Testes.** `test_v29_cycle.py` (9): rótulos, códigos desconhecidos, metadados
+da fonte, detecção de diferença verdadeira, ausência de diferença sob a nula,
+IC, amostra insuficiente e desenho degenerado. Suíte: **354/354**.
+
+**Checkpoint.** `4d7af5b`.
+
+### Fase 6 — cobertura (D95)
+
+`tools/s29_coverage.py`: 19.402 linhas, 1.296 municípios, 46/49/30 blocos,
+5–6 UFs; interseção com a CAD medida na mesma população.
+
+### Fase 7–8 — síntese e encerramento
+
+`docs/V2_9_REGIONAL_AGROCLIMATIC_REPORT.md`; decisões D90–D94 em
+`docs/DECISIONS.md`; balanço hídrico por município e publicação da branch.
+

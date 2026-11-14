@@ -161,6 +161,55 @@ def profile_capacity_to_depth_mm(
     return result
 
 
+def layers_up_to_depth(
+    depth_cm: float,
+    layers: Sequence[Mapping[str, Any]] = AW_LAYERS,
+) -> list[Mapping[str, Any]]:
+    """Camadas **totalmente** contidas num perfil de ``depth_cm``.
+
+    Uma camada só entra se a sua base estiver dentro do perfil; camadas
+    atravessadas pela profundidade ficam de fora, porque fatiar uma camada
+    exigiria inventar uma proporção que o dado publicado não suporta.
+    """
+    return [
+        layer
+        for layer in layers
+        if float(layer["bottom_cm"]) >= 0 and float(layer["top_cm"]) <= depth_cm
+    ]
+
+
+def pixel_capacity_mm(
+    stack: "Any",
+    layers: Sequence[Mapping[str, Any]],
+) -> "Any":
+    """CAD por pixel (mm) para as camadas informadas.
+
+    ``stack`` tem forma ``(n_camadas, linhas, colunas)``, na mesma ordem de
+    ``layers``. Devolve a integração ``Σ AW(mm/cm) · espessura(cm)`` por
+    pixel, com ``NaN`` onde **qualquer** camada do perfil for inválida — a
+    ausência não é preenchida.
+
+    A função existe para que a seleção de camadas por profundidade fique num
+    só lugar: usar todas as camadas disponíveis para qualquer profundidade
+    transforma a CAD de 0–100 cm na de 0–200 cm.
+    """
+    import numpy as np
+
+    if len(layers) == 0:
+        raise ValueError("nenhuma camada para integrar")
+    thickness = np.array(
+        [layer_thickness_cm(layer) for layer in layers], dtype="float64"
+    ).reshape(-1, 1, 1)
+    values = np.asarray(stack, dtype="float64")
+    if values.shape[0] != thickness.shape[0]:
+        raise ValueError(
+            f"stack com {values.shape[0]} camadas e {thickness.shape[0]} espessuras"
+        )
+    capacity = np.nansum(values * thickness, axis=0)
+    capacity[np.isnan(values).any(axis=0)] = np.nan
+    return capacity
+
+
 def compare_with_scenarios(
     capacity_mm: float | None,
     scenarios: Sequence[float] = V26_SCENARIO_CAPACITIES_MM,

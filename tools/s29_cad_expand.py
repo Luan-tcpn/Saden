@@ -153,7 +153,12 @@ def panel_codes() -> set[str]:
 
 
 def select_pilot(municipalities: list[dict[str, Any]], n: int) -> list[dict[str, Any]]:
-    """Piloto estratificado por UF: municípios do painel, ordenados por área."""
+    """Amostra estratificada por UF, cobrindo a distribuição de área.
+
+    Em cada UF, os municípios do painel são ordenados por área e a amostra é
+    retirada em passos regulares ao longo dessa ordenação — de modo que
+    municípios grandes, médios e pequenos entrem na proporção em que existem.
+    """
     codes = panel_codes()
     usable = [
         m
@@ -169,11 +174,17 @@ def select_pilot(municipalities: list[dict[str, Any]], n: int) -> list[dict[str,
     per_state = max(1, n // max(len(states), 1))
     chosen: list[dict[str, Any]] = []
     for state in states:
-        rows = sorted(by_state[state], key=lambda r: -(_to_float(r.get("area_km2")) or 0.0))
-        # pega municípios ao longo da distribuição de área (grande, médio, pequeno)
+        rows = sorted(
+            by_state[state], key=lambda r: (_to_float(r.get("area_km2")) or 0.0)
+        )
         if not rows:
             continue
-        picks = [rows[0], rows[len(rows) // 2], rows[-1]][:per_state]
+        count = min(per_state, len(rows))
+        if count == 1:
+            picks = [rows[len(rows) // 2]]
+        else:
+            step = (len(rows) - 1) / (count - 1)
+            picks = [rows[int(round(i * step))] for i in range(count)]
         chosen.extend(picks)
     return chosen[:n]
 
@@ -227,22 +238,16 @@ def run(municipalities: list[dict[str, Any]], scale: float, delay: float, out: d
             entry[f"cad_0_{int(depth)}_cm_mm"] = result["capacity_mm"]
         # distribuição **por pixel** da CAD, usando só as camadas do perfil
         for depth in DEPTHS_CM:
-            selected = [
-                layer for layer in soil.AW_LAYERS if float(layer["top_cm"]) <= depth
-            ]
+            selected = soil.layers_up_to_depth(depth)
             keys = [layer["key"] for layer in selected]
             if not all(k in arrays for k in keys):
                 continue
-            shapes = {arrays[k].shape for k in keys}
-            if len(shapes) != 1:
+            if len({arrays[k].shape for k in keys}) != 1:
                 entry[f"cad_0_{int(depth)}_pixels"] = {"status": "grid_mismatch"}
                 continue
-            thickness = np.array(
-                [soil.layer_thickness_cm(layer) for layer in selected], dtype="float64"
-            ).reshape(-1, 1, 1)
-            stack = np.stack([arrays[k] for k in keys])
-            cad_pixel = np.nansum(stack * thickness, axis=0)
-            cad_pixel[np.isnan(stack).any(axis=0)] = np.nan
+            cad_pixel = soil.pixel_capacity_mm(
+                np.stack([arrays[k] for k in keys]), selected
+            )
             valid = cad_pixel[np.isfinite(cad_pixel)]
             if valid.size == 0:
                 entry[f"cad_0_{int(depth)}_pixels"] = {"status": "no_valid_pixels"}
@@ -280,7 +285,12 @@ def main() -> int:
     parser.add_argument("--scale", type=float, default=0.2)
     parser.add_argument("--delay", type=float, default=0.05)
     parser.add_argument("--reset", action="store_true")
+    parser.add_argument("--out", default="")
     args = parser.parse_args()
+
+    global OUT_JSON
+    if args.out:
+        OUT_JSON = os.path.abspath(args.out)
 
     municipalities = load_municipalities()
     if args.pilot:
@@ -314,6 +324,7 @@ def main() -> int:
             "robustos a uma minoria de pixels vizinhos, nao a todos."
         ),
         "municipalities": [],
+        "selection": {"mode": mode, "codes": [str(m["ibge_code"]) for m in selected]},
     }
     if os.path.exists(OUT_JSON) and not args.reset:
         try:
