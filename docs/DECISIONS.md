@@ -1715,3 +1715,132 @@ apenas a escada 0–60/0–100/0–200 cm.
 Nenhuma profundidade foi atribuída por cultivar. A distinção entre
 profundidade máxima de raiz isolada e profundidade efetiva de extração é
 mantida.
+
+## D100 - Contrato temporal da janela ZARC: meses completos, com semântica histórica preservada (2026-11-14)
+
+Decisão: `cycle.window_bounds(months, corrected=True)` é o **protocolo padrão**
+da V3.1. Ele devolve o primeiro dia do primeiro mês e o **último dia do último
+mês**. A semântica histórica (`corrected=False`) continua disponível e é usada
+para reproduzir o painel V2.6/V3.0, nunca para produzir variável nova.
+
+Causa confirmada (D97): a consulta comparava a data diária `"AAAA-MM-DD"` com o
+rótulo mensal `"AAAA-MM"`. Como `"2017-12-01" > "2017-12"` na ordem
+lexicográfica, o último mês era **inteiramente excluído**. Não era um erro de
+índice de um único dia: era um mês inteiro por janela.
+
+O defeito não afetava só o déficit. Afetava toda variável agregada na janela.
+Reconstruindo as 19.402 linhas analíticas com as mesmas funções do painel, as
+medianas passam de (a última coluna é a **mediana da variação relativa por
+linha**, não a razão entre medianas):
+
+| variável | janela histórica | janela corrigida | mediana da variação relativa |
+|---|---:|---:|---:|
+| precipitação acumulada | 338,3 mm | 491,4 mm | +44,0% |
+| ET0 acumulada | 390,0 mm | 557,5 mm | +43,5% |
+| graus-dia | 1.018,9 | 1.489,8 | +45,5% |
+| dias com chuva | 59 | 88 | +45,6% |
+| noites quentes | 26 | 44 | +54,3% |
+| déficit hídrico | 51,3 mm | 106,0 mm | +23,6% |
+| excedente hídrico | 58,4 mm | 91,9 mm | 0,0% |
+| temperatura média | 24,33 °C | 24,41 °C | +1,0% |
+
+Logo: toda a pesquisa agroclimática da V2.6 a V3.0 foi conduzida com **um mês
+inteiro a menos por janela** (tipicamente 17–25% do período), o que reduzia as
+variáveis acumuladas em ~44%. Os resultados anteriores permanecem registrados e
+reproduzíveis (`_legacy`), mas **nenhuma conclusão da V3.1 se apoia neles**. A
+reprodução da janela histórica contra o painel publicado confere até o erro de
+float32 (diferença máxima 1,7e-5 em 19.402 linhas; `temp_media_c` e
+`extreme_heat_days` exatos), o que mostra que as diferenças observadas são do
+defeito, e não do pipeline.
+
+Consequência de engenharia: o painel derivado `v31_panel_windows.csv` carrega
+as **duas** semânticas lado a lado (`_legacy` e `_corrected`) e as três
+profundidades de CAD na janela corrigida. A janela histórica nunca é
+sobrescrita.
+
+## D101 - A janela corrigida fortalece o clima no milho e não resgata a soja (2026-11-14)
+
+Decisão: a correção da janela **não** transforma o clima em preditor útil da
+soja; no milho ela melhora de forma mensurável o modelo climático. Nenhuma
+alegação de generalização é feita fora do braço TE.
+
+TE, `climate_plus_state` contra a média da UF, equalização estrita por célula,
+IC por bootstrap de bloco (250 km), mesma especificação e mesmas linhas:
+
+| Cultura | janela histórica | janela corrigida | pareado (corrigida − histórica) |
+|---|---:|---:|---|
+| soja | −6,3 n.s. | −18,5 n.s. | −12,2 [−24,0; 4,9] n.s. |
+| milho | −198,7 | **−228,5** [−403,5; −37,0] | **−29,8** [−51,5; −2,3] |
+| milho 2ª | −267,2 | −228,4 | +38,8 [−1,8; 59,7] n.s. |
+
+O ganho no milho **não** é uniforme entre UFs. Diferença de MAE do clima
+corrigido contra a média da UF, por UF:
+
+| UF | milho | soja | milho 2ª |
+|---|---:|---:|---:|
+| PR | **−607,4** | **−61,8** | **−366,1** |
+| BA | −131,1 | — | — |
+| GO | −109,9 | +29,6 | +13,8 |
+| MT | +85,0 | +17,7 | −28,2 |
+| MS | +261,4 | +19,8 | +35,8 |
+| RS | +12,8 | −20,7 | — |
+
+Ou seja: o valor climático do milho está concentrado em **PR**, com contribuição
+moderada de BA e GO, e o modelo climático é **pior** que a média da UF em MS,
+MT e RS. A MAE agregada esconde essa heterogeneidade; ela não pode ser
+apresentada como "o clima explica o milho". Na soja o único ganho relevante
+também é de PR, e o agregado continua não significativo.
+
+## D102 - Tendência espacial (M3/M4) rejeitada no protocolo TE (2026-11-14)
+
+Decisão: latitude/longitude com termos quadráticos (centragem por constantes
+fixas, sem vazamento) **não** substitui nem complementa a média da UF.
+
+| Cultura | M3 (tendência + UF) vs M1 | M3 vs M2 (pareado) | M4 vs M3 (pareado) |
+|---|---:|---:|---:|
+| soja | +2,8 n.s. | +21,3 n.s. | −18,6 n.s. |
+| milho | +159,6 n.s. | **+388,1** [62,0; 719,5] | **−175,7** [−318,2; −33,2] |
+| milho 2ª | −49,7 n.s. | **+178,7** [43,8; 342,7] | **−131,5** [−265,5; −39,0] |
+
+No milho a tendência espacial é **pior** que o clima (pareado, IC exclui zero) e
+destrói exatamente o ganho que o clima tinha em PR. A leitura correta é que um
+gradiente suave global não descreve a estrutura regional do milho: a
+heterogeneidade é por UF/grupo de UFs, não um plano inclinado. A comparação
+M4 vs M3 não deve ser lida como "clima ajuda" isoladamente, porque M3 é um
+modelo ruim; a comparação relevante é M2 vs M1 (D101).
+
+A complexidade dos termos espaciais foi fixada antes da avaliação (quadrático
+completo); não foi escolhida por TE. O modelo espacial nunca é apresentado como
+definitivo.
+
+## D103 - Vizinhos históricos (M1c) superam a média da UF, com cobertura declarada (2026-11-14)
+
+Decisão: a média das produtividades **já observadas no treino** dos municípios
+vizinhos é um baseline experimental válido e melhor que a média da UF, no
+protocolo TE. Ele **não** substitui o modelo climático e não é comparado a ele
+de forma pareada (conjuntos de linhas diferentes).
+
+Desenho: o treino de cada célula exclui o bloco espacial e o grupo temporal do
+teste; a previsão usa apenas médias de municípios de **outros blocos** e
+**outros anos**; fallback para a média da UF calculada no treino, depois para a
+média global. Grade de parâmetros fixada antes da avaliação.
+
+| Cultura | configuração | MAE M1c | MAE M1 | delta | cobertura direta | fallback |
+|---|---|---:|---:|---:|---:|---:|
+| soja | r200/d100/k3 | 583,0 | 610,7 | **−27,7** [−52,3; −3,8] | 0,987 | 0,013 |
+| soja | r100/d50/k3 | 590,0 | 610,7 | **−20,7** [−40,9; −1,1] | 0,667 | 0,333 |
+| milho | r200/d100/k3 | 1.624,5 | 1.917,1 | −292,6 [−631,0; 4,1] | 0,961 | 0,039 |
+| milho | r100/d50/k3 | 1.791,3 | 1.917,1 | **−125,8** [−245,7; −10,7] | 0,454 | 0,546 |
+| milho 2ª | r300/d150/k3 | 1.311,3 | 1.500,8 | **−189,6** [−312,5; −11,7] | 1,000 | 0,000 |
+
+Ressalvas mantidas: (i) o ganho depende do raio e do decaimento, e a única
+configuração com IC excluindo zero **e** boa cobertura para o milho é r300;
+(ii) em raios pequenos a cobertura cai muito e o baseline degenera na média da
+UF; (iii) o ponto estimado de M1c para o milho é menor que o do clima corrigido,
+mas a comparação não é pareada e não é usada como evidência.
+
+Leitura científica: a persistência espacial da produtividade entre anos
+diferentes carrega informação sobre municípios não observados — mais do que a
+média da UF. Isso é consistente com a V3.0 (a CAD não explicava o efeito do
+bloco) e com D102 (não é um gradiente suave). Não é evidência causal.
+

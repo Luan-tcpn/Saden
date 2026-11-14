@@ -309,6 +309,7 @@ def factorial_holdout(
     variant: str = "climate_only",
     equalize: str = "global",
     min_cell_train: int = 200,
+    keep_errors: bool = False,
 ) -> dict[str, Any]:
     """Fatorial 2×2 espaço × tempo com controle opcional de tamanho.
 
@@ -331,6 +332,11 @@ def factorial_holdout(
     ``variant`` escolhe o modelo: ``climate_only`` (o da V2.6/V2.7) ou
     ``climate_plus_state`` (com dummies de UF, para comparar com a média da
     UF em igualdade de informação).
+
+    ``keep_errors=True`` acrescenta ``row_abs_errors`` e ``row_blocks`` — os
+    erros absolutos por linha, na ordem determinística de teste — para que
+    duas especificações possam ser comparadas de forma **pareada** (mesmas
+    linhas) e não apenas pelas MAEs agregadas.
     """
     if equalize not in ("global", "per_cell"):
         raise ValueError(f"modo de equalizacao desconhecido: {equalize!r}")
@@ -778,11 +784,13 @@ def factorial_holdout(
 
     # decomposição por ano do erro de cada braço (mecanismo)
     out["by_year"] = {}
+    kept_errors: dict[str, np.ndarray] = {}
     for arm, _, _ in ARMS:
         entry = out["arms"].get(arm, {})
         if entry.get("status") != "ok":
             continue
         errors = entry.pop("_abs")
+        kept_errors[arm] = errors
         base_errors = entry.pop("_abs_base")
         entry.pop("_abs_baselines", None)
         per_year = {}
@@ -797,4 +805,220 @@ def factorial_holdout(
             }
         entry["by_year"] = per_year
         out["by_year"][arm] = per_year
+    if keep_errors:
+        out["row_abs_errors"] = dict(kept_errors)
+        out["row_blocks"] = out["test_blocks"]
+        out["row_years"] = out["test_years"]
+        out["row_states"] = out["test_states"]
     return out
+
+
+def _haversine_km(lat1, lon1, lat2, lon2) -> np.ndarray:
+    """Distância em km, tratando latitude/longitude como ângulos (não como plano)."""
+    radius = 6371.0088
+    phi1 = np.radians(lat1)
+    phi2 = np.radians(lat2)
+    dphi = phi2 - phi1
+    dlambda = np.radians(lon2 - lon1)
+    a = (
+        np.sin(dphi / 2.0) ** 2
+        + np.cos(phi1) * np.cos(phi2) * np.sin(dlambda / 2.0) ** 2
+    )
+    return 2.0 * radius * np.arcsin(np.sqrt(np.clip(a, 0.0, 1.0)))
+
+
+def neighbor_holdout(
+    rows: Sequence[dict[str, Any]],
+    radius_km: float = 200.0,
+    min_neighbors: int = 3,
+    decay_km: float | None = 100.0,
+    n_space_folds: int = 5,
+    n_time_folds: int = 5,
+    seed: int = 20261114,
+    n_boot: int = 1000,
+) -> dict[str, Any]:
+    """Baseline de **vizinhos históricos** (M1c) no braço TE.
+
+    Para cada célula (bloco espacial × grupo temporal) do protocolo TE, o
+    treino contém apenas linhas de **outros blocos** e **outros anos**. A
+    previsão de um município de teste é a média das produtividades **já
+    observadas no treino** dos municípios vizinhos, ponderada pela distância.
+
+    Não há vazamento porque:
+
+    * o próprio bloco do teste está fora do treino (nenhum vizinho do bloco);
+    * o ano de teste está fora do treino (nenhuma produtividade contemporânea);
+    * a UF do teste pode estar no treino em outros anos — o fallback para a
+      média da UF usa **somente treino**, e é reportado separadamente.
+
+    ``decay_km=None`` usa média simples dos vizinhos; caso contrário os pesos
+    são ``exp(-(d/decay)^2)``. O raio, o número mínimo de vizinhos e o
+    decaimento são **fixados antes** da avaliação (não escolhidos por TE).
+
+    Devolve MAE de M1c, MAE de M1 (mesmas linhas), IC bootstrap por bloco da
+    diferença e cobertura.
+    """
+    data = [r for r in rows if r.get(TARGET) is not None]
+    if not data:
+        return {"status": "insufficient_rows"}
+    from . import analysis  # import tardio evita ciclo
+
+    y = np.array([float(r[TARGET]) for r in data], dtype="float64")
+    blocks = np.array([str(r.get("spatial_block") or "") for r in data])
+    years = np.array([str(int(r["year"])) for r in data])
+    states = np.array([str(r.get("state") or "") for r in data])
+    codes = np.array([str(r["ibge_code"]) for r in data])
+    lat = np.array([float(r["latitude"]) for r in data], dtype="float64")
+    lon = np.array([float(r["longitude"]) for r in data], dtype="float64")
+
+    block_names = sorted({b for b in blocks.tolist() if b})
+    year_names = sorted(set(years.tolist()))
+    if len(block_names) < n_space_folds or len(year_names) < 2:
+        return {
+            "status": "insufficient_groups",
+            "n_blocks": len(block_names),
+            "n_years": len(year_names),
+        }
+
+    # coordenada e município por código (constantes, não dependem do split)
+    unique_codes = sorted(set(codes.tolist()))
+    code_position = {code: i for i, code in enumerate(unique_codes)}
+    code_lat = np.zeros(len(unique_codes))
+    code_lon = np.zeros(len(unique_codes))
+    code_state = [""] * len(unique_codes)
+    for i, code in enumerate(codes.tolist()):
+        p = code_position[code]
+        code_lat[p] = lat[i]
+        code_lon[p] = lon[i]
+        code_state[p] = states[i]
+    row_code = np.array([code_position[c] for c in codes.tolist()], dtype="int64")
+
+    distances = _haversine_km(
+        code_lat[:, None], code_lon[:, None], code_lat[None, :], code_lon[None, :]
+    )
+
+    rng = np.random.default_rng(seed)
+    space_folds = analysis._blocked_folds(block_names, n_space_folds, rng)
+    time_folds = analysis._blocked_folds(year_names, n_time_folds, rng)
+
+    predictions = np.full(len(data), np.nan)
+    fallback_state = np.zeros(len(data), dtype=bool)
+    fallback_global = np.zeros(len(data), dtype=bool)
+    neighbor_counts = np.zeros(len(data), dtype="int64")
+    min_distances = np.full(len(data), np.nan)
+
+    for fold_space in space_folds:
+        for fold_time in time_folds:
+            in_space = np.isin(blocks, list(fold_space))
+            in_time = np.isin(years, list(fold_time))
+            test_mask = in_space & in_time
+            train_mask = ~in_space & ~in_time
+            if not test_mask.any():
+                continue
+            train_rows = np.flatnonzero(train_mask)
+            if train_rows.size == 0:
+                continue
+            # média treinada por município (somente treino)
+            muni_mean = np.full(len(unique_codes), np.nan)
+            for position in np.unique(row_code[train_rows]).tolist():
+                selected = train_rows[row_code[train_rows] == position]
+                muni_mean[position] = float(np.mean(y[selected]))
+            state_mean: dict[str, float] = {}
+            for state in set(states[train_rows].tolist()):
+                selected = train_rows[states[train_rows] == state]
+                state_mean[state] = float(np.mean(y[selected]))
+            global_mean = float(np.mean(y[train_rows]))
+
+            available = np.flatnonzero(np.isfinite(muni_mean))
+            for row in np.flatnonzero(test_mask).tolist():
+                origin = row_code[row]
+                # vizinhos = municípios com média de treino, fora do bloco de teste
+                candidate = available[available != origin]
+                if candidate.size == 0:
+                    predictions[row] = state_mean.get(states[row], global_mean)
+                    fallback_state[row] = True
+                    continue
+                dist = distances[origin, candidate]
+                inside = dist <= radius_km
+                chosen = candidate[inside]
+                neighbor_counts[row] = int(chosen.size)
+                if chosen.size:
+                    min_distances[row] = float(dist[inside].min())
+                if chosen.size < min_neighbors:
+                    predictions[row] = state_mean.get(states[row], global_mean)
+                    fallback_state[row] = True
+                    continue
+                weights = np.ones(chosen.size)
+                if decay_km:
+                    weights = np.exp(-((dist[inside] / decay_km) ** 2))
+                values = muni_mean[chosen]
+                total = float(weights.sum())
+                predictions[row] = (
+                    float(np.dot(weights, values) / total) if total > 0 else float(np.mean(values))
+                )
+
+    if np.isnan(predictions).any():
+        # linhas nunca testadas (não deveria ocorrer com 5×5 dobras em grade)
+        missing = np.isnan(predictions)
+        global_mean = float(np.mean(y))
+        predictions[missing] = global_mean
+        fallback_global[missing] = True
+
+    errors_neighbor = np.abs(predictions - y)
+    state_pred = np.zeros(len(data))
+    state_available = np.zeros(len(data), dtype=bool)
+    for fold_space in space_folds:
+        for fold_time in time_folds:
+            in_space = np.isin(blocks, list(fold_space))
+            in_time = np.isin(years, list(fold_time))
+            test_mask = in_space & in_time
+            train_mask = ~in_space & ~in_time
+            if not test_mask.any() or not train_mask.any():
+                continue
+            fallback = float(np.mean(y[train_mask]))
+            for state in set(states[test_mask].tolist()):
+                selected = train_mask & (states == state)
+                value = float(np.mean(y[selected])) if selected.any() else fallback
+                rows_state = test_mask & (states == state)
+                state_pred[rows_state] = value
+                state_available[rows_state] = True
+    if not state_available.all():
+        state_pred[~state_available] = float(np.mean(y))
+    errors_state = np.abs(state_pred - y)
+
+    interval = block_bootstrap_difference(
+        errors_neighbor, errors_state, blocks, n_boot=n_boot, seed=seed
+    )
+    state_alignment = errors_neighbor - errors_state
+    covered = neighbor_counts >= min_neighbors
+    return {
+        "status": "ok",
+        "n": int(len(data)),
+        "n_blocks": len(block_names),
+        "n_years": len(year_names),
+        "n_municipalities": len(unique_codes),
+        "radius_km": radius_km,
+        "min_neighbors": min_neighbors,
+        "decay_km": decay_km,
+        "mae": float(np.mean(errors_neighbor)),
+        "mae_baseline_state": float(np.mean(errors_state)),
+        "delta_mae": interval["delta_mae"],
+        "ci95": interval["ci95"],
+        "n_boot": n_boot,
+        "coverage_direct": float(np.mean(covered)),
+        "fallback_state_share": float(np.mean(fallback_state)),
+        "fallback_global_share": float(np.mean(fallback_global)),
+        "neighbor_count_median": float(np.median(neighbor_counts)),
+        "neighbor_count_p10": float(np.quantile(neighbor_counts, 0.10)),
+        "min_distance_median_km": (
+            float(np.median(min_distances[np.isfinite(min_distances)]))
+            if np.isfinite(min_distances).any()
+            else None
+        ),
+        "worse_rows_share": float(np.mean(state_alignment > 0)),
+        "row_predictions": predictions,
+        "row_abs_errors": errors_neighbor,
+        "row_abs_baseline": errors_state,
+        "row_blocks": blocks,
+        "row_codes": codes,
+    }

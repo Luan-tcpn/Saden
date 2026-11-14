@@ -1,0 +1,430 @@
+{
+  "generated_at": "2026-11-14T11:28:15.653213+00:00",
+  "protocol": {
+    "arm": "TE (bloco espacial e grupo temporal fora do treino)",
+    "baseline": "M1c — média das produtividades de treino dos municípios vizinhos",
+    "comparison": "M1 — média da UF calculada somente no treino, nas mesmas linhas",
+    "grid": [
+      {
+        "radius_km": 100.0,
+        "decay_km": 50.0,
+        "min_neighbors": 3
+      },
+      {
+        "radius_km": 200.0,
+        "decay_km": 100.0,
+        "min_neighbors": 3
+      },
+      {
+        "radius_km": 300.0,
+        "decay_km": 150.0,
+        "min_neighbors": 3
+      },
+      {
+        "radius_km": 200.0,
+        "decay_km": null,
+        "min_neighbors": 3
+      },
+      {
+        "radius_km": 200.0,
+        "decay_km": 100.0,
+        "min_neighbors": 6
+      }
+    ],
+    "block_radius_km": 250.0,
+    "note": "grade fixada antes da avaliação; nenhuma configuração escolhida por TE"
+  },
+  "crops": {
+    "soja": {
+      "n_rows": 8884,
+      "configs": {
+        "r100_d50_k3": {
+          "status": "ok",
+          "n": 8884,
+          "n_blocks": 46,
+          "n_years": 8,
+          "n_municipalities": 1225,
+          "radius_km": 100.0,
+          "min_neighbors": 3,
+          "decay_km": 50.0,
+          "mae": 589.9865348144646,
+          "mae_baseline_state": 610.6939328207382,
+          "delta_mae": -20.707398006273593,
+          "ci95": [
+            -40.94329402797021,
+            -1.0786282449273288
+          ],
+          "n_boot": 1000,
+          "coverage_direct": 0.6668167492120667,
+          "fallback_state_share": 0.33318325078793337,
+          "fallback_global_share": 0.0,
+          "neighbor_count_median": 7.0,
+          "neighbor_count_p10": 0.0,
+          "min_distance_median_km": 52.964644790434164,
+          "worse_rows_share": 0.29581269698334084
+        },
+        "r200_d100_k3": {
+          "status": "ok",
+          "n": 8884,
+          "n_blocks": 46,
+          "n_years": 8,
+          "n_municipalities": 1225,
+          "radius_km": 200.0,
+          "min_neighbors": 3,
+          "decay_km": 100.0,
+          "mae": 582.9892788618041,
+          "mae_baseline_state": 610.6939328207382,
+          "delta_mae": -27.704653958934045,
+          "ci95": [
+            -52.29066404772904,
+            -3.8312200955935087
+          ],
+          "n_boot": 1000,
+          "coverage_direct": 0.9871679423683025,
+          "fallback_state_share": 0.012832057631697433,
+          "fallback_global_share": 0.0,
+          "neighbor_count_median": 70.0,
+          "neighbor_count_p10": 9.0,
+          "min_distance_median_km": 61.9383874151514,
+          "worse_rows_share": 0.4436064835659613
+        },
+        "r300_d150_k3": {
+          "status": "ok",
+          "n": 8884,
+          "n_blocks": 46,
+          "n_years": 8,
+          "n_municipalities": 1225,
+          "radius_km": 300.0,
+          "min_neighbors": 3,
+          "decay_km": 150.0,
+          "mae": 589.5618081365443,
+          "mae_baseline_state": 610.6939328207382,
+          "delta_mae": -21.132124684193855,
+          "ci95": [
+            -48.16340802299996,
+            7.258046245373201
+          ],
+          "n_boot": 1000,
+          "coverage_direct": 0.9997748761819001,
+          "fallback_state_share": 0.00022512381809995497,
+          "fallback_global_share": 0.0,
+          "neighbor_count_median": 174.0,
+          "neighbor_count_p10": 26.0,
+          "min_distance_median_km": 62.041802792525594,
+          "worse_rows_share": 0.45936515083295815
+        },
+        "r200_dnone_k3": {
+          "status": "ok",
+          "n": 8884,
+          "n_blocks": 46,
+          "n_years": 8,
+          "n_municipalities": 1225,
+          "radius_km": 200.0,
+          "min_neighbors": 3,
+          "decay_km": null,
+          "mae": 589.932100129627,
+          "mae_baseline_state": 610.6939328207382,
+          "delta_mae": -20.76183269111118,
+          "ci95": [
+            -48.274096081665874,
+            8.486202832512701
+          ],
+          "n_boot": 1000,
+          "coverage_direct": 0.9871679423683025,
+          "fallback_state_share": 0.012832057631697433,
+          "fallback_global_share": 0.0,
+          "neighbor_count_median": 70.0,
+          "neighbor_count_p10": 9.0,
+          "min_distance_median_km": 61.9383874151514,
+          "worse_rows_share": 0.4606033318325079
+        },
+        "r200_d100_k6": {
+          "status": "ok",
+          "n": 8884,
+          "n_blocks": 46,
+          "n_years": 8,
+          "n_municipalities": 1225,
+          "radius_km": 200.0,
+          "min_neighbors": 6,
+          "decay_km": 100.0,
+          "mae": 584.2332173796995,
+          "mae_baseline_state": 610.6939328207382,
+          "delta_mae": -26.4607154410387,
+          "ci95": [
+            -50.090385201119375,
+            -2.5580798522500214
+          ],
+          "n_boot": 1000,
+          "coverage_direct": 0.9391040072039621,
+          "fallback_state_share": 0.06089599279603782,
+          "fallback_global_share": 0.0,
+          "neighbor_count_median": 70.0,
+          "neighbor_count_p10": 9.0,
+          "min_distance_median_km": 61.9383874151514,
+          "worse_rows_share": 0.4191805493021162
+        }
+      }
+    },
+    "milho": {
+      "n_rows": 7616,
+      "configs": {
+        "r100_d50_k3": {
+          "status": "ok",
+          "n": 7616,
+          "n_blocks": 49,
+          "n_years": 8,
+          "n_municipalities": 1063,
+          "radius_km": 100.0,
+          "min_neighbors": 3,
+          "decay_km": 50.0,
+          "mae": 1791.2847596800354,
+          "mae_baseline_state": 1917.0797155784246,
+          "delta_mae": -125.79495589838916,
+          "ci95": [
+            -245.66585768702004,
+            -10.697601542540594
+          ],
+          "n_boot": 1000,
+          "coverage_direct": 0.4543067226890756,
+          "fallback_state_share": 0.5456932773109243,
+          "fallback_global_share": 0.0,
+          "neighbor_count_median": 2.0,
+          "neighbor_count_p10": 0.0,
+          "min_distance_median_km": 55.901685760776445,
+          "worse_rows_share": 0.19209558823529413
+        },
+        "r200_d100_k3": {
+          "status": "ok",
+          "n": 7616,
+          "n_blocks": 49,
+          "n_years": 8,
+          "n_municipalities": 1063,
+          "radius_km": 200.0,
+          "min_neighbors": 3,
+          "decay_km": 100.0,
+          "mae": 1624.4498391320972,
+          "mae_baseline_state": 1917.0797155784246,
+          "delta_mae": -292.62987644632744,
+          "ci95": [
+            -630.959250273847,
+            4.103806403901707
+          ],
+          "n_boot": 1000,
+          "coverage_direct": 0.9608718487394958,
+          "fallback_state_share": 0.0391281512605042,
+          "fallback_global_share": 0.0,
+          "neighbor_count_median": 30.0,
+          "neighbor_count_p10": 5.0,
+          "min_distance_median_km": 79.76108829832255,
+          "worse_rows_share": 0.40795693277310924
+        },
+        "r300_d150_k3": {
+          "status": "ok",
+          "n": 7616,
+          "n_blocks": 49,
+          "n_years": 8,
+          "n_municipalities": 1063,
+          "radius_km": 300.0,
+          "min_neighbors": 3,
+          "decay_km": 150.0,
+          "mae": 1667.3245945422418,
+          "mae_baseline_state": 1917.0797155784246,
+          "delta_mae": -249.7551210361828,
+          "ci95": [
+            -545.3711875441768,
+            1.8158663744050951
+          ],
+          "n_boot": 1000,
+          "coverage_direct": 0.9985556722689075,
+          "fallback_state_share": 0.001444327731092437,
+          "fallback_global_share": 0.0,
+          "neighbor_count_median": 83.0,
+          "neighbor_count_p10": 24.0,
+          "min_distance_median_km": 80.76458088441936,
+          "worse_rows_share": 0.41544117647058826
+        },
+        "r200_dnone_k3": {
+          "status": "ok",
+          "n": 7616,
+          "n_blocks": 49,
+          "n_years": 8,
+          "n_municipalities": 1063,
+          "radius_km": 200.0,
+          "min_neighbors": 3,
+          "decay_km": null,
+          "mae": 1671.428993715789,
+          "mae_baseline_state": 1917.0797155784246,
+          "delta_mae": -245.6507218626357,
+          "ci95": [
+            -576.0845218267999,
+            39.14615495821677
+          ],
+          "n_boot": 1000,
+          "coverage_direct": 0.9608718487394958,
+          "fallback_state_share": 0.0391281512605042,
+          "fallback_global_share": 0.0,
+          "neighbor_count_median": 30.0,
+          "neighbor_count_p10": 5.0,
+          "min_distance_median_km": 79.76108829832255,
+          "worse_rows_share": 0.43080357142857145
+        },
+        "r200_d100_k6": {
+          "status": "ok",
+          "n": 7616,
+          "n_blocks": 49,
+          "n_years": 8,
+          "n_municipalities": 1063,
+          "radius_km": 200.0,
+          "min_neighbors": 6,
+          "decay_km": 100.0,
+          "mae": 1664.9040461135962,
+          "mae_baseline_state": 1917.0797155784246,
+          "delta_mae": -252.1756694648284,
+          "ci95": [
+            -548.8236038678946,
+            5.958151076756871
+          ],
+          "n_boot": 1000,
+          "coverage_direct": 0.8940388655462185,
+          "fallback_state_share": 0.10596113445378151,
+          "fallback_global_share": 0.0,
+          "neighbor_count_median": 30.0,
+          "neighbor_count_p10": 5.0,
+          "min_distance_median_km": 79.76108829832255,
+          "worse_rows_share": 0.3799894957983193
+        }
+      }
+    },
+    "milho_2": {
+      "n_rows": 2902,
+      "configs": {
+        "r100_d50_k3": {
+          "status": "ok",
+          "n": 2902,
+          "n_blocks": 30,
+          "n_years": 9,
+          "n_municipalities": 505,
+          "radius_km": 100.0,
+          "min_neighbors": 3,
+          "decay_km": 50.0,
+          "mae": 1351.6023951218895,
+          "mae_baseline_state": 1500.8107059507129,
+          "delta_mae": -149.20831082882341,
+          "ci95": [
+            -279.79749430276536,
+            14.970293017113573
+          ],
+          "n_boot": 1000,
+          "coverage_direct": 0.6140592694693315,
+          "fallback_state_share": 0.3859407305306685,
+          "fallback_global_share": 0.0,
+          "neighbor_count_median": 5.0,
+          "neighbor_count_p10": 0.0,
+          "min_distance_median_km": 52.73443540394826,
+          "worse_rows_share": 0.24190213645761544
+        },
+        "r200_d100_k3": {
+          "status": "ok",
+          "n": 2902,
+          "n_blocks": 30,
+          "n_years": 9,
+          "n_municipalities": 505,
+          "radius_km": 200.0,
+          "min_neighbors": 3,
+          "decay_km": 100.0,
+          "mae": 1306.2738348079035,
+          "mae_baseline_state": 1500.8107059507129,
+          "delta_mae": -194.53687114280933,
+          "ci95": [
+            -377.72881035258416,
+            24.180671791298497
+          ],
+          "n_boot": 1000,
+          "coverage_direct": 0.9631288766368022,
+          "fallback_state_share": 0.0368711233631978,
+          "fallback_global_share": 0.0,
+          "neighbor_count_median": 49.0,
+          "neighbor_count_p10": 6.0,
+          "min_distance_median_km": 63.01354436366198,
+          "worse_rows_share": 0.3883528600964852
+        },
+        "r300_d150_k3": {
+          "status": "ok",
+          "n": 2902,
+          "n_blocks": 30,
+          "n_years": 9,
+          "n_municipalities": 505,
+          "radius_km": 300.0,
+          "min_neighbors": 3,
+          "decay_km": 150.0,
+          "mae": 1311.2581973553908,
+          "mae_baseline_state": 1500.8107059507129,
+          "delta_mae": -189.55250859532202,
+          "ci95": [
+            -312.4566998246049,
+            -11.678419221498453
+          ],
+          "n_boot": 1000,
+          "coverage_direct": 1.0,
+          "fallback_state_share": 0.0,
+          "fallback_global_share": 0.0,
+          "neighbor_count_median": 126.0,
+          "neighbor_count_p10": 19.0,
+          "min_distance_median_km": 63.96686003482362,
+          "worse_rows_share": 0.3769813921433494
+        },
+        "r200_dnone_k3": {
+          "status": "ok",
+          "n": 2902,
+          "n_blocks": 30,
+          "n_years": 9,
+          "n_municipalities": 505,
+          "radius_km": 200.0,
+          "min_neighbors": 3,
+          "decay_km": null,
+          "mae": 1342.7664750751671,
+          "mae_baseline_state": 1500.8107059507129,
+          "delta_mae": -158.04423087554574,
+          "ci95": [
+            -304.6928953398478,
+            39.10057724039671
+          ],
+          "n_boot": 1000,
+          "coverage_direct": 0.9631288766368022,
+          "fallback_state_share": 0.0368711233631978,
+          "fallback_global_share": 0.0,
+          "neighbor_count_median": 49.0,
+          "neighbor_count_p10": 6.0,
+          "min_distance_median_km": 63.01354436366198,
+          "worse_rows_share": 0.39627842866988283
+        },
+        "r200_d100_k6": {
+          "status": "ok",
+          "n": 2902,
+          "n_blocks": 30,
+          "n_years": 9,
+          "n_municipalities": 505,
+          "radius_km": 200.0,
+          "min_neighbors": 6,
+          "decay_km": 100.0,
+          "mae": 1302.3021948784458,
+          "mae_baseline_state": 1500.8107059507129,
+          "delta_mae": -198.50851107226708,
+          "ci95": [
+            -379.58257173398135,
+            8.467023336819471
+          ],
+          "n_boot": 1000,
+          "coverage_direct": 0.9004135079255686,
+          "fallback_state_share": 0.09958649207443143,
+          "fallback_global_share": 0.0,
+          "neighbor_count_median": 49.0,
+          "neighbor_count_p10": 6.0,
+          "min_distance_median_km": 63.01354436366198,
+          "worse_rows_share": 0.3542384562370779
+        }
+      }
+    }
+  },
+  "elapsed_s": 8.7
+}
