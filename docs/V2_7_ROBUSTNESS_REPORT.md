@@ -58,7 +58,13 @@ controle a **dependência espacial real** da base meteorológica. A resposta é
 | Checkpoints | apenas `MASTER_STATUS.md` e `EXECUTION_LOG.md` (complementados nesta sessão) |
 | Manifests | `v27_robust_inference.json` (138,6 KB), `.csv`, `v27_cluster_diagnostics.json` |
 | Scripts | `tmp/v27_check_grid.py`, `v27_check_series.py`, `v27_check_dependence.py`, `v27_check_dependence2.py`, `v27_smoke.py`, `v27_validate_wcb.py` + caches `.npy` |
-| Pendente | `run_robustness.py spatial` (protocolos P1–P4) **nunca executado** |
+| Pendente no momento da recuperação | `run_robustness.py spatial` (protocolos P1–P4) **nunca executado** — executado nesta sessão, e o manifesto gerado revelou que o relatório não trazia os números (ver §9) |
+
+> A auditoria desta sessão acrescentou três fatos ao quadro acima: a
+> calibração Monte Carlo **já havia terminado** (ao contrário do que o
+> `MASTER_STATUS` registrava), `v27_spatial_dependence.json` **não existia**
+> (os números do correlograma vinham de script em `tmp/`) e a validação
+> P1–P4 estava concluída mas não documentada.
 
 **Defeito de ambiente**: o agente anterior usava o Python do sistema. O
 interpretador correto é `geospatial\.venv\Scripts\python.exe` (3.12.10).

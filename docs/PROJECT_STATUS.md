@@ -255,16 +255,23 @@ Relatório: `geospatial/reports/V2_3_EXPLORATORY_PRODUCTIVITY_STUDY.md`.
 
 | Item | Estado | Evidencia |
 |---|---|---|
-| Dependencia espacial caracterizada | DONE | r(T) = 0,834 e r(P) = 0,630 na banda de 400-425 km; a limitacao "55 km" foi **refutada** (D76) |
+| Dependencia espacial caracterizada | DONE | r(T) = 0,8339 e r(P) = 0,6295 na banda de 400-425 km, em manifesto reproduzivel (`v27_spatial_dependence.json`); a limitacao "55 km" foi **refutada** (D76) |
 | Inferencia agrupada (4 esquemas) + Conley + bootstrap wild + Holm | DONE | 12 familias de 21 hipoteses; 4/21 (bloco 250 km) a 13/21 (municipio) |
-| Bootstrap wild calibrado por Monte Carlo | DONE | tamanho ~nominal para >= 10 grupos; conservador com 5; **defeito real corrigido** (D79, D80) |
+| Bootstrap wild calibrado por Monte Carlo | DONE | tamanho ~nominal para >= 10 grupos; **levemente** conservador com 5 (0,047; poder 53,5%) apos a grade recalculada; **dois defeitos reais corrigidos** (D79, D80, D85) |
 | Politica de nulidade do bootstrap | DONE | as duas variantes sao reportadas; politica declarada (D81) |
 | Janela fenologica de enchimento de graos | DONE | requisitos termicos publicados; 84 municipios, 1.027 linhas recalculadas (D78) |
 | CAD territorial oficial | DONE | Embrapa Solos (Vasques et al. 2021), 90 m, CC BY-NC 3.0 BR; CAD 0-100 cm de 126 a 240 mm (D82) |
+| Validacao territorial P1-P4 | DONE | reproduz a faixa da V2.6 (+1,35% a +6,36%); 132 valores de MAE identicos bit a bit |
+| **Holdout espacial x temporal (P5)** | DONE | remove bloco **e** ano do treino (D86): soja **-3,30%**, milho +1,21% (hidrico +5,40%), milho 2a +16,92% |
 | ERA5-Land nativo | BLOCKED | credencial CDS ausente; nenhuma conta criada, nenhuma credencial solicitada (D83) |
 | Ampliacao do painel | ADIADA | decisao de escopo: a robustez estatistica precede a escala |
-| Testes | DONE | **309/309** offline (262 da V2.6 + 47 novos); 10/10 externos |
+| Testes | DONE | **318/318** offline (262 da V2.6 + 56 da V2.7); 10/10 externos |
 | Veredito | **CAMINHO A** | nenhuma integracao ao produto; a Ridge permanece unica na previsao de precos |
 
+**Resultado cientifico central:** o ganho territorial da V2.6 depende do ano
+compartilhado entre treino e teste. Por cultura: soja **nao robusto**
+(inverte de sinal), milho **parcialmente robusto** (so as variaveis
+hidricas resistem), milho 2a safra **robusto** no protocolo mais estrito.
+
 Relatorio: `docs/V2_7_ROBUSTNESS_REPORT.md`. Checkpoints:
-`docs/execution/v2.7/`. Decisoes D76-D84.
+`docs/execution/v2.7/`. Decisoes D76-D86.

@@ -380,27 +380,37 @@ painel; e **não** integrar ao Ridge sem ganho **temporal** demonstrado.
 |---|---|
 | Branch | `v2/agroclimatic-robustness` (base `d87addb` = V2.6) |
 | Foco | inferencia espacial, validacao territorial por blocos, janela fenologica, CAD oficial |
-| Testes | **309/309** offline (262 da V2.6 + 47 novos); 10/10 externos |
+| Testes | **318/318** offline (262 da V2.6 + 56 da V2.7); 10/10 externos |
 | Modulos novos | `geospatial/agroclimate/{robust,spatial,spatial_inference,phenology,soil}.py`; CLI `geospatial/run_robustness.py` |
-| Manifests | `geospatial/data/manifests/v27_*` (12 arquivos) |
-| Decisoes | D76-D84 (em `docs/DECISIONS.md` e `docs/execution/v2.7/DECISIONS_V2_7.md`) |
+| Manifests | `geospatial/data/manifests/v27_*` (15 arquivos JSON/CSV) |
+| Decisoes | D76-D86 (em `docs/DECISIONS.md` e `docs/execution/v2.7/DECISIONS_V2_7.md`) |
 | Relatorio | `docs/V2_7_ROBUSTNESS_REPORT.md` |
 
-**Os 5 fatos que um novo agente precisa saber:**
+**Os 8 fatos que um novo agente precisa saber:**
 
 1. O bootstrap wild da V2.7 usa **um peso de Rademacher por grupo** (CGM
    2008). A versao anterior (peso por observacao) estava errada e foi
    corrigida (D80). Nao voltar a essa variante.
-2. A escala de agrupamento conservadora e o **bloco espacial de 250 km**
+2. **Replica com erro-padrao numericamente nulo e descartada**, nao contada
+   (D85): `se <= sqrt(eps)*max(|beta|,1)`. Sem isso, |t| ~ 1e18 entra na
+   cauda e corrompe o p-valor e os diagnosticos.
+3. A escala de agrupamento conservadora e o **bloco espacial de 250 km**
    (46 grupos), calibrada pelo correlograma - nao a celula de 55 km (D76).
-3. A inferencia e reportada em **12 familias de Holm** (21 hipoteses cada):
+4. A inferencia e reportada em **12 familias de Holm** (21 hipoteses cada):
    municipio 13, celula 12, bloco 4, UF 0, Conley 8-10, bootstrap wild 3-13.
    O intervalo honesto e **4 a 13**; a leitura conservadora e 4-6.
-4. A CAD oficial do solo esta disponivel (WCS da Embrapa Solos, mm/cm) e e
+5. A CAD oficial do solo esta disponivel (WCS da Embrapa Solos, mm/cm) e e
    **2-3x maior** que os cenarios da V2.6; a conversao correta e
-   `Σ AW(mm/cm) x espessura(cm)` (D82).
-5. **ERA5-Land esta bloqueado** por credencial CDS ausente: nao criar
+   `Sum AW(mm/cm) x espessura(cm)` (D82).
+6. **ERA5-Land esta bloqueado** por credencial CDS ausente: nao criar
    conta, nao pedir credencial, nao gravar segredo (D83).
+7. **O ganho territorial dependia do ano compartilhado.** O protocolo P5
+   (D86) remove bloco **e** ano do treino: soja inverte para -3,30% (era
+   +2,76% no bloco), milho fica +1,21% (hidrico +5,40%) e milho 2a safra
+   +16,92%. Por cultura: nao robusto, parcialmente robusto, robusto.
+8. A linha de base dos protocolos territoriais e a **media do treino**
+   (agregada); `walk_forward` usa a media do **proprio municipio**. Os MAEs
+   nao sao comparaveis entre os dois protocolos.
 
 **Ambiente:** `geospatial\.venv\Scripts\python.exe` (Python 3.12.10).
 Sem `scipy` - toda a estatistica e NumPy puro. O Python do sistema **nao**

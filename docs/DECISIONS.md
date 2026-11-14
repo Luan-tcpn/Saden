@@ -1391,8 +1391,10 @@ demonstrado. A V2.7 calibra com dois DGP (erro agrupado; painel município ×
 ano com efeitos fixos e erro AR(1) intracluster), 3 sementes e taxas de
 rejeição em 1%/5%/10% com incerteza de Monte Carlo.
 
-Consequências: tamanho próximo do nominal para ≥ 10 grupos; conservador com
-5 grupos (poder 46%).
+Consequências: tamanho próximo do nominal para ≥ 10 grupos; com 5 grupos o
+procedimento é levemente conservador (0,043–0,052) e o poder cai para 53,5%
+(contra 91,3% da variante por observação) — valores da grade **recalculada**
+após D85; a primeira grade, contaminada, indicava 46%.
 
 ## D80 - Correção dos pesos do bootstrap wild: um peso por grupo (2026-11-14)
 

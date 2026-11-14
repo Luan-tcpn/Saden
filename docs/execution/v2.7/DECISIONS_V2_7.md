@@ -92,9 +92,12 @@ observação o bootstrap **não preserva** a estrutura de dependência e
 degenera no bootstrap wild ordinário.
 
 **Efeito observado (calibração).** Com 5 grupos, o esquema por grupo tem
-poder de **46%** sob efeito verdadeiro, enquanto o esquema por observação
-tem **88%** — ou seja, a variante herdada não corrigia o problema de
+poder de **53,5%** sob efeito verdadeiro, enquanto o esquema por observação
+tem **91,3%** — ou seja, a variante herdada não corrigia o problema de
 poucos grupos.
+> Valores da grade **recalculada** após D85. A primeira grade, contaminada
+> por réplicas com erro-padrão nulo, indicava 46% e 88%; a diferença não
+> muda a conclusão, mas a magnitude correta é esta.
 
 **Nota metodológica.** As duas variantes foram mantidas no código
 (`weight_scheme="cluster" | "observation"`) para comparação explícita; o

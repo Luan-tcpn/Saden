@@ -851,8 +851,17 @@ Branch `v2/agroclimatic-productivity-panel`, derivada de
 | 6 | Teste clima -> produtividade -> **preco** | nao executado - escopo da V2.7 e produtividade/generalizacao territorial; a **Ridge** permanece unica na previsao de precos |
 | 7 | Integracao ao Ridge | **nao** recomendada - nenhum ganho temporal demonstrado |
 
-**Numeros da V2.7:** 309/309 testes offline; 12 familias de Holm; 4-13
+**Numeros da V2.7:** 318/318 testes offline; 12 familias de Holm; 4-13
 hipoteses sobreviventes conforme o esquema (conservador: 4-6);
-poder do bootstrap wild: 100% com >= 10 grupos, 46% com 5 grupos.
+poder do bootstrap wild: ~100% com >= 10 grupos, **53,5% com 5 grupos**
+(grade recalculada apos D85).
+
+**Validacao territorial P1-P5 (D86):** o ganho do modelo climatico sobre a
+media historica do treino vai de +3,98% (P1, municipio) a +2,76% (P3,
+bloco de 250 km) e **-3,30% (P5, bloco x ano)** na soja; no milho,
++1,21% (P5) com **+5,40%** nas variaveis hidricas; no milho 2a safra,
++16,92% (P5). Classificacao: soja **nao robusto**, milho **parcialmente
+robusto**, milho 2a safra **robusto**. O ganho aparente da V2.6 dependia,
+em parte, do ano compartilhado entre treino e teste.
 
 **Caminho final: A.** Nenhuma integracao ao produto.

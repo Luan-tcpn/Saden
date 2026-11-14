@@ -364,9 +364,17 @@ da base meteorologica?
    e 2-3x maior que os cenarios de 35/50/70 mm da V2.6.
 7. **ERA5-Land** segue bloqueado (credencial ausente) - bloqueio documentado.
 
-**Estado:** 309/309 testes offline; 10/10 externos. Decisoes D76-D84.
+**Estado:** 318/318 testes offline; 10/10 externos. Decisoes D76-D86.
 Relatorio: `docs/V2_7_ROBUSTNESS_REPORT.md`. Checkpoints:
 `docs/execution/v2.7/`.
+
+**Validacao territorial (P1-P5, resultado central):** os protocolos
+territoriais P1-P4 reproduzem a faixa da V2.6 (+1,35% a +6,36%), mas
+separam apenas o espaco. O protocolo **P5** (D86) remove do treino o
+**bloco espacial e o ano** ao mesmo tempo e revela que o ganho dependia do
+ano compartilhado: soja **-3,30%** (nao robusto), milho **+1,21%** com
+**+5,40%** nas variaveis hidricas (parcialmente robusto) e milho 2a safra
+**+16,92%** (robusto). A soja nao tem ganho territorial defensavel.
 
 **Nao foi feito (e por que):** ampliacao do painel (decisao de escopo: a
 robustez estatistica precede a escala) e acesso ao CDS (credencial
