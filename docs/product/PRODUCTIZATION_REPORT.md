@@ -144,8 +144,9 @@ Consulta real executada na validação E2E (Yahoo + PTAX, sem fixture):
 | nível | arquivo | resultado |
 |---|---|---|
 | unitário | `tests/unit/alerts.test.js` (novo) | **16/16** |
+| unitário | `tests/unit/migration.test.js` (novo — migra banco V1.1 real) | **5/5** |
 | integração | `tests/integration/api.test.js` (4 casos novos + todos os da V1.1) | **36/36** |
-| suíte completa | `npm test` (11 suítes) | **85 passam, 0 falham** |
+| suíte completa | `npm test` (12 suítes) | **90 passam, 0 falham** |
 | E2E | navegador real (agent-browser + Chrome), fluxo completo | ver §11 |
 
 ## 11. Validação end-to-end (navegador real)
@@ -174,7 +175,7 @@ transbordava (tabela de 560 px). Corrigido com rolagem interna do bloco
 cd backend
 npm install          # Node 18+; validado em 22.14.0
 npm start            # http://localhost:3001
-npm test             # 85 testes
+npm test             # 90 testes
 
 # Docker (arquivos da V1.1 preservados)
 docker compose up --build
@@ -182,6 +183,24 @@ docker compose up --build
 
 Migração roda no primeiro `connect()`; bancos existentes são atualizados sem
 perda de dados. **Faça backup de `data/saden.db` antes de subir em produção.**
+
+### 12.1. Validação em container (executada)
+
+| passo | resultado |
+|---|---|
+| `docker build -t saden:product1 .` | imagem construída (base `node:22-slim`) |
+| `docker run` com volume nomeado e `NODE_ENV=production` | **healthy** |
+| `/api/health` | 200 |
+| `/api/series` sem token | 401 |
+| `/api/series` com token | **5 séries** |
+| `POST /api/alerts` (`yahoo:ZS=F:brl:sc60`, ≥ 1000) | 201, `unit=R$/sc 60kg`, `status=active` |
+| schema dentro do container | 24 colunas em `alerts`, 10 em `alert_events`, índice único presente |
+| `docker restart` | usuário e alerta **persistidos** (1/1) |
+
+A migração também foi testada contra um **banco no formato exato da V1.1**
+(`tests/unit/migration.test.js`): colunas novas criadas, colunas antigas
+preservadas, backfill correto de `condition`/`status`/`series_id`, eventos
+antigos reclassificados como `evaluation` e segunda execução idempotente.
 
 ## 13. Limitações
 

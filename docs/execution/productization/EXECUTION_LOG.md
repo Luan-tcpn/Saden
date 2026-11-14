@@ -63,7 +63,7 @@ Ordem: `seriesService` → `alertEngine` → migração → rotas → frontend �
 
 ## 6. Verificação
 
-- `npm test`: **85 passam, 0 falham**, 11 suítes (todas as da V1.1 incluídas).
+- `npm test`: **90 passam, 0 falham**, 12 suítes (todas as da V1.1 incluídas).
 - E2E no navegador (agent-browser + Chrome): cadastro → dashboard com preço real
   → alertas → criação com confirmação → avaliação → evento → leitura.
 - Servidor: **0 linhas de erro** no log durante todo o E2E.

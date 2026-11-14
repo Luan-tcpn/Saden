@@ -14,8 +14,8 @@ Alertas existente.
 
 | item | valor |
 |---|---|
-| suíte completa | **85 testes, 0 falhas** (11 suítes) |
-| testes novos | 16 unitários + 4 de integração |
+| suíte completa | **90 testes, 0 falhas** (12 suítes) |
+| testes novos | 21 unitários (16 de alertas + 5 de migração) + 4 de integração |
 | séries reais no catálogo | 5 |
 | endpoints novos/alterados | 6 |
 | tabelas migradas | 2 (aditivas, idempotentes) |

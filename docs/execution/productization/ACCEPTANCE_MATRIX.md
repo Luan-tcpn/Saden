@@ -18,7 +18,7 @@
 | 12 | eventos persistidos | **aceito** | `alert_events` com preço, data e leitura |
 | 13 | idempotência comprovada | **testado** | mesmo par (alerta, observação) ⇒ 1 evento |
 | 14 | responsividade validada | **testado** | 320/390/414/768/1024 px sem overflow |
-| 15 | testes aprovados | **aceito** | 16 unit + 4 integração + 36 integração herdados |
+| 15 | testes aprovados | **aceito** | 21 unit + 4 integração novos + 65 herdados = 90 |
 | 16 | documentação completa | **aceito** | decisão, relatório, guia, 5 checkpointos |
 | 17 | regressões corrigidas | **aceito** | delete global de eventos removido; overflow corrigido |
 | 18 | bundle validado | **aceito** | ver `BUNDLE_INFO.txt` |
