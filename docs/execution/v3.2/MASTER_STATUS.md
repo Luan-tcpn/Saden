@@ -3,7 +3,7 @@
 **Versão:** V3.2 — inclinações climáticas heterogêneas por UF
 **Branch:** `v3/uf-heterogeneous-climate-slopes`
 **Commit-base:** `345b22e02b78447c94f0e6d5b316c3916d918283` (V3.1)
-**Estado:** em execução
+**Estado:** **concluída**
 
 ## Marcos verificados no início
 
@@ -17,31 +17,53 @@
 | bundle V3.1 | 16.658.052 B, SHA-256 `88A66B39…406AA82`, 32 refs, *okay* |
 | bundle V3.0 | presente, 16.601.458 B |
 
-`SADEN-TCC/` não é tocado em nenhuma etapa.
+## Commits da V3.2
 
-## Tarefas
+| commit | conteúdo |
+|---|---|
+| `c9db008` | inclinações heterogêneas por UF, inferência UF×ano, D104–D107 |
 
-| fase | descrição | estado |
-|---|---|---|
-| 0 | auditoria e checkpoint inicial | concluída |
-| 1 | auditoria dos dados e da janela corrigida | concluída |
-| 2 | pré-registro (`docs/V3_2_PREREGISTRATION.md`) | concluída |
-| 3 | identificabilidade por UF | concluída |
-| 4 | modelos de comparação (M1/M2/HET-FE/HET-PP) | concluída |
-| 5 | seleção de complexidade sem vazamento | concluída |
-| 6 | validação TE / territorial / blocos | concluída |
-| 7 | inferência, teste global, multiplicidade | concluída |
-| 8 | análise por cultura | concluída |
-| 9 | robustez e explicações alternativas | concluída |
-| 10 | reavaliação do M1c | concluída |
-| 11 | pesquisa metodológica externa | concluída |
-| 12 | classificação da evidência (níveis A–D) | concluída |
-| 13 | testes e controle de qualidade | concluída |
-| 14 | código e desempenho | concluída |
-| 15 | relatório e decisões | concluída |
-| 16 | bundle e publicação | concluída |
-| 17 | revisão crítica independente | concluída |
+**Bundle:** `SADEN_V3_2_RECOVERY_2026-11-14`, criado **fora** do repositório. O
+`BUNDLE_INFO.txt` dessa pasta registra tamanho, SHA-256, número de refs e o
+commit final — informação que não pode estar dentro do próprio commit.
 
-## Checkpoint atual
+## Resultado central
 
-Ver `EXECUTION_LOG.md` para a sequência com comandos e resultados.
+**A heterogeneidade de inclinações não está estabelecida.** Família
+confirmatória de 6 testes globais (3 culturas × 2 variáveis), Holm: **1
+rejeição** (milho 2ª × temperatura, p = 0,0019 → 0,0113). Nenhum contraste
+individual por UF sobrevive ao Holm.
+
+**Correção metodológica (D104):** a unidade de dependência para regressores
+climáticos é **UF×ano**, não o bloco espacial de 250 km. F da soja para
+precipitação: 8,74 (p ≈ 0) com agrupamento por bloco, 1,13 (p = 0,36) com
+agrupamento duplo UF×ano + município.
+
+| cultura | M2 comum | HET-FE | HET-PP | nível |
+|---|---:|---:|---:|---|
+| soja | **592,2** | 599,0 | 603,1 | **D** |
+| milho | 1.688,6 | 1.578,3 | 1.610,9 | **C** |
+| milho 2ª | **1.272,4** | 1.285,0 | 1.278,5 | **B** |
+
+MAE em kg/ha, TE. M2 comum reproduz a V3.1 exatamente.
+
+## Testes
+
+| item | valor |
+|---|---|
+| suíte offline | **410/410** |
+| novos testes V3.2 | 17 |
+| `compileall` | limpo |
+| números do relatório conferidos contra manifests | **39/39** |
+
+## Bloqueios
+
+* 4–6 UFs: modelo hierárquico completo não identificável (D106).
+* ERA5-Land (sem credencial CDS) e CHIRPS/ARCO (DNS) — inalterados.
+* Nenhuma generalização nacional.
+
+## Próxima ação
+
+Ver `NEXT_ACTIONS.md`: prioridade 1 é o teste conjunto da **forma funcional
+hídrica** (déficit + graus-dia) com teste global pré-registrado; prioridade 2 é
+revisar, sob a D104, quais p-valores de associação da V2.7–V3.1 sobrevivem.
