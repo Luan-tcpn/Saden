@@ -17,8 +17,24 @@ const { connect } = require('../db');
 const { notFound } = require('../utils/errors');
 
 // Frequência real da fonte: fechamentos diários em dias úteis (Yahoo).
-// Um fim de semana + feriado não é atraso; 7 dias corridos é.
-const STALE_AFTER_DAYS = 7;
+// A tolerância é expressa em **dias corridos** e cobre fim de semana + feriado:
+// uma cotação de sexta continua sendo a mais recente no domingo e na segunda.
+// 4 dias = sexta → terça, sem gerar falso "atrasado". Configurável por ambiente.
+const DEFAULT_STALE_AFTER_DAYS = 4;
+
+function staleAfterDays() {
+  const raw = Number(process.env.SADEN_STALE_AFTER_DAYS);
+  return Number.isFinite(raw) && raw > 0 ? raw : DEFAULT_STALE_AFTER_DAYS;
+}
+
+// Política por série. Hoje todas são de fechamento diário; a estrutura permite
+// frequências diferentes sem mexer na regra de avaliação.
+const POLICY = {
+  frequency: 'business_daily',
+  expected_by: '18:00',
+  timezone: 'America/Sao_Paulo',
+  weekend_and_holiday_grace: true,
+};
 
 const MARKET_BY_TICKER = {
   'ZS=F': 'CBOT (CBoT/CME Group) — Chicago',
@@ -58,21 +74,58 @@ function daysSince(dateIso) {
 }
 
 function freshnessFor(observationDate) {
-  if (!observationDate) return { status: 'unknown', age_days: null, stale_after_days: STALE_AFTER_DAYS };
+  const limit = staleAfterDays();
+  if (!observationDate) return { status: 'unknown', age_days: null, stale_after_days: limit };
   const age = daysSince(observationDate);
-  const stale = age == null || age > STALE_AFTER_DAYS;
+  const stale = age == null || age > limit;
   return {
     status: stale ? 'stale' : 'fresh',
     age_days: age,
-    stale_after_days: STALE_AFTER_DAYS,
+    stale_after_days: limit,
+    policy: POLICY,
   };
+}
+
+// Estado operacional da série (preenchido pelo worker): separa "sem cotação
+// nova" de "fonte com erro". Sem isso, um alerta parece saudável com a fonte
+// quebrada.
+function stateFor(seriesId) {
+  try {
+    const row = connect().prepare('SELECT * FROM series_state WHERE series_id = ?').get(seriesId);
+    if (!row) return null;
+    return {
+      last_attempt_at: row.last_attempt_at,
+      last_success_at: row.last_success_at,
+      last_error: row.last_error,
+      last_error_at: row.last_error_at,
+      consecutive_failures: row.consecutive_failures,
+      last_observation_date: row.last_observation_date,
+      last_price: row.last_price,
+    };
+  } catch {
+    return null;
+  }
+}
+
+// Estado legível para a interface. Combina frescor do dado + saúde da fonte.
+function operationalStatus(series, state) {
+  const freshness = freshnessFor(series.observation_date);
+  if (freshness.status === 'unknown') {
+    if (state && state.last_error) return { status: 'source_error', label: 'erro na fonte' };
+    return { status: 'awaiting', label: 'aguardando nova observação' };
+  }
+  if (freshness.status === 'fresh') return { status: 'updated', label: 'atualizado' };
+  if (state && state.last_error) return { status: 'source_error', label: 'erro na fonte' };
+  return { status: 'late', label: 'atrasado' };
 }
 
 function buildSeries(commodity, observation) {
   const observationDate = observation ? observation.data_date : null;
   const freshness = freshnessFor(observationDate);
-  return {
-    series_id: seriesIdFor(commodity),
+  const seriesId = seriesIdFor(commodity);
+  const state = stateFor(seriesId);
+  const base = {
+    series_id: seriesId,
     commodity_key: commodity.key,
     commodity_name: commodity.name,
     instrument: 'Contrato futuro (vencimento mais líquido)',
@@ -85,18 +138,23 @@ function buildSeries(commodity, observation) {
     unit: commodity.unit_br,
     location: 'Brasil (referência nacional)',
     frequency: 'diária (dias úteis)',
+    expected_by: POLICY.expected_by,
+    timezone: POLICY.timezone,
     observation_date: observationDate,
     last_price: observation ? observation.price_brl : null,
     last_updated_at: observation ? observation.retrieved_at : null,
     freshness_status: freshness.status,
     age_days: freshness.age_days,
     stale_after_days: freshness.stale_after_days,
+    operational: operationalStatus({ observation_date: observationDate }, state),
+    source_state: state,
     limitations: [
       'É referência internacional convertida, não o preço recebido pelo produtor brasileiro.',
       'Não inclui base local, prêmio portuário, frete nem custo de exportação.',
       'Fonte física regional (CEPEA/CONAB) não possui API pública: não há série municipal.',
     ],
   };
+  return base;
 }
 
 function latestObservationFor(commodityKey) {
@@ -144,7 +202,11 @@ function seriesIdForCommodity(commodityKey) {
 }
 
 module.exports = {
-  STALE_AFTER_DAYS,
+  staleAfterDays,
+  get STALE_AFTER_DAYS() {
+    return staleAfterDays();
+  },
+  POLICY,
   list,
   get,
   exists,
@@ -152,5 +214,7 @@ module.exports = {
   seriesIdForCommodity,
   latestObservationFor,
   freshnessFor,
+  stateFor,
+  operationalStatus,
   slugUnit,
 };

@@ -97,7 +97,10 @@ describe('catálogo de séries — identidade estável', () => {
     assert.equal(seriesService.freshnessFor(today(-3)).status, 'fresh');
     assert.equal(seriesService.freshnessFor(today(-30)).status, 'stale');
     assert.equal(seriesService.freshnessFor(null).status, 'unknown');
-    assert.equal(seriesService.freshnessFor(today(-30)).stale_after_days, 7);
+    // Release 2: tolerancia de 4 dias corridos cobre fim de semana + feriado
+    assert.equal(seriesService.freshnessFor(today(-30)).stale_after_days, 4);
+    assert.equal(seriesService.freshnessFor(today(-4)).status, 'fresh', 'sexta ainda vale na terca');
+    assert.equal(seriesService.freshnessFor(today(-8)).status, 'stale');
   });
 });
 

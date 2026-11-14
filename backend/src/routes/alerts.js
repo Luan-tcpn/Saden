@@ -5,12 +5,26 @@ const { connect } = require('../db');
 const { requireAuth } = require('../middleware/auth');
 const { badRequest, notFound } = require('../utils/errors');
 const { requireString, requireNumber } = require('../utils/validate');
+const rateLimit = require('../middleware/rateLimit');
 const seriesService = require('../services/seriesService');
 const alertEngine = require('../services/alertEngine');
 
 const router = express.Router();
 
 const LEGACY_ONLY_KINDS = ['rain_above'];
+
+// Limites por usuario (Release 2): o endpoint de avaliacao pode gerar chamada
+// externa; sem limite, uma conta conseguiria consumir a cota do provedor.
+function keyOf(req, scope) {
+  const identity = req.user ? `u:${req.user.id}` : `ip:${req.ip}`;
+  return `alert-${scope}:${identity}`;
+}
+
+const LIMITS = {
+  create: rateLimit({ windowMs: 10 * 60 * 1000, max: 30, key: (req) => keyOf(req, 'create') }),
+  evaluate: rateLimit({ windowMs: 10 * 60 * 1000, max: 20, key: (req) => keyOf(req, 'evaluate') }),
+  read: rateLimit({ windowMs: 10 * 60 * 1000, max: 120, key: (req) => keyOf(req, 'read') }),
+};
 
 // Aceita o contrato novo (series_id + condition) e o contrato V1.1
 // (commodity_key + kind), resolvendo os dois para a mesma regra.
@@ -154,7 +168,7 @@ router.get('/events', requireAuth, (req, res, next) => {
 });
 
 // POST /api/alerts/events/read — marca como lidas (todas ou por id)
-router.post('/events/read', requireAuth, (req, res, next) => {
+router.post('/events/read', requireAuth, LIMITS.read, (req, res, next) => {
   try {
     const ids = Array.isArray(req.body && req.body.ids) ? req.body.ids : null;
     const db = connect();
@@ -184,7 +198,7 @@ router.post('/events/read', requireAuth, (req, res, next) => {
 });
 
 // POST /api/alerts — cria regra
-router.post('/', requireAuth, (req, res, next) => {
+router.post('/', requireAuth, LIMITS.create, (req, res, next) => {
   try {
     const v = validateAlert(req.body);
     const db = connect();
@@ -280,7 +294,7 @@ router.delete('/:id', requireAuth, (req, res, next) => {
 });
 
 // POST /api/alerts/check — avaliação manual (contrato V1.1 preservado)
-router.post('/check', requireAuth, async (req, res, next) => {
+router.post('/check', requireAuth, LIMITS.evaluate, async (req, res, next) => {
   try {
     const db = connect();
     const alerts = db
@@ -319,7 +333,7 @@ router.post('/check', requireAuth, async (req, res, next) => {
 });
 
 // POST /api/alerts/evaluate — avalia todas as séries do usuário (motor)
-router.post('/evaluate', requireAuth, (req, res, next) => {
+router.post('/evaluate', requireAuth, LIMITS.evaluate, (req, res, next) => {
   try {
     const seriesIds = connect()
       .prepare("SELECT DISTINCT series_id FROM alerts WHERE user_id = ? AND status = 'active' AND series_id IS NOT NULL")

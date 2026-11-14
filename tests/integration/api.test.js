@@ -588,7 +588,7 @@ describe('API SADEN — integração', () => {
       assert.ok(['fresh', 'stale', 'unknown'].includes(s.freshness_status));
     }
     assert.match(data.note, /produtor/);
-    assert.equal(data.stale_after_days, 7);
+    assert.equal(data.stale_after_days, 4);
     assert.deepEqual(data.conditions.map((c) => c.value).sort(), ['price_above', 'price_below']);
     const single = await api('/api/series/yahoo:ZS=F:brl:sc60', { token: T });
     assert.equal(single.status, 200);

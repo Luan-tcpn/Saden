@@ -56,6 +56,8 @@ app.use('/api/geo', require('./routes/geo'));
 app.use('/api/forecast', require('./routes/forecast'));
 app.use('/api/series', require('./routes/series'));
 app.use('/api/alerts', require('./routes/alerts'));
+// Saúde do worker, operação (admin) e feedback do usuário.
+app.use('/api', require('./routes/ops'));
 app.use('/api/places', require('./routes/places'));
 app.use('/api/landcover', require('./routes/landcover'));
 app.use('/api/reports', require('./routes/reports'));

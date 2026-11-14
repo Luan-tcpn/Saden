@@ -400,3 +400,30 @@ table.data tr.row-unread td { background: var(--green-100); }
 #al-list table.data, #al-events table.data { min-width: 560px; }
 #al-list code, #al-events code, .series-grid code { word-break: break-all; }
 .unit-hint { white-space: nowrap; font-weight: 600; }
+
+/* ---- Monitoramento automático (Release 2) ---- */
+.monitor-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  font-size: 13px;
+}
+.monitor-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--muted);
+  flex: 0 0 auto;
+}
+.monitor-banner.ok { border-color: var(--ok); background: var(--green-100); }
+.monitor-banner.ok .monitor-dot { background: var(--ok); }
+.monitor-banner.warn { border-color: var(--amber); }
+.monitor-banner.warn .monitor-dot { background: var(--amber); }
+.monitor-banner.down { border-color: var(--danger); }
+.monitor-banner.down .monitor-dot { background: var(--danger); }
+.fb-message { flex: 1 1 260px; }

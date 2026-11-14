@@ -207,6 +207,74 @@ function migrate(database) {
   seedCommodities(database);
   seedSources(database);
   upgradeAlerts(database);
+  upgradeWorker(database);
+}
+
+// Estruturas do monitoramento automático (Release 2).
+// - worker_locks: lease persistente, uma linha por job.
+// - worker_runs: histórico de ciclos (auditoria, métricas, diagnóstico).
+// - series_state: estado operacional por série (falhas, última tentativa).
+// - feedback: canal simples de retorno do usuário (sem dados pessoais extras).
+function upgradeWorker(database) {
+  database.exec(`
+    CREATE TABLE IF NOT EXISTS worker_locks (
+      job_key TEXT PRIMARY KEY,
+      owner TEXT NOT NULL,
+      acquired_at TEXT NOT NULL,
+      heartbeat_at TEXT NOT NULL,
+      expires_at TEXT NOT NULL,
+      status TEXT NOT NULL DEFAULT 'held'
+    );
+
+    CREATE TABLE IF NOT EXISTS worker_runs (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      job_key TEXT NOT NULL,
+      owner TEXT,
+      started_at TEXT NOT NULL,
+      finished_at TEXT,
+      status TEXT NOT NULL,
+      series_total INTEGER NOT NULL DEFAULT 0,
+      series_ok INTEGER NOT NULL DEFAULT 0,
+      series_failed INTEGER NOT NULL DEFAULT 0,
+      series_skipped INTEGER NOT NULL DEFAULT 0,
+      observations_new INTEGER NOT NULL DEFAULT 0,
+      alerts_evaluated INTEGER NOT NULL DEFAULT 0,
+      events_created INTEGER NOT NULL DEFAULT 0,
+      duplicates_blocked INTEGER NOT NULL DEFAULT 0,
+      duration_ms INTEGER,
+      error TEXT
+    );
+    CREATE INDEX IF NOT EXISTS idx_worker_runs_started ON worker_runs(started_at);
+
+    CREATE TABLE IF NOT EXISTS series_state (
+      series_id TEXT PRIMARY KEY,
+      last_attempt_at TEXT,
+      last_success_at TEXT,
+      last_error TEXT,
+      last_error_at TEXT,
+      consecutive_failures INTEGER NOT NULL DEFAULT 0,
+      last_observation_date TEXT,
+      last_price REAL
+    );
+
+    -- Sinal de vida do processo worker. Uma linha só: quem escreve é o worker.
+    CREATE TABLE IF NOT EXISTS worker_heartbeat (
+      id INTEGER PRIMARY KEY CHECK (id = 1),
+      owner TEXT NOT NULL,
+      started_at TEXT NOT NULL,
+      heartbeat_at TEXT NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS feedback (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+      kind TEXT NOT NULL,
+      message TEXT NOT NULL,
+      context_json TEXT,
+      created_at TEXT NOT NULL DEFAULT (datetime('now'))
+    );
+    CREATE INDEX IF NOT EXISTS idx_feedback_created ON feedback(created_at);
+  `);
 }
 
 // Migração aditiva e idempotente dos alertas (v1.1 → product release 1).

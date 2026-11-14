@@ -367,6 +367,10 @@
         </section>
         <!-- ALERTAS -->
         <section id="page-alertas" class="page hidden">
+          <div id="al-monitor" class="monitor-banner" role="status" aria-live="polite">
+            <span class="monitor-dot"></span>
+            <span id="al-monitor-text">Verificando o monitoramento automático…</span>
+          </div>
           <div class="panel">
             <h2>Novo alerta de preço</h2>
             <p class="meta">Escolha a série, a condição e o limite. O alerta dispara <strong>uma vez</strong> quando a
@@ -407,6 +411,26 @@
             <h2>Eventos disparados</h2>
             <p class="meta">Só aparecem eventos de condição atingida — avaliações sem disparo não entram aqui.</p>
             <div id="al-events"></div>
+          </div>
+
+          <div class="panel">
+            <h2>Enviar retorno</h2>
+            <p class="meta">Problema, sugestão ou dificuldade com os alertas. Sem dados pessoais além da sua conta.</p>
+            <div class="filters">
+              <label>Tipo
+                <select id="fb-kind">
+                  <option value="problem">Problema</option>
+                  <option value="suggestion">Sugestão</option>
+                  <option value="difficulty">Dificuldade</option>
+                  <option value="usefulness">Utilidade</option>
+                </select>
+              </label>
+              <label class="fb-message">Mensagem
+                <input id="fb-message" type="text" maxlength="1000" placeholder="Ex.: o alerta de milho não disparou ontem" />
+              </label>
+              <button id="btn-fb-send" class="btn" type="button">Enviar</button>
+            </div>
+            <p class="status" id="fb-status" aria-live="polite"></p>
           </div>
         </section>
         <!-- APARÊNCIA -->

@@ -72,13 +72,20 @@ O contador ao lado de "Meus alertas" mostra quantos eventos novos existem.
 - Depois disso ele **não** volta a disparar até você clicar em **Reativar**.
 - Se você reativar, ele pode disparar de novo — mas **uma vez por observação**:
   a mesma cotação nunca gera dois eventos.
-- Uma observação com **mais de 7 dias** é considerada desatualizada e **não
-  dispara**, mesmo que satisfaça a condição.
+- Uma observação com **mais de 4 dias corridos** é considerada desatualizada e
+  **não dispara**, mesmo que satisfaça a condição. O limite cobre fim de semana e
+  feriado: uma cotação de sexta continua valendo na segunda.
 
 ## 6. Quando a avaliação acontece
 
+> **Atualizado na Release 2:** existe agora um **worker independente** que avalia
+> os alertas automaticamente, uma vez por dia útil ao fim da tarde, sem precisar
+> do navegador aberto. Ver `RELEASE_2_USER_GUIDE.md`. A tabela abaixo descreve o
+> comportamento quando o worker **não** está ativo.
+
 | situação | avalia? |
 |---|---|
+| worker ativo (Release 2) | **sim — diariamente em dia útil** |
 | você abre o painel / consulta preços (cache expirado) | **sim** |
 | você clica em **Verificar agora** | **sim** |
 | você deixa o app aberto e o preço não atualiza | não |

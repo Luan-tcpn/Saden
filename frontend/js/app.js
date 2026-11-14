@@ -784,6 +784,66 @@
       <h2>Fontes</h2><ul>${rep.sources.map((s) => `<li><strong>${esc(s.name)}</strong> (${esc(s.status)}) — <span>${esc(s.base_url)}</span></li>`).join('')}</ul>`;
   }
 
+  // Estado real do monitoramento. Um alerta "ativo" não prova que o worker está
+  // rodando — o banner mostra o heartbeat, não a intenção.
+  let monitorTimer = null;
+
+  function fmtWhen(iso) {
+    if (!iso) return '—';
+    const date = new Date(iso);
+    return Number.isNaN(date.getTime()) ? '—' : date.toLocaleString('pt-BR');
+  }
+
+  async function refreshMonitorStatus() {
+    const banner = $('al-monitor');
+    const text = $('al-monitor-text');
+    if (!banner || !text) return;
+    try {
+      const { data } = await Api().workerHealth();
+      const state = data && data.status ? data.status : 'unknown';
+      const last = data && (data.last_success_at || data.last_run_at);
+      if (state === 'ok') {
+        banner.className = 'monitor-banner ok';
+        text.textContent = `Monitoramento automático ativo · última verificação: ${fmtWhen(last)} · próxima: ${fmtWhen(data.next_run_at)}`;
+      } else if (state === 'degraded') {
+        banner.className = 'monitor-banner warn';
+        text.textContent = `Monitoramento ativo com falhas recentes · última verificação bem-sucedida: ${fmtWhen(last)}`;
+      } else if (state === 'down') {
+        banner.className = 'monitor-banner down';
+        text.textContent = 'Monitoramento automático temporariamente indisponível (worker sem sinal). Os alertas serão avaliados quando ele voltar.';
+      } else if (state === 'not_started') {
+        banner.className = 'monitor-banner down';
+        text.textContent = 'Monitoramento automático ainda não foi iniciado neste ambiente.';
+      } else {
+        banner.className = 'monitor-banner warn';
+        text.textContent = 'Não foi possível confirmar o estado do monitoramento agora.';
+      }
+    } catch {
+      banner.className = 'monitor-banner warn';
+      text.textContent = 'Não foi possível consultar o estado do monitoramento.';
+    }
+  }
+
+  function initFeedback() {
+    if (initFeedback.bound) return;
+    initFeedback.bound = true;
+    $('btn-fb-send').addEventListener('click', async () => {
+      const message = $('fb-message').value.trim();
+      if (message.length < 3) {
+        setStatus('fb-status', 'error', 'Escreva ao menos 3 caracteres.');
+        return;
+      }
+      setStatus('fb-status', 'loading', 'Enviando…');
+      try {
+        await Api().feedback({ kind: $('fb-kind').value, message, context: { screen: 'alertas' } });
+        $('fb-message').value = '';
+        setStatus('fb-status', 'ok', 'Retorno registrado. Obrigado.');
+      } catch (err) {
+        setStatus('fb-status', 'error', err.message);
+      }
+    });
+  }
+
   // ---------------- alertas de preço ----------------
   // Série com identidade estável (series_id), condição explícita e disparo
   // único. Toda a informação de mercado vem do backend; nada é inventado aqui.
@@ -984,6 +1044,9 @@
         }
       });
     }
+    initFeedback();
+    refreshMonitorStatus();
+    if (!monitorTimer) monitorTimer = setInterval(refreshMonitorStatus, 60000);
     loadAlertSeries()
       .then(() => Promise.all([loadAlerts(), loadAlertFeed()]))
       .catch((err) => setStatus('al-form-status', 'error', `Falha ao carregar séries: ${err.message}`));
