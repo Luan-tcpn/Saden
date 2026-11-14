@@ -1,0 +1,195 @@
+{
+  "generated_at": "2026-11-14T10:48:15.594967+00:00",
+  "method": "Coeficiente within (FE municipio + ano) do deficit sobre produtividade, erro agrupado por bloco espacial (CR1), p de Holm sobre a familia de 15 hipoteses (3 culturas x 5 definicoes).",
+  "family_size": 15,
+  "crops": {
+    "soja": {
+      "deficit_hist": {
+        "status": "ok",
+        "coefficient": -1.2601698923303288,
+        "std_error": 0.24036137480388067,
+        "t_statistic": -5.242813631593453,
+        "p_value": 4.081932592752468e-06,
+        "n": 8884,
+        "n_clusters": 46,
+        "deficit_mean": 85.9338699048485,
+        "deficit_sd": 101.62907363936799,
+        "p_holm": 4.490125852027715e-05
+      },
+      "deficit_corr50": {
+        "status": "ok",
+        "coefficient": -2.447749991994517,
+        "std_error": 0.29422238927301075,
+        "t_statistic": -8.319387243243527,
+        "p_value": 1.1874480838518374e-10,
+        "n": 8884,
+        "n_clusters": 46,
+        "deficit_mean": 138.48856828217524,
+        "deficit_sd": 123.95018242277956,
+        "p_holm": 1.7811721257777562e-09
+      },
+      "deficit_cad60": {
+        "status": "ok",
+        "coefficient": -2.4034758102634863,
+        "std_error": 0.3005224345278911,
+        "t_statistic": -7.99765852436026,
+        "p_value": 3.4742188053853203e-10,
+        "n": 8884,
+        "n_clusters": 46,
+        "deficit_mean": 96.25420413299534,
+        "deficit_sd": 113.5858606062639,
+        "p_holm": 4.863906327539449e-09
+      },
+      "deficit_cad100": {
+        "status": "ok",
+        "coefficient": -2.317524756453306,
+        "std_error": 0.2960533299286926,
+        "t_statistic": -7.828065156407816,
+        "p_value": 6.140307534934649e-10,
+        "n": 8884,
+        "n_clusters": 46,
+        "deficit_mean": 56.63555206296137,
+        "deficit_sd": 95.14640012556896,
+        "p_holm": 7.982399795415044e-09
+      },
+      "deficit_cad200": {
+        "status": "ok",
+        "coefficient": -2.285157637965121,
+        "std_error": 0.38477006826008836,
+        "t_statistic": -5.9390213181043245,
+        "p_value": 3.845681478175635e-07,
+        "n": 8884,
+        "n_clusters": 46,
+        "deficit_mean": 13.758314840529225,
+        "deficit_sd": 51.65429356622357,
+        "p_holm": 4.614817773810762e-06
+      }
+    },
+    "milho": {
+      "deficit_hist": {
+        "status": "ok",
+        "coefficient": -3.0394987287652526,
+        "std_error": 1.0250157467920995,
+        "t_statistic": -2.9653190580512554,
+        "p_value": 0.004698988383684,
+        "n": 7616,
+        "n_clusters": 49,
+        "deficit_mean": 109.5373332539254,
+        "deficit_sd": 113.43512332632,
+        "p_holm": 0.042290895453156
+      },
+      "deficit_corr50": {
+        "status": "ok",
+        "coefficient": -2.4374075238408253,
+        "std_error": 0.8630770382819685,
+        "t_statistic": -2.8240903369329597,
+        "p_value": 0.006884922723268174,
+        "n": 7616,
+        "n_clusters": 49,
+        "deficit_mean": 150.22602728682867,
+        "deficit_sd": 137.19398363446192,
+        "p_holm": 0.04240888904798207
+      },
+      "deficit_cad60": {
+        "status": "ok",
+        "coefficient": -2.6047785928992564,
+        "std_error": 0.9070209443096571,
+        "t_statistic": -2.8717954191033375,
+        "p_value": 0.006058412721140296,
+        "n": 7616,
+        "n_clusters": 49,
+        "deficit_mean": 109.72800828819217,
+        "deficit_sd": 125.57600552133995,
+        "p_holm": 0.04240888904798207
+      },
+      "deficit_cad100": {
+        "status": "ok",
+        "coefficient": -2.7806000309189156,
+        "std_error": 0.9501726272524441,
+        "t_statistic": -2.9264156335037836,
+        "p_value": 0.005225680376285245,
+        "n": 7616,
+        "n_clusters": 49,
+        "deficit_mean": 69.4248018719047,
+        "deficit_sd": 105.32957798222067,
+        "p_holm": 0.042290895453156
+      },
+      "deficit_cad200": {
+        "status": "ok",
+        "coefficient": -2.010204131645114,
+        "std_error": 0.5991291792305974,
+        "t_statistic": -3.3552098634665417,
+        "p_value": 0.001556766575235104,
+        "n": 7616,
+        "n_clusters": 49,
+        "deficit_mean": 19.34514951320618,
+        "deficit_sd": 55.208185874752076,
+        "p_holm": 0.015567665752351039
+      }
+    },
+    "milho_2": {
+      "deficit_hist": {
+        "status": "ok",
+        "coefficient": -0.741960672795644,
+        "std_error": 0.4379462378203654,
+        "t_statistic": -1.694182090679308,
+        "p_value": 0.10094587162671186,
+        "n": 2902,
+        "n_clusters": 30,
+        "deficit_mean": 46.55957549744031,
+        "deficit_sd": 85.15992084592484,
+        "p_holm": 0.5047293581335592
+      },
+      "deficit_corr50": {
+        "status": "ok",
+        "coefficient": -0.5546754996056014,
+        "std_error": 0.5466949187329896,
+        "t_statistic": -1.0145978691206925,
+        "p_value": 0.31868821255072366,
+        "n": 2902,
+        "n_clusters": 30,
+        "deficit_mean": 79.84275503565007,
+        "deficit_sd": 112.60988682324263,
+        "p_holm": 1.0
+      },
+      "deficit_cad60": {
+        "status": "ok",
+        "coefficient": -0.43844617251558615,
+        "std_error": 0.49325339450645145,
+        "t_statistic": -0.8888862750844212,
+        "p_value": 0.3813783243276798,
+        "n": 2902,
+        "n_clusters": 30,
+        "deficit_mean": 56.758519004769255,
+        "deficit_sd": 98.55054108311786,
+        "p_holm": 1.0
+      },
+      "deficit_cad100": {
+        "status": "ok",
+        "coefficient": -0.16478051603861596,
+        "std_error": 0.5135393120565039,
+        "t_statistic": -0.3208722529512705,
+        "p_value": 0.7506081626615283,
+        "n": 2902,
+        "n_clusters": 30,
+        "deficit_mean": 35.79152650120412,
+        "deficit_sd": 78.45104328282186,
+        "p_holm": 1.0
+      },
+      "deficit_cad200": {
+        "status": "ok",
+        "coefficient": -0.4324402476298638,
+        "std_error": 0.9790341148901176,
+        "t_statistic": -0.441700897908342,
+        "p_value": 0.6619818725407316,
+        "n": 2902,
+        "n_clusters": 30,
+        "deficit_mean": 9.45757673517176,
+        "deficit_sd": 35.95384750282303,
+        "p_holm": 1.0
+      }
+    }
+  },
+  "n_tests": 15,
+  "n_survive_holm": 10
+}

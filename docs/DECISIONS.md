@@ -1628,3 +1628,90 @@ sobrevive.
 
 Regra derivada: não declarar dois coeficientes diferentes com base em um ser
 significativo e o outro não; usar interação com erro-padrão próprio.
+
+## D96 - Aquisição da CAD por UF com máscara de polígono municipal (2026-11-14)
+
+Decisão: a CAD é adquirida **uma requisição por UF e por camada** (6 UFs × 6
+camadas = 36 janelas) e agregada **pelo polígono oficial do município**, não
+pelo bbox.
+
+Motivo: a extração municipal da V2.9 exigia ~7.800 requisições (~5 h) e
+agregava por bbox. A varredura por UF é 200× mais rápida e, com o raster
+alinhado, permite mascarar o limite municipal.
+
+Consequência medida: 1.296 de 1.296 municípios do painel cobertos, **0 sem
+dado**, em **71 s** e 610 MB transferidos. CAD 0–100 cm entre 105,1 e 256,9 mm
+(mediana 174,5); por UF de 138,4 (MS) a 195,1 (RS). Fração de pixels válidos
+por município: mínimo 0,605, mediana 1,000; apenas 4 municípios abaixo de 0,90.
+
+Validação de geometria (18 municípios, mesma área): mediana por polígono vs
+bbox difere em 0,85 mm (máx. 10,3 mm; correlação 0,994). O bbox da V2.9 era
+uma aproximação aceitável, mas o polígono remove o viés de forma.
+
+## D97 - A janela ZARC do painel histórico perde o último mês (2026-11-14)
+
+Decisão: corrigir a seleção de dias da janela e manter as duas semânticas em
+`cycle.window_bounds`.
+
+Defeito: o painel comparava `months[0] <= data <= months[-1]` com
+`months[-1]` no formato `"AAAA-MM"`. Como `"2017-12-01" > "2017-12"` na ordem
+lexicográfica, o **mês final era inteiramente excluído**; e o início era
+aceito a partir do dia 1º, incluindo dias anteriores ao início real da janela.
+Em **28.282 de 40.990 linhas** (69%) o número de meses usados difere do número
+listado; nas 19.402 linhas analíticas, **todas** perdem ~31 dias.
+
+Consequência: com a janela corrigida e a mesma CAD (50 mm), o déficit cresce
+(razão mediana 1,236; p90 3,78) e a precipitação e a ET0 da janela sobem
+(medianas +135,4 mm e +165,1 mm). A reprodução da janela histórica é exata
+(19.402 pares; diferença máxima 1,05e-5 mm, resíduo de float32).
+
+Regra: qualquer número de versões anteriores passa a ser identificado como
+"janela histórica"; o novo painel usa a janela corrigida e as duas nunca são
+misturadas sem rótulo.
+
+## D98 - A CAD oficial não melhora a predição e não explica o efeito do bloco (2026-11-14)
+
+Decisão: usar a CAD oficial como representação **preferida** do solo para
+descrição e associação, mas **não** adotá-la como variável preditiva sem
+ganho demonstrado, e registrar o resultado negativo.
+
+Evidência (TE, `M2 − M1`, diferença de MAE; negativo = modelo melhor):
+
+| Cultura | clima | déficit hist. | déficit 50 mm corrigido | CAD 0–100 | CAD 0–200 |
+|---|---|---|---|---|---|
+| soja | −6,3 n.s. | **+10,6 [0,7;21,5]** | −20,0 n.s. | −10,3 n.s. | −6,9 n.s. |
+| milho | −198,7 | −167,1 | −195,2 | −142,8 | −21,7 n.s. |
+| milho 2ª | −267,2 | n.s. | n.s. | n.s. | n.s. |
+
+Ou seja: (i) na soja o déficit da janela histórica era **pior que a média da
+UF** e a correção da janela reverte isso; (ii) em nenhuma cultura a CAD
+oficial melhora a predição em relação à CAD de 50 mm com a janela correta;
+(iii) no milho o efeito do bloco (SS−SE) **cresce** com a CAD (−209 hist →
+−225 em 0–100 → −286 em 0–200), logo a heterogeneidade espacial não era
+deficiência de representação do solo.
+
+Associação (within, EP agrupado por bloco, 15 hipóteses, Holm): o coeficiente
+do déficit da soja vai de −1,26 (histórico) a −2,45 (janela corrigida) e
+permanece em −2,32/−2,29 com a CAD oficial, enquanto a média do déficit cai de
+138,5 para 13,8 mm — a CAD reescala o déficit quase proporcionalmente e não
+altera a associação. 10 de 15 hipóteses sobrevivem ao Holm.
+
+## D99 - Profundidade radicular: 0–100 cm na soja, 40–50 cm no milho (2026-11-14)
+
+Decisão: os cenários de perfil passam a ter justificativa publicada, e não
+apenas a escada 0–60/0–100/0–200 cm.
+
+* **Soja** — Franchini et al. (Embrapa Soja, safra 2008/2009) avaliaram o
+  sistema radicular até 100 cm e mediram 6–12% da área radicular na camada
+  75–100 cm. Limitar o reservatório a 60 cm descartaria 17–33% do sistema
+  radicular; **0–100 cm** é o cenário de referência.
+* **Milho** — Embrapa Milho e Sorgo (Albuquerque & Resende, *Cultivo do
+  Milho — Irrigação*) declara profundidade efetiva do sistema radicular
+  **Z = 40–50 cm** para manejo de irrigação. O cenário **0–60 cm** é o mais
+  próximo disponível nas camadas publicadas.
+* **Milho 2ª safra** — sem fonte específica; mantido como **cenário** igual ao
+  milho, explicitamente identificado como aproximação.
+
+Nenhuma profundidade foi atribuída por cultivar. A distinção entre
+profundidade máxima de raiz isolada e profundidade efetiva de extração é
+mantida.

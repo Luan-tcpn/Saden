@@ -33,3 +33,8 @@ data/manifests/climate_quality_full.json
 # por `tools/s27_wcs_probe.py`; a versao extraida (camadas, unidade, licenca)
 # fica no manifesto versionado `v27_cad_wcs_probe.json`.
 data/processed/embrapa_solos_wcs_capabilities.xml
+# V3.0 - painel recalculado com a CAD oficial (~8,5 MB): derivado do painel da
+# V2.6 + estatisticas de CAD; regeneravel por `tools/v30_recalculate_panel.py`.
+# As estatisticas por municipio (a evidencia) ficam nos manifests versionados
+# `v30_cad_polygon.json`/`.csv` e `v30_balance_recalc.json`.
+data/processed/v30_panel_cad.csv

@@ -72,6 +72,36 @@ def soil_label(code: Any) -> str:
     return COD_SOLO.get(str(code), "nao documentado")
 
 
+def last_day_of_month(month: str) -> str:
+    """Último dia de um mês ``"AAAA-MM"`` em formato ISO."""
+    import calendar
+
+    year, month_number = int(month[:4]), int(month[5:7])
+    day = calendar.monthrange(year, month_number)[1]
+    return f"{month}-{day:02d}"
+
+
+def window_bounds(months: Sequence[str], corrected: bool = True) -> tuple[str, str]:
+    """Limites da janela ZARC em datas ISO.
+
+    ``corrected=False`` reproduz o comportamento histórico do painel V2.6,
+    que comparava ``"AAAA-MM"`` com ``"AAAA-MM-DD"``: o início era aceito a
+    partir do dia 1º do primeiro mês e o **mês final era inteiramente
+    excluído**, porque ``"2017-12-01" > "2017-12"`` na ordem lexicográfica.
+    Em 28.282 das 40.990 linhas o número de meses usados difere do número de
+    meses listados.
+
+    ``corrected=True`` (padrão) devolve o primeiro dia do primeiro mês e o
+    último dia do último mês.
+    """
+    ordered = [str(m) for m in months if str(m).strip()]
+    if not ordered:
+        raise ValueError("janela sem meses")
+    if corrected:
+        return f"{ordered[0]}-01", last_day_of_month(ordered[-1])
+    return ordered[0], ordered[-1]
+
+
 def interaction_test(
     rows: Sequence[dict[str, Any]],
     variable: str,

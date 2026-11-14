@@ -1,0 +1,50 @@
+{
+  "generated_at": "2026-11-14T10:46:48.354264+00:00",
+  "n_rows": 19402,
+  "n_municipalities": 1296,
+  "reproduction": {
+    "n_pairs": 19402,
+    "n_exact": 11978,
+    "max_abs_diff": 1.0480540822754847e-05,
+    "median_abs_diff": 6.034330510829022e-07
+  },
+  "window_defect": {
+    "rows_with_last_month_dropped": 19402,
+    "median_days_lost": 31.0,
+    "median_precip_change_mm": 135.36999942734838,
+    "median_et0_change_mm": 165.0779477280807,
+    "deficit_ratio_corr_over_hist_cad50": {
+      "n": 13461,
+      "median": 1.235569718416235,
+      "p10": 1.0,
+      "p90": 3.7843621237792977
+    }
+  },
+  "cad_effect_at_fixed_window": {
+    "cad_0_60": {
+      "n": 15843,
+      "median_ratio": 0.621766126201233,
+      "p10": 0.0,
+      "p90": 0.8779317640195702,
+      "share_eliminated": 0.20311809632014138,
+      "share_above_1": 0.0
+    },
+    "cad_0_100": {
+      "n": 15843,
+      "median_ratio": 0.1387172983577679,
+      "p10": 0.0,
+      "p90": 0.6818513784995656,
+      "share_eliminated": 0.4358391718740138,
+      "share_above_1": 0.0
+    },
+    "cad_0_200": {
+      "n": 15843,
+      "median_ratio": 0.0,
+      "p10": 0.0,
+      "p90": 0.2082416606250557,
+      "share_eliminated": 0.8288834185444676,
+      "share_above_1": 0.0
+    }
+  },
+  "elapsed_s": 134.5
+}

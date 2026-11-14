@@ -1,0 +1,1671 @@
+{
+  "generated_at": "2026-11-14T10:47:18.128946+00:00",
+  "method": "Fatorial espaco x tempo com climate_plus_state, equalizacao estrita por celula e IC por bootstrap de bloco. Cada spec difere apenas na variavel hidrica; precipitacao e temperatura acompanham a janela (hist ou corrigida).",
+  "join": {
+    "rows": 19402,
+    "dropped": 0
+  },
+  "n_repeats": 3,
+  "crops": {
+    "soja": {
+      "n_rows": 8884,
+      "specs": {
+        "climate_hist": {
+          "variables": [
+            "precip_hist",
+            "temp_media_c"
+          ],
+          "cells_used": 25,
+          "arms": {
+            "SS": {
+              "mae": 552.48,
+              "rmse": 731.47,
+              "gain_vs_M1": 2.35,
+              "delta_vs_M1": -13.29,
+              "ci95_vs_M1": [
+                -25.87,
+                -0.88
+              ]
+            },
+            "SE": {
+              "mae": 559.12,
+              "rmse": 745.55,
+              "gain_vs_M1": 3.27,
+              "delta_vs_M1": -18.9,
+              "ci95_vs_M1": [
+                -34.87,
+                -3.73
+              ]
+            },
+            "TS": {
+              "mae": 589.54,
+              "rmse": 773.33,
+              "gain_vs_M1": -0.213,
+              "delta_vs_M1": 1.25,
+              "ci95_vs_M1": [
+                -13.5,
+                13.1
+              ]
+            },
+            "TE": {
+              "mae": 604.36,
+              "rmse": 800.19,
+              "gain_vs_M1": 1.037,
+              "delta_vs_M1": -6.33,
+              "ci95_vs_M1": [
+                -26.81,
+                10.35
+              ]
+            }
+          },
+          "paired": {
+            "SS_minus_SE": {
+              "delta_mae": -6.64,
+              "ci95": [
+                -15.16,
+                2.49
+              ]
+            },
+            "SS_minus_TS": {
+              "delta_mae": -37.05,
+              "ci95": [
+                -47.09,
+                -24.76
+              ]
+            },
+            "SE_minus_TE": {
+              "delta_mae": -45.24,
+              "ci95": [
+                -61.58,
+                -25.84
+              ]
+            },
+            "TS_minus_TE": {
+              "delta_mae": -14.82,
+              "ci95": [
+                -27.82,
+                -2.55
+              ]
+            }
+          }
+        },
+        "climate_corr": {
+          "variables": [
+            "precip_corr",
+            "temp_media_c"
+          ],
+          "cells_used": 25,
+          "arms": {
+            "SS": {
+              "mae": 546.03,
+              "rmse": 720.55,
+              "gain_vs_M1": 3.491,
+              "delta_vs_M1": -19.75,
+              "ci95_vs_M1": [
+                -34.89,
+                0.29
+              ]
+            },
+            "SE": {
+              "mae": 556.81,
+              "rmse": 738.27,
+              "gain_vs_M1": 3.671,
+              "delta_vs_M1": -21.22,
+              "ci95_vs_M1": [
+                -37.3,
+                1.08
+              ]
+            },
+            "TS": {
+              "mae": 580.53,
+              "rmse": 763.32,
+              "gain_vs_M1": 1.318,
+              "delta_vs_M1": -7.75,
+              "ci95_vs_M1": [
+                -25.18,
+                13.92
+              ]
+            },
+            "TE": {
+              "mae": 600.98,
+              "rmse": 793.43,
+              "gain_vs_M1": 1.59,
+              "delta_vs_M1": -9.71,
+              "ci95_vs_M1": [
+                -30.43,
+                15.68
+              ]
+            }
+          },
+          "paired": {
+            "SS_minus_SE": {
+              "delta_mae": -10.78,
+              "ci95": [
+                -20.13,
+                1.25
+              ]
+            },
+            "SS_minus_TS": {
+              "delta_mae": -34.5,
+              "ci95": [
+                -45.67,
+                -23.43
+              ]
+            },
+            "SE_minus_TE": {
+              "delta_mae": -44.18,
+              "ci95": [
+                -59.63,
+                -26.56
+              ]
+            },
+            "TS_minus_TE": {
+              "delta_mae": -20.45,
+              "ci95": [
+                -32.72,
+                -7.83
+              ]
+            }
+          }
+        },
+        "water_hist": {
+          "variables": [
+            "deficit_hist"
+          ],
+          "cells_used": 25,
+          "arms": {
+            "SS": {
+              "mae": 564.79,
+              "rmse": 744.4,
+              "gain_vs_M1": 0.175,
+              "delta_vs_M1": -0.99,
+              "ci95_vs_M1": [
+                -6.83,
+                3.81
+              ]
+            },
+            "SE": {
+              "mae": 570.75,
+              "rmse": 756.86,
+              "gain_vs_M1": 1.259,
+              "delta_vs_M1": -7.27,
+              "ci95_vs_M1": [
+                -14.08,
+                -1.22
+              ]
+            },
+            "TS": {
+              "mae": 605.16,
+              "rmse": 788.84,
+              "gain_vs_M1": -2.869,
+              "delta_vs_M1": 16.88,
+              "ci95_vs_M1": [
+                8.62,
+                24.52
+              ]
+            },
+            "TE": {
+              "mae": 621.25,
+              "rmse": 814.73,
+              "gain_vs_M1": -1.729,
+              "delta_vs_M1": 10.56,
+              "ci95_vs_M1": [
+                0.71,
+                21.46
+              ]
+            }
+          },
+          "paired": {
+            "SS_minus_SE": {
+              "delta_mae": -5.96,
+              "ci95": [
+                -13.47,
+                2.08
+              ]
+            },
+            "SS_minus_TS": {
+              "delta_mae": -40.37,
+              "ci95": [
+                -47.7,
+                -32.98
+              ]
+            },
+            "SE_minus_TE": {
+              "delta_mae": -50.5,
+              "ci95": [
+                -61.67,
+                -36.69
+              ]
+            },
+            "TS_minus_TE": {
+              "delta_mae": -16.09,
+              "ci95": [
+                -27.03,
+                -5.16
+              ]
+            }
+          }
+        },
+        "water_corr50": {
+          "variables": [
+            "deficit_corr50"
+          ],
+          "cells_used": 25,
+          "arms": {
+            "SS": {
+              "mae": 538.02,
+              "rmse": 700.54,
+              "gain_vs_M1": 4.906,
+              "delta_vs_M1": -27.76,
+              "ci95_vs_M1": [
+                -51.65,
+                5.99
+              ]
+            },
+            "SE": {
+              "mae": 543.3,
+              "rmse": 712.14,
+              "gain_vs_M1": 6.008,
+              "delta_vs_M1": -34.73,
+              "ci95_vs_M1": [
+                -56.07,
+                -4.26
+              ]
+            },
+            "TS": {
+              "mae": 577.16,
+              "rmse": 750.22,
+              "gain_vs_M1": 1.892,
+              "delta_vs_M1": -11.13,
+              "ci95_vs_M1": [
+                -40.49,
+                29.19
+              ]
+            },
+            "TE": {
+              "mae": 590.72,
+              "rmse": 773.57,
+              "gain_vs_M1": 3.27,
+              "delta_vs_M1": -19.97,
+              "ci95_vs_M1": [
+                -47.15,
+                19.73
+              ]
+            }
+          },
+          "paired": {
+            "SS_minus_SE": {
+              "delta_mae": -5.28,
+              "ci95": [
+                -15.36,
+                5.45
+              ]
+            },
+            "SS_minus_TS": {
+              "delta_mae": -39.13,
+              "ci95": [
+                -48.59,
+                -31.35
+              ]
+            },
+            "SE_minus_TE": {
+              "delta_mae": -47.42,
+              "ci95": [
+                -58.17,
+                -37.14
+              ]
+            },
+            "TS_minus_TE": {
+              "delta_mae": -13.57,
+              "ci95": [
+                -29.03,
+                -0.23
+              ]
+            }
+          }
+        },
+        "water_cad60": {
+          "variables": [
+            "deficit_cad60"
+          ],
+          "cells_used": 25,
+          "arms": {
+            "SS": {
+              "mae": 542.51,
+              "rmse": 706.75,
+              "gain_vs_M1": 4.113,
+              "delta_vs_M1": -23.27,
+              "ci95_vs_M1": [
+                -41.74,
+                4.84
+              ]
+            },
+            "SE": {
+              "mae": 545.15,
+              "rmse": 716.09,
+              "gain_vs_M1": 5.688,
+              "delta_vs_M1": -32.88,
+              "ci95_vs_M1": [
+                -52.88,
+                -5.34
+              ]
+            },
+            "TS": {
+              "mae": 584.01,
+              "rmse": 758.05,
+              "gain_vs_M1": 0.726,
+              "delta_vs_M1": -4.27,
+              "ci95_vs_M1": [
+                -28.4,
+                31.69
+              ]
+            },
+            "TE": {
+              "mae": 595.16,
+              "rmse": 779.22,
+              "gain_vs_M1": 2.544,
+              "delta_vs_M1": -15.54,
+              "ci95_vs_M1": [
+                -40.03,
+                20.55
+              ]
+            }
+          },
+          "paired": {
+            "SS_minus_SE": {
+              "delta_mae": -2.64,
+              "ci95": [
+                -10.79,
+                6.06
+              ]
+            },
+            "SS_minus_TS": {
+              "delta_mae": -41.5,
+              "ci95": [
+                -50.6,
+                -33.78
+              ]
+            },
+            "SE_minus_TE": {
+              "delta_mae": -50.01,
+              "ci95": [
+                -60.22,
+                -39.81
+              ]
+            },
+            "TS_minus_TE": {
+              "delta_mae": -11.14,
+              "ci95": [
+                -24.34,
+                0.95
+              ]
+            }
+          }
+        },
+        "water_cad100": {
+          "variables": [
+            "deficit_cad100"
+          ],
+          "cells_used": 25,
+          "arms": {
+            "SS": {
+              "mae": 549.46,
+              "rmse": 717.38,
+              "gain_vs_M1": 2.885,
+              "delta_vs_M1": -16.32,
+              "ci95_vs_M1": [
+                -29.4,
+                2.9
+              ]
+            },
+            "SE": {
+              "mae": 551.86,
+              "rmse": 726.93,
+              "gain_vs_M1": 4.525,
+              "delta_vs_M1": -26.16,
+              "ci95_vs_M1": [
+                -42.0,
+                -5.95
+              ]
+            },
+            "TS": {
+              "mae": 589.61,
+              "rmse": 766.16,
+              "gain_vs_M1": -0.226,
+              "delta_vs_M1": 1.33,
+              "ci95_vs_M1": [
+                -16.02,
+                27.45
+              ]
+            },
+            "TE": {
+              "mae": 600.36,
+              "rmse": 787.95,
+              "gain_vs_M1": 1.692,
+              "delta_vs_M1": -10.33,
+              "ci95_vs_M1": [
+                -30.29,
+                18.35
+              ]
+            }
+          },
+          "paired": {
+            "SS_minus_SE": {
+              "delta_mae": -2.41,
+              "ci95": [
+                -9.07,
+                5.22
+              ]
+            },
+            "SS_minus_TS": {
+              "delta_mae": -40.16,
+              "ci95": [
+                -49.76,
+                -32.31
+              ]
+            },
+            "SE_minus_TE": {
+              "delta_mae": -48.5,
+              "ci95": [
+                -59.44,
+                -37.99
+              ]
+            },
+            "TS_minus_TE": {
+              "delta_mae": -10.75,
+              "ci95": [
+                -22.88,
+                -0.04
+              ]
+            }
+          }
+        },
+        "water_cad200": {
+          "variables": [
+            "deficit_cad200"
+          ],
+          "cells_used": 25,
+          "arms": {
+            "SS": {
+              "mae": 559.65,
+              "rmse": 737.95,
+              "gain_vs_M1": 1.083,
+              "delta_vs_M1": -6.13,
+              "ci95_vs_M1": [
+                -12.49,
+                -0.19
+              ]
+            },
+            "SE": {
+              "mae": 569.42,
+              "rmse": 755.27,
+              "gain_vs_M1": 1.488,
+              "delta_vs_M1": -8.6,
+              "ci95_vs_M1": [
+                -14.86,
+                -2.78
+              ]
+            },
+            "TS": {
+              "mae": 585.28,
+              "rmse": 768.56,
+              "gain_vs_M1": 0.51,
+              "delta_vs_M1": -3.0,
+              "ci95_vs_M1": [
+                -11.16,
+                6.01
+              ]
+            },
+            "TE": {
+              "mae": 603.78,
+              "rmse": 798.11,
+              "gain_vs_M1": 1.132,
+              "delta_vs_M1": -6.91,
+              "ci95_vs_M1": [
+                -15.47,
+                2.14
+              ]
+            }
+          },
+          "paired": {
+            "SS_minus_SE": {
+              "delta_mae": -9.77,
+              "ci95": [
+                -19.83,
+                1.26
+              ]
+            },
+            "SS_minus_TS": {
+              "delta_mae": -25.63,
+              "ci95": [
+                -34.53,
+                -17.15
+              ]
+            },
+            "SE_minus_TE": {
+              "delta_mae": -34.36,
+              "ci95": [
+                -47.54,
+                -21.07
+              ]
+            },
+            "TS_minus_TE": {
+              "delta_mae": -18.5,
+              "ci95": [
+                -29.67,
+                -4.4
+              ]
+            }
+          }
+        }
+      }
+    },
+    "milho": {
+      "n_rows": 7616,
+      "specs": {
+        "climate_hist": {
+          "variables": [
+            "precip_hist",
+            "temp_media_c"
+          ],
+          "cells_used": 25,
+          "arms": {
+            "SS": {
+              "mae": 1490.48,
+              "rmse": 1929.99,
+              "gain_vs_M1": 6.315,
+              "delta_vs_M1": -100.47,
+              "ci95_vs_M1": [
+                -216.16,
+                15.14
+              ]
+            },
+            "SE": {
+              "mae": 1661.27,
+              "rmse": 2120.9,
+              "gain_vs_M1": 11.504,
+              "delta_vs_M1": -215.96,
+              "ci95_vs_M1": [
+                -373.5,
+                -47.26
+              ]
+            },
+            "TS": {
+              "mae": 1514.87,
+              "rmse": 1961.41,
+              "gain_vs_M1": 4.518,
+              "delta_vs_M1": -71.69,
+              "ci95_vs_M1": [
+                -178.63,
+                32.41
+              ]
+            },
+            "TE": {
+              "mae": 1718.36,
+              "rmse": 2195.83,
+              "gain_vs_M1": 10.366,
+              "delta_vs_M1": -198.72,
+              "ci95_vs_M1": [
+                -355.79,
+                -31.26
+              ]
+            }
+          },
+          "paired": {
+            "SS_minus_SE": {
+              "delta_mae": -170.79,
+              "ci95": [
+                -330.57,
+                -32.4
+              ]
+            },
+            "SS_minus_TS": {
+              "delta_mae": -24.39,
+              "ci95": [
+                -43.49,
+                -6.92
+              ]
+            },
+            "SE_minus_TE": {
+              "delta_mae": -57.09,
+              "ci95": [
+                -89.09,
+                -31.34
+              ]
+            },
+            "TS_minus_TE": {
+              "delta_mae": -203.49,
+              "ci95": [
+                -358.69,
+                -65.14
+              ]
+            }
+          }
+        },
+        "climate_corr": {
+          "variables": [
+            "precip_corr",
+            "temp_media_c"
+          ],
+          "cells_used": 25,
+          "arms": {
+            "SS": {
+              "mae": 1484.26,
+              "rmse": 1921.86,
+              "gain_vs_M1": 6.706,
+              "delta_vs_M1": -106.69,
+              "ci95_vs_M1": [
+                -220.37,
+                4.38
+              ]
+            },
+            "SE": {
+              "mae": 1661.58,
+              "rmse": 2120.5,
+              "gain_vs_M1": 11.488,
+              "delta_vs_M1": -215.65,
+              "ci95_vs_M1": [
+                -370.17,
+                -45.68
+              ]
+            },
+            "TS": {
+              "mae": 1507.65,
+              "rmse": 1951.89,
+              "gain_vs_M1": 4.973,
+              "delta_vs_M1": -78.91,
+              "ci95_vs_M1": [
+                -181.07,
+                28.34
+              ]
+            },
+            "TE": {
+              "mae": 1717.63,
+              "rmse": 2192.59,
+              "gain_vs_M1": 10.404,
+              "delta_vs_M1": -199.45,
+              "ci95_vs_M1": [
+                -352.28,
+                -31.35
+              ]
+            }
+          },
+          "paired": {
+            "SS_minus_SE": {
+              "delta_mae": -177.32,
+              "ci95": [
+                -336.12,
+                -37.68
+              ]
+            },
+            "SS_minus_TS": {
+              "delta_mae": -23.39,
+              "ci95": [
+                -43.04,
+                -5.85
+              ]
+            },
+            "SE_minus_TE": {
+              "delta_mae": -56.06,
+              "ci95": [
+                -83.04,
+                -31.87
+              ]
+            },
+            "TS_minus_TE": {
+              "delta_mae": -209.98,
+              "ci95": [
+                -370.18,
+                -66.57
+              ]
+            }
+          }
+        },
+        "water_hist": {
+          "variables": [
+            "deficit_hist"
+          ],
+          "cells_used": 25,
+          "arms": {
+            "SS": {
+              "mae": 1498.95,
+              "rmse": 1928.19,
+              "gain_vs_M1": 5.783,
+              "delta_vs_M1": -92.0,
+              "ci95_vs_M1": [
+                -160.97,
+                6.79
+              ]
+            },
+            "SE": {
+              "mae": 1708.42,
+              "rmse": 2174.54,
+              "gain_vs_M1": 8.992,
+              "delta_vs_M1": -168.8,
+              "ci95_vs_M1": [
+                -313.35,
+                -13.49
+              ]
+            },
+            "TS": {
+              "mae": 1503.73,
+              "rmse": 1933.51,
+              "gain_vs_M1": 5.221,
+              "delta_vs_M1": -82.83,
+              "ci95_vs_M1": [
+                -149.48,
+                13.35
+              ]
+            },
+            "TE": {
+              "mae": 1750.0,
+              "rmse": 2225.57,
+              "gain_vs_M1": 8.715,
+              "delta_vs_M1": -167.08,
+              "ci95_vs_M1": [
+                -303.84,
+                -11.28
+              ]
+            }
+          },
+          "paired": {
+            "SS_minus_SE": {
+              "delta_mae": -209.48,
+              "ci95": [
+                -329.99,
+                -75.82
+              ]
+            },
+            "SS_minus_TS": {
+              "delta_mae": -4.78,
+              "ci95": [
+                -23.16,
+                8.38
+              ]
+            },
+            "SE_minus_TE": {
+              "delta_mae": -41.58,
+              "ci95": [
+                -59.91,
+                -23.78
+              ]
+            },
+            "TS_minus_TE": {
+              "delta_mae": -246.28,
+              "ci95": [
+                -375.36,
+                -101.4
+              ]
+            }
+          }
+        },
+        "water_corr50": {
+          "variables": [
+            "deficit_corr50"
+          ],
+          "cells_used": 25,
+          "arms": {
+            "SS": {
+              "mae": 1469.58,
+              "rmse": 1899.37,
+              "gain_vs_M1": 7.628,
+              "delta_vs_M1": -121.36,
+              "ci95_vs_M1": [
+                -202.38,
+                -8.3
+              ]
+            },
+            "SE": {
+              "mae": 1673.02,
+              "rmse": 2140.65,
+              "gain_vs_M1": 10.878,
+              "delta_vs_M1": -204.21,
+              "ci95_vs_M1": [
+                -364.45,
+                -31.19
+              ]
+            },
+            "TS": {
+              "mae": 1480.17,
+              "rmse": 1911.12,
+              "gain_vs_M1": 6.706,
+              "delta_vs_M1": -106.39,
+              "ci95_vs_M1": [
+                -185.09,
+                6.54
+              ]
+            },
+            "TE": {
+              "mae": 1721.84,
+              "rmse": 2198.31,
+              "gain_vs_M1": 10.184,
+              "delta_vs_M1": -195.24,
+              "ci95_vs_M1": [
+                -342.5,
+                -18.78
+              ]
+            }
+          },
+          "paired": {
+            "SS_minus_SE": {
+              "delta_mae": -203.44,
+              "ci95": [
+                -312.97,
+                -71.94
+              ]
+            },
+            "SS_minus_TS": {
+              "delta_mae": -10.58,
+              "ci95": [
+                -29.28,
+                2.24
+              ]
+            },
+            "SE_minus_TE": {
+              "delta_mae": -48.82,
+              "ci95": [
+                -66.12,
+                -31.39
+              ]
+            },
+            "TS_minus_TE": {
+              "delta_mae": -241.67,
+              "ci95": [
+                -362.56,
+                -98.67
+              ]
+            }
+          }
+        },
+        "water_cad60": {
+          "variables": [
+            "deficit_cad60"
+          ],
+          "cells_used": 25,
+          "arms": {
+            "SS": {
+              "mae": 1476.8,
+              "rmse": 1908.78,
+              "gain_vs_M1": 7.175,
+              "delta_vs_M1": -114.15,
+              "ci95_vs_M1": [
+                -190.16,
+                -1.76
+              ]
+            },
+            "SE": {
+              "mae": 1683.4,
+              "rmse": 2149.99,
+              "gain_vs_M1": 10.325,
+              "delta_vs_M1": -193.83,
+              "ci95_vs_M1": [
+                -349.59,
+                -24.87
+              ]
+            },
+            "TS": {
+              "mae": 1487.27,
+              "rmse": 1920.79,
+              "gain_vs_M1": 6.258,
+              "delta_vs_M1": -99.29,
+              "ci95_vs_M1": [
+                -173.66,
+                15.28
+              ]
+            },
+            "TE": {
+              "mae": 1735.64,
+              "rmse": 2211.5,
+              "gain_vs_M1": 9.464,
+              "delta_vs_M1": -181.44,
+              "ci95_vs_M1": [
+                -328.16,
+                -12.69
+              ]
+            }
+          },
+          "paired": {
+            "SS_minus_SE": {
+              "delta_mae": -206.6,
+              "ci95": [
+                -328.21,
+                -75.08
+              ]
+            },
+            "SS_minus_TS": {
+              "delta_mae": -10.47,
+              "ci95": [
+                -29.29,
+                2.7
+              ]
+            },
+            "SE_minus_TE": {
+              "delta_mae": -52.24,
+              "ci95": [
+                -70.04,
+                -31.72
+              ]
+            },
+            "TS_minus_TE": {
+              "delta_mae": -248.37,
+              "ci95": [
+                -380.94,
+                -103.26
+              ]
+            }
+          }
+        },
+        "water_cad100": {
+          "variables": [
+            "deficit_cad100"
+          ],
+          "cells_used": 25,
+          "arms": {
+            "SS": {
+              "mae": 1496.08,
+              "rmse": 1936.13,
+              "gain_vs_M1": 5.963,
+              "delta_vs_M1": -94.86,
+              "ci95_vs_M1": [
+                -162.4,
+                -0.49
+              ]
+            },
+            "SE": {
+              "mae": 1721.45,
+              "rmse": 2190.38,
+              "gain_vs_M1": 8.298,
+              "delta_vs_M1": -155.77,
+              "ci95_vs_M1": [
+                -285.4,
+                -17.59
+              ]
+            },
+            "TS": {
+              "mae": 1505.04,
+              "rmse": 1946.92,
+              "gain_vs_M1": 5.138,
+              "delta_vs_M1": -81.52,
+              "ci95_vs_M1": [
+                -142.85,
+                13.44
+              ]
+            },
+            "TE": {
+              "mae": 1774.3,
+              "rmse": 2253.55,
+              "gain_vs_M1": 7.448,
+              "delta_vs_M1": -142.78,
+              "ci95_vs_M1": [
+                -261.12,
+                -2.84
+              ]
+            }
+          },
+          "paired": {
+            "SS_minus_SE": {
+              "delta_mae": -225.37,
+              "ci95": [
+                -371.32,
+                -77.76
+              ]
+            },
+            "SS_minus_TS": {
+              "delta_mae": -8.96,
+              "ci95": [
+                -29.58,
+                6.48
+              ]
+            },
+            "SE_minus_TE": {
+              "delta_mae": -52.85,
+              "ci95": [
+                -72.43,
+                -30.07
+              ]
+            },
+            "TS_minus_TE": {
+              "delta_mae": -269.26,
+              "ci95": [
+                -431.32,
+                -106.78
+              ]
+            }
+          }
+        },
+        "water_cad200": {
+          "variables": [
+            "deficit_cad200"
+          ],
+          "cells_used": 25,
+          "arms": {
+            "SS": {
+              "mae": 1563.48,
+              "rmse": 2023.46,
+              "gain_vs_M1": 1.726,
+              "delta_vs_M1": -27.46,
+              "ci95_vs_M1": [
+                -66.72,
+                14.86
+              ]
+            },
+            "SE": {
+              "mae": 1849.54,
+              "rmse": 2339.34,
+              "gain_vs_M1": 1.475,
+              "delta_vs_M1": -27.68,
+              "ci95_vs_M1": [
+                -57.8,
+                14.08
+              ]
+            },
+            "TS": {
+              "mae": 1567.9,
+              "rmse": 2032.97,
+              "gain_vs_M1": 1.176,
+              "delta_vs_M1": -18.66,
+              "ci95_vs_M1": [
+                -56.8,
+                25.92
+              ]
+            },
+            "TE": {
+              "mae": 1895.4,
+              "rmse": 2397.99,
+              "gain_vs_M1": 1.131,
+              "delta_vs_M1": -21.68,
+              "ci95_vs_M1": [
+                -51.84,
+                22.59
+              ]
+            }
+          },
+          "paired": {
+            "SS_minus_SE": {
+              "delta_mae": -286.06,
+              "ci95": [
+                -512.3,
+                -64.99
+              ]
+            },
+            "SS_minus_TS": {
+              "delta_mae": -4.41,
+              "ci95": [
+                -32.22,
+                18.36
+              ]
+            },
+            "SE_minus_TE": {
+              "delta_mae": -45.86,
+              "ci95": [
+                -72.1,
+                -23.25
+              ]
+            },
+            "TS_minus_TE": {
+              "delta_mae": -327.51,
+              "ci95": [
+                -566.07,
+                -98.97
+              ]
+            }
+          }
+        }
+      }
+    },
+    "milho_2": {
+      "n_rows": 2902,
+      "specs": {
+        "climate_hist": {
+          "variables": [
+            "precip_hist",
+            "temp_media_c"
+          ],
+          "cells_used": 25,
+          "arms": {
+            "SS": {
+              "mae": 1166.15,
+              "rmse": 1497.59,
+              "gain_vs_M1": 12.576,
+              "delta_vs_M1": -167.75,
+              "ci95_vs_M1": [
+                -282.47,
+                -18.89
+              ]
+            },
+            "SE": {
+              "mae": 1208.16,
+              "rmse": 1552.95,
+              "gain_vs_M1": 17.502,
+              "delta_vs_M1": -256.31,
+              "ci95_vs_M1": [
+                -399.75,
+                -31.3
+              ]
+            },
+            "TS": {
+              "mae": 1179.84,
+              "rmse": 1508.86,
+              "gain_vs_M1": 12.033,
+              "delta_vs_M1": -161.39,
+              "ci95_vs_M1": [
+                -278.94,
+                -16.93
+              ]
+            },
+            "TE": {
+              "mae": 1233.65,
+              "rmse": 1581.31,
+              "gain_vs_M1": 17.801,
+              "delta_vs_M1": -267.16,
+              "ci95_vs_M1": [
+                -413.8,
+                -35.14
+              ]
+            }
+          },
+          "paired": {
+            "SS_minus_SE": {
+              "delta_mae": -42.02,
+              "ci95": [
+                -74.01,
+                1.95
+              ]
+            },
+            "SS_minus_TS": {
+              "delta_mae": -13.7,
+              "ci95": [
+                -32.75,
+                -5.21
+              ]
+            },
+            "SE_minus_TE": {
+              "delta_mae": -25.49,
+              "ci95": [
+                -40.84,
+                -13.45
+              ]
+            },
+            "TS_minus_TE": {
+              "delta_mae": -53.81,
+              "ci95": [
+                -93.56,
+                0.58
+              ]
+            }
+          }
+        },
+        "climate_corr": {
+          "variables": [
+            "precip_corr",
+            "temp_media_c"
+          ],
+          "cells_used": 25,
+          "arms": {
+            "SS": {
+              "mae": 1158.12,
+              "rmse": 1495.36,
+              "gain_vs_M1": 13.178,
+              "delta_vs_M1": -175.78,
+              "ci95_vs_M1": [
+                -292.41,
+                -13.83
+              ]
+            },
+            "SE": {
+              "mae": 1212.98,
+              "rmse": 1564.28,
+              "gain_vs_M1": 17.173,
+              "delta_vs_M1": -251.49,
+              "ci95_vs_M1": [
+                -387.94,
+                -28.66
+              ]
+            },
+            "TS": {
+              "mae": 1176.38,
+              "rmse": 1511.2,
+              "gain_vs_M1": 12.292,
+              "delta_vs_M1": -164.86,
+              "ci95_vs_M1": [
+                -280.88,
+                -6.66
+              ]
+            },
+            "TE": {
+              "mae": 1243.79,
+              "rmse": 1599.18,
+              "gain_vs_M1": 17.125,
+              "delta_vs_M1": -257.02,
+              "ci95_vs_M1": [
+                -399.07,
+                -23.4
+              ]
+            }
+          },
+          "paired": {
+            "SS_minus_SE": {
+              "delta_mae": -54.86,
+              "ci95": [
+                -100.38,
+                1.94
+              ]
+            },
+            "SS_minus_TS": {
+              "delta_mae": -18.25,
+              "ci95": [
+                -33.29,
+                -11.4
+              ]
+            },
+            "SE_minus_TE": {
+              "delta_mae": -30.81,
+              "ci95": [
+                -43.93,
+                -20.44
+              ]
+            },
+            "TS_minus_TE": {
+              "delta_mae": -67.42,
+              "ci95": [
+                -120.16,
+                -0.71
+              ]
+            }
+          }
+        },
+        "water_hist": {
+          "variables": [
+            "deficit_hist"
+          ],
+          "cells_used": 25,
+          "arms": {
+            "SS": {
+              "mae": 1310.96,
+              "rmse": 1745.26,
+              "gain_vs_M1": 1.72,
+              "delta_vs_M1": -22.94,
+              "ci95_vs_M1": [
+                -36.8,
+                -2.47
+              ]
+            },
+            "SE": {
+              "mae": 1422.65,
+              "rmse": 1873.59,
+              "gain_vs_M1": 2.856,
+              "delta_vs_M1": -41.82,
+              "ci95_vs_M1": [
+                -60.6,
+                -8.39
+              ]
+            },
+            "TS": {
+              "mae": 1322.99,
+              "rmse": 1757.41,
+              "gain_vs_M1": 1.36,
+              "delta_vs_M1": -18.25,
+              "ci95_vs_M1": [
+                -34.7,
+                5.76
+              ]
+            },
+            "TE": {
+              "mae": 1462.3,
+              "rmse": 1919.48,
+              "gain_vs_M1": 2.566,
+              "delta_vs_M1": -38.51,
+              "ci95_vs_M1": [
+                -62.42,
+                1.1
+              ]
+            }
+          },
+          "paired": {
+            "SS_minus_SE": {
+              "delta_mae": -111.69,
+              "ci95": [
+                -210.95,
+                9.14
+              ]
+            },
+            "SS_minus_TS": {
+              "delta_mae": -12.03,
+              "ci95": [
+                -37.56,
+                4.84
+              ]
+            },
+            "SE_minus_TE": {
+              "delta_mae": -39.65,
+              "ci95": [
+                -54.28,
+                -23.38
+              ]
+            },
+            "TS_minus_TE": {
+              "delta_mae": -139.31,
+              "ci95": [
+                -254.48,
+                12.79
+              ]
+            }
+          }
+        },
+        "water_corr50": {
+          "variables": [
+            "deficit_corr50"
+          ],
+          "cells_used": 25,
+          "arms": {
+            "SS": {
+              "mae": 1319.15,
+              "rmse": 1748.81,
+              "gain_vs_M1": 1.106,
+              "delta_vs_M1": -14.75,
+              "ci95_vs_M1": [
+                -35.29,
+                6.66
+              ]
+            },
+            "SE": {
+              "mae": 1423.14,
+              "rmse": 1873.0,
+              "gain_vs_M1": 2.822,
+              "delta_vs_M1": -41.33,
+              "ci95_vs_M1": [
+                -60.89,
+                -7.98
+              ]
+            },
+            "TS": {
+              "mae": 1344.5,
+              "rmse": 1772.66,
+              "gain_vs_M1": -0.244,
+              "delta_vs_M1": 3.27,
+              "ci95_vs_M1": [
+                -26.94,
+                30.56
+              ]
+            },
+            "TE": {
+              "mae": 1475.98,
+              "rmse": 1931.92,
+              "gain_vs_M1": 1.654,
+              "delta_vs_M1": -24.83,
+              "ci95_vs_M1": [
+                -45.93,
+                11.5
+              ]
+            }
+          },
+          "paired": {
+            "SS_minus_SE": {
+              "delta_mae": -103.99,
+              "ci95": [
+                -195.84,
+                12.14
+              ]
+            },
+            "SS_minus_TS": {
+              "delta_mae": -25.35,
+              "ci95": [
+                -48.09,
+                -12.52
+              ]
+            },
+            "SE_minus_TE": {
+              "delta_mae": -52.84,
+              "ci95": [
+                -66.25,
+                -31.34
+              ]
+            },
+            "TS_minus_TE": {
+              "delta_mae": -131.48,
+              "ci95": [
+                -240.18,
+                13.51
+              ]
+            }
+          }
+        },
+        "water_cad60": {
+          "variables": [
+            "deficit_cad60"
+          ],
+          "cells_used": 25,
+          "arms": {
+            "SS": {
+              "mae": 1310.81,
+              "rmse": 1742.31,
+              "gain_vs_M1": 1.731,
+              "delta_vs_M1": -23.09,
+              "ci95_vs_M1": [
+                -40.6,
+                1.88
+              ]
+            },
+            "SE": {
+              "mae": 1412.91,
+              "rmse": 1862.95,
+              "gain_vs_M1": 3.521,
+              "delta_vs_M1": -51.56,
+              "ci95_vs_M1": [
+                -75.45,
+                -5.94
+              ]
+            },
+            "TS": {
+              "mae": 1334.88,
+              "rmse": 1766.32,
+              "gain_vs_M1": 0.474,
+              "delta_vs_M1": -6.35,
+              "ci95_vs_M1": [
+                -30.29,
+                24.54
+              ]
+            },
+            "TE": {
+              "mae": 1463.16,
+              "rmse": 1919.13,
+              "gain_vs_M1": 2.509,
+              "delta_vs_M1": -37.65,
+              "ci95_vs_M1": [
+                -64.23,
+                11.15
+              ]
+            }
+          },
+          "paired": {
+            "SS_minus_SE": {
+              "delta_mae": -102.1,
+              "ci95": [
+                -194.63,
+                12.34
+              ]
+            },
+            "SS_minus_TS": {
+              "delta_mae": -24.08,
+              "ci95": [
+                -48.12,
+                -9.59
+              ]
+            },
+            "SE_minus_TE": {
+              "delta_mae": -50.24,
+              "ci95": [
+                -64.47,
+                -31.66
+              ]
+            },
+            "TS_minus_TE": {
+              "delta_mae": -128.27,
+              "ci95": [
+                -236.1,
+                12.43
+              ]
+            }
+          }
+        },
+        "water_cad100": {
+          "variables": [
+            "deficit_cad100"
+          ],
+          "cells_used": 25,
+          "arms": {
+            "SS": {
+              "mae": 1309.38,
+              "rmse": 1746.01,
+              "gain_vs_M1": 1.838,
+              "delta_vs_M1": -24.52,
+              "ci95_vs_M1": [
+                -38.99,
+                1.19
+              ]
+            },
+            "SE": {
+              "mae": 1419.98,
+              "rmse": 1873.57,
+              "gain_vs_M1": 3.038,
+              "delta_vs_M1": -44.49,
+              "ci95_vs_M1": [
+                -63.35,
+                -4.33
+              ]
+            },
+            "TS": {
+              "mae": 1329.82,
+              "rmse": 1767.18,
+              "gain_vs_M1": 0.851,
+              "delta_vs_M1": -11.42,
+              "ci95_vs_M1": [
+                -29.0,
+                18.45
+              ]
+            },
+            "TE": {
+              "mae": 1465.78,
+              "rmse": 1924.98,
+              "gain_vs_M1": 2.334,
+              "delta_vs_M1": -35.03,
+              "ci95_vs_M1": [
+                -58.5,
+                7.92
+              ]
+            }
+          },
+          "paired": {
+            "SS_minus_SE": {
+              "delta_mae": -110.6,
+              "ci95": [
+                -212.12,
+                8.44
+              ]
+            },
+            "SS_minus_TS": {
+              "delta_mae": -20.44,
+              "ci95": [
+                -46.24,
+                -4.53
+              ]
+            },
+            "SE_minus_TE": {
+              "delta_mae": -45.8,
+              "ci95": [
+                -60.59,
+                -30.23
+              ]
+            },
+            "TS_minus_TE": {
+              "delta_mae": -135.96,
+              "ci95": [
+                -252.2,
+                11.01
+              ]
+            }
+          }
+        },
+        "water_cad200": {
+          "variables": [
+            "deficit_cad200"
+          ],
+          "cells_used": 25,
+          "arms": {
+            "SS": {
+              "mae": 1316.47,
+              "rmse": 1754.09,
+              "gain_vs_M1": 1.307,
+              "delta_vs_M1": -17.43,
+              "ci95_vs_M1": [
+                -33.17,
+                6.57
+              ]
+            },
+            "SE": {
+              "mae": 1441.92,
+              "rmse": 1897.83,
+              "gain_vs_M1": 1.54,
+              "delta_vs_M1": -22.55,
+              "ci95_vs_M1": [
+                -33.76,
+                1.62
+              ]
+            },
+            "TS": {
+              "mae": 1324.86,
+              "rmse": 1763.38,
+              "gain_vs_M1": 1.221,
+              "delta_vs_M1": -16.38,
+              "ci95_vs_M1": [
+                -34.88,
+                10.24
+              ]
+            },
+            "TE": {
+              "mae": 1477.57,
+              "rmse": 1938.11,
+              "gain_vs_M1": 1.548,
+              "delta_vs_M1": -23.24,
+              "ci95_vs_M1": [
+                -37.08,
+                1.72
+              ]
+            }
+          },
+          "paired": {
+            "SS_minus_SE": {
+              "delta_mae": -125.45,
+              "ci95": [
+                -238.57,
+                7.14
+              ]
+            },
+            "SS_minus_TS": {
+              "delta_mae": -8.39,
+              "ci95": [
+                -33.61,
+                9.92
+              ]
+            },
+            "SE_minus_TE": {
+              "delta_mae": -35.65,
+              "ci95": [
+                -47.62,
+                -21.69
+              ]
+            },
+            "TS_minus_TE": {
+              "delta_mae": -152.71,
+              "ci95": [
+                -285.28,
+                8.31
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "elapsed_s": 22.2
+}
