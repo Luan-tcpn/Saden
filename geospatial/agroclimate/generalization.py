@@ -393,6 +393,9 @@ def factorial_holdout(
     observed_parts: list[np.ndarray] = []
     block_parts: list[np.ndarray] = []
     year_parts: list[np.ndarray] = []
+    state_parts: list[np.ndarray] = []
+    fallback_rows: dict[str, int] = {a: 0 for a, _, _ in ARMS}
+    test_rows: dict[str, int] = {a: 0 for a, _, _ in ARMS}
     # --- preparação das células e dos alvos de treino -----------------------
     cells: list[dict[str, Any]] = []
     for space_fold in space_folds:
@@ -450,6 +453,7 @@ def factorial_holdout(
         observed_parts.append(observed_cell)
         block_parts.append(block_ids[test_mask])
         year_parts.append(year_ids[test_mask])
+        state_parts.append(state_ids[test_mask])
         x_test = x_all[test_mask]
         state_test = state_codes[test_mask]
         year_test = year_codes[test_mask]
@@ -491,6 +495,19 @@ def factorial_holdout(
                     chosen = stratified_subsample(pools, target, draw_rng)
                 else:
                     chosen = pool_index
+                # diagnóstico de fallback: UF do teste sem nenhuma linha no treino
+                chosen_states = state_codes[chosen]
+                chosen_states = chosen_states[chosen_states >= 0]
+                counts_train = np.bincount(
+                    chosen_states, minlength=len(state_names)
+                )
+                known = state_test >= 0
+                unknown_count = int((~known).sum())
+                zero_count = int(
+                    np.sum(counts_train[np.maximum(state_test[known], 0)] == 0)
+                ) if known.any() else 0
+                fallback_rows[arm] += unknown_count + zero_count
+                test_rows[arm] += int(state_test.size)
                 fitted = _fit_predict(
                     x_all[chosen],
                     y_all[chosen],
@@ -572,6 +589,7 @@ def factorial_holdout(
     observed = np.concatenate(observed_parts)
     out["test_blocks"] = np.concatenate(block_parts)
     out["test_years"] = np.concatenate(year_parts)
+    out["test_states"] = np.concatenate(state_parts)
 
     for arm, _, _ in ARMS:
         if not abs_err[arm]:
@@ -660,6 +678,13 @@ def factorial_holdout(
             for name in BASELINES
             if abs_base[(arm, name)]
         }
+        if test_rows[arm] > 0:
+            entry["state_fallback_share"] = float(
+                fallback_rows[arm] / (test_rows[arm] * max(n_repeats, 1))
+            )
+            entry["state_fallback_rows"] = int(
+                round(fallback_rows[arm] / max(n_repeats, 1))
+            )
         out["arms"][arm] = entry
 
     # diferenças pareadas com bootstrap por bloco
@@ -703,6 +728,53 @@ def factorial_holdout(
             out["model_vs_baseline"][f"{arm}_vs_{name}"] = block_bootstrap_difference(
                 entry["_abs"], values, out["test_blocks"], n_boot=n_boot, seed=seed
             )
+
+    # comparações entre as próprias linhas de base (aninhamento M0→M1→M1×ano)
+    out["baseline_pairs"] = {}
+    for arm, _, _ in ARMS:
+        entry = out["arms"].get(arm, {})
+        if entry.get("status") != "ok":
+            continue
+        base = entry["_abs_baselines"]
+        for left, right in (("state", "global"), ("state_year", "state")):
+            if left in base and right in base:
+                out["baseline_pairs"][f"{arm}_{left}_minus_{right}"] = (
+                    block_bootstrap_difference(
+                        base[left],
+                        base[right],
+                        out["test_blocks"],
+                        n_boot=n_boot,
+                        seed=seed,
+                    )
+                )
+
+    # decomposição por UF: modelo vs média da UF (valor incremental do clima
+    # dentro de cada UF, que é a granularidade da pergunta da V2.9)
+    out["by_state"] = {}
+    for arm, _, _ in ARMS:
+        entry = out["arms"].get(arm, {})
+        if entry.get("status") != "ok":
+            continue
+        errors = entry["_abs"]
+        state_base = entry["_abs_baselines"].get("state")
+        per_state: dict[str, Any] = {}
+        for state in sorted(set(out["test_states"].tolist())):
+            if not state:
+                continue
+            mask = out["test_states"] == state
+            if not mask.any():
+                continue
+            item = {
+                "n": int(mask.sum()),
+                "mae_model": float(np.mean(errors[mask])),
+            }
+            if state_base is not None:
+                item["mae_state_baseline"] = float(np.mean(state_base[mask]))
+                item["delta_model_minus_state"] = item["mae_model"] - item[
+                    "mae_state_baseline"
+                ]
+            per_state[state] = item
+        out["by_state"][arm] = per_state
 
     # decomposição por ano do erro de cada braço (mecanismo)
     out["by_year"] = {}
