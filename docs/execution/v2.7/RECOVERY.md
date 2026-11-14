@@ -41,21 +41,21 @@ $env:SADEN_EXTERNAL_TESTS="1"
 & geospatial\.venv\Scripts\python.exe -m unittest discover -s geospatial\tests_external -t geospatial
 ```
 
-Referência da V2.7: **309/309** offline e **10/10** externos.
+Referência da V2.7: **318/318** offline e **10/10** externos.
 
 ## 4. Reprodução dos experimentos
 
-Todos os experimentos são **retomáveis** (grava incrementalmente e
-retoma a partir do manifesto existente).
+Todos os experimentos são **retomáveis** (grava incrementalmente e retoma
+a partir do manifesto existente).
 
 ```powershell
-# 1. calibração do bootstrap wild (longa; ~1,5 h)
+# 1. calibração do bootstrap wild (longa; ~75 min em 84 casos)
 & geospatial\.venv\Scripts\python.exe tools\calibrate_wild_bootstrap.py
 # 2. inferência robusta (efeitos fixos + Conley + bootstrap + Holm)
 & geospatial\.venv\Scripts\python.exe geospatial\run_robustness.py infer --block-km 250 --null-policy auto
-# 3. validação territorial por blocos espaciais
+# 3. validação territorial por blocos espaciais (P1-P5; ~2 h nas 3 culturas)
 & geospatial\.venv\Scripts\python.exe geospatial\run_robustness.py spatial --block-km 250
-# 4. dependência espacial (correlograma)
+# 4. dependência espacial (correlograma; manifesto v27_spatial_dependence.*)
 & geospatial\.venv\Scripts\python.exe geospatial\run_robustness.py dependence
 # 5. diagnóstico dos grupos de agrupamento
 & geospatial\.venv\Scripts\python.exe geospatial\run_robustness.py diagnose
@@ -66,6 +66,11 @@ retoma a partir do manifesto existente).
 # 8. CAD (exige rede; sondagem + amostra)
 & geospatial\.venv\Scripts\python.exe tools\s27_cad_sample.py --sample 10 --window-deg 0.2
 ```
+
+> `spatial` grava o manifesto **por cultura**, ao final de cada uma: se for
+> interrompido, as culturas já concluídas estão no arquivo. O comando é o
+> mais caro (≈2 h no total) porque cada predição refaz a regressão sobre o
+> conjunto de treino.
 
 ## 5. Onde os artefatos grandes estão
 

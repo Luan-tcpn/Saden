@@ -38,13 +38,21 @@
 | `v27_robust_inference.json` / `.csv` | ~60 KB / 31 KB | inferência por esquema, Conley, bootstrap wild e Holm |
 | `v27_cluster_diagnostics.json` | 10,1 KB | 1.225 municípios, 383 células, 46 blocos de 250 km, 5 UFs; identidade de valores |
 | `v27_stats_validation.json` | 1,9 KB | 16/16 verificações das implementações estatísticas |
-| `v27_wild_bootstrap_calibration.json` | ~76 KB | calibração Monte Carlo do bootstrap wild (dois DGP) |
-| `v27_spatial_validation.json` / `.csv` | — | protocolos P1–P4 de validação territorial |
+| `v27_wild_bootstrap_calibration.json` | 252 KB | calibração Monte Carlo do bootstrap wild (2 DGP, 84 casos, 999 réplicas) — **grade recalculada após D85** |
+| `v27_spatial_dependence.json` / `.csv` | 30 KB / 11 KB | correlograma de anomalias (1.296 municípios, 3.653 dias), quatro campos, bandas de 25 km até 600 km |
+| `v27_spatial_validation.json` / `.csv` | 84 KB / 5,8 KB | protocolos P1–P5 de validação territorial (P5 = bloco × ano, D86) |
 | `v27_cad_wcs_probe.json` | 37 KB | capabilities do WCS (506 camadas) e descrição das camadas AW |
 | `v27_cad_layer_metadata.json` | 3,4 KB | título, unidade, profundidade, escala, CRS e licença por camada |
 | `v27_cad_sample.json` / `.csv` | 37 KB / 2,7 KB | amostra geográfica controlada: CAD por município |
 | `v27_phenology_window.json` | 17 KB | manifesto do experimento fenológico |
 | `v27_phenology_window.csv` | 601 KB | indicadores recalculados por linha (janela fenológica × ZARC) |
+| `v27_panel_coverage.json` / `.csv` | 1,7 KB / 546 KB | diagnóstico de cobertura nacional do painel (decisão de expansão) |
+
+> Todos os manifests são regeneráveis por comando
+> (`run_robustness.py {dependence,diagnose,infer,spatial}` e
+> `tools/{calibrate_wild_bootstrap,validate_v27_stats,s27_*}.py`), com
+> semente fixa. Os artefatos grandes que os originam ficam fora do Git
+> (D74/D84).
 
 ## 4. Períodos
 

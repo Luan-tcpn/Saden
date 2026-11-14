@@ -341,3 +341,43 @@ os blocos de 250 km **e** os anos da dobra, e o protocolo entra em
 
 `318 passed` (309 da V2.7 + 9 novos: coerência observado × bootstrap com
 peso unitário e ausência de vazamento em P5).
+
+### 06:52 — Commit `feb309d`
+
+Correções (D85), protocolo P5 (D86), testes novos e documentação
+correspondente.
+
+### 07:56 — Calibração recalculada (84/84 casos)
+
+Grade completa reexecutada com o harness corrigido, `--force`:
+* **9 → 0** diagnósticos degenerados (`mean_t_boot_sd_cluster` deixou de
+  ter valores ~8,5e14).
+* Diferença old→new **restrita a G = 5**: tamanho 0,037 → 0,047; poder
+  0,468 → 0,535. Nos demais casos ≤ 0,007 (ruído Monte Carlo).
+* `painel_fe` inalterado em todos os casos (o caminho *within* não foi
+  afetado) — confirma que as correções foram cirúrgicas.
+* Conclusão qualitativa preservada: pesos por grupo mantêm validade e
+  custam poder com poucos grupos; o procedimento é **levemente**
+  conservador com 5 grupos, não fortemente.
+
+### 08:30 — Validação territorial concluída (P1–P5, 3 culturas)
+
+* **Integridade:** 132 valores de MAE de P1–P4 comparados com o manifesto
+  de `ac41210` → **0 diferenças**. As correções não tocaram os protocolos
+  territoriais.
+* **P5 (bloco × ano), ganho do bloco meteorológico:**
+  soja +3,98% (P1) → +2,76% (P3) → **−3,30% (P5)**;
+  milho +1,62% → +1,35% → **+1,21%** (hídrico **+5,40%**);
+  milho 2ª +14,60% → +16,97% → **+16,92%**.
+* **Resultado:** o ganho territorial da V2.6 era, em parte, efeito do
+  **ano compartilhado** entre treino e teste. Para a soja ele não
+  sobrevive; para o milho sobrevive apenas nas variáveis hídricas; para o
+  milho 2ª safra sobrevive ao protocolo mais estrito.
+
+### 08:35 — Fechamento
+
+* Suíte offline **318/318**; externos opt-in **10/10**.
+* `MASTER_STATUS`, `NEXT_ACTIONS`, `DATA_MANIFEST`, `EVIDENCE_MATRIX`,
+  `RECOVERY` e o relatório consolidado atualizados com os números finais.
+* Correção de rastreabilidade no relatório: o correlograma passou a citar
+  o manifesto; a tabela antiga vinha de script em `tmp/`.

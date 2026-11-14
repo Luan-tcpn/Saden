@@ -25,17 +25,27 @@ controle a **dependência espacial real** da base meteorológica. A resposta é
    Holm (contra 13 com o agrupamento por município da V2.6). Os **quatro
    resultados nuclearmente robustos** são: déficit hídrico e temperatura
    média na soja, temperatura média e ET0 no milho.
-3. O **bootstrap wild de cluster** da execução anterior tinha um defeito
-   real: sorteava **um peso por observação** em vez de **um por grupo**,
-   o que anulava a proteção contra poucos grupos. Corrigido e calibrado.
+3. O **bootstrap wild de cluster** da execução anterior tinha **dois**
+   defeitos reais: sorteava **um peso por observação** em vez de **um por
+   grupo** (D80) e aceitava réplicas com erro-padrão numericamente nulo,
+   que entravam na cauda como excedência espúria (D85). Corrigido,
+   recalibrado e com o DGP de calibração consertado.
 4. A **janela fenológica** de enchimento de grãos (requisitos térmicos
    publicados) confirma a soja e **revela** duas relações no milho que a
    janela de plantio não mostrava.
 5. A **CAD oficial** (Embrapa Solos, Vasques et al., 2021) é 2 a 3 vezes
    maior que os cenários de 35/50/70 mm usados na V2.6.
-6. A **validação territorial** é reavaliada com separações geográficas
-   (município, célula, bloco espacial e UF), sem misturar os protocolos
-   temporais e territoriais.
+6. A **validação territorial** reproduz a faixa da V2.6 (+1,35% a +6,36%)
+   em P1–P3, mas o teste mais estrito — removendo **o bloco espacial e o
+   ano** ao mesmo tempo (P5, D86) — mostra que o ganho:
+   * **não sobrevive na soja** (−3,30% em P5, contra +2,76% em P3);
+   * **sobrevive parcialmente no milho** (+1,21% no bloco meteorológico,
+     **+5,40%** no hídrico);
+   * **sobrevive no milho 2ª safra** (+16,92%, praticamente igual a P3).
+
+   O ganho territorial aparente da V2.6 era, em parte, **efeito do ano
+   compartilhado** entre treino e teste — e o resultado por cultura é
+   heterogêneo.
 
 ---
 
@@ -127,14 +137,45 @@ de confiança **continua excluindo zero** no esquema conservador.
 `rng.choice([-1,1], size=len(grupo))` — **um peso por observação** —, o que
 não preserva a dependência intracluster. A versão correta usa **um peso por
 grupo e por replicação** (CGM, 2008). Efeito medido na calibração com 5
-grupos: poder de **46%** (correto) contra **88%** (variante herdada) sob
+grupos: poder de **53,5%** (correto) contra **91,3%** (variante herdada) sob
 efeito verdadeiro — a variante anterior **não** corrigia o problema de
-poucos grupos.
+poucos grupos, apenas parecia mais potente porque subestima a variância.
 
-**Calibração (D79).** Dois DGP, 3 sementes, taxas em 1%/5%/10% com
-incerteza de Monte Carlo: o tamanho é próximo do nominal para G ≥ 10
-(ex.: G = 25 → 0,055/0,0555/0,053; G = 50 → 0,054/0,0485/0,048) e
-**conservador com 5 grupos**, como esperado.
+**Calibração (D79).** Dois DGP, 3 sementes, 999 réplicas por bootstrap,
+taxas em 1%/5%/10% com incerteza de Monte Carlo explícita. Tamanho
+empírico ao nível nominal de 5%:
+
+| DGP | grupos | tamanho (pesos por grupo) | tamanho (pesos por obs.) |
+|---|---|---|---|
+| agrupado | 5 | 0,043 / 0,052 / 0,047 | 0,057 / 0,052 / 0,058 |
+| agrupado | 10 | 0,051–0,061 | 0,052–0,063 |
+| agrupado | 25 | 0,045–0,058 | 0,048–0,059 |
+| agrupado | 50 | 0,046–0,057 | 0,046–0,058 |
+| agrupado | 100 | 0,047–0,063 | 0,045–0,063 |
+| agrupado | 200 | 0,039–0,047 | 0,042–0,054 |
+| painel_fe | 10 | 0,051 / 0,066 / 0,068 | 0,048 / 0,072 / 0,077 |
+| painel_fe | 25 | 0,051 / 0,062 / 0,068 | 0,050 / 0,062 / 0,066 |
+| painel_fe | 46 | 0,048–0,058 | 0,049–0,056 |
+| painel_fe | 100 | 0,051–0,056 | 0,050–0,056 |
+
+Leitura: para G ≥ 10 o tamanho é compatível com o nominal dentro da
+incerteza Monte Carlo (com 800–2.000 simulações, ±1,0–1,5 p.p. ao nível de
+5%). Com **5 grupos** o procedimento é **levemente conservador**
+(0,043–0,052) e o **poder cai para ~53%**, contra ~94% do teste t
+assintótico — o custo de exigir validade com poucos grupos. O `painel_fe`
+com 10 municípios e erro AR(1) é o caso mais difícil: o bootstrap reduz,
+mas **não elimina**, a sobre-rejeição (0,051–0,071 contra nominal 0,05).
+
+**Achado da auditoria (D85).** A grade anterior estava contaminada por
+réplicas com erro-padrão numericamente nulo (`|t| ≈ 1e18`, contadas como
+excedência) e por um DGP com coluna estruturalmente nula no design. As duas
+falhas foram corrigidas e a grade foi **recalculada por inteiro**. O efeito
+é restrito a G = 5: tamanho 0,037 → 0,047 e poder 0,468 → 0,535; nos demais
+casos a diferença é ≤ 0,007 (ruído Monte Carlo), e os 9 diagnósticos
+degenerados (`t_boot_sd ≈ 8,5e14`) desapareceram. A conclusão qualitativa
+— pesos por grupo preservam a validade sob dependência e custam poder com
+poucos grupos — **não** mudou; o que mudou é que o procedimento não é tão
+conservador quanto a primeira grade sugeria.
 
 **Transparência (D81).** O bootstrap é reportado nos dois ramos (nulidade
 imposta e irrestrita) com a política declarada, porque a convenção de
@@ -201,15 +242,74 @@ mais permissivo; 250–600 km convergem.
 
 ---
 
-## 9. Validação espacial (protocolos P1–P4)
+## 9. Validação espacial (protocolos P1–P5)
 
-> Resultado em `v27_spatial_validation.json` / `.csv`.
+> Resultado em `v27_spatial_validation.json` / `.csv`; comando
+> `run_robustness.py spatial --block-km 250`.
 
-Os quatro protocolos — **P1** holdout por município (protocolo da V2.6),
-**P2** grouped por célula MERRA-2, **P3** grouped por bloco espacial de
-250 km e **P4** leave-one-UF-out — mantêm as avaliações temporais e
-territoriais **completamente separadas** e verificam ausência de vazamento
-por grupo.
+Cinco protocolos, todos com a **mesma** linha de base (média do conjunto de
+treino) e a **mesma** amostra de teste (a amostra completa da cultura); o
+que muda é apenas a informação removida do treino. Isso torna a sequência
+comparável: o ganho medido é sempre relativo à mesma referência, sob
+informação decrescente.
+
+| Protocolo | retirado do treino | soja (B) | milho (B) | milho 2ª (B) |
+|---|---|---|---|---|
+| P1 município (V2.6) | o município | +3,98% | +1,62% | +14,60% |
+| P2 célula MERRA-2 | a célula | +3,99% | +1,47% | +14,22% |
+| P3 bloco 250 km | o bloco espacial | +2,76% | +1,35% | +16,97% |
+| P4 leave-one-UF-out | a UF inteira | **−1,75%** | **−3,38%** | não estimável |
+| **P5 bloco × ano** | **o bloco e o ano** | **−3,30%** | **+1,21%** | **+16,92%** |
+
+Ganho = `(MAE_média_histórica − MAE_modelo) / MAE_média_histórica`; positivo
+significa que o modelo climático superou a média. `B` = bloco
+meteorológico (`precip_acumulada_mm`, `temp_media_c`). Os blocos `C`
+(térmico) e `D` (hídrico) estão no manifesto; o essencial:
+
+| Cultura | P3 (bloco) B / C / D | P5 (bloco × ano) B / C / D |
+|---|---|---|
+| soja | +2,76 / +1,49 / +0,85 | −3,30 / −1,42 / −5,30 |
+| milho | +1,35 / +5,20 / +6,30 | +1,21 / +4,33 / **+5,40** |
+| milho 2ª safra | +16,97 / +13,30 / +11,16 | +16,92 / +11,98 / +10,26 |
+
+**Leitura por cultura.**
+
+* **Soja — não robusto.** O ganho cresce em P1/P2 (+4,0%), cai em P3
+  (+2,8%), inverte em P4 (−1,8%) e permanece negativo em P5 (−3,3%). O
+  ganho territorial aparente da V2.6 **não sobrevive** quando o ano deixa
+  de ser compartilhado entre treino e teste. Como o mesmo encolhimento
+  monotônico aparece ao remover informação espacial, a explicação mais
+  parcimoniosa é que o modelo capturava estrutura regional **e** o choque
+  do ano, não uma relação climática transferível.
+* **Milho — parcialmente robusto, e dependente da família.** O bloco
+  meteorológico mantém apenas +1,2% em P5, mas o bloco **hídrico** mantém
+  **+5,4%** e o térmico +4,3%. O sinal de déficit hídrico é o que resiste
+  ao protocolo mais estrito; a leitura de "ganho modesto" da V2.6 se
+  sustenta apenas para as variáveis de água.
+* **Milho 2ª safra — robusto no protocolo mais estrito.** +16,9% em P5,
+  praticamente igual a P3. Duas ressalvas: (i) a linha de base agregada é
+  particularmente fraca para a 2ª safra (MAE 1.466 kg/ha), de modo que
+  parte do ganho reflete heterogeneidade regional que a média agregada não
+  captura; (ii) P4 não é estimável (apenas 4 UFs para 5 dobras), e o
+  esquema por UF é degenerado.
+
+**Reprodução da V2.6.** Em P1–P3 o ganho fica entre **+1,35% e +6,36%**,
+dentro da faixa de 1,7%–6,3% que a V2.6 reportou. Ou seja: o resultado
+original **reproduz**, e o que a V2.7 acrescenta é o teste que ele não
+fazia — a remoção do ano compartilhado e a separação por UF.
+
+**Ressalva sobre o rótulo `media_historica`.** Nos protocolos territoriais
+a linha de base é a **média do conjunto de treino** (agregada), porque o
+município de teste é, por construção, não visto. Na validação temporal
+(`walk_forward`) a mesma chave é a média do **próprio município** em anos
+anteriores. São duas linhas de base diferentes com o mesmo nome: os MAEs
+territoriais (≈621 para a soja) e o temporal da V2.6 (≈487) **não são
+comparáveis**, e a diferença não é contradição.
+
+**Integridade.** Os valores de P1–P4 são **idênticos bit a bit** aos da
+execução anterior (132 valores de MAE conferidos, 0 diferenças), o que
+confirma que as correções de D85 não tocaram os protocolos territoriais;
+P5 é a única adição.
 
 ---
 
@@ -317,11 +417,11 @@ Justificativa:
 |---|---|---|
 | 1 | Os 12 efeitos fixos continuam reproduzíveis? | **Sim**, bit a bit (n, municípios e anos idênticos) |
 | 2 | A inferência agrupada altera a significância? | **Sim**: 13 → 4 hipóteses com o agrupamento conservador de 250 km |
-| 3 | O Wild Bootstrap está calibrado? | **Sim** para ≥ 10 grupos (tamanho ≈ nominal); conservador com 5; e a **implementação tinha defeito real**, corrigido (D80) |
+| 3 | O Wild Bootstrap está calibrado? | **Sim** para ≥ 10 grupos (tamanho ≈ nominal); levemente conservador com 5 (tamanho 0,047, poder 53%); e a **implementação tinha dois defeitos reais**, corrigidos (D80, D85) |
 | 4 | O Conley HAC modifica os intervalos? | **Sim**: o EP do déficit hídrico da soja sai de 0,0723 (município) para 0,215–0,273 (150–600 km); 8–10 hipóteses sobrevivem |
-| 5 | A dependência espacial vai além de 55 km? | **Sim**: r(T) = 0,834 e r(P) = 0,630 a 400–425 km |
-| 6 | A separação por blocos altera os resultados territoriais? | Sim — ver seção 9 |
-| 7 | O ganho territorial de 1,7% a 6,3% permanece? | Ver seção 9 |
+| 5 | A dependência espacial vai além de 55 km? | **Sim**: r(T) = 0,834 e r(P) = 0,630 a 400–425 km (anomalias anuais, manifesto reproduzível) |
+| 6 | A separação por blocos altera os resultados territoriais? | **Sim**: o ganho cai de +4,0% (município) para +2,8% (bloco 250 km) na soja |
+| 7 | O ganho territorial de 1,7% a 6,3% permanece? | **Reproduz em P1–P3** (+1,35% a +6,36%), mas **não sobrevive a P5** na soja; sobrevive no milho (hídrico +5,40%) e no milho 2ª safra (+16,92%) — seção 9 |
 | 8 | A validação temporal continua desfavorável? | **Sim** — nenhum protocolo temporal é misturado com os territoriais |
 | 9 | O refinamento fenológico melhora a representação? | **Sim**: mantém a soja e revela precipitação e temperatura no milho; nenhuma direção se inverte |
 | 10 | A CAD geoespacial é viável? | **Sim**: 6 camadas oficiais a 90 m, licença livre (não-comercial), conversão documentada; os cenários da V2.6 são ~2–3× conservadores |
@@ -352,6 +452,20 @@ Justificativa:
 8. **Convenção de nulidade do CGM** não verificável neste ambiente
    (D81) — reportadas as duas variantes.
 9. **Metadado do WCS** declara unidade de campo incorreta (GRAY_INDEX).
+10. **Poucos grupos no esquema por UF** (5–6): o teste t e o bootstrap por
+    UF são degenerados ou instáveis. Com 10 grupos no `painel_fe` o
+    bootstrap ainda sobre-rejeita (até 0,071 ao nominal de 0,05); nesse
+    regime nenhum dos dois métodos é confiável, e o resultado deve ser
+    lido como **não conclusivo**, não como "sem efeito".
+11. **O ano é compartilhado entre treino e teste em P1–P4.** Os quatro
+    protocolos territoriais separam apenas o espaço; por isso foi
+    acrescentado P5 (D86), que remove blocos **e** anos. A comparação
+    P3 × P5 é o que separa ganho territorial genuíno de ganho atribuível
+    ao choque do ano, e é a leitura que deve prevalecer.
+12. **Sobreposição temporal no diagnóstico de dependência**: o
+    correlograma usa todas as 1.296 células com dados, não apenas os
+    1.225 municípios do painel de soja; a diferença é de 6% e não altera
+    a ordem de grandeza.
 
 ---
 
@@ -359,7 +473,7 @@ Justificativa:
 
 | Suíte | Comando | Resultado |
 |---|---|---|
-| Offline | `python -m unittest discover -s geospatial/tests -t geospatial` | **309/309 OK** (262 da V2.6 + 47 novos) |
+| Offline | `python -m pytest geospatial/tests -q` | **318/318 OK** (262 da V2.6 + 56 da V2.7) |
 | Externos opt-in | `SADEN_EXTERNAL_TESTS=1 python -m unittest discover -s geospatial/tests_external -t geospatial` | **10/10 OK** |
 
 Cobertura da suíte nova: distribuições · within↔LSDV · cluster-robust

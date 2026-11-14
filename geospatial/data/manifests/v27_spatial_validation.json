@@ -1,8 +1,7 @@
 {
-  "generated_at": "2026-11-14T04:43:36.899185+00:00",
+  "generated_at": "2026-11-14T06:40:33.134921+00:00",
   "seed": 20261113,
   "block_km": 250.0,
-  "protocols": {},
   "crops": {
     "soja": {
       "P1_municipio_v26": {
@@ -517,6 +516,384 @@
             "gain_percent": 0.30353860257928816,
             "mae_modelo": 668.0271539708464,
             "mae_media_historica": 670.0610479121069,
+            "n_predictions": 8884
+          }
+        }
+      },
+      "P5_bloco_x_ano": {
+        "description": "Holdout espacial E temporal simultaneos: cada dobra remove do treino os blocos de 250 km e os anos da dobra. Nenhuma observacao de treino compartilha bloco nem ano com a de teste, o que elimina o ganho atribuivel ao choque do ano.",
+        "group_key": "spatial_block_id",
+        "time_key": "year",
+        "models": {
+          "B_meteorologicos": {
+            "status": "ok",
+            "n_folds": 25,
+            "n_space_folds": 5,
+            "n_time_folds": 5,
+            "group_key": "spatial_block_id",
+            "time_key": "year",
+            "n_groups": 46,
+            "n_times": 8,
+            "space_folds": [
+              [
+                "B-08_-024",
+                "B-05_-024",
+                "B-07_-020",
+                "B-06_-026",
+                "B-09_-023",
+                "B-09_-022",
+                "B-09_-021",
+                "B-13_-022",
+                "B-08_-023",
+                "B-15_-021"
+              ],
+              [
+                "B-08_-026",
+                "B-14_-021",
+                "B-07_-023",
+                "B-15_-020",
+                "B-07_-021",
+                "B-05_-023",
+                "B-06_-022",
+                "B-05_-027",
+                "B-12_-020"
+              ],
+              [
+                "B-06_-021",
+                "B-08_-022",
+                "B-08_-025",
+                "B-12_-022",
+                "B-14_-022",
+                "B-10_-022",
+                "B-07_-024",
+                "B-06_-024",
+                "B-05_-026"
+              ],
+              [
+                "B-10_-023",
+                "B-07_-025",
+                "B-07_-022",
+                "B-13_-021",
+                "B-09_-024",
+                "B-10_-024",
+                "B-11_-022",
+                "B-13_-020",
+                "B-06_-023"
+              ],
+              [
+                "B-07_-026",
+                "B-06_-025",
+                "B-11_-021",
+                "B-12_-021",
+                "B-11_-020",
+                "B-11_-023",
+                "B-08_-021",
+                "B-14_-020",
+                "B-05_-025"
+              ]
+            ],
+            "time_folds": [
+              [
+                "2019",
+                "2021"
+              ],
+              [
+                "2025",
+                "2018"
+              ],
+              [
+                "2020",
+                "2024"
+              ],
+              [
+                "2022"
+              ],
+              [
+                "2023"
+              ]
+            ],
+            "n_predictions": 8884,
+            "models": {
+              "media_historica": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 640.6883121982855,
+                "rmse_kg_ha": 825.2248202438263,
+                "mape_percent": 32.74735525639205
+              },
+              "ultimo_valor": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 984.8638000900495,
+                "rmse_kg_ha": 1238.0369528504157,
+                "mape_percent": 50.46188317687403
+              },
+              "tendencia": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 640.1762300973203,
+                "rmse_kg_ha": 825.6995259286707,
+                "mape_percent": 32.64052241481891
+              },
+              "modelo": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 661.8022760466441,
+                "rmse_kg_ha": 840.741100429521,
+                "mape_percent": 32.840952853842275
+              }
+            },
+            "best_by_mae": "tendencia"
+          },
+          "C_thermal": {
+            "status": "ok",
+            "n_folds": 25,
+            "n_space_folds": 5,
+            "n_time_folds": 5,
+            "group_key": "spatial_block_id",
+            "time_key": "year",
+            "n_groups": 46,
+            "n_times": 8,
+            "space_folds": [
+              [
+                "B-08_-024",
+                "B-05_-024",
+                "B-07_-020",
+                "B-06_-026",
+                "B-09_-023",
+                "B-09_-022",
+                "B-09_-021",
+                "B-13_-022",
+                "B-08_-023",
+                "B-15_-021"
+              ],
+              [
+                "B-08_-026",
+                "B-14_-021",
+                "B-07_-023",
+                "B-15_-020",
+                "B-07_-021",
+                "B-05_-023",
+                "B-06_-022",
+                "B-05_-027",
+                "B-12_-020"
+              ],
+              [
+                "B-06_-021",
+                "B-08_-022",
+                "B-08_-025",
+                "B-12_-022",
+                "B-14_-022",
+                "B-10_-022",
+                "B-07_-024",
+                "B-06_-024",
+                "B-05_-026"
+              ],
+              [
+                "B-10_-023",
+                "B-07_-025",
+                "B-07_-022",
+                "B-13_-021",
+                "B-09_-024",
+                "B-10_-024",
+                "B-11_-022",
+                "B-13_-020",
+                "B-06_-023"
+              ],
+              [
+                "B-07_-026",
+                "B-06_-025",
+                "B-11_-021",
+                "B-12_-021",
+                "B-11_-020",
+                "B-11_-023",
+                "B-08_-021",
+                "B-14_-020",
+                "B-05_-025"
+              ]
+            ],
+            "time_folds": [
+              [
+                "2019",
+                "2021"
+              ],
+              [
+                "2025",
+                "2018"
+              ],
+              [
+                "2020",
+                "2024"
+              ],
+              [
+                "2022"
+              ],
+              [
+                "2023"
+              ]
+            ],
+            "n_predictions": 8884,
+            "models": {
+              "media_historica": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 640.6883121982855,
+                "rmse_kg_ha": 825.2248202438263,
+                "mape_percent": 32.74735525639205
+              },
+              "ultimo_valor": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 984.8638000900495,
+                "rmse_kg_ha": 1238.0369528504157,
+                "mape_percent": 50.46188317687403
+              },
+              "tendencia": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 640.1762300973203,
+                "rmse_kg_ha": 825.6995259286707,
+                "mape_percent": 32.64052241481891
+              },
+              "modelo": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 649.7878182897596,
+                "rmse_kg_ha": 826.5227117882898,
+                "mape_percent": 32.50608857617839
+              }
+            },
+            "best_by_mae": "tendencia"
+          },
+          "D_hidricos": {
+            "status": "ok",
+            "n_folds": 25,
+            "n_space_folds": 5,
+            "n_time_folds": 5,
+            "group_key": "spatial_block_id",
+            "time_key": "year",
+            "n_groups": 46,
+            "n_times": 8,
+            "space_folds": [
+              [
+                "B-08_-024",
+                "B-05_-024",
+                "B-07_-020",
+                "B-06_-026",
+                "B-09_-023",
+                "B-09_-022",
+                "B-09_-021",
+                "B-13_-022",
+                "B-08_-023",
+                "B-15_-021"
+              ],
+              [
+                "B-08_-026",
+                "B-14_-021",
+                "B-07_-023",
+                "B-15_-020",
+                "B-07_-021",
+                "B-05_-023",
+                "B-06_-022",
+                "B-05_-027",
+                "B-12_-020"
+              ],
+              [
+                "B-06_-021",
+                "B-08_-022",
+                "B-08_-025",
+                "B-12_-022",
+                "B-14_-022",
+                "B-10_-022",
+                "B-07_-024",
+                "B-06_-024",
+                "B-05_-026"
+              ],
+              [
+                "B-10_-023",
+                "B-07_-025",
+                "B-07_-022",
+                "B-13_-021",
+                "B-09_-024",
+                "B-10_-024",
+                "B-11_-022",
+                "B-13_-020",
+                "B-06_-023"
+              ],
+              [
+                "B-07_-026",
+                "B-06_-025",
+                "B-11_-021",
+                "B-12_-021",
+                "B-11_-020",
+                "B-11_-023",
+                "B-08_-021",
+                "B-14_-020",
+                "B-05_-025"
+              ]
+            ],
+            "time_folds": [
+              [
+                "2019",
+                "2021"
+              ],
+              [
+                "2025",
+                "2018"
+              ],
+              [
+                "2020",
+                "2024"
+              ],
+              [
+                "2022"
+              ],
+              [
+                "2023"
+              ]
+            ],
+            "n_predictions": 8884,
+            "models": {
+              "media_historica": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 640.6883121982855,
+                "rmse_kg_ha": 825.2248202438263,
+                "mape_percent": 32.74735525639205
+              },
+              "ultimo_valor": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 984.8638000900495,
+                "rmse_kg_ha": 1238.0369528504157,
+                "mape_percent": 50.46188317687403
+              },
+              "tendencia": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 640.1762300973203,
+                "rmse_kg_ha": 825.6995259286707,
+                "mape_percent": 32.64052241481891
+              },
+              "modelo": {
+                "n_predictions": 8884,
+                "mae_kg_ha": 674.6159915876462,
+                "rmse_kg_ha": 845.8062680348133,
+                "mape_percent": 33.36221806972012
+              }
+            },
+            "best_by_mae": "tendencia"
+          }
+        },
+        "n_groups": 46,
+        "n_times": 8,
+        "n_folds": 25,
+        "gains_vs_media_historica": {
+          "B_meteorologicos": {
+            "gain_percent": -3.2955125677123434,
+            "mae_modelo": 661.8022760466441,
+            "mae_media_historica": 640.6883121982855,
+            "n_predictions": 8884
+          },
+          "C_thermal": {
+            "gain_percent": -1.4202703433518935,
+            "mae_modelo": 649.7878182897596,
+            "mae_media_historica": 640.6883121982855,
+            "n_predictions": 8884
+          },
+          "D_hidricos": {
+            "gain_percent": -5.295504653885508,
+            "mae_modelo": 674.6159915876462,
+            "mae_media_historica": 640.6883121982855,
             "n_predictions": 8884
           }
         }
@@ -1038,6 +1415,393 @@
             "n_predictions": 7616
           }
         }
+      },
+      "P5_bloco_x_ano": {
+        "description": "Holdout espacial E temporal simultaneos: cada dobra remove do treino os blocos de 250 km e os anos da dobra. Nenhuma observacao de treino compartilha bloco nem ano com a de teste, o que elimina o ganho atribuivel ao choque do ano.",
+        "group_key": "spatial_block_id",
+        "time_key": "year",
+        "models": {
+          "B_meteorologicos": {
+            "status": "ok",
+            "n_folds": 25,
+            "n_space_folds": 5,
+            "n_time_folds": 5,
+            "group_key": "spatial_block_id",
+            "time_key": "year",
+            "n_groups": 49,
+            "n_times": 8,
+            "space_folds": [
+              [
+                "B-07_-018",
+                "B-07_-020",
+                "B-05_-020",
+                "B-06_-020",
+                "B-08_-023",
+                "B-13_-022",
+                "B-05_-017",
+                "B-06_-026",
+                "B-06_-018",
+                "B-05_-024"
+              ],
+              [
+                "B-06_-022",
+                "B-07_-022",
+                "B-08_-026",
+                "B-06_-021",
+                "B-11_-022",
+                "B-07_-026",
+                "B-08_-025",
+                "B-09_-024",
+                "B-11_-021",
+                "B-06_-017"
+              ],
+              [
+                "B-06_-025",
+                "B-08_-024",
+                "B-14_-021",
+                "B-06_-024",
+                "B-07_-024",
+                "B-09_-022",
+                "B-10_-024",
+                "B-07_-021",
+                "B-13_-020",
+                "B-05_-023"
+              ],
+              [
+                "B-12_-021",
+                "B-12_-020",
+                "B-09_-023",
+                "B-14_-020",
+                "B-09_-021",
+                "B-05_-027",
+                "B-08_-021",
+                "B-12_-022",
+                "B-07_-023",
+                "B-13_-021"
+              ],
+              [
+                "B-05_-026",
+                "B-07_-025",
+                "B-10_-022",
+                "B-11_-023",
+                "B-06_-023",
+                "B-08_-022",
+                "B-11_-020",
+                "B-05_-025",
+                "B-10_-023"
+              ]
+            ],
+            "time_folds": [
+              [
+                "2021",
+                "2023"
+              ],
+              [
+                "2018",
+                "2025"
+              ],
+              [
+                "2022",
+                "2020"
+              ],
+              [
+                "2024"
+              ],
+              [
+                "2019"
+              ]
+            ],
+            "n_predictions": 7616,
+            "models": {
+              "media_historica": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1717.7266932453254,
+                "rmse_kg_ha": 2213.1280869409475,
+                "mape_percent": 64.10768852305902
+              },
+              "ultimo_valor": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1772.0888918067226,
+                "rmse_kg_ha": 2234.3269200327386,
+                "mape_percent": 70.76377755941311
+              },
+              "tendencia": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1748.5997867193669,
+                "rmse_kg_ha": 2245.4667305567027,
+                "mape_percent": 64.69827544201185
+              },
+              "modelo": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1696.907665550051,
+                "rmse_kg_ha": 2167.170619270931,
+                "mape_percent": 60.39717409489751
+              }
+            },
+            "best_by_mae": "modelo"
+          },
+          "C_thermal": {
+            "status": "ok",
+            "n_folds": 25,
+            "n_space_folds": 5,
+            "n_time_folds": 5,
+            "group_key": "spatial_block_id",
+            "time_key": "year",
+            "n_groups": 49,
+            "n_times": 8,
+            "space_folds": [
+              [
+                "B-07_-018",
+                "B-07_-020",
+                "B-05_-020",
+                "B-06_-020",
+                "B-08_-023",
+                "B-13_-022",
+                "B-05_-017",
+                "B-06_-026",
+                "B-06_-018",
+                "B-05_-024"
+              ],
+              [
+                "B-06_-022",
+                "B-07_-022",
+                "B-08_-026",
+                "B-06_-021",
+                "B-11_-022",
+                "B-07_-026",
+                "B-08_-025",
+                "B-09_-024",
+                "B-11_-021",
+                "B-06_-017"
+              ],
+              [
+                "B-06_-025",
+                "B-08_-024",
+                "B-14_-021",
+                "B-06_-024",
+                "B-07_-024",
+                "B-09_-022",
+                "B-10_-024",
+                "B-07_-021",
+                "B-13_-020",
+                "B-05_-023"
+              ],
+              [
+                "B-12_-021",
+                "B-12_-020",
+                "B-09_-023",
+                "B-14_-020",
+                "B-09_-021",
+                "B-05_-027",
+                "B-08_-021",
+                "B-12_-022",
+                "B-07_-023",
+                "B-13_-021"
+              ],
+              [
+                "B-05_-026",
+                "B-07_-025",
+                "B-10_-022",
+                "B-11_-023",
+                "B-06_-023",
+                "B-08_-022",
+                "B-11_-020",
+                "B-05_-025",
+                "B-10_-023"
+              ]
+            ],
+            "time_folds": [
+              [
+                "2021",
+                "2023"
+              ],
+              [
+                "2018",
+                "2025"
+              ],
+              [
+                "2022",
+                "2020"
+              ],
+              [
+                "2024"
+              ],
+              [
+                "2019"
+              ]
+            ],
+            "n_predictions": 7616,
+            "models": {
+              "media_historica": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1717.7266932453254,
+                "rmse_kg_ha": 2213.1280869409475,
+                "mape_percent": 64.10768852305902
+              },
+              "ultimo_valor": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1772.0888918067226,
+                "rmse_kg_ha": 2234.3269200327386,
+                "mape_percent": 70.76377755941311
+              },
+              "tendencia": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1748.5997867193669,
+                "rmse_kg_ha": 2245.4667305567027,
+                "mape_percent": 64.69827544201185
+              },
+              "modelo": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1643.3448834493224,
+                "rmse_kg_ha": 2106.4232776436215,
+                "mape_percent": 62.62602410494114
+              }
+            },
+            "best_by_mae": "modelo"
+          },
+          "D_hidricos": {
+            "status": "ok",
+            "n_folds": 25,
+            "n_space_folds": 5,
+            "n_time_folds": 5,
+            "group_key": "spatial_block_id",
+            "time_key": "year",
+            "n_groups": 49,
+            "n_times": 8,
+            "space_folds": [
+              [
+                "B-07_-018",
+                "B-07_-020",
+                "B-05_-020",
+                "B-06_-020",
+                "B-08_-023",
+                "B-13_-022",
+                "B-05_-017",
+                "B-06_-026",
+                "B-06_-018",
+                "B-05_-024"
+              ],
+              [
+                "B-06_-022",
+                "B-07_-022",
+                "B-08_-026",
+                "B-06_-021",
+                "B-11_-022",
+                "B-07_-026",
+                "B-08_-025",
+                "B-09_-024",
+                "B-11_-021",
+                "B-06_-017"
+              ],
+              [
+                "B-06_-025",
+                "B-08_-024",
+                "B-14_-021",
+                "B-06_-024",
+                "B-07_-024",
+                "B-09_-022",
+                "B-10_-024",
+                "B-07_-021",
+                "B-13_-020",
+                "B-05_-023"
+              ],
+              [
+                "B-12_-021",
+                "B-12_-020",
+                "B-09_-023",
+                "B-14_-020",
+                "B-09_-021",
+                "B-05_-027",
+                "B-08_-021",
+                "B-12_-022",
+                "B-07_-023",
+                "B-13_-021"
+              ],
+              [
+                "B-05_-026",
+                "B-07_-025",
+                "B-10_-022",
+                "B-11_-023",
+                "B-06_-023",
+                "B-08_-022",
+                "B-11_-020",
+                "B-05_-025",
+                "B-10_-023"
+              ]
+            ],
+            "time_folds": [
+              [
+                "2021",
+                "2023"
+              ],
+              [
+                "2018",
+                "2025"
+              ],
+              [
+                "2022",
+                "2020"
+              ],
+              [
+                "2024"
+              ],
+              [
+                "2019"
+              ]
+            ],
+            "n_predictions": 7616,
+            "models": {
+              "media_historica": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1717.7266932453254,
+                "rmse_kg_ha": 2213.1280869409475,
+                "mape_percent": 64.10768852305902
+              },
+              "ultimo_valor": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1772.0888918067226,
+                "rmse_kg_ha": 2234.3269200327386,
+                "mape_percent": 70.76377755941311
+              },
+              "tendencia": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1748.5997867193669,
+                "rmse_kg_ha": 2245.4667305567027,
+                "mape_percent": 64.69827544201185
+              },
+              "modelo": {
+                "n_predictions": 7616,
+                "mae_kg_ha": 1624.9616433468225,
+                "rmse_kg_ha": 2086.26808213728,
+                "mape_percent": 60.546957935932774
+              }
+            },
+            "best_by_mae": "modelo"
+          }
+        },
+        "n_groups": 49,
+        "n_times": 8,
+        "n_folds": 25,
+        "gains_vs_media_historica": {
+          "B_meteorologicos": {
+            "gain_percent": 1.2120104890458847,
+            "mae_modelo": 1696.907665550051,
+            "mae_media_historica": 1717.7266932453254,
+            "n_predictions": 7616
+          },
+          "C_thermal": {
+            "gain_percent": 4.330247069484163,
+            "mae_modelo": 1643.3448834493224,
+            "mae_media_historica": 1717.7266932453254,
+            "n_predictions": 7616
+          },
+          "D_hidricos": {
+            "gain_percent": 5.400454581237283,
+            "mae_modelo": 1624.9616433468225,
+            "mae_media_historica": 1717.7266932453254,
+            "n_predictions": 7616
+          }
+        }
       }
     },
     "milho_2": {
@@ -1450,6 +2214,339 @@
             "n_municipalities": 505,
             "n_groups": 4,
             "group_key": "state"
+          }
+        }
+      },
+      "P5_bloco_x_ano": {
+        "description": "Holdout espacial E temporal simultaneos: cada dobra remove do treino os blocos de 250 km e os anos da dobra. Nenhuma observacao de treino compartilha bloco nem ano com a de teste, o que elimina o ganho atribuivel ao choque do ano.",
+        "group_key": "spatial_block_id",
+        "time_key": "year",
+        "models": {
+          "B_meteorologicos": {
+            "status": "ok",
+            "n_folds": 25,
+            "n_space_folds": 5,
+            "n_time_folds": 5,
+            "group_key": "spatial_block_id",
+            "time_key": "year",
+            "n_groups": 30,
+            "n_times": 9,
+            "space_folds": [
+              [
+                "B-08_-024",
+                "B-07_-022",
+                "B-05_-023",
+                "B-10_-023",
+                "B-06_-024",
+                "B-05_-026"
+              ],
+              [
+                "B-12_-022",
+                "B-09_-022",
+                "B-07_-025",
+                "B-08_-022",
+                "B-11_-021",
+                "B-06_-025"
+              ],
+              [
+                "B-10_-022",
+                "B-07_-024",
+                "B-08_-021",
+                "B-05_-024",
+                "B-09_-024",
+                "B-11_-023"
+              ],
+              [
+                "B-06_-023",
+                "B-10_-024",
+                "B-12_-021",
+                "B-05_-027",
+                "B-08_-023",
+                "B-05_-025"
+              ],
+              [
+                "B-12_-020",
+                "B-07_-021",
+                "B-09_-023",
+                "B-06_-026",
+                "B-11_-022",
+                "B-07_-026"
+              ]
+            ],
+            "time_folds": [
+              [
+                "2020",
+                "2022"
+              ],
+              [
+                "2017",
+                "2024"
+              ],
+              [
+                "2018",
+                "2025"
+              ],
+              [
+                "2021",
+                "2019"
+              ],
+              [
+                "2023"
+              ]
+            ],
+            "n_predictions": 2902,
+            "models": {
+              "media_historica": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1465.8129044333332,
+                "rmse_kg_ha": 1913.537540139903,
+                "mape_percent": 38.62309303593271
+              },
+              "ultimo_valor": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1704.184355616816,
+                "rmse_kg_ha": 2124.8847099709915,
+                "mape_percent": 49.11713159127887
+              },
+              "tendencia": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1475.273873301538,
+                "rmse_kg_ha": 1902.126772730435,
+                "mape_percent": 38.82040629699984
+              },
+              "modelo": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1217.8467053522213,
+                "rmse_kg_ha": 1552.2969492951574,
+                "mape_percent": 31.378854373608693
+              }
+            },
+            "best_by_mae": "modelo"
+          },
+          "C_thermal": {
+            "status": "ok",
+            "n_folds": 25,
+            "n_space_folds": 5,
+            "n_time_folds": 5,
+            "group_key": "spatial_block_id",
+            "time_key": "year",
+            "n_groups": 30,
+            "n_times": 9,
+            "space_folds": [
+              [
+                "B-08_-024",
+                "B-07_-022",
+                "B-05_-023",
+                "B-10_-023",
+                "B-06_-024",
+                "B-05_-026"
+              ],
+              [
+                "B-12_-022",
+                "B-09_-022",
+                "B-07_-025",
+                "B-08_-022",
+                "B-11_-021",
+                "B-06_-025"
+              ],
+              [
+                "B-10_-022",
+                "B-07_-024",
+                "B-08_-021",
+                "B-05_-024",
+                "B-09_-024",
+                "B-11_-023"
+              ],
+              [
+                "B-06_-023",
+                "B-10_-024",
+                "B-12_-021",
+                "B-05_-027",
+                "B-08_-023",
+                "B-05_-025"
+              ],
+              [
+                "B-12_-020",
+                "B-07_-021",
+                "B-09_-023",
+                "B-06_-026",
+                "B-11_-022",
+                "B-07_-026"
+              ]
+            ],
+            "time_folds": [
+              [
+                "2020",
+                "2022"
+              ],
+              [
+                "2017",
+                "2024"
+              ],
+              [
+                "2018",
+                "2025"
+              ],
+              [
+                "2021",
+                "2019"
+              ],
+              [
+                "2023"
+              ]
+            ],
+            "n_predictions": 2902,
+            "models": {
+              "media_historica": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1465.8129044333332,
+                "rmse_kg_ha": 1913.537540139903,
+                "mape_percent": 38.62309303593271
+              },
+              "ultimo_valor": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1704.184355616816,
+                "rmse_kg_ha": 2124.8847099709915,
+                "mape_percent": 49.11713159127887
+              },
+              "tendencia": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1475.273873301538,
+                "rmse_kg_ha": 1902.126772730435,
+                "mape_percent": 38.82040629699984
+              },
+              "modelo": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1290.210520323898,
+                "rmse_kg_ha": 1674.7498383131626,
+                "mape_percent": 32.01806374592956
+              }
+            },
+            "best_by_mae": "modelo"
+          },
+          "D_hidricos": {
+            "status": "ok",
+            "n_folds": 25,
+            "n_space_folds": 5,
+            "n_time_folds": 5,
+            "group_key": "spatial_block_id",
+            "time_key": "year",
+            "n_groups": 30,
+            "n_times": 9,
+            "space_folds": [
+              [
+                "B-08_-024",
+                "B-07_-022",
+                "B-05_-023",
+                "B-10_-023",
+                "B-06_-024",
+                "B-05_-026"
+              ],
+              [
+                "B-12_-022",
+                "B-09_-022",
+                "B-07_-025",
+                "B-08_-022",
+                "B-11_-021",
+                "B-06_-025"
+              ],
+              [
+                "B-10_-022",
+                "B-07_-024",
+                "B-08_-021",
+                "B-05_-024",
+                "B-09_-024",
+                "B-11_-023"
+              ],
+              [
+                "B-06_-023",
+                "B-10_-024",
+                "B-12_-021",
+                "B-05_-027",
+                "B-08_-023",
+                "B-05_-025"
+              ],
+              [
+                "B-12_-020",
+                "B-07_-021",
+                "B-09_-023",
+                "B-06_-026",
+                "B-11_-022",
+                "B-07_-026"
+              ]
+            ],
+            "time_folds": [
+              [
+                "2020",
+                "2022"
+              ],
+              [
+                "2017",
+                "2024"
+              ],
+              [
+                "2018",
+                "2025"
+              ],
+              [
+                "2021",
+                "2019"
+              ],
+              [
+                "2023"
+              ]
+            ],
+            "n_predictions": 2902,
+            "models": {
+              "media_historica": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1465.8129044333332,
+                "rmse_kg_ha": 1913.537540139903,
+                "mape_percent": 38.62309303593271
+              },
+              "ultimo_valor": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1704.184355616816,
+                "rmse_kg_ha": 2124.8847099709915,
+                "mape_percent": 49.11713159127887
+              },
+              "tendencia": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1475.273873301538,
+                "rmse_kg_ha": 1902.126772730435,
+                "mape_percent": 38.82040629699984
+              },
+              "modelo": {
+                "n_predictions": 2902,
+                "mae_kg_ha": 1315.438651838886,
+                "rmse_kg_ha": 1710.292516265349,
+                "mape_percent": 33.52218779070139
+              }
+            },
+            "best_by_mae": "modelo"
+          }
+        },
+        "n_groups": 30,
+        "n_times": 9,
+        "n_folds": 25,
+        "gains_vs_media_historica": {
+          "B_meteorologicos": {
+            "gain_percent": 16.9166336529813,
+            "mae_modelo": 1217.8467053522213,
+            "mae_media_historica": 1465.8129044333332,
+            "n_predictions": 2902
+          },
+          "C_thermal": {
+            "gain_percent": 11.979863431296582,
+            "mae_modelo": 1290.210520323898,
+            "mae_media_historica": 1465.8129044333332,
+            "n_predictions": 2902
+          },
+          "D_hidricos": {
+            "gain_percent": 10.258761683680236,
+            "mae_modelo": 1315.438651838886,
+            "mae_media_historica": 1465.8129044333332,
+            "n_predictions": 2902
           }
         }
       }
