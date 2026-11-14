@@ -1,0 +1,53 @@
+{
+  "generated_at": "2026-11-14T04:50:22Z",
+  "method": "Classificacao do par (municipio, cultura) segundo os criterios de D69, usando os artefatos da V2.6. Nenhuma aquisicao foi feita.",
+  "universe": {
+    "municipios_com_geometria_oficial": 1782,
+    "pares_municipio_cultura_avaliados": 3564,
+    "municipios_distintos": 1782,
+    "linhas_do_painel": 40990
+  },
+  "criteria_counts": {
+    "producao_observada": 3022,
+    "area_positiva": 3022,
+    "geometria_oficial": 3564,
+    "cobertura_climatica": 2288,
+    "compatibilidade_zarc": 3564,
+    "estacao_inmet": 3438,
+    "calendario": 3564,
+    "cobertura_temporal": 3002
+  },
+  "criteria_denominator": 3564,
+  "quality_flag_labels_informational": {
+    "paired": 18229,
+    "retrospective_mask": 3193
+  },
+  "classification": {
+    "elegivel_com_ressalvas": 739,
+    "dados_insuficientes": 542,
+    "elegivel": 2281,
+    "nao_elegivel": 2
+  },
+  "by_crop": {
+    "milho|dados_insuficientes": 75,
+    "milho|elegivel": 1063,
+    "milho|elegivel_com_ressalvas": 643,
+    "milho|nao_elegivel": 1,
+    "soja|dados_insuficientes": 467,
+    "soja|elegivel": 1218,
+    "soja|elegivel_com_ressalvas": 96,
+    "soja|nao_elegivel": 1
+  },
+  "relaxed_criterion_counts": {
+    "producao_observada": 2281,
+    "area_positiva": 2281,
+    "geometria_oficial": 2281,
+    "cobertura_climatica": 2901,
+    "compatibilidade_zarc": 2281,
+    "estacao_inmet": 2281,
+    "calendario": 2281,
+    "cobertura_temporal": 2288
+  },
+  "decision": "Nao ampliar agora: a robustez estatistica (D76-D82) alterou a leitura dos resultados e deve ser fixada antes de qualquer aquisicao massiva. O gargalo observado e a producao observada com area positiva (nao a cobertura meteorologica).",
+  "elapsed_s": 1.2
+}
