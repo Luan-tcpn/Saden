@@ -213,6 +213,14 @@ estratificada e registra o plano para a cobertura completa (retomável, com
 cache local e escrita incremental: uma interrupção não perde o que já foi
 coletado).
 
+> **Nota de execução.** A varredura completa chegou a 223 municípios antes de
+> ser interrompida; como o manifesto é percorrido em ordem de código IBGE, ela
+> cobriu apenas a Bahia — amostra **geograficamente enviesada**. Esses dados
+> ficam preservados em `v29_cad_expansion.json` para retomada, mas a
+> **análise usa a amostra estratificada** (`v29_cad_stratified.json`). Essa
+> distinção é registrada para que ninguém use a varredura parcial como se
+> fosse representativa.
+
 **Correção durante a implementação.** A CAD por pixel usava inicialmente
 todas as seis camadas para qualquer profundidade, o que atribuía à "0–100 cm"
 o valor de 0–200 cm. Corrigido: cada profundidade usa apenas as suas camadas,
