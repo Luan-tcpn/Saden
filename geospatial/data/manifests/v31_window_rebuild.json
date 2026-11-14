@@ -1,0 +1,143 @@
+{
+  "generated_at": "2026-11-14T11:19:48.470507+00:00",
+  "n_rows": 19402,
+  "n_municipalities": 1296,
+  "definition": {
+    "legacy": "months[0] <= data <= months[-1] (comparação lexicográfica; último mês excluído)",
+    "corrected": "primeiro dia do primeiro mês até o último dia do último mês",
+    "cad_legacy": 50.0,
+    "cad_corrected_scenarios": [
+      "cad_0_60",
+      "cad_0_100",
+      "cad_0_200"
+    ]
+  },
+  "reproduction_legacy": {
+    "precip_acumulada_mm": {
+      "n": 19402,
+      "max_abs_diff": 1.5897005823717336e-05,
+      "median_abs_diff": 1.1907517887266295e-06,
+      "n_exact": 8366
+    },
+    "temp_media_c": {
+      "n": 19402,
+      "max_abs_diff": 3.64242062289577e-07,
+      "median_abs_diff": 4.221181271191199e-08,
+      "n_exact": 19402
+    },
+    "degree_days_total": {
+      "n": 19402,
+      "max_abs_diff": 1.5926359992590733e-05,
+      "median_abs_diff": 1.9836427327390993e-06,
+      "n_exact": 5326
+    },
+    "extreme_heat_days": {
+      "n": 19402,
+      "max_abs_diff": 0.0,
+      "median_abs_diff": 0.0,
+      "n_exact": 19402
+    },
+    "et0_total_mm": {
+      "n": 19402,
+      "max_abs_diff": 7.715277433817391e-06,
+      "median_abs_diff": 9.85914368811791e-07,
+      "n_exact": 9798
+    },
+    "deficiency_total_mm": {
+      "n": 19402,
+      "max_abs_diff": 1.0480540822754847e-05,
+      "median_abs_diff": 6.034330510829022e-07,
+      "n_exact": 11978
+    },
+    "excess_total_mm": {
+      "n": 19402,
+      "max_abs_diff": 1.7237038036910235e-05,
+      "median_abs_diff": 4.996873599338869e-07,
+      "n_exact": 11624
+    }
+  },
+  "effect_of_restoring_last_month": {
+    "precip_acumulada_mm": {
+      "n": 19402,
+      "median_legacy": 338.27999883145094,
+      "median_corrected": 491.41999664902687,
+      "median_delta": 135.36999942734838,
+      "median_relative_change": 0.440328150912556,
+      "share_increased": 1.0,
+      "share_unchanged": 0.0
+    },
+    "et0_total_mm": {
+      "n": 19402,
+      "median_legacy": 390.0290635483018,
+      "median_corrected": 557.5060710529636,
+      "median_delta": 165.0779477280807,
+      "median_relative_change": 0.43477314927871746,
+      "share_increased": 1.0,
+      "share_unchanged": 0.0
+    },
+    "degree_days_total": {
+      "n": 19402,
+      "median_legacy": 1018.9099972248077,
+      "median_corrected": 1489.8150005340576,
+      "median_delta": 453.30250120162964,
+      "median_relative_change": 0.4547316583095502,
+      "share_increased": 1.0,
+      "share_unchanged": 0.0
+    },
+    "extreme_heat_days": {
+      "n": 19402,
+      "median_legacy": 4.0,
+      "median_corrected": 8.0,
+      "median_delta": 0.0,
+      "median_relative_change": 0.058823529411764705,
+      "share_increased": 0.4224822183280074,
+      "share_unchanged": 0.5775177816719925
+    },
+    "deficiency_total_mm": {
+      "n": 19402,
+      "median_legacy": 51.345182483286266,
+      "median_corrected": 105.96998135621962,
+      "median_delta": 8.454160879347931,
+      "median_relative_change": 0.23556971841623503,
+      "share_increased": 0.5339655705597361,
+      "share_unchanged": 0.4660344294402639
+    },
+    "excess_total_mm": {
+      "n": 19402,
+      "median_legacy": 58.36850908261442,
+      "median_corrected": 91.90601981266866,
+      "median_delta": 0.0,
+      "median_relative_change": 0.0,
+      "share_increased": 0.29414493351200904,
+      "share_unchanged": 0.7058550664879909
+    },
+    "temp_media_c": {
+      "n": 19402,
+      "median_legacy": 24.329120866544955,
+      "median_corrected": 24.414754164023478,
+      "median_delta": 0.24713564322802384,
+      "median_relative_change": 0.01000535240196351,
+      "share_increased": 0.587825997319864,
+      "share_unchanged": 0.0
+    },
+    "dias_com_chuva": {
+      "n": 19402,
+      "median_legacy": 59.0,
+      "median_corrected": 88.0,
+      "median_delta": 28.0,
+      "median_relative_change": 0.45614035087719296,
+      "share_increased": 1.0,
+      "share_unchanged": 0.0
+    },
+    "warm_nights": {
+      "n": 19402,
+      "median_legacy": 26.0,
+      "median_corrected": 44.0,
+      "median_delta": 18.0,
+      "median_relative_change": 0.5434782608695652,
+      "share_increased": 0.9426347799195959,
+      "share_unchanged": 0.05736522008040408
+    }
+  },
+  "elapsed_s": 253.8
+}

@@ -38,3 +38,6 @@ data/processed/embrapa_solos_wcs_capabilities.xml
 # As estatisticas por municipio (a evidencia) ficam nos manifests versionados
 # `v30_cad_polygon.json`/`.csv` e `v30_balance_recalc.json`.
 data/processed/v30_panel_cad.csv
+# V3.1 - painel com as duas janelas (legada e corrigida): derivado e regeneravel
+# por 	ools/v31_rebuild_panel.py; a evidencia fica em 31_window_rebuild.json.
+data/processed/v31_panel_windows.csv
