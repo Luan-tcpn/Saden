@@ -1,0 +1,3338 @@
+{
+  "generated_at": "2026-11-14T12:26:18.768332+00:00",
+  "preregistration": "docs/V3_2_PREREGISTRATION.md",
+  "design": {
+    "estimator": "within dois fatores (município e ano) + interações UF x clima",
+    "inference": "CR1 agrupado por bloco espacial; F(q, G-1) no teste global",
+    "reference_state": "primeira UF em ordem alfabética (o teste global não depende dela)",
+    "family_confirmatory": "3 culturas x 2 variáveis primárias = 6 testes globais, Holm",
+    "family_secondary": "contrastes UF x variável por cultura, Holm dentro da cultura",
+    "family_exploratory": "3 variáveis adicionais x 3 culturas, Benjamini-Hochberg",
+    "variables_primary": [
+      "precip_corrected",
+      "temp_corrected"
+    ],
+    "variables_exploratory": [
+      "degree_days_corrected",
+      "heat_corrected",
+      "deficit_cad100"
+    ]
+  },
+  "crops": {
+    "soja": {
+      "n_rows": 8884,
+      "tests": {
+        "precip_corrected": {
+          "status": "ok",
+          "wald": 4.520050213676097,
+          "statistic": 1.1300125534190242,
+          "df1": 4,
+          "df2": 39,
+          "p_value": 0.3565206041151502,
+          "n_restrictions": 4,
+          "reference_state": "GO",
+          "reference_slope": 1.7635330960259632
+        },
+        "temp_corrected": {
+          "status": "ok",
+          "wald": 7.578545872129433,
+          "statistic": 1.8946364680323582,
+          "df1": 4,
+          "df2": 39,
+          "p_value": 0.13078431583424246,
+          "n_restrictions": 4,
+          "reference_state": "GO",
+          "reference_slope": 70.26791464681011
+        }
+      },
+      "single_variable": {
+        "precip_corrected": {
+          "status": "ok",
+          "n": 8884,
+          "n_clusters": 40,
+          "cluster_info": {
+            "scheme": "two_way",
+            "clusters_a": "UF x ano",
+            "clusters_b": "municipio",
+            "n_clusters_a": 40,
+            "n_clusters_b": 1225
+          },
+          "df": 39,
+          "states": [
+            "GO",
+            "MS",
+            "MT",
+            "PR",
+            "RS"
+          ],
+          "reference_state": "GO",
+          "variables": [
+            "precip_corrected"
+          ],
+          "common_slopes": {
+            "precip_corrected": 1.0768166919348219
+          },
+          "slopes_by_state": {
+            "GO": {
+              "precip_corrected": 1.0768166919348219
+            },
+            "MS": {
+              "precip_corrected": 1.0680140230119073
+            },
+            "MT": {
+              "precip_corrected": 0.8992261652675457
+            },
+            "PR": {
+              "precip_corrected": 0.6380751889459744
+            },
+            "RS": {
+              "precip_corrected": 0.8661649418058666
+            }
+          },
+          "global_tests": {
+            "precip_corrected": {
+              "status": "ok",
+              "wald": 0.5434165785237922,
+              "statistic": 0.13585414463094805,
+              "df1": 4,
+              "df2": 39,
+              "p_value": 0.9681075745134305,
+              "n_restrictions": 4,
+              "reference_state": "GO",
+              "reference_slope": 1.0768166919348219
+            }
+          },
+          "contrasts": {
+            "precip_corrected|MS": {
+              "variable": "precip_corrected",
+              "state": "MS",
+              "reference_state": "GO",
+              "difference": -0.008802668922914647,
+              "std_error": 0.9731474664389629,
+              "t_statistic": -0.00904556526784809,
+              "p_value": 0.9928288952795669,
+              "ci95": [
+                -1.977179213145781,
+                1.9595738752999519
+              ],
+              "n_rows_state": 586,
+              "identified": true,
+              "p_holm": 1.0
+            },
+            "precip_corrected|MT": {
+              "variable": "precip_corrected",
+              "state": "MT",
+              "reference_state": "GO",
+              "difference": -0.1775905266672762,
+              "std_error": 0.7527620417593943,
+              "t_statistic": -0.23591854638711918,
+              "p_value": 0.8147304575454242,
+              "ci95": [
+                -1.7001954734823344,
+                1.345014420147782
+              ],
+              "n_rows_state": 911,
+              "identified": true,
+              "p_holm": 1.0
+            },
+            "precip_corrected|PR": {
+              "variable": "precip_corrected",
+              "state": "PR",
+              "reference_state": "GO",
+              "difference": -0.43874150298884745,
+              "std_error": 0.7915917378387143,
+              "t_statistic": -0.5542522515289825,
+              "p_value": 0.5825707247240973,
+              "ci95": [
+                -2.0398869234913333,
+                1.1624039175136383
+              ],
+              "n_rows_state": 2863,
+              "identified": true,
+              "p_holm": 1.0
+            },
+            "precip_corrected|RS": {
+              "variable": "precip_corrected",
+              "state": "RS",
+              "reference_state": "GO",
+              "difference": -0.21065175012895526,
+              "std_error": 0.7545056891302092,
+              "t_statistic": -0.2791917319693025,
+              "p_value": 0.781572948604623,
+              "ci95": [
+                -1.7367835566487069,
+                1.3154800563907962
+              ],
+              "n_rows_state": 2966,
+              "identified": true,
+              "p_holm": 1.0
+            }
+          },
+          "multiplicity": {
+            "family": "contrastes por UF × variável dentro da cultura",
+            "size": 4,
+            "procedure": "Holm"
+          }
+        },
+        "temp_corrected": {
+          "status": "ok",
+          "n": 8884,
+          "n_clusters": 40,
+          "cluster_info": {
+            "scheme": "two_way",
+            "clusters_a": "UF x ano",
+            "clusters_b": "municipio",
+            "n_clusters_a": 40,
+            "n_clusters_b": 1225
+          },
+          "df": 39,
+          "states": [
+            "GO",
+            "MS",
+            "MT",
+            "PR",
+            "RS"
+          ],
+          "reference_state": "GO",
+          "variables": [
+            "temp_corrected"
+          ],
+          "common_slopes": {
+            "temp_corrected": -195.95688479104356
+          },
+          "slopes_by_state": {
+            "GO": {
+              "temp_corrected": -195.95688479104356
+            },
+            "MS": {
+              "temp_corrected": -256.0186469093687
+            },
+            "MT": {
+              "temp_corrected": -292.85446803561
+            },
+            "PR": {
+              "temp_corrected": -278.92012081571795
+            },
+            "RS": {
+              "temp_corrected": -309.0498579008289
+            }
+          },
+          "global_tests": {
+            "temp_corrected": {
+              "status": "ok",
+              "wald": 1.5297447119583263,
+              "statistic": 0.38243617798958157,
+              "df1": 4,
+              "df2": 39,
+              "p_value": 0.8198226796845445,
+              "n_restrictions": 4,
+              "reference_state": "GO",
+              "reference_slope": -195.95688479104356
+            }
+          },
+          "contrasts": {
+            "temp_corrected|MS": {
+              "variable": "temp_corrected",
+              "state": "MS",
+              "reference_state": "GO",
+              "difference": -60.06176211832516,
+              "std_error": 85.22409204137294,
+              "t_statistic": -0.7047509768618895,
+              "p_value": 0.4851528959196578,
+              "ci95": [
+                -232.4437592587872,
+                112.32023502213687
+              ],
+              "n_rows_state": 586,
+              "identified": true,
+              "p_holm": 1.0
+            },
+            "temp_corrected|MT": {
+              "variable": "temp_corrected",
+              "state": "MT",
+              "reference_state": "GO",
+              "difference": -96.89758324456645,
+              "std_error": 84.04783458055216,
+              "t_statistic": -1.1528861359503435,
+              "p_value": 0.25597456630165094,
+              "ci95": [
+                -266.9003750994008,
+                73.10520861026791
+              ],
+              "n_rows_state": 911,
+              "identified": true,
+              "p_holm": 1.0
+            },
+            "temp_corrected|PR": {
+              "variable": "temp_corrected",
+              "state": "PR",
+              "reference_state": "GO",
+              "difference": -82.96323602467442,
+              "std_error": 110.9745884737204,
+              "t_statistic": -0.7475876880076985,
+              "p_value": 0.4591930504879397,
+              "ci95": [
+                -307.43052848528464,
+                141.50405643593578
+              ],
+              "n_rows_state": 2863,
+              "identified": true,
+              "p_holm": 1.0
+            },
+            "temp_corrected|RS": {
+              "variable": "temp_corrected",
+              "state": "RS",
+              "reference_state": "GO",
+              "difference": -113.09297310978536,
+              "std_error": 175.1770728421345,
+              "t_statistic": -0.6455923213861561,
+              "p_value": 0.5223238962936205,
+              "ci95": [
+                -467.42204774618864,
+                241.23610152661792
+              ],
+              "n_rows_state": 2966,
+              "identified": true,
+              "p_holm": 1.0
+            }
+          },
+          "multiplicity": {
+            "family": "contrastes por UF × variável dentro da cultura",
+            "size": 4,
+            "procedure": "Holm"
+          }
+        }
+      },
+      "exploratory": {
+        "degree_days_corrected": {
+          "status": "ok",
+          "n": 8884,
+          "n_clusters": 40,
+          "cluster_info": {
+            "scheme": "two_way",
+            "clusters_a": "UF x ano",
+            "clusters_b": "municipio",
+            "n_clusters_a": 40,
+            "n_clusters_b": 1225
+          },
+          "df": 39,
+          "states": [
+            "GO",
+            "MS",
+            "MT",
+            "PR",
+            "RS"
+          ],
+          "reference_state": "GO",
+          "variables": [
+            "degree_days_corrected"
+          ],
+          "common_slopes": {
+            "degree_days_corrected": 0.7775353834754136
+          },
+          "slopes_by_state": {
+            "GO": {
+              "degree_days_corrected": 0.7775353834754136
+            },
+            "MS": {
+              "degree_days_corrected": -0.5843817448498069
+            },
+            "MT": {
+              "degree_days_corrected": -0.002015704313319655
+            },
+            "PR": {
+              "degree_days_corrected": 0.023738406110080823
+            },
+            "RS": {
+              "degree_days_corrected": 0.176454658587458
+            }
+          },
+          "global_tests": {
+            "degree_days_corrected": {
+              "status": "ok",
+              "wald": 7.342047649457304,
+              "statistic": 1.835511912364326,
+              "df1": 4,
+              "df2": 39,
+              "p_value": 0.14154824875776656,
+              "n_restrictions": 4,
+              "reference_state": "GO",
+              "reference_slope": 0.7775353834754136
+            }
+          },
+          "contrasts": {
+            "degree_days_corrected|MS": {
+              "variable": "degree_days_corrected",
+              "state": "MS",
+              "reference_state": "GO",
+              "difference": -1.3619171283252205,
+              "std_error": 0.6124228600782026,
+              "t_statistic": -2.223818242433524,
+              "p_value": 0.03202187440486094,
+              "ci95": [
+                -2.600659286628343,
+                -0.12317497002209787
+              ],
+              "n_rows_state": 586,
+              "identified": true,
+              "p_holm": 0.12808749761944377
+            },
+            "degree_days_corrected|MT": {
+              "variable": "degree_days_corrected",
+              "state": "MT",
+              "reference_state": "GO",
+              "difference": -0.7795510877887333,
+              "std_error": 0.6797544669529639,
+              "t_statistic": -1.146812747377907,
+              "p_value": 0.2584463215361549,
+              "ci95": [
+                -2.1544842759489207,
+                0.5953821003714539
+              ],
+              "n_rows_state": 911,
+              "identified": true,
+              "p_holm": 0.7490697876710984
+            },
+            "degree_days_corrected|PR": {
+              "variable": "degree_days_corrected",
+              "state": "PR",
+              "reference_state": "GO",
+              "difference": -0.7537969773653328,
+              "std_error": 0.6450861587997201,
+              "t_statistic": -1.1685213937435668,
+              "p_value": 0.24968992922369948,
+              "ci95": [
+                -2.058606893410917,
+                0.5510129386802516
+              ],
+              "n_rows_state": 2863,
+              "identified": true,
+              "p_holm": 0.7490697876710984
+            },
+            "degree_days_corrected|RS": {
+              "variable": "degree_days_corrected",
+              "state": "RS",
+              "reference_state": "GO",
+              "difference": -0.6010807248879556,
+              "std_error": 0.7428508616977118,
+              "t_statistic": -0.8091539713829575,
+              "p_value": 0.4233357554413604,
+              "ci95": [
+                -2.1036384177853993,
+                0.901476968009488
+              ],
+              "n_rows_state": 2966,
+              "identified": true,
+              "p_holm": 0.7490697876710984
+            }
+          },
+          "multiplicity": {
+            "family": "contrastes por UF × variável dentro da cultura",
+            "size": 4,
+            "procedure": "Holm"
+          }
+        },
+        "heat_corrected": {
+          "status": "ok",
+          "n": 8884,
+          "n_clusters": 40,
+          "cluster_info": {
+            "scheme": "two_way",
+            "clusters_a": "UF x ano",
+            "clusters_b": "municipio",
+            "n_clusters_a": 40,
+            "n_clusters_b": 1225
+          },
+          "df": 39,
+          "states": [
+            "GO",
+            "MS",
+            "MT",
+            "PR",
+            "RS"
+          ],
+          "reference_state": "GO",
+          "variables": [
+            "heat_corrected"
+          ],
+          "common_slopes": {
+            "heat_corrected": -8.791223550772678
+          },
+          "slopes_by_state": {
+            "GO": {
+              "heat_corrected": -8.791223550772678
+            },
+            "MS": {
+              "heat_corrected": -10.947712395845368
+            },
+            "MT": {
+              "heat_corrected": -7.844511827973199
+            },
+            "PR": {
+              "heat_corrected": -11.916338815027592
+            },
+            "RS": {
+              "heat_corrected": -51.64499399140765
+            }
+          },
+          "global_tests": {
+            "heat_corrected": {
+              "status": "ok",
+              "wald": 6.136168934640891,
+              "statistic": 1.5340422336602229,
+              "df1": 4,
+              "df2": 39,
+              "p_value": 0.2113188867118027,
+              "n_restrictions": 4,
+              "reference_state": "GO",
+              "reference_slope": -8.791223550772678
+            }
+          },
+          "contrasts": {
+            "heat_corrected|MS": {
+              "variable": "heat_corrected",
+              "state": "MS",
+              "reference_state": "GO",
+              "difference": -2.1564888450726896,
+              "std_error": 6.43318858477977,
+              "t_statistic": -0.3352130621780169,
+              "p_value": 0.7392608411109319,
+              "ci95": [
+                -15.168840982390854,
+                10.855863292245477
+              ],
+              "n_rows_state": 586,
+              "identified": true,
+              "p_holm": 1.0
+            },
+            "heat_corrected|MT": {
+              "variable": "heat_corrected",
+              "state": "MT",
+              "reference_state": "GO",
+              "difference": 0.9467117227994786,
+              "std_error": 5.457100202019792,
+              "t_statistic": 0.1734825617548822,
+              "p_value": 0.863169451326664,
+              "ci95": [
+                -10.091315305556716,
+                11.984738751155671
+              ],
+              "n_rows_state": 911,
+              "identified": true,
+              "p_holm": 1.0
+            },
+            "heat_corrected|PR": {
+              "variable": "heat_corrected",
+              "state": "PR",
+              "reference_state": "GO",
+              "difference": -3.1251152642549136,
+              "std_error": 7.467307476751636,
+              "t_statistic": -0.4185063055170154,
+              "p_value": 0.6778727394615989,
+              "ci95": [
+                -18.229170294603048,
+                11.97893976609322
+              ],
+              "n_rows_state": 2863,
+              "identified": true,
+              "p_holm": 1.0
+            },
+            "heat_corrected|RS": {
+              "variable": "heat_corrected",
+              "state": "RS",
+              "reference_state": "GO",
+              "difference": -42.853770440634975,
+              "std_error": 21.657261069295753,
+              "t_statistic": -1.9787253015751953,
+              "p_value": 0.05493986480815622,
+              "ci95": [
+                -86.65971575836508,
+                0.9521748770951248
+              ],
+              "n_rows_state": 2966,
+              "identified": true,
+              "p_holm": 0.21975945923262488
+            }
+          },
+          "multiplicity": {
+            "family": "contrastes por UF × variável dentro da cultura",
+            "size": 4,
+            "procedure": "Holm"
+          }
+        },
+        "deficit_cad100": {
+          "status": "ok",
+          "n": 8884,
+          "n_clusters": 40,
+          "cluster_info": {
+            "scheme": "two_way",
+            "clusters_a": "UF x ano",
+            "clusters_b": "municipio",
+            "n_clusters_a": 40,
+            "n_clusters_b": 1225
+          },
+          "df": 39,
+          "states": [
+            "GO",
+            "MS",
+            "MT",
+            "PR",
+            "RS"
+          ],
+          "reference_state": "GO",
+          "variables": [
+            "deficit_cad100"
+          ],
+          "common_slopes": {
+            "deficit_cad100": -1.6066090335627277
+          },
+          "slopes_by_state": {
+            "GO": {
+              "deficit_cad100": -1.6066090335627277
+            },
+            "MS": {
+              "deficit_cad100": -1.6805731415913456
+            },
+            "MT": {
+              "deficit_cad100": -1.3403768899864517
+            },
+            "PR": {
+              "deficit_cad100": -2.9248049200086728
+            },
+            "RS": {
+              "deficit_cad100": -4.912959517898835
+            }
+          },
+          "global_tests": {
+            "deficit_cad100": {
+              "status": "ok",
+              "wald": 5.076362711677511,
+              "statistic": 1.2690906779193778,
+              "df1": 4,
+              "df2": 39,
+              "p_value": 0.29859100365454494,
+              "n_restrictions": 4,
+              "reference_state": "GO",
+              "reference_slope": -1.6066090335627277
+            }
+          },
+          "contrasts": {
+            "deficit_cad100|MS": {
+              "variable": "deficit_cad100",
+              "state": "MS",
+              "reference_state": "GO",
+              "difference": -0.07396410802861797,
+              "std_error": 0.967413832673813,
+              "t_statistic": -0.07645549973602327,
+              "p_value": 0.9394475952292051,
+              "ci95": [
+                -2.0307432832959,
+                1.8828150672386637
+              ],
+              "n_rows_state": 586,
+              "identified": true,
+              "p_holm": 1.0
+            },
+            "deficit_cad100|MT": {
+              "variable": "deficit_cad100",
+              "state": "MT",
+              "reference_state": "GO",
+              "difference": 0.2662321435762761,
+              "std_error": 0.906806802974971,
+              "t_statistic": 0.29359301529592124,
+              "p_value": 0.7706256724031624,
+              "ci95": [
+                -1.5679577430287597,
+                2.1004220301813117
+              ],
+              "n_rows_state": 911,
+              "identified": true,
+              "p_holm": 1.0
+            },
+            "deficit_cad100|PR": {
+              "variable": "deficit_cad100",
+              "state": "PR",
+              "reference_state": "GO",
+              "difference": -1.3181958864459449,
+              "std_error": 1.3225347357243016,
+              "t_statistic": -0.9967192927632403,
+              "p_value": 0.3250450479001591,
+              "ci95": [
+                -3.993274887828704,
+                1.3568831149368141
+              ],
+              "n_rows_state": 2863,
+              "identified": true,
+              "p_holm": 0.9751351437004773
+            },
+            "deficit_cad100|RS": {
+              "variable": "deficit_cad100",
+              "state": "RS",
+              "reference_state": "GO",
+              "difference": -3.306350484336107,
+              "std_error": 2.298094733273648,
+              "t_statistic": -1.4387355040086591,
+              "p_value": 0.15820309215474693,
+              "ci95": [
+                -7.954685834713011,
+                1.3419848660407978
+              ],
+              "n_rows_state": 2966,
+              "identified": true,
+              "p_holm": 0.6328123686189877
+            }
+          },
+          "multiplicity": {
+            "family": "contrastes por UF × variável dentro da cultura",
+            "size": 4,
+            "procedure": "Holm"
+          }
+        }
+      },
+      "joint": {
+        "status": "ok",
+        "n": 8884,
+        "n_clusters": 40,
+        "cluster_info": {
+          "scheme": "two_way",
+          "clusters_a": "UF x ano",
+          "clusters_b": "municipio",
+          "n_clusters_a": 40,
+          "n_clusters_b": 1225
+        },
+        "df": 39,
+        "states": [
+          "GO",
+          "MS",
+          "MT",
+          "PR",
+          "RS"
+        ],
+        "reference_state": "GO",
+        "variables": [
+          "precip_corrected",
+          "temp_corrected"
+        ],
+        "common_slopes": {
+          "precip_corrected": 1.7635330960259632,
+          "temp_corrected": 70.26791464681011
+        },
+        "slopes_by_state": {
+          "GO": {
+            "precip_corrected": 1.7635330960259632,
+            "temp_corrected": 70.26791464681011
+          },
+          "MS": {
+            "precip_corrected": 0.10091493878231983,
+            "temp_corrected": -178.55791784095447
+          },
+          "MT": {
+            "precip_corrected": 0.6966157794124774,
+            "temp_corrected": -129.32445741904664
+          },
+          "PR": {
+            "precip_corrected": 0.37775085529331087,
+            "temp_corrected": -164.54981447509113
+          },
+          "RS": {
+            "precip_corrected": 0.9208530866946314,
+            "temp_corrected": -291.8688583851798
+          }
+        },
+        "global_tests": {
+          "precip_corrected": {
+            "status": "ok",
+            "wald": 4.520050213676097,
+            "statistic": 1.1300125534190242,
+            "df1": 4,
+            "df2": 39,
+            "p_value": 0.3565206041151502,
+            "n_restrictions": 4,
+            "reference_state": "GO",
+            "reference_slope": 1.7635330960259632
+          },
+          "temp_corrected": {
+            "status": "ok",
+            "wald": 7.578545872129433,
+            "statistic": 1.8946364680323582,
+            "df1": 4,
+            "df2": 39,
+            "p_value": 0.13078431583424246,
+            "n_restrictions": 4,
+            "reference_state": "GO",
+            "reference_slope": 70.26791464681011
+          }
+        },
+        "contrasts": {
+          "precip_corrected|MS": {
+            "variable": "precip_corrected",
+            "state": "MS",
+            "reference_state": "GO",
+            "difference": -1.6626181572436434,
+            "std_error": 1.2290211439323202,
+            "t_statistic": -1.3527986605047377,
+            "p_value": 0.18391114264460395,
+            "ci95": [
+              -4.148548065608738,
+              0.8233117511214509
+            ],
+            "n_rows_state": 586,
+            "identified": true,
+            "p_holm": 0.4873853744966016
+          },
+          "precip_corrected|MT": {
+            "variable": "precip_corrected",
+            "state": "MT",
+            "reference_state": "GO",
+            "difference": -1.0669173166134858,
+            "std_error": 0.7493548967670752,
+            "t_statistic": -1.4237810698461608,
+            "p_value": 0.1624617914988672,
+            "ci95": [
+              -2.582630662189332,
+              0.44879602896236004
+            ],
+            "n_rows_state": 911,
+            "identified": true,
+            "p_holm": 0.4873853744966016
+          },
+          "precip_corrected|PR": {
+            "variable": "precip_corrected",
+            "state": "PR",
+            "reference_state": "GO",
+            "difference": -1.3857822407326523,
+            "std_error": 0.825046402633781,
+            "t_statistic": -1.6796415768965771,
+            "p_value": 0.10102209089137615,
+            "ci95": [
+              -3.054596107948993,
+              0.2830316264836883
+            ],
+            "n_rows_state": 2863,
+            "identified": true,
+            "p_holm": 0.4040883635655046
+          },
+          "precip_corrected|RS": {
+            "variable": "precip_corrected",
+            "state": "RS",
+            "reference_state": "GO",
+            "difference": -0.8426800093313318,
+            "std_error": 0.8105596403816735,
+            "t_statistic": -1.0396273973554044,
+            "p_value": 0.3049156710244867,
+            "ci95": [
+              -2.4821916340796033,
+              0.7968316154169397
+            ],
+            "n_rows_state": 2966,
+            "identified": true,
+            "p_holm": 0.4873853744966016
+          },
+          "temp_corrected|MS": {
+            "variable": "temp_corrected",
+            "state": "MS",
+            "reference_state": "GO",
+            "difference": -248.8258324877646,
+            "std_error": 116.66918198226126,
+            "t_statistic": -2.132746868196923,
+            "p_value": 0.03929576232584647,
+            "ci95": [
+              -484.81152753140066,
+              -12.840137444128516
+            ],
+            "n_rows_state": 586,
+            "identified": true,
+            "p_holm": 0.2750703362809253
+          },
+          "temp_corrected|MT": {
+            "variable": "temp_corrected",
+            "state": "MT",
+            "reference_state": "GO",
+            "difference": -199.59237206585675,
+            "std_error": 87.71885934853023,
+            "t_statistic": -2.275364426170015,
+            "p_value": 0.02845907174024876,
+            "ci95": [
+              -377.0205123861104,
+              -22.164231745603104
+            ],
+            "n_rows_state": 911,
+            "identified": true,
+            "p_holm": 0.22767257392199008
+          },
+          "temp_corrected|PR": {
+            "variable": "temp_corrected",
+            "state": "PR",
+            "reference_state": "GO",
+            "difference": -234.81772912190124,
+            "std_error": 115.24050916183819,
+            "t_statistic": -2.0376318260806587,
+            "p_value": 0.048411641662054486,
+            "ci95": [
+              -467.91366062396423,
+              -1.7217976198382416
+            ],
+            "n_rows_state": 2863,
+            "identified": true,
+            "p_holm": 0.29046984997232694
+          },
+          "temp_corrected|RS": {
+            "variable": "temp_corrected",
+            "state": "RS",
+            "reference_state": "GO",
+            "difference": -362.13677303198995,
+            "std_error": 178.87599419766502,
+            "t_statistic": -2.024512985413876,
+            "p_value": 0.04980389797815781,
+            "ci95": [
+              -723.9476223081549,
+              -0.3259237558249879
+            ],
+            "n_rows_state": 2966,
+            "identified": true,
+            "p_holm": 0.29046984997232694
+          }
+        },
+        "multiplicity": {
+          "family": "contrastes por UF × variável dentro da cultura",
+          "size": 8,
+          "procedure": "Holm"
+        }
+      },
+      "joint_block_clustering": {
+        "status": "ok",
+        "n": 8884,
+        "n_clusters": 46,
+        "cluster_info": {
+          "scheme": "block",
+          "clusters_a": "bloco espacial",
+          "n_clusters_a": 46
+        },
+        "df": 45,
+        "states": [
+          "GO",
+          "MS",
+          "MT",
+          "PR",
+          "RS"
+        ],
+        "reference_state": "GO",
+        "variables": [
+          "precip_corrected",
+          "temp_corrected"
+        ],
+        "common_slopes": {
+          "precip_corrected": 1.7635330960259632,
+          "temp_corrected": 70.26791464681011
+        },
+        "slopes_by_state": {
+          "GO": {
+            "precip_corrected": 1.7635330960259632,
+            "temp_corrected": 70.26791464681011
+          },
+          "MS": {
+            "precip_corrected": 0.10091493878231983,
+            "temp_corrected": -178.55791784095447
+          },
+          "MT": {
+            "precip_corrected": 0.6966157794124774,
+            "temp_corrected": -129.32445741904664
+          },
+          "PR": {
+            "precip_corrected": 0.37775085529331087,
+            "temp_corrected": -164.54981447509113
+          },
+          "RS": {
+            "precip_corrected": 0.9208530866946314,
+            "temp_corrected": -291.8688583851798
+          }
+        },
+        "global_tests": {
+          "precip_corrected": {
+            "status": "ok",
+            "wald": 34.945246670428745,
+            "statistic": 8.736311667607186,
+            "df1": 4,
+            "df2": 45,
+            "p_value": 2.6259061760216174e-05,
+            "n_restrictions": 4,
+            "reference_state": "GO",
+            "reference_slope": 1.7635330960259632
+          },
+          "temp_corrected": {
+            "status": "ok",
+            "wald": 41.313361100016806,
+            "statistic": 10.328340275004201,
+            "df1": 4,
+            "df2": 45,
+            "p_value": 5.084912108056106e-06,
+            "n_restrictions": 4,
+            "reference_state": "GO",
+            "reference_slope": 70.26791464681011
+          }
+        },
+        "contrasts": {
+          "precip_corrected|MS": {
+            "variable": "precip_corrected",
+            "state": "MS",
+            "reference_state": "GO",
+            "difference": -1.6626181572436434,
+            "std_error": 0.48315093478471804,
+            "t_statistic": -3.441198262370063,
+            "p_value": 0.0012611190212604266,
+            "ci95": [
+              -2.635734092334493,
+              -0.6895022221527937
+            ],
+            "n_rows_state": 586,
+            "identified": true,
+            "p_holm": 0.002522238042520853
+          },
+          "precip_corrected|MT": {
+            "variable": "precip_corrected",
+            "state": "MT",
+            "reference_state": "GO",
+            "difference": -1.0669173166134858,
+            "std_error": 0.29235851648587147,
+            "t_statistic": -3.649345773941378,
+            "p_value": 0.0006811960357126721,
+            "ci95": [
+              -1.6557575954358565,
+              -0.4780770377911151
+            ],
+            "n_rows_state": 911,
+            "identified": true,
+            "p_holm": 0.002043588107138016
+          },
+          "precip_corrected|PR": {
+            "variable": "precip_corrected",
+            "state": "PR",
+            "reference_state": "GO",
+            "difference": -1.3857822407326523,
+            "std_error": 0.30195993412142996,
+            "t_statistic": -4.5892917706604575,
+            "p_value": 3.561431879110925e-05,
+            "ci95": [
+              -1.9939607673528617,
+              -0.7776037141124429
+            ],
+            "n_rows_state": 2863,
+            "identified": true,
+            "p_holm": 0.00017807159395554623
+          },
+          "precip_corrected|RS": {
+            "variable": "precip_corrected",
+            "state": "RS",
+            "reference_state": "GO",
+            "difference": -0.8426800093313318,
+            "std_error": 0.36864857863070977,
+            "t_statistic": -2.2858626295572364,
+            "p_value": 0.02702358392954837,
+            "ci95": [
+              -1.5851763608575518,
+              -0.10018365780511185
+            ],
+            "n_rows_state": 2966,
+            "identified": true,
+            "p_holm": 0.02702358392954837
+          },
+          "temp_corrected|MS": {
+            "variable": "temp_corrected",
+            "state": "MS",
+            "reference_state": "GO",
+            "difference": -248.8258324877646,
+            "std_error": 60.24583178973032,
+            "t_statistic": -4.130175069309611,
+            "p_value": 0.00015519913203200045,
+            "ci95": [
+              -370.1671664614059,
+              -127.48449851412329
+            ],
+            "n_rows_state": 586,
+            "identified": true,
+            "p_holm": 0.0006207965281280018
+          },
+          "temp_corrected|MT": {
+            "variable": "temp_corrected",
+            "state": "MT",
+            "reference_state": "GO",
+            "difference": -199.59237206585675,
+            "std_error": 42.09027695048478,
+            "t_statistic": -4.742006623065423,
+            "p_value": 2.1604534727390474e-05,
+            "ci95": [
+              -284.3665415107615,
+              -114.81820262095195
+            ],
+            "n_rows_state": 911,
+            "identified": true,
+            "p_holm": 0.00015123174309173332
+          },
+          "temp_corrected|PR": {
+            "variable": "temp_corrected",
+            "state": "PR",
+            "reference_state": "GO",
+            "difference": -234.81772912190124,
+            "std_error": 46.93259325767423,
+            "t_statistic": -5.0032975555533525,
+            "p_value": 9.098639143554493e-06,
+            "ci95": [
+              -329.3448242511493,
+              -140.29063399265317
+            ],
+            "n_rows_state": 2863,
+            "identified": true,
+            "p_holm": 7.278911314843594e-05
+          },
+          "temp_corrected|RS": {
+            "variable": "temp_corrected",
+            "state": "RS",
+            "reference_state": "GO",
+            "difference": -362.13677303198995,
+            "std_error": 76.56044530686496,
+            "t_statistic": -4.730076628740797,
+            "p_value": 2.2468399602040472e-05,
+            "ci95": [
+              -516.3374253787734,
+              -207.93612068520648
+            ],
+            "n_rows_state": 2966,
+            "identified": true,
+            "p_holm": 0.00015123174309173332
+          }
+        },
+        "multiplicity": {
+          "family": "contrastes por UF × variável dentro da cultura",
+          "size": 8,
+          "procedure": "Holm"
+        }
+      }
+    },
+    "milho": {
+      "n_rows": 7616,
+      "tests": {
+        "precip_corrected": {
+          "status": "ok",
+          "wald": 5.160357109353646,
+          "statistic": 1.0320714218707292,
+          "df1": 5,
+          "df2": 47,
+          "p_value": 0.4098981739619909,
+          "n_restrictions": 5,
+          "reference_state": "BA",
+          "reference_slope": 0.6178240692333666
+        },
+        "temp_corrected": {
+          "status": "ok",
+          "wald": 12.368069529466457,
+          "statistic": 2.4736139058932913,
+          "df1": 5,
+          "df2": 47,
+          "p_value": 0.04540937637001807,
+          "n_restrictions": 5,
+          "reference_state": "BA",
+          "reference_slope": -23.7332402575578
+        }
+      },
+      "single_variable": {
+        "precip_corrected": {
+          "status": "ok",
+          "n": 7616,
+          "n_clusters": 48,
+          "cluster_info": {
+            "scheme": "two_way",
+            "clusters_a": "UF x ano",
+            "clusters_b": "municipio",
+            "n_clusters_a": 48,
+            "n_clusters_b": 1063
+          },
+          "df": 47,
+          "states": [
+            "BA",
+            "GO",
+            "MS",
+            "MT",
+            "PR",
+            "RS"
+          ],
+          "reference_state": "BA",
+          "variables": [
+            "precip_corrected"
+          ],
+          "common_slopes": {
+            "precip_corrected": 0.619382820885053
+          },
+          "slopes_by_state": {
+            "BA": {
+              "precip_corrected": 0.619382820885053
+            },
+            "GO": {
+              "precip_corrected": 0.26816561397377586
+            },
+            "MS": {
+              "precip_corrected": 0.9719539987140972
+            },
+            "MT": {
+              "precip_corrected": -0.030876153996809763
+            },
+            "PR": {
+              "precip_corrected": 1.7192482423874211
+            },
+            "RS": {
+              "precip_corrected": 1.212434804431781
+            }
+          },
+          "global_tests": {
+            "precip_corrected": {
+              "status": "ok",
+              "wald": 1.9165253821183756,
+              "statistic": 0.3833050764236751,
+              "df1": 5,
+              "df2": 47,
+              "p_value": 0.8577222057020063,
+              "n_restrictions": 5,
+              "reference_state": "BA",
+              "reference_slope": 0.619382820885053
+            }
+          },
+          "contrasts": {
+            "precip_corrected|GO": {
+              "variable": "precip_corrected",
+              "state": "GO",
+              "reference_state": "BA",
+              "difference": -0.35121720691127717,
+              "std_error": 1.6822997895976468,
+              "t_statistic": -0.20877206849991778,
+              "p_value": 0.8355283607339596,
+              "ci95": [
+                -3.7355678498839273,
+                3.033133436061373
+              ],
+              "n_rows_state": 1567,
+              "identified": true,
+              "p_holm": 1.0
+            },
+            "precip_corrected|MS": {
+              "variable": "precip_corrected",
+              "state": "MS",
+              "reference_state": "BA",
+              "difference": 0.3525711778290441,
+              "std_error": 1.7261272898308635,
+              "t_statistic": 0.20425560728119374,
+              "p_value": 0.8390356730871287,
+              "ci95": [
+                -3.1199490229782687,
+                3.825091378636357
+              ],
+              "n_rows_state": 552,
+              "identified": true,
+              "p_holm": 1.0
+            },
+            "precip_corrected|MT": {
+              "variable": "precip_corrected",
+              "state": "MT",
+              "reference_state": "BA",
+              "difference": -0.6502589748818628,
+              "std_error": 1.5590178689452971,
+              "t_statistic": -0.4170952673696898,
+              "p_value": 0.6785077707016023,
+              "ci95": [
+                -3.7865983834677626,
+                2.486080433704037
+              ],
+              "n_rows_state": 997,
+              "identified": true,
+              "p_holm": 1.0
+            },
+            "precip_corrected|PR": {
+              "variable": "precip_corrected",
+              "state": "PR",
+              "reference_state": "BA",
+              "difference": 1.099865421502368,
+              "std_error": 1.5832188886839453,
+              "t_statistic": 0.6947020588016316,
+              "p_value": 0.49066219443715253,
+              "ci95": [
+                -2.085160158965344,
+                4.28489100197008
+              ],
+              "n_rows_state": 2966,
+              "identified": true,
+              "p_holm": 1.0
+            },
+            "precip_corrected|RS": {
+              "variable": "precip_corrected",
+              "state": "RS",
+              "reference_state": "BA",
+              "difference": 0.593051983546728,
+              "std_error": 1.48677866218707,
+              "t_statistic": 0.3988838410381415,
+              "p_value": 0.6917853806689271,
+              "ci95": [
+                -2.3979608861239448,
+                3.584064853217401
+              ],
+              "n_rows_state": 1428,
+              "identified": true,
+              "p_holm": 1.0
+            }
+          },
+          "multiplicity": {
+            "family": "contrastes por UF × variável dentro da cultura",
+            "size": 5,
+            "procedure": "Holm"
+          }
+        },
+        "temp_corrected": {
+          "status": "ok",
+          "n": 7616,
+          "n_clusters": 48,
+          "cluster_info": {
+            "scheme": "two_way",
+            "clusters_a": "UF x ano",
+            "clusters_b": "municipio",
+            "n_clusters_a": 48,
+            "n_clusters_b": 1063
+          },
+          "df": 47,
+          "states": [
+            "BA",
+            "GO",
+            "MS",
+            "MT",
+            "PR",
+            "RS"
+          ],
+          "reference_state": "BA",
+          "variables": [
+            "temp_corrected"
+          ],
+          "common_slopes": {
+            "temp_corrected": -104.4506909289792
+          },
+          "slopes_by_state": {
+            "BA": {
+              "temp_corrected": -104.4506909289792
+            },
+            "GO": {
+              "temp_corrected": -286.3386360022779
+            },
+            "MS": {
+              "temp_corrected": -317.6480832899694
+            },
+            "MT": {
+              "temp_corrected": -93.5146235427285
+            },
+            "PR": {
+              "temp_corrected": -308.1245848157892
+            },
+            "RS": {
+              "temp_corrected": -41.60573738500881
+            }
+          },
+          "global_tests": {
+            "temp_corrected": {
+              "status": "ok",
+              "wald": 5.089989436210979,
+              "statistic": 1.017997887242196,
+              "df1": 5,
+              "df2": 47,
+              "p_value": 0.41785498426845513,
+              "n_restrictions": 5,
+              "reference_state": "BA",
+              "reference_slope": -104.4506909289792
+            }
+          },
+          "contrasts": {
+            "temp_corrected|GO": {
+              "variable": "temp_corrected",
+              "state": "GO",
+              "reference_state": "BA",
+              "difference": -181.88794507329868,
+              "std_error": 184.62733033208318,
+              "t_statistic": -0.9851626232483714,
+              "p_value": 0.329588763619137,
+              "ci95": [
+                -553.3102254441192,
+                189.53433529752186
+              ],
+              "n_rows_state": 1567,
+              "identified": true,
+              "p_holm": 1.0
+            },
+            "temp_corrected|MS": {
+              "variable": "temp_corrected",
+              "state": "MS",
+              "reference_state": "BA",
+              "difference": -213.1973923609902,
+              "std_error": 194.10998597275307,
+              "t_statistic": -1.098332944039862,
+              "p_value": 0.27765397876715714,
+              "ci95": [
+                -603.6963152618944,
+                177.30153053991404
+              ],
+              "n_rows_state": 552,
+              "identified": true,
+              "p_holm": 1.0
+            },
+            "temp_corrected|MT": {
+              "variable": "temp_corrected",
+              "state": "MT",
+              "reference_state": "BA",
+              "difference": 10.936067386250699,
+              "std_error": 196.52137471113178,
+              "t_statistic": 0.055648233696338145,
+              "p_value": 0.9558579317427577,
+              "ci95": [
+                -384.41394393400174,
+                406.2860787065031
+              ],
+              "n_rows_state": 997,
+              "identified": true,
+              "p_holm": 1.0
+            },
+            "temp_corrected|PR": {
+              "variable": "temp_corrected",
+              "state": "PR",
+              "reference_state": "BA",
+              "difference": -203.67389388681002,
+              "std_error": 190.03365248561676,
+              "t_statistic": -1.0717780310107214,
+              "p_value": 0.28929249605744856,
+              "ci95": [
+                -585.9722915641688,
+                178.6245037905488
+              ],
+              "n_rows_state": 2966,
+              "identified": true,
+              "p_holm": 1.0
+            },
+            "temp_corrected|RS": {
+              "variable": "temp_corrected",
+              "state": "RS",
+              "reference_state": "BA",
+              "difference": 62.84495354397039,
+              "std_error": 411.2282106000821,
+              "t_statistic": 0.15282257375354746,
+              "p_value": 0.8791924080597279,
+              "ci95": [
+                -764.4394981088119,
+                890.1294051967527
+              ],
+              "n_rows_state": 1428,
+              "identified": true,
+              "p_holm": 1.0
+            }
+          },
+          "multiplicity": {
+            "family": "contrastes por UF × variável dentro da cultura",
+            "size": 5,
+            "procedure": "Holm"
+          }
+        }
+      },
+      "exploratory": {
+        "degree_days_corrected": {
+          "status": "ok",
+          "n": 7616,
+          "n_clusters": 48,
+          "cluster_info": {
+            "scheme": "two_way",
+            "clusters_a": "UF x ano",
+            "clusters_b": "municipio",
+            "n_clusters_a": 48,
+            "n_clusters_b": 1063
+          },
+          "df": 47,
+          "states": [
+            "BA",
+            "GO",
+            "MS",
+            "MT",
+            "PR",
+            "RS"
+          ],
+          "reference_state": "BA",
+          "variables": [
+            "degree_days_corrected"
+          ],
+          "common_slopes": {
+            "degree_days_corrected": -0.08705791889731959
+          },
+          "slopes_by_state": {
+            "BA": {
+              "degree_days_corrected": -0.08705791889731959
+            },
+            "GO": {
+              "degree_days_corrected": -4.765297093498714
+            },
+            "MS": {
+              "degree_days_corrected": -1.016634128914998
+            },
+            "MT": {
+              "degree_days_corrected": -1.3492302925730297
+            },
+            "PR": {
+              "degree_days_corrected": -0.7941945370086206
+            },
+            "RS": {
+              "degree_days_corrected": 3.372246133826534
+            }
+          },
+          "global_tests": {
+            "degree_days_corrected": {
+              "status": "ok",
+              "wald": 24.953850076277988,
+              "statistic": 4.990770015255597,
+              "df1": 5,
+              "df2": 47,
+              "p_value": 0.0009535104235255497,
+              "n_restrictions": 5,
+              "reference_state": "BA",
+              "reference_slope": -0.08705791889731959
+            }
+          },
+          "contrasts": {
+            "degree_days_corrected|GO": {
+              "variable": "degree_days_corrected",
+              "state": "GO",
+              "reference_state": "BA",
+              "difference": -4.678239174601394,
+              "std_error": 3.4553347583062255,
+              "t_statistic": -1.3539177827431765,
+              "p_value": 0.1822374168432106,
+              "ci95": [
+                -11.629476096384682,
+                2.2729977471818943
+              ],
+              "n_rows_state": 1567,
+              "identified": true,
+              "p_holm": 0.911187084216053
+            },
+            "degree_days_corrected|MS": {
+              "variable": "degree_days_corrected",
+              "state": "MS",
+              "reference_state": "BA",
+              "difference": -0.9295762100176785,
+              "std_error": 3.0552584999783656,
+              "t_statistic": -0.30425452053378166,
+              "p_value": 0.7622770545770431,
+              "ci95": [
+                -7.075963514341396,
+                5.216811094306038
+              ],
+              "n_rows_state": 552,
+              "identified": true,
+              "p_holm": 1.0
+            },
+            "degree_days_corrected|MT": {
+              "variable": "degree_days_corrected",
+              "state": "MT",
+              "reference_state": "BA",
+              "difference": -1.2621723736757102,
+              "std_error": 3.016552299168219,
+              "t_statistic": -0.4184155448005129,
+              "p_value": 0.6775491114733723,
+              "ci95": [
+                -7.3306928456970954,
+                4.806348098345675
+              ],
+              "n_rows_state": 997,
+              "identified": true,
+              "p_holm": 1.0
+            },
+            "degree_days_corrected|PR": {
+              "variable": "degree_days_corrected",
+              "state": "PR",
+              "reference_state": "BA",
+              "difference": -0.707136618111301,
+              "std_error": 3.0459043720402357,
+              "t_statistic": -0.2321598224167623,
+              "p_value": 0.8174218147649028,
+              "ci95": [
+                -6.83470584429127,
+                5.420432608068668
+              ],
+              "n_rows_state": 2966,
+              "identified": true,
+              "p_holm": 1.0
+            },
+            "degree_days_corrected|RS": {
+              "variable": "degree_days_corrected",
+              "state": "RS",
+              "reference_state": "BA",
+              "difference": 3.4593040527238537,
+              "std_error": 3.231065661392297,
+              "t_statistic": 1.0706387350955928,
+              "p_value": 0.2897993096073713,
+              "ci95": [
+                -3.0407616408200977,
+                9.959369746267805
+              ],
+              "n_rows_state": 1428,
+              "identified": true,
+              "p_holm": 1.0
+            }
+          },
+          "multiplicity": {
+            "family": "contrastes por UF × variável dentro da cultura",
+            "size": 5,
+            "procedure": "Holm"
+          }
+        },
+        "heat_corrected": {
+          "status": "ok",
+          "n": 7616,
+          "n_clusters": 48,
+          "cluster_info": {
+            "scheme": "two_way",
+            "clusters_a": "UF x ano",
+            "clusters_b": "municipio",
+            "n_clusters_a": 48,
+            "n_clusters_b": 1063
+          },
+          "df": 47,
+          "states": [
+            "BA",
+            "GO",
+            "MS",
+            "MT",
+            "PR",
+            "RS"
+          ],
+          "reference_state": "BA",
+          "variables": [
+            "heat_corrected"
+          ],
+          "common_slopes": {
+            "heat_corrected": 3.2906208006356894
+          },
+          "slopes_by_state": {
+            "BA": {
+              "heat_corrected": 3.2906208006356894
+            },
+            "GO": {
+              "heat_corrected": -11.665215161423635
+            },
+            "MS": {
+              "heat_corrected": -16.30051294224037
+            },
+            "MT": {
+              "heat_corrected": 1.3915892939105734
+            },
+            "PR": {
+              "heat_corrected": -12.872994529937849
+            },
+            "RS": {
+              "heat_corrected": -100.17632843134739
+            }
+          },
+          "global_tests": {
+            "heat_corrected": {
+              "status": "ok",
+              "wald": 18.77690438389967,
+              "statistic": 3.7553808767799337,
+              "df1": 5,
+              "df2": 47,
+              "p_value": 0.006084147769605605,
+              "n_restrictions": 5,
+              "reference_state": "BA",
+              "reference_slope": 3.2906208006356894
+            }
+          },
+          "contrasts": {
+            "heat_corrected|GO": {
+              "variable": "heat_corrected",
+              "state": "GO",
+              "reference_state": "BA",
+              "difference": -14.955835962059325,
+              "std_error": 12.029286900336992,
+              "t_statistic": -1.2432853323699802,
+              "p_value": 0.21992899122064136,
+              "ci95": [
+                -39.15563977074603,
+                9.243967846627378
+              ],
+              "n_rows_state": 1567,
+              "identified": true,
+              "p_holm": 0.6597869736619241
+            },
+            "heat_corrected|MS": {
+              "variable": "heat_corrected",
+              "state": "MS",
+              "reference_state": "BA",
+              "difference": -19.59113374287606,
+              "std_error": 13.227955660688588,
+              "t_statistic": -1.481040173206646,
+              "p_value": 0.14526920533018073,
+              "ci95": [
+                -46.20234805930431,
+                7.020080573552189
+              ],
+              "n_rows_state": 552,
+              "identified": true,
+              "p_holm": 0.5810768213207229
+            },
+            "heat_corrected|MT": {
+              "variable": "heat_corrected",
+              "state": "MT",
+              "reference_state": "BA",
+              "difference": -1.899031506725116,
+              "std_error": 12.345198034302758,
+              "t_statistic": -0.15382754504613105,
+              "p_value": 0.878404325594093,
+              "ci95": [
+                -26.734366542349065,
+                22.936303528898833
+              ],
+              "n_rows_state": 997,
+              "identified": true,
+              "p_holm": 0.878404325594093
+            },
+            "heat_corrected|PR": {
+              "variable": "heat_corrected",
+              "state": "PR",
+              "reference_state": "BA",
+              "difference": -16.16361533057354,
+              "std_error": 13.308261844275439,
+              "t_statistic": -1.2145549523829313,
+              "p_value": 0.23060294144914095,
+              "ci95": [
+                -42.93638485002647,
+                10.609154188879398
+              ],
+              "n_rows_state": 2966,
+              "identified": true,
+              "p_holm": 0.6597869736619241
+            },
+            "heat_corrected|RS": {
+              "variable": "heat_corrected",
+              "state": "RS",
+              "reference_state": "BA",
+              "difference": -103.46694923198308,
+              "std_error": 30.34175868224596,
+              "t_statistic": -3.4100511547646466,
+              "p_value": 0.0013429802198921719,
+              "ci95": [
+                -164.5066944308692,
+                -42.427204033096956
+              ],
+              "n_rows_state": 1428,
+              "identified": true,
+              "p_holm": 0.006714901099460859
+            }
+          },
+          "multiplicity": {
+            "family": "contrastes por UF × variável dentro da cultura",
+            "size": 5,
+            "procedure": "Holm"
+          }
+        },
+        "deficit_cad100": {
+          "status": "ok",
+          "n": 7616,
+          "n_clusters": 48,
+          "cluster_info": {
+            "scheme": "two_way",
+            "clusters_a": "UF x ano",
+            "clusters_b": "municipio",
+            "n_clusters_a": 48,
+            "n_clusters_b": 1063
+          },
+          "df": 47,
+          "states": [
+            "BA",
+            "GO",
+            "MS",
+            "MT",
+            "PR",
+            "RS"
+          ],
+          "reference_state": "BA",
+          "variables": [
+            "deficit_cad100"
+          ],
+          "common_slopes": {
+            "deficit_cad100": 0.3660116121122295
+          },
+          "slopes_by_state": {
+            "BA": {
+              "deficit_cad100": 0.3660116121122295
+            },
+            "GO": {
+              "deficit_cad100": -1.4509252811273907
+            },
+            "MS": {
+              "deficit_cad100": -1.4842614601676198
+            },
+            "MT": {
+              "deficit_cad100": 0.5248546402124015
+            },
+            "PR": {
+              "deficit_cad100": -2.8601302108816005
+            },
+            "RS": {
+              "deficit_cad100": -16.08167032659742
+            }
+          },
+          "global_tests": {
+            "deficit_cad100": {
+              "status": "ok",
+              "wald": 29.832211289106635,
+              "statistic": 5.966442257821327,
+              "df1": 5,
+              "df2": 47,
+              "p_value": 0.00023744005330697673,
+              "n_restrictions": 5,
+              "reference_state": "BA",
+              "reference_slope": 0.3660116121122295
+            }
+          },
+          "contrasts": {
+            "deficit_cad100|GO": {
+              "variable": "deficit_cad100",
+              "state": "GO",
+              "reference_state": "BA",
+              "difference": -1.8169368932396202,
+              "std_error": 2.1289859219078164,
+              "t_statistic": -0.8534283268587495,
+              "p_value": 0.3977504884272892,
+              "ci95": [
+                -6.099904125501894,
+                2.4660303390226535
+              ],
+              "n_rows_state": 1567,
+              "identified": true,
+              "p_holm": 1.0
+            },
+            "deficit_cad100|MS": {
+              "variable": "deficit_cad100",
+              "state": "MS",
+              "reference_state": "BA",
+              "difference": -1.8502730722798493,
+              "std_error": 2.1433947240846365,
+              "t_statistic": -0.8632442039205035,
+              "p_value": 0.3923870779390306,
+              "ci95": [
+                -6.16222707563555,
+                2.4616809310758514
+              ],
+              "n_rows_state": 552,
+              "identified": true,
+              "p_holm": 1.0
+            },
+            "deficit_cad100|MT": {
+              "variable": "deficit_cad100",
+              "state": "MT",
+              "reference_state": "BA",
+              "difference": 0.15884302810017203,
+              "std_error": 2.0072772115525948,
+              "t_statistic": 0.0791335781555103,
+              "p_value": 0.9372623472063428,
+              "ci95": [
+                -3.8792778606667007,
+                4.196963916867045
+              ],
+              "n_rows_state": 997,
+              "identified": true,
+              "p_holm": 1.0
+            },
+            "deficit_cad100|PR": {
+              "variable": "deficit_cad100",
+              "state": "PR",
+              "reference_state": "BA",
+              "difference": -3.22614182299383,
+              "std_error": 2.3663581049445495,
+              "t_statistic": -1.3633362660760207,
+              "p_value": 0.17927194844961303,
+              "ci95": [
+                -7.986640292703578,
+                1.5343566467159175
+              ],
+              "n_rows_state": 2966,
+              "identified": true,
+              "p_holm": 0.7170877937984521
+            },
+            "deficit_cad100|RS": {
+              "variable": "deficit_cad100",
+              "state": "RS",
+              "reference_state": "BA",
+              "difference": -16.447681938709646,
+              "std_error": 3.6212804718356804,
+              "t_statistic": -4.541951960537339,
+              "p_value": 3.883360185318778e-05,
+              "ci95": [
+                -23.732758575479934,
+                -9.162605301939358
+              ],
+              "n_rows_state": 1428,
+              "identified": true,
+              "p_holm": 0.00019416800926593892
+            }
+          },
+          "multiplicity": {
+            "family": "contrastes por UF × variável dentro da cultura",
+            "size": 5,
+            "procedure": "Holm"
+          }
+        }
+      },
+      "joint": {
+        "status": "ok",
+        "n": 7616,
+        "n_clusters": 48,
+        "cluster_info": {
+          "scheme": "two_way",
+          "clusters_a": "UF x ano",
+          "clusters_b": "municipio",
+          "n_clusters_a": 48,
+          "n_clusters_b": 1063
+        },
+        "df": 47,
+        "states": [
+          "BA",
+          "GO",
+          "MS",
+          "MT",
+          "PR",
+          "RS"
+        ],
+        "reference_state": "BA",
+        "variables": [
+          "precip_corrected",
+          "temp_corrected"
+        ],
+        "common_slopes": {
+          "precip_corrected": 0.6178240692333666,
+          "temp_corrected": -23.7332402575578
+        },
+        "slopes_by_state": {
+          "BA": {
+            "precip_corrected": 0.6178240692333666,
+            "temp_corrected": -23.7332402575578
+          },
+          "GO": {
+            "precip_corrected": -1.8188108771615998,
+            "temp_corrected": -382.7834591478076
+          },
+          "MS": {
+            "precip_corrected": -1.6700729687756453,
+            "temp_corrected": -382.1643042085168
+          },
+          "MT": {
+            "precip_corrected": 0.40789695370857826,
+            "temp_corrected": -5.6600935525017775
+          },
+          "PR": {
+            "precip_corrected": 0.7693461495122994,
+            "temp_corrected": -227.1411068765106
+          },
+          "RS": {
+            "precip_corrected": 0.7300226382189215,
+            "temp_corrected": -62.91667146554876
+          }
+        },
+        "global_tests": {
+          "precip_corrected": {
+            "status": "ok",
+            "wald": 5.160357109353646,
+            "statistic": 1.0320714218707292,
+            "df1": 5,
+            "df2": 47,
+            "p_value": 0.4098981739619909,
+            "n_restrictions": 5,
+            "reference_state": "BA",
+            "reference_slope": 0.6178240692333666
+          },
+          "temp_corrected": {
+            "status": "ok",
+            "wald": 12.368069529466457,
+            "statistic": 2.4736139058932913,
+            "df1": 5,
+            "df2": 47,
+            "p_value": 0.04540937637001807,
+            "n_restrictions": 5,
+            "reference_state": "BA",
+            "reference_slope": -23.7332402575578
+          }
+        },
+        "contrasts": {
+          "precip_corrected|GO": {
+            "variable": "precip_corrected",
+            "state": "GO",
+            "reference_state": "BA",
+            "difference": -2.4366349463949666,
+            "std_error": 3.042974414756665,
+            "t_statistic": -0.8007411874969099,
+            "p_value": 0.4273108432626721,
+            "ci95": [
+              -8.55830985880408,
+              3.6850399660141457
+            ],
+            "n_rows_state": 1567,
+            "identified": true,
+            "p_holm": 1.0
+          },
+          "precip_corrected|MS": {
+            "variable": "precip_corrected",
+            "state": "MS",
+            "reference_state": "BA",
+            "difference": -2.287897038009012,
+            "std_error": 2.552608014272298,
+            "t_statistic": -0.8962978354752402,
+            "p_value": 0.37466166846615845,
+            "ci95": [
+              -7.423081995991887,
+              2.847287919973863
+            ],
+            "n_rows_state": 552,
+            "identified": true,
+            "p_holm": 1.0
+          },
+          "precip_corrected|MT": {
+            "variable": "precip_corrected",
+            "state": "MT",
+            "reference_state": "BA",
+            "difference": -0.20992711552478838,
+            "std_error": 2.4449545255068847,
+            "t_statistic": -0.08586135788405576,
+            "p_value": 0.9319413639798433,
+            "ci95": [
+              -5.128541188713929,
+              4.708686957664352
+            ],
+            "n_rows_state": 997,
+            "identified": true,
+            "p_holm": 1.0
+          },
+          "precip_corrected|PR": {
+            "variable": "precip_corrected",
+            "state": "PR",
+            "reference_state": "BA",
+            "difference": 0.15152208027893277,
+            "std_error": 2.528895214254509,
+            "t_statistic": 0.059916314216917774,
+            "p_value": 0.9524763334261986,
+            "ci95": [
+              -4.935958877214184,
+              5.23900303777205
+            ],
+            "n_rows_state": 2966,
+            "identified": true,
+            "p_holm": 1.0
+          },
+          "precip_corrected|RS": {
+            "variable": "precip_corrected",
+            "state": "RS",
+            "reference_state": "BA",
+            "difference": 0.11219856898555491,
+            "std_error": 2.434053335393761,
+            "t_statistic": 0.046095361738408405,
+            "p_value": 0.9634295468440189,
+            "ci95": [
+              -4.784485138405144,
+              5.008882276376254
+            ],
+            "n_rows_state": 1428,
+            "identified": true,
+            "p_holm": 1.0
+          },
+          "temp_corrected|GO": {
+            "variable": "temp_corrected",
+            "state": "GO",
+            "reference_state": "BA",
+            "difference": -359.0502188902498,
+            "std_error": 348.71716734121594,
+            "t_statistic": -1.0296316112791863,
+            "p_value": 0.30845268487658406,
+            "ci95": [
+              -1060.578672263657,
+              342.47823448315734
+            ],
+            "n_rows_state": 1567,
+            "identified": true,
+            "p_holm": 1.0
+          },
+          "temp_corrected|MS": {
+            "variable": "temp_corrected",
+            "state": "MS",
+            "reference_state": "BA",
+            "difference": -358.431063950959,
+            "std_error": 306.88804141383343,
+            "t_statistic": -1.1679538319566538,
+            "p_value": 0.24871613067116427,
+            "ci95": [
+              -975.8101700423465,
+              258.94804214042847
+            ],
+            "n_rows_state": 552,
+            "identified": true,
+            "p_holm": 1.0
+          },
+          "temp_corrected|MT": {
+            "variable": "temp_corrected",
+            "state": "MT",
+            "reference_state": "BA",
+            "difference": 18.073146705056022,
+            "std_error": 325.7929560053834,
+            "t_statistic": 0.055474332308023816,
+            "p_value": 0.9559957315535764,
+            "ci95": [
+              -637.3377419787536,
+              673.4840353888657
+            ],
+            "n_rows_state": 997,
+            "identified": true,
+            "p_holm": 1.0
+          },
+          "temp_corrected|PR": {
+            "variable": "temp_corrected",
+            "state": "PR",
+            "reference_state": "BA",
+            "difference": -203.4078666189528,
+            "std_error": 315.6364733192202,
+            "t_statistic": -0.644437141499916,
+            "p_value": 0.5224249668663775,
+            "ci95": [
+              -838.386547606013,
+              431.57081436810745
+            ],
+            "n_rows_state": 2966,
+            "identified": true,
+            "p_holm": 1.0
+          },
+          "temp_corrected|RS": {
+            "variable": "temp_corrected",
+            "state": "RS",
+            "reference_state": "BA",
+            "difference": -39.183431207990964,
+            "std_error": 490.7917268352885,
+            "t_statistic": -0.07983718768173341,
+            "p_value": 0.9367057245949626,
+            "ci95": [
+              -1026.529031885934,
+              948.1621694699522
+            ],
+            "n_rows_state": 1428,
+            "identified": true,
+            "p_holm": 1.0
+          }
+        },
+        "multiplicity": {
+          "family": "contrastes por UF × variável dentro da cultura",
+          "size": 10,
+          "procedure": "Holm"
+        }
+      },
+      "joint_block_clustering": {
+        "status": "ok",
+        "n": 7616,
+        "n_clusters": 49,
+        "cluster_info": {
+          "scheme": "block",
+          "clusters_a": "bloco espacial",
+          "n_clusters_a": 49
+        },
+        "df": 48,
+        "states": [
+          "BA",
+          "GO",
+          "MS",
+          "MT",
+          "PR",
+          "RS"
+        ],
+        "reference_state": "BA",
+        "variables": [
+          "precip_corrected",
+          "temp_corrected"
+        ],
+        "common_slopes": {
+          "precip_corrected": 0.6178240692333666,
+          "temp_corrected": -23.7332402575578
+        },
+        "slopes_by_state": {
+          "BA": {
+            "precip_corrected": 0.6178240692333666,
+            "temp_corrected": -23.7332402575578
+          },
+          "GO": {
+            "precip_corrected": -1.8188108771615998,
+            "temp_corrected": -382.7834591478076
+          },
+          "MS": {
+            "precip_corrected": -1.6700729687756453,
+            "temp_corrected": -382.1643042085168
+          },
+          "MT": {
+            "precip_corrected": 0.40789695370857826,
+            "temp_corrected": -5.6600935525017775
+          },
+          "PR": {
+            "precip_corrected": 0.7693461495122994,
+            "temp_corrected": -227.1411068765106
+          },
+          "RS": {
+            "precip_corrected": 0.7300226382189215,
+            "temp_corrected": -62.91667146554876
+          }
+        },
+        "global_tests": {
+          "precip_corrected": {
+            "status": "ok",
+            "wald": 11.394825360043153,
+            "statistic": 2.2789650720086305,
+            "df1": 5,
+            "df2": 48,
+            "p_value": 0.06143492004746177,
+            "n_restrictions": 5,
+            "reference_state": "BA",
+            "reference_slope": 0.6178240692333666
+          },
+          "temp_corrected": {
+            "status": "ok",
+            "wald": 24.445486437914163,
+            "statistic": 4.889097287582833,
+            "df1": 5,
+            "df2": 48,
+            "p_value": 0.001075322325324166,
+            "n_restrictions": 5,
+            "reference_state": "BA",
+            "reference_slope": -23.7332402575578
+          }
+        },
+        "contrasts": {
+          "precip_corrected|GO": {
+            "variable": "precip_corrected",
+            "state": "GO",
+            "reference_state": "BA",
+            "difference": -2.4366349463949666,
+            "std_error": 3.070066694075354,
+            "t_statistic": -0.7936749227947424,
+            "p_value": 0.43129087792175547,
+            "ci95": [
+              -8.609417749727394,
+              3.7361478569374604
+            ],
+            "n_rows_state": 1567,
+            "identified": true,
+            "p_holm": 1.0
+          },
+          "precip_corrected|MS": {
+            "variable": "precip_corrected",
+            "state": "MS",
+            "reference_state": "BA",
+            "difference": -2.287897038009012,
+            "std_error": 2.8784200366349846,
+            "t_statistic": -0.7948447443006535,
+            "p_value": 0.43061655505240926,
+            "ci95": [
+              -8.075348410709328,
+              3.499554334691304
+            ],
+            "n_rows_state": 552,
+            "identified": true,
+            "p_holm": 1.0
+          },
+          "precip_corrected|MT": {
+            "variable": "precip_corrected",
+            "state": "MT",
+            "reference_state": "BA",
+            "difference": -0.20992711552478838,
+            "std_error": 2.649569561873716,
+            "t_statistic": -0.07923064883653504,
+            "p_value": 0.9371785643833644,
+            "ci95": [
+              -5.53724376937129,
+              5.117389538321714
+            ],
+            "n_rows_state": 997,
+            "identified": true,
+            "p_holm": 1.0
+          },
+          "precip_corrected|PR": {
+            "variable": "precip_corrected",
+            "state": "PR",
+            "reference_state": "BA",
+            "difference": 0.15152208027893277,
+            "std_error": 2.858565792753729,
+            "t_statistic": 0.05300632948978505,
+            "p_value": 0.9579468587301804,
+            "ci95": [
+              -5.5960096595873825,
+              5.899053820145248
+            ],
+            "n_rows_state": 2966,
+            "identified": true,
+            "p_holm": 1.0
+          },
+          "precip_corrected|RS": {
+            "variable": "precip_corrected",
+            "state": "RS",
+            "reference_state": "BA",
+            "difference": 0.11219856898555491,
+            "std_error": 2.6659612146639953,
+            "t_statistic": 0.042085596882809814,
+            "p_value": 0.9666050414814951,
+            "ci95": [
+              -5.248075711695991,
+              5.472472849667101
+            ],
+            "n_rows_state": 1428,
+            "identified": true,
+            "p_holm": 1.0
+          },
+          "temp_corrected|GO": {
+            "variable": "temp_corrected",
+            "state": "GO",
+            "reference_state": "BA",
+            "difference": -359.0502188902498,
+            "std_error": 318.2446936424974,
+            "t_statistic": -1.128220599001068,
+            "p_value": 0.26483449627897704,
+            "ci95": [
+              -998.9240613573306,
+              280.8236235768309
+            ],
+            "n_rows_state": 1567,
+            "identified": true,
+            "p_holm": 1.0
+          },
+          "temp_corrected|MS": {
+            "variable": "temp_corrected",
+            "state": "MS",
+            "reference_state": "BA",
+            "difference": -358.431063950959,
+            "std_error": 289.6060784275691,
+            "t_statistic": -1.2376503486980612,
+            "p_value": 0.2218658034753509,
+            "ci95": [
+              -940.7231112566789,
+              223.86098335476083
+            ],
+            "n_rows_state": 552,
+            "identified": true,
+            "p_holm": 1.0
+          },
+          "temp_corrected|MT": {
+            "variable": "temp_corrected",
+            "state": "MT",
+            "reference_state": "BA",
+            "difference": 18.073146705056022,
+            "std_error": 275.395324724937,
+            "t_statistic": 0.065626192903265,
+            "p_value": 0.947948007768733,
+            "ci95": [
+              -535.6462652741144,
+              571.7925586842265
+            ],
+            "n_rows_state": 997,
+            "identified": true,
+            "p_holm": 1.0
+          },
+          "temp_corrected|PR": {
+            "variable": "temp_corrected",
+            "state": "PR",
+            "reference_state": "BA",
+            "difference": -203.4078666189528,
+            "std_error": 294.7863327386361,
+            "t_statistic": -0.6900179690464097,
+            "p_value": 0.49350576516210687,
+            "ci95": [
+              -796.1155132958366,
+              389.2997800579311
+            ],
+            "n_rows_state": 2966,
+            "identified": true,
+            "p_holm": 1.0
+          },
+          "temp_corrected|RS": {
+            "variable": "temp_corrected",
+            "state": "RS",
+            "reference_state": "BA",
+            "difference": -39.183431207990964,
+            "std_error": 280.5446618232166,
+            "t_statistic": -0.1396691384300235,
+            "p_value": 0.8895058203401879,
+            "ci95": [
+              -603.2562793356863,
+              524.8894169197042
+            ],
+            "n_rows_state": 1428,
+            "identified": true,
+            "p_holm": 1.0
+          }
+        },
+        "multiplicity": {
+          "family": "contrastes por UF × variável dentro da cultura",
+          "size": 10,
+          "procedure": "Holm"
+        }
+      }
+    },
+    "milho_2": {
+      "n_rows": 2902,
+      "tests": {
+        "precip_corrected": {
+          "status": "ok",
+          "wald": 8.297311831744771,
+          "statistic": 2.7657706105815905,
+          "df1": 3,
+          "df2": 31,
+          "p_value": 0.058414751715482854,
+          "n_restrictions": 3,
+          "reference_state": "GO",
+          "reference_slope": 9.01557703296815
+        },
+        "temp_corrected": {
+          "status": "ok",
+          "wald": 18.802168080615,
+          "statistic": 6.267389360205001,
+          "df1": 3,
+          "df2": 31,
+          "p_value": 0.001885616273383957,
+          "n_restrictions": 3,
+          "reference_state": "GO",
+          "reference_slope": 856.3889617355965
+        }
+      },
+      "single_variable": {
+        "precip_corrected": {
+          "status": "ok",
+          "n": 2902,
+          "n_clusters": 32,
+          "cluster_info": {
+            "scheme": "two_way",
+            "clusters_a": "UF x ano",
+            "clusters_b": "municipio",
+            "n_clusters_a": 32,
+            "n_clusters_b": 505
+          },
+          "df": 31,
+          "states": [
+            "GO",
+            "MS",
+            "MT",
+            "PR"
+          ],
+          "reference_state": "GO",
+          "variables": [
+            "precip_corrected"
+          ],
+          "common_slopes": {
+            "precip_corrected": 4.661828444760334
+          },
+          "slopes_by_state": {
+            "GO": {
+              "precip_corrected": 4.661828444760334
+            },
+            "MS": {
+              "precip_corrected": 0.7813868482307988
+            },
+            "MT": {
+              "precip_corrected": -0.2707132635294007
+            },
+            "PR": {
+              "precip_corrected": -0.10308979480444247
+            }
+          },
+          "global_tests": {
+            "precip_corrected": {
+              "status": "ok",
+              "wald": 5.348049764840853,
+              "statistic": 1.7826832549469511,
+              "df1": 3,
+              "df2": 31,
+              "p_value": 0.17097714529363,
+              "n_restrictions": 3,
+              "reference_state": "GO",
+              "reference_slope": 4.661828444760334
+            }
+          },
+          "contrasts": {
+            "precip_corrected|MS": {
+              "variable": "precip_corrected",
+              "state": "MS",
+              "reference_state": "GO",
+              "difference": -3.8804415965295354,
+              "std_error": 2.6095550218717696,
+              "t_statistic": -1.4870127527513062,
+              "p_value": 0.1471128465402447,
+              "ci95": [
+                -9.202664152748284,
+                1.4417809596892122
+              ],
+              "n_rows_state": 428,
+              "identified": true,
+              "p_holm": 0.1908083931075292
+            },
+            "precip_corrected|MT": {
+              "variable": "precip_corrected",
+              "state": "MT",
+              "reference_state": "GO",
+              "difference": -4.932541708289735,
+              "std_error": 2.479346366643254,
+              "t_statistic": -1.9894524519249892,
+              "p_value": 0.05553635741554727,
+              "ci95": [
+                -9.98920196133273,
+                0.12411854475326045
+              ],
+              "n_rows_state": 353,
+              "identified": true,
+              "p_holm": 0.16660907224664182
+            },
+            "precip_corrected|PR": {
+              "variable": "precip_corrected",
+              "state": "PR",
+              "reference_state": "GO",
+              "difference": -4.764918239564777,
+              "std_error": 2.770315379260234,
+              "t_statistic": -1.7199912599254918,
+              "p_value": 0.0954041965537646,
+              "ci95": [
+                -10.415013706324789,
+                0.8851772271952356
+              ],
+              "n_rows_state": 1836,
+              "identified": true,
+              "p_holm": 0.1908083931075292
+            }
+          },
+          "multiplicity": {
+            "family": "contrastes por UF × variável dentro da cultura",
+            "size": 3,
+            "procedure": "Holm"
+          }
+        },
+        "temp_corrected": {
+          "status": "ok",
+          "n": 2902,
+          "n_clusters": 32,
+          "cluster_info": {
+            "scheme": "two_way",
+            "clusters_a": "UF x ano",
+            "clusters_b": "municipio",
+            "n_clusters_a": 32,
+            "n_clusters_b": 505
+          },
+          "df": 31,
+          "states": [
+            "GO",
+            "MS",
+            "MT",
+            "PR"
+          ],
+          "reference_state": "GO",
+          "variables": [
+            "temp_corrected"
+          ],
+          "common_slopes": {
+            "temp_corrected": 44.81488641093023
+          },
+          "slopes_by_state": {
+            "GO": {
+              "temp_corrected": 44.81488641093023
+            },
+            "MS": {
+              "temp_corrected": -114.13686380368293
+            },
+            "MT": {
+              "temp_corrected": 188.52642458246495
+            },
+            "PR": {
+              "temp_corrected": -165.09447741540976
+            }
+          },
+          "global_tests": {
+            "temp_corrected": {
+              "status": "ok",
+              "wald": 10.96622860148643,
+              "statistic": 3.6554095338288097,
+              "df1": 3,
+              "df2": 31,
+              "p_value": 0.022963605086388884,
+              "n_restrictions": 3,
+              "reference_state": "GO",
+              "reference_slope": 44.81488641093023
+            }
+          },
+          "contrasts": {
+            "temp_corrected|MS": {
+              "variable": "temp_corrected",
+              "state": "MS",
+              "reference_state": "GO",
+              "difference": -158.95175021461316,
+              "std_error": 379.5121044114278,
+              "t_statistic": -0.4188318326792921,
+              "p_value": 0.6782268532595572,
+              "ci95": [
+                -932.9717902319178,
+                615.0682898026914
+              ],
+              "n_rows_state": 428,
+              "identified": true,
+              "p_holm": 1.0
+            },
+            "temp_corrected|MT": {
+              "variable": "temp_corrected",
+              "state": "MT",
+              "reference_state": "GO",
+              "difference": 143.71153817153473,
+              "std_error": 373.78805807615424,
+              "t_statistic": 0.384473326706054,
+              "p_value": 0.703252596358162,
+              "ci95": [
+                -618.6342323771834,
+                906.0573087202528
+              ],
+              "n_rows_state": 353,
+              "identified": true,
+              "p_holm": 1.0
+            },
+            "temp_corrected|PR": {
+              "variable": "temp_corrected",
+              "state": "PR",
+              "reference_state": "GO",
+              "difference": -209.90936382633998,
+              "std_error": 364.2435131110645,
+              "t_statistic": -0.5762885439838562,
+              "p_value": 0.5685810941229903,
+              "ci95": [
+                -952.7889065790225,
+                532.9701789263424
+              ],
+              "n_rows_state": 1836,
+              "identified": true,
+              "p_holm": 1.0
+            }
+          },
+          "multiplicity": {
+            "family": "contrastes por UF × variável dentro da cultura",
+            "size": 3,
+            "procedure": "Holm"
+          }
+        }
+      },
+      "exploratory": {
+        "degree_days_corrected": {
+          "status": "ok",
+          "n": 2902,
+          "n_clusters": 32,
+          "cluster_info": {
+            "scheme": "two_way",
+            "clusters_a": "UF x ano",
+            "clusters_b": "municipio",
+            "n_clusters_a": 32,
+            "n_clusters_b": 505
+          },
+          "df": 31,
+          "states": [
+            "GO",
+            "MS",
+            "MT",
+            "PR"
+          ],
+          "reference_state": "GO",
+          "variables": [
+            "degree_days_corrected"
+          ],
+          "common_slopes": {
+            "degree_days_corrected": -3.8575387251995306
+          },
+          "slopes_by_state": {
+            "GO": {
+              "degree_days_corrected": -3.8575387251995306
+            },
+            "MS": {
+              "degree_days_corrected": -0.11864088239448911
+            },
+            "MT": {
+              "degree_days_corrected": 4.734871287416297
+            },
+            "PR": {
+              "degree_days_corrected": -0.22113221567903363
+            }
+          },
+          "global_tests": {
+            "degree_days_corrected": {
+              "status": "ok",
+              "wald": 5.942807517120018,
+              "statistic": 1.980935839040006,
+              "df1": 3,
+              "df2": 31,
+              "p_value": 0.13731987129479592,
+              "n_restrictions": 3,
+              "reference_state": "GO",
+              "reference_slope": -3.8575387251995306
+            }
+          },
+          "contrasts": {
+            "degree_days_corrected|MS": {
+              "variable": "degree_days_corrected",
+              "state": "MS",
+              "reference_state": "GO",
+              "difference": 3.7388978428050414,
+              "std_error": 6.8564032559101955,
+              "t_statistic": 0.5453147522474155,
+              "p_value": 0.5894394807994219,
+              "ci95": [
+                -10.244828791539916,
+                17.72262447715
+              ],
+              "n_rows_state": 428,
+              "identified": true,
+              "p_holm": 1.0
+            },
+            "degree_days_corrected|MT": {
+              "variable": "degree_days_corrected",
+              "state": "MT",
+              "reference_state": "GO",
+              "difference": 8.592410012615828,
+              "std_error": 6.077163400914725,
+              "t_statistic": 1.4138849732627745,
+              "p_value": 0.16736029596057855,
+              "ci95": [
+                -3.8020464594978804,
+                20.986866484729536
+              ],
+              "n_rows_state": 353,
+              "identified": true,
+              "p_holm": 0.5020808878817357
+            },
+            "degree_days_corrected|PR": {
+              "variable": "degree_days_corrected",
+              "state": "PR",
+              "reference_state": "GO",
+              "difference": 3.636406509520497,
+              "std_error": 6.787026791313386,
+              "t_statistic": 0.5357878525210301,
+              "p_value": 0.5959288015071732,
+              "ci95": [
+                -10.205825892415824,
+                17.478638911456816
+              ],
+              "n_rows_state": 1836,
+              "identified": true,
+              "p_holm": 1.0
+            }
+          },
+          "multiplicity": {
+            "family": "contrastes por UF × variável dentro da cultura",
+            "size": 3,
+            "procedure": "Holm"
+          }
+        },
+        "heat_corrected": {
+          "status": "ok",
+          "n": 2902,
+          "n_clusters": 32,
+          "cluster_info": {
+            "scheme": "two_way",
+            "clusters_a": "UF x ano",
+            "clusters_b": "municipio",
+            "n_clusters_a": 32,
+            "n_clusters_b": 505
+          },
+          "df": 31,
+          "states": [
+            "GO",
+            "MS",
+            "MT",
+            "PR"
+          ],
+          "reference_state": "GO",
+          "variables": [
+            "heat_corrected"
+          ],
+          "common_slopes": {
+            "heat_corrected": 79.83271946586768
+          },
+          "slopes_by_state": {
+            "GO": {
+              "heat_corrected": 79.83271946586768
+            },
+            "MS": {
+              "heat_corrected": -4.446548242102907
+            },
+            "MT": {
+              "heat_corrected": 19.696414869140106
+            },
+            "PR": {
+              "heat_corrected": -5.167598823509735
+            }
+          },
+          "global_tests": {
+            "heat_corrected": {
+              "status": "ok",
+              "wald": 9.829041234808553,
+              "statistic": 3.276347078269518,
+              "df1": 3,
+              "df2": 31,
+              "p_value": 0.034010920915935536,
+              "n_restrictions": 3,
+              "reference_state": "GO",
+              "reference_slope": 79.83271946586768
+            }
+          },
+          "contrasts": {
+            "heat_corrected|MS": {
+              "variable": "heat_corrected",
+              "state": "MS",
+              "reference_state": "GO",
+              "difference": -84.27926770797059,
+              "std_error": 38.82664036226543,
+              "t_statistic": -2.170655686961763,
+              "p_value": 0.03773488154601382,
+              "ci95": [
+                -163.46672280520846,
+                -5.091812610732731
+              ],
+              "n_rows_state": 428,
+              "identified": true,
+              "p_holm": 0.09359935979661199
+            },
+            "heat_corrected|MT": {
+              "variable": "heat_corrected",
+              "state": "MT",
+              "reference_state": "GO",
+              "difference": -60.13630459672758,
+              "std_error": 40.68883624688447,
+              "t_statistic": -1.4779558754603652,
+              "p_value": 0.149508727451509,
+              "ci95": [
+                -143.12173324047,
+                22.84912404701486
+              ],
+              "n_rows_state": 353,
+              "identified": true,
+              "p_holm": 0.149508727451509
+            },
+            "heat_corrected|PR": {
+              "variable": "heat_corrected",
+              "state": "PR",
+              "reference_state": "GO",
+              "difference": -85.00031828937742,
+              "std_error": 37.66051229621607,
+              "t_statistic": -2.2570143927096233,
+              "p_value": 0.031199786598870665,
+              "ci95": [
+                -161.80943951568736,
+                -8.191197063067477
+              ],
+              "n_rows_state": 1836,
+              "identified": true,
+              "p_holm": 0.09359935979661199
+            }
+          },
+          "multiplicity": {
+            "family": "contrastes por UF × variável dentro da cultura",
+            "size": 3,
+            "procedure": "Holm"
+          }
+        },
+        "deficit_cad100": {
+          "status": "ok",
+          "n": 2902,
+          "n_clusters": 32,
+          "cluster_info": {
+            "scheme": "two_way",
+            "clusters_a": "UF x ano",
+            "clusters_b": "municipio",
+            "n_clusters_a": 32,
+            "n_clusters_b": 505
+          },
+          "df": 31,
+          "states": [
+            "GO",
+            "MS",
+            "MT",
+            "PR"
+          ],
+          "reference_state": "GO",
+          "variables": [
+            "deficit_cad100"
+          ],
+          "common_slopes": {
+            "deficit_cad100": 4.1313702611534
+          },
+          "slopes_by_state": {
+            "GO": {
+              "deficit_cad100": 4.1313702611534
+            },
+            "MS": {
+              "deficit_cad100": -0.30869783843560583
+            },
+            "MT": {
+              "deficit_cad100": 4.042842545963288
+            },
+            "PR": {
+              "deficit_cad100": -0.07932785416722599
+            }
+          },
+          "global_tests": {
+            "deficit_cad100": {
+              "status": "ok",
+              "wald": 1.959235552281016,
+              "statistic": 0.6530785174270054,
+              "df1": 3,
+              "df2": 31,
+              "p_value": 0.5870841918522876,
+              "n_restrictions": 3,
+              "reference_state": "GO",
+              "reference_slope": 4.1313702611534
+            }
+          },
+          "contrasts": {
+            "deficit_cad100|MS": {
+              "variable": "deficit_cad100",
+              "state": "MS",
+              "reference_state": "GO",
+              "difference": -4.440068099589006,
+              "std_error": 6.117732948038652,
+              "t_statistic": -0.7257701729220615,
+              "p_value": 0.473423738454824,
+              "ci95": [
+                -16.917266708576175,
+                8.037130509398164
+              ],
+              "n_rows_state": 428,
+              "identified": true,
+              "p_holm": 1.0
+            },
+            "deficit_cad100|MT": {
+              "variable": "deficit_cad100",
+              "state": "MT",
+              "reference_state": "GO",
+              "difference": -0.08852771519011188,
+              "std_error": 4.895923443986384,
+              "t_statistic": -0.018081923911381748,
+              "p_value": 0.9856893782765717,
+              "ci95": [
+                -10.073829411727756,
+                9.89677398134753
+              ],
+              "n_rows_state": 353,
+              "identified": true,
+              "p_holm": 1.0
+            },
+            "deficit_cad100|PR": {
+              "variable": "deficit_cad100",
+              "state": "PR",
+              "reference_state": "GO",
+              "difference": -4.210698115320626,
+              "std_error": 6.098892402389852,
+              "t_statistic": -0.6904037385002337,
+              "p_value": 0.4950773964953876,
+              "ci95": [
+                -16.649471178119622,
+                8.228074947478373
+              ],
+              "n_rows_state": 1836,
+              "identified": true,
+              "p_holm": 1.0
+            }
+          },
+          "multiplicity": {
+            "family": "contrastes por UF × variável dentro da cultura",
+            "size": 3,
+            "procedure": "Holm"
+          }
+        }
+      },
+      "joint": {
+        "status": "ok",
+        "n": 2902,
+        "n_clusters": 32,
+        "cluster_info": {
+          "scheme": "two_way",
+          "clusters_a": "UF x ano",
+          "clusters_b": "municipio",
+          "n_clusters_a": 32,
+          "n_clusters_b": 505
+        },
+        "df": 31,
+        "states": [
+          "GO",
+          "MS",
+          "MT",
+          "PR"
+        ],
+        "reference_state": "GO",
+        "variables": [
+          "precip_corrected",
+          "temp_corrected"
+        ],
+        "common_slopes": {
+          "precip_corrected": 9.01557703296815,
+          "temp_corrected": 856.3889617355965
+        },
+        "slopes_by_state": {
+          "GO": {
+            "precip_corrected": 9.01557703296815,
+            "temp_corrected": 856.3889617355965
+          },
+          "MS": {
+            "precip_corrected": 0.0037961387005047698,
+            "temp_corrected": -138.45815462988764
+          },
+          "MT": {
+            "precip_corrected": 0.562890433486114,
+            "temp_corrected": 194.83667053534487
+          },
+          "PR": {
+            "precip_corrected": -1.3649218786587376,
+            "temp_corrected": -299.7405138544175
+          }
+        },
+        "global_tests": {
+          "precip_corrected": {
+            "status": "ok",
+            "wald": 8.297311831744771,
+            "statistic": 2.7657706105815905,
+            "df1": 3,
+            "df2": 31,
+            "p_value": 0.058414751715482854,
+            "n_restrictions": 3,
+            "reference_state": "GO",
+            "reference_slope": 9.01557703296815
+          },
+          "temp_corrected": {
+            "status": "ok",
+            "wald": 18.802168080615,
+            "statistic": 6.267389360205001,
+            "df1": 3,
+            "df2": 31,
+            "p_value": 0.001885616273383957,
+            "n_restrictions": 3,
+            "reference_state": "GO",
+            "reference_slope": 856.3889617355965
+          }
+        },
+        "contrasts": {
+          "precip_corrected|MS": {
+            "variable": "precip_corrected",
+            "state": "MS",
+            "reference_state": "GO",
+            "difference": -9.011780894267645,
+            "std_error": 4.4900471647724,
+            "t_statistic": -2.00705706723338,
+            "p_value": 0.053531130668681606,
+            "ci95": [
+              -18.169292461775022,
+              0.14573067323973454
+            ],
+            "n_rows_state": 428,
+            "identified": true,
+            "p_holm": 0.21412452267472643
+          },
+          "precip_corrected|MT": {
+            "variable": "precip_corrected",
+            "state": "MT",
+            "reference_state": "GO",
+            "difference": -8.452686599482035,
+            "std_error": 4.498390478271492,
+            "t_statistic": -1.8790468813925603,
+            "p_value": 0.06966873533675991,
+            "ci95": [
+              -17.627214467058316,
+              0.7218412680942432
+            ],
+            "n_rows_state": 353,
+            "identified": true,
+            "p_holm": 0.21412452267472643
+          },
+          "precip_corrected|PR": {
+            "variable": "precip_corrected",
+            "state": "PR",
+            "reference_state": "GO",
+            "difference": -10.380498911626887,
+            "std_error": 4.555388963231216,
+            "t_statistic": -2.278729433515556,
+            "p_value": 0.029725502587140924,
+            "ci95": [
+              -19.671275955702747,
+              -1.0897218675510274
+            ],
+            "n_rows_state": 1836,
+            "identified": true,
+            "p_holm": 0.17835301552284555
+          },
+          "temp_corrected|MS": {
+            "variable": "temp_corrected",
+            "state": "MS",
+            "reference_state": "GO",
+            "difference": -994.8471163654841,
+            "std_error": 538.0546401280706,
+            "t_statistic": -1.8489704245068594,
+            "p_value": 0.0740189994432039,
+            "ci95": [
+              -2092.2167898026646,
+              102.52255707169627
+            ],
+            "n_rows_state": 428,
+            "identified": true,
+            "p_holm": 0.21412452267472643
+          },
+          "temp_corrected|MT": {
+            "variable": "temp_corrected",
+            "state": "MT",
+            "reference_state": "GO",
+            "difference": -661.5522912002516,
+            "std_error": 537.6937937851719,
+            "t_statistic": -1.230351361400622,
+            "p_value": 0.2278204297706624,
+            "ci95": [
+              -1758.1860136690073,
+              435.08143126850405
+            ],
+            "n_rows_state": 353,
+            "identified": true,
+            "p_holm": 0.2278204297706624
+          },
+          "temp_corrected|PR": {
+            "variable": "temp_corrected",
+            "state": "PR",
+            "reference_state": "GO",
+            "difference": -1156.129475590014,
+            "std_error": 536.3619659331486,
+            "t_statistic": -2.155502345470395,
+            "p_value": 0.03900008766435573,
+            "ci95": [
+              -2250.0469172462826,
+              -62.21203393374526
+            ],
+            "n_rows_state": 1836,
+            "identified": true,
+            "p_holm": 0.19500043832177866
+          }
+        },
+        "multiplicity": {
+          "family": "contrastes por UF × variável dentro da cultura",
+          "size": 6,
+          "procedure": "Holm"
+        }
+      },
+      "joint_block_clustering": {
+        "status": "ok",
+        "n": 2902,
+        "n_clusters": 30,
+        "cluster_info": {
+          "scheme": "block",
+          "clusters_a": "bloco espacial",
+          "n_clusters_a": 30
+        },
+        "df": 29,
+        "states": [
+          "GO",
+          "MS",
+          "MT",
+          "PR"
+        ],
+        "reference_state": "GO",
+        "variables": [
+          "precip_corrected",
+          "temp_corrected"
+        ],
+        "common_slopes": {
+          "precip_corrected": 9.01557703296815,
+          "temp_corrected": 856.3889617355965
+        },
+        "slopes_by_state": {
+          "GO": {
+            "precip_corrected": 9.01557703296815,
+            "temp_corrected": 856.3889617355965
+          },
+          "MS": {
+            "precip_corrected": 0.0037961387005047698,
+            "temp_corrected": -138.45815462988764
+          },
+          "MT": {
+            "precip_corrected": 0.562890433486114,
+            "temp_corrected": 194.83667053534487
+          },
+          "PR": {
+            "precip_corrected": -1.3649218786587376,
+            "temp_corrected": -299.7405138544175
+          }
+        },
+        "global_tests": {
+          "precip_corrected": {
+            "status": "ok",
+            "wald": 9.902474499320931,
+            "statistic": 3.300824833106977,
+            "df1": 3,
+            "df2": 29,
+            "p_value": 0.034165285870022225,
+            "n_restrictions": 3,
+            "reference_state": "GO",
+            "reference_slope": 9.01557703296815
+          },
+          "temp_corrected": {
+            "status": "ok",
+            "wald": 30.14262470061516,
+            "statistic": 10.04754156687172,
+            "df1": 3,
+            "df2": 29,
+            "p_value": 0.000105412448511069,
+            "n_restrictions": 3,
+            "reference_state": "GO",
+            "reference_slope": 856.3889617355965
+          }
+        },
+        "contrasts": {
+          "precip_corrected|MS": {
+            "variable": "precip_corrected",
+            "state": "MS",
+            "reference_state": "GO",
+            "difference": -9.011780894267645,
+            "std_error": 3.5230409699329632,
+            "t_statistic": -2.5579551788292494,
+            "p_value": 0.016017307571743328,
+            "ci95": [
+              -16.217208716422483,
+              -1.8063530721128043
+            ],
+            "n_rows_state": 428,
+            "identified": true,
+            "p_holm": 0.04805192271522998
+          },
+          "precip_corrected|MT": {
+            "variable": "precip_corrected",
+            "state": "MT",
+            "reference_state": "GO",
+            "difference": -8.452686599482035,
+            "std_error": 3.628413031889086,
+            "t_statistic": -2.3295822513020945,
+            "p_value": 0.02699736635671437,
+            "ci95": [
+              -15.873624486202182,
+              -1.031748712761889
+            ],
+            "n_rows_state": 353,
+            "identified": true,
+            "p_holm": 0.05399473271342874
+          },
+          "precip_corrected|PR": {
+            "variable": "precip_corrected",
+            "state": "PR",
+            "reference_state": "GO",
+            "difference": -10.380498911626887,
+            "std_error": 3.7760152549579957,
+            "t_statistic": -2.749061698836373,
+            "p_value": 0.010178124480466592,
+            "ci95": [
+              -18.10331724021225,
+              -2.6576805830415235
+            ],
+            "n_rows_state": 1836,
+            "identified": true,
+            "p_holm": 0.04071249792186637
+          },
+          "temp_corrected|MS": {
+            "variable": "temp_corrected",
+            "state": "MS",
+            "reference_state": "GO",
+            "difference": -994.8471163654841,
+            "std_error": 311.0478329568316,
+            "t_statistic": -3.1983734042074254,
+            "p_value": 0.003332258257754069,
+            "ci95": [
+              -1631.0113644499372,
+              -358.682868281031
+            ],
+            "n_rows_state": 428,
+            "identified": true,
+            "p_holm": 0.016661291288770343
+          },
+          "temp_corrected|MT": {
+            "variable": "temp_corrected",
+            "state": "MT",
+            "reference_state": "GO",
+            "difference": -661.5522912002516,
+            "std_error": 293.0087232682431,
+            "t_statistic": -2.257790429654256,
+            "p_value": 0.03165924946940467,
+            "ci95": [
+              -1260.8224174319203,
+              -62.28216496858295
+            ],
+            "n_rows_state": 353,
+            "identified": true,
+            "p_holm": 0.05399473271342874
+          },
+          "temp_corrected|PR": {
+            "variable": "temp_corrected",
+            "state": "PR",
+            "reference_state": "GO",
+            "difference": -1156.129475590014,
+            "std_error": 302.7466638564443,
+            "t_statistic": -3.8188017032558443,
+            "p_value": 0.0006528410077226363,
+            "ci95": [
+              -1775.3159265659988,
+              -536.9430246140291
+            ],
+            "n_rows_state": 1836,
+            "identified": true,
+            "p_holm": 0.0039170460463358175
+          }
+        },
+        "multiplicity": {
+          "family": "contrastes por UF × variável dentro da cultura",
+          "size": 6,
+          "procedure": "Holm"
+        }
+      }
+    }
+  },
+  "confirmatory_family": {
+    "size": 6,
+    "raw": {
+      "soja|precip_corrected": 0.3565206041151502,
+      "soja|temp_corrected": 0.13078431583424246,
+      "milho|precip_corrected": 0.4098981739619909,
+      "milho|temp_corrected": 0.04540937637001807,
+      "milho_2|precip_corrected": 0.058414751715482854,
+      "milho_2|temp_corrected": 0.001885616273383957
+    },
+    "holm": {
+      "milho_2|temp_corrected": 0.011313697640303742,
+      "milho|temp_corrected": 0.22704688185009037,
+      "milho_2|precip_corrected": 0.23365900686193142,
+      "soja|temp_corrected": 0.3923529475027274,
+      "soja|precip_corrected": 0.7130412082303004,
+      "milho|precip_corrected": 0.7130412082303004
+    },
+    "rejected_holm_0.05": [
+      "milho_2|temp_corrected"
+    ]
+  },
+  "exploratory_family": {
+    "size": 9,
+    "raw": {
+      "soja|degree_days_corrected": 0.14154824875776656,
+      "soja|heat_corrected": 0.2113188867118027,
+      "soja|deficit_cad100": 0.29859100365454494,
+      "milho|degree_days_corrected": 0.0009535104235255497,
+      "milho|heat_corrected": 0.006084147769605605,
+      "milho|deficit_cad100": 0.00023744005330697673,
+      "milho_2|degree_days_corrected": 0.13731987129479592,
+      "milho_2|heat_corrected": 0.034010920915935536,
+      "milho_2|deficit_cad100": 0.5870841918522876
+    },
+    "bh": {
+      "milho_2|deficit_cad100": 0.5870841918522876,
+      "soja|deficit_cad100": 0.3359148791113631,
+      "soja|heat_corrected": 0.2716957114866035,
+      "soja|degree_days_corrected": 0.21232237313664984,
+      "milho_2|degree_days_corrected": 0.21232237313664984,
+      "milho_2|heat_corrected": 0.07652457206085496,
+      "milho|heat_corrected": 0.018252443308816816,
+      "milho|degree_days_corrected": 0.004290796905864974,
+      "milho|deficit_cad100": 0.0021369604797627905
+    }
+  },
+  "elapsed_s": 42.0
+}

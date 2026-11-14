@@ -1,0 +1,1017 @@
+{
+  "generated_at": "2026-11-14T12:37:03.353489+00:00",
+  "definition": "M1c = media das produtividades de treino dos municipios vizinhos; treino TE exclui bloco e ano do teste; fallback = media da UF no treino",
+  "comparisons": "cada linha prevista uma vez por modelo; alinhamento por (municipio, ano); M2 avaliado com equalize=global e sem subamostragem para cobrir todas as linhas",
+  "configs": [
+    {
+      "radius_km": 100.0,
+      "decay_km": 50.0,
+      "min_neighbors": 3
+    },
+    {
+      "radius_km": 200.0,
+      "decay_km": 100.0,
+      "min_neighbors": 3
+    },
+    {
+      "radius_km": 300.0,
+      "decay_km": 150.0,
+      "min_neighbors": 3
+    }
+  ],
+  "crops": {
+    "soja": {
+      "n_rows": 8884,
+      "configs": {
+        "r100_d50_k3": {
+          "coverage_direct": 0.6668167492120667,
+          "fallback_share": 0.33318325078793337,
+          "aggregate": {
+            "mae_m1c": 589.9865348144646,
+            "mae_m1": 610.6939328207382,
+            "m1c_vs_m1": {
+              "delta_mae": -20.707398006273593,
+              "n": 8884,
+              "block": {
+                "ci95": [
+                  -41.20910042693665,
+                  1.054654481679753
+                ],
+                "n_units": 46,
+                "excludes_zero": false
+              },
+              "state_year": {
+                "ci95": [
+                  -36.06650770163945,
+                  -3.60413055033572
+                ],
+                "n_units": 40,
+                "excludes_zero": true
+              }
+            }
+          },
+          "covered_subset": {
+            "n": 5924,
+            "mae_m1c": 616.9392397963201,
+            "mae_m1": 647.9933457868224,
+            "m1c_vs_m1": {
+              "delta_mae": -31.054105990502308,
+              "n": 5924,
+              "block": {
+                "ci95": [
+                  -63.56738149029362,
+                  -0.45617272004245074
+                ],
+                "n_units": 36,
+                "excludes_zero": true
+              },
+              "state_year": {
+                "ci95": [
+                  -54.90304324064546,
+                  -5.893745977217303
+                ],
+                "n_units": 40,
+                "excludes_zero": true
+              }
+            }
+          },
+          "fallback_subset": {
+            "n": 2960,
+            "mae_m1c": 536.0447022764536,
+            "mae_m1": 536.0447022764536
+          },
+          "vs_m2": {
+            "n": 8884,
+            "mae_m1c": 589.9865348144646,
+            "mae_m2": 592.1874254629803,
+            "m1c_vs_m2": {
+              "delta_mae": -2.200890648515724,
+              "n": 8884,
+              "block": {
+                "ci95": [
+                  -23.0266401701822,
+                  13.608940000214337
+                ],
+                "n_units": 46,
+                "excludes_zero": false
+              },
+              "state_year": {
+                "ci95": [
+                  -38.119621342699844,
+                  27.029063387108014
+                ],
+                "n_units": 40,
+                "excludes_zero": false
+              }
+            },
+            "subset_covered_only": {
+              "n": 5924,
+              "mae_m1c": 616.9392397963201,
+              "mae_m2": 625.2543666583102,
+              "m1c_vs_m2": {
+                "delta_mae": -8.315126861990166,
+                "n": 5924,
+                "block": {
+                  "ci95": [
+                    -29.124588742276675,
+                    8.513827400183311
+                  ],
+                  "n_units": 36,
+                  "excludes_zero": false
+                },
+                "state_year": {
+                  "ci95": [
+                    -52.25649230794748,
+                    28.55241683130929
+                  ],
+                  "n_units": 40,
+                  "excludes_zero": false
+                }
+              }
+            }
+          },
+          "n_aligned_with_m2": 8884
+        },
+        "r200_d100_k3": {
+          "coverage_direct": 0.9871679423683025,
+          "fallback_share": 0.012832057631697433,
+          "aggregate": {
+            "mae_m1c": 582.9892788618041,
+            "mae_m1": 610.6939328207382,
+            "m1c_vs_m1": {
+              "delta_mae": -27.704653958934045,
+              "n": 8884,
+              "block": {
+                "ci95": [
+                  -51.05460132287747,
+                  -3.633761393558373
+                ],
+                "n_units": 46,
+                "excludes_zero": true
+              },
+              "state_year": {
+                "ci95": [
+                  -46.1724295237167,
+                  -8.085270142428485
+                ],
+                "n_units": 40,
+                "excludes_zero": true
+              }
+            }
+          },
+          "covered_subset": {
+            "n": 8770,
+            "mae_m1c": 584.8700635603348,
+            "mae_m1": 612.9348464304798,
+            "m1c_vs_m1": {
+              "delta_mae": -28.064782870144995,
+              "n": 8770,
+              "block": {
+                "ci95": [
+                  -51.7656541316252,
+                  -3.6728501673898717
+                ],
+                "n_units": 46,
+                "excludes_zero": true
+              },
+              "state_year": {
+                "ci95": [
+                  -46.58781905573603,
+                  -8.197487722924304
+                ],
+                "n_units": 40,
+                "excludes_zero": true
+              }
+            }
+          },
+          "fallback_subset": {
+            "n": 114,
+            "mae_m1c": 438.300841966064,
+            "mae_m1": 438.300841966064
+          },
+          "vs_m2": {
+            "n": 8884,
+            "mae_m1c": 582.9892788618041,
+            "mae_m2": 592.1874254629803,
+            "m1c_vs_m2": {
+              "delta_mae": -9.198146601176177,
+              "n": 8884,
+              "block": {
+                "ci95": [
+                  -28.88809974210894,
+                  7.0013685469058595
+                ],
+                "n_units": 46,
+                "excludes_zero": false
+              },
+              "state_year": {
+                "ci95": [
+                  -49.181069037207614,
+                  25.55164837859848
+                ],
+                "n_units": 40,
+                "excludes_zero": false
+              }
+            },
+            "subset_covered_only": {
+              "n": 8770,
+              "mae_m1c": 584.8700635603348,
+              "mae_m2": 594.1551402412617,
+              "m1c_vs_m2": {
+                "delta_mae": -9.285076680926977,
+                "n": 8770,
+                "block": {
+                  "ci95": [
+                    -29.670123633965563,
+                    7.104473047374436
+                  ],
+                  "n_units": 46,
+                  "excludes_zero": false
+                },
+                "state_year": {
+                  "ci95": [
+                    -50.28922160945954,
+                    26.067825840000495
+                  ],
+                  "n_units": 40,
+                  "excludes_zero": false
+                }
+              }
+            }
+          },
+          "n_aligned_with_m2": 8884
+        },
+        "r300_d150_k3": {
+          "coverage_direct": 0.9997748761819001,
+          "fallback_share": 0.00022512381809995497,
+          "aggregate": {
+            "mae_m1c": 589.5618081365443,
+            "mae_m1": 610.6939328207382,
+            "m1c_vs_m1": {
+              "delta_mae": -21.132124684193855,
+              "n": 8884,
+              "block": {
+                "ci95": [
+                  -46.789033872837486,
+                  8.510298927270092
+                ],
+                "n_units": 46,
+                "excludes_zero": false
+              },
+              "state_year": {
+                "ci95": [
+                  -40.0924428274491,
+                  -2.8627496291367405
+                ],
+                "n_units": 40,
+                "excludes_zero": true
+              }
+            }
+          },
+          "covered_subset": {
+            "n": 8882,
+            "mae_m1c": 589.5786206626024,
+            "mae_m1": 610.7155037626226,
+            "m1c_vs_m1": {
+              "delta_mae": -21.136883100020214,
+              "n": 8882,
+              "block": {
+                "ci95": [
+                  -46.789033872837486,
+                  8.512060078514864
+                ],
+                "n_units": 46,
+                "excludes_zero": false
+              },
+              "state_year": {
+                "ci95": [
+                  -40.10147505039382,
+                  -2.863405297458138
+                ],
+                "n_units": 40,
+                "excludes_zero": true
+              }
+            }
+          },
+          "fallback_subset": {
+            "n": 2,
+            "mae_m1c": 514.8973799126638,
+            "mae_m1": 514.8973799126638
+          },
+          "vs_m2": {
+            "n": 8884,
+            "mae_m1c": 589.5618081365443,
+            "mae_m2": 592.1874254629803,
+            "m1c_vs_m2": {
+              "delta_mae": -2.625617326435986,
+              "n": 8884,
+              "block": {
+                "ci95": [
+                  -25.807251187598418,
+                  21.31532551647253
+                ],
+                "n_units": 46,
+                "excludes_zero": false
+              },
+              "state_year": {
+                "ci95": [
+                  -46.686203869165084,
+                  34.23730177985862
+                ],
+                "n_units": 40,
+                "excludes_zero": false
+              }
+            },
+            "subset_covered_only": {
+              "n": 8882,
+              "mae_m1c": 589.5786206626024,
+              "mae_m2": 592.2861074195664,
+              "m1c_vs_m2": {
+                "delta_mae": -2.7074867569640446,
+                "n": 8882,
+                "block": {
+                  "ci95": [
+                    -25.81009379181007,
+                    21.256353706551025
+                  ],
+                  "n_units": 46,
+                  "excludes_zero": false
+                },
+                "state_year": {
+                  "ci95": [
+                    -46.715195684600815,
+                    34.21668839886565
+                  ],
+                  "n_units": 40,
+                  "excludes_zero": false
+                }
+              }
+            }
+          },
+          "n_aligned_with_m2": 8884
+        }
+      }
+    },
+    "milho": {
+      "n_rows": 7616,
+      "configs": {
+        "r100_d50_k3": {
+          "coverage_direct": 0.4543067226890756,
+          "fallback_share": 0.5456932773109243,
+          "aggregate": {
+            "mae_m1c": 1791.2847596800354,
+            "mae_m1": 1917.0797155784246,
+            "m1c_vs_m1": {
+              "delta_mae": -125.79495589838916,
+              "n": 7616,
+              "block": {
+                "ci95": [
+                  -246.83312736600385,
+                  -11.032911898734724
+                ],
+                "n_units": 49,
+                "excludes_zero": true
+              },
+              "state_year": {
+                "ci95": [
+                  -178.57707540363958,
+                  -63.61444816334914
+                ],
+                "n_units": 48,
+                "excludes_zero": true
+              }
+            }
+          },
+          "covered_subset": {
+            "n": 3460,
+            "mae_m1c": 1518.7505459116633,
+            "mae_m1": 1795.6448765827995,
+            "m1c_vs_m1": {
+              "delta_mae": -276.89433067113623,
+              "n": 3460,
+              "block": {
+                "ci95": [
+                  -621.3219633659256,
+                  -26.542822388830306
+                ],
+                "n_units": 35,
+                "excludes_zero": true
+              },
+              "state_year": {
+                "ci95": [
+                  -440.7709582154559,
+                  -136.86300532742294
+                ],
+                "n_units": 43,
+                "excludes_zero": true
+              }
+            }
+          },
+          "fallback_subset": {
+            "n": 4156,
+            "mae_m1c": 2018.1780175333963,
+            "mae_m1": 2018.1780175333963
+          },
+          "vs_m2": {
+            "n": 7616,
+            "mae_m1c": 1791.2847596800354,
+            "mae_m2": 1688.5761026833648,
+            "m1c_vs_m2": {
+              "delta_mae": 102.7086569966707,
+              "n": 7616,
+              "block": {
+                "ci95": [
+                  -20.625410774775048,
+                  206.42346437261043
+                ],
+                "n_units": 49,
+                "excludes_zero": false
+              },
+              "state_year": {
+                "ci95": [
+                  -4.505710268318005,
+                  186.40855037170888
+                ],
+                "n_units": 48,
+                "excludes_zero": false
+              }
+            },
+            "subset_covered_only": {
+              "n": 3460,
+              "mae_m1c": 1518.7505459116633,
+              "mae_m2": 1654.8539601200055,
+              "m1c_vs_m2": {
+                "delta_mae": -136.1034142083422,
+                "n": 3460,
+                "block": {
+                  "ci95": [
+                    -324.9476798964432,
+                    3.0795508091121406
+                  ],
+                  "n_units": 35,
+                  "excludes_zero": false
+                },
+                "state_year": {
+                  "ci95": [
+                    -237.55153380915112,
+                    -34.145617816233404
+                  ],
+                  "n_units": 43,
+                  "excludes_zero": true
+                }
+              }
+            }
+          },
+          "n_aligned_with_m2": 7616
+        },
+        "r200_d100_k3": {
+          "coverage_direct": 0.9608718487394958,
+          "fallback_share": 0.0391281512605042,
+          "aggregate": {
+            "mae_m1c": 1624.4498391320972,
+            "mae_m1": 1917.0797155784246,
+            "m1c_vs_m1": {
+              "delta_mae": -292.62987644632744,
+              "n": 7616,
+              "block": {
+                "ci95": [
+                  -599.9627430578556,
+                  16.991526961540647
+                ],
+                "n_units": 49,
+                "excludes_zero": false
+              },
+              "state_year": {
+                "ci95": [
+                  -401.19571781836277,
+                  -169.3160349352264
+                ],
+                "n_units": 48,
+                "excludes_zero": true
+              }
+            }
+          },
+          "covered_subset": {
+            "n": 7318,
+            "mae_m1c": 1604.9441263922095,
+            "mae_m1": 1909.4903328714702,
+            "m1c_vs_m1": {
+              "delta_mae": -304.5462064792607,
+              "n": 7318,
+              "block": {
+                "ci95": [
+                  -638.8485451937872,
+                  13.707331557854097
+                ],
+                "n_units": 46,
+                "excludes_zero": false
+              },
+              "state_year": {
+                "ci95": [
+                  -419.2653692519114,
+                  -175.12314275178787
+                ],
+                "n_units": 48,
+                "excludes_zero": true
+              }
+            }
+          },
+          "fallback_subset": {
+            "n": 298,
+            "mae_m1c": 2103.452543261291,
+            "mae_m1": 2103.452543261291
+          },
+          "vs_m2": {
+            "n": 7616,
+            "mae_m1c": 1624.4498391320972,
+            "mae_m2": 1688.5761026833648,
+            "m1c_vs_m2": {
+              "delta_mae": -64.12626355126758,
+              "n": 7616,
+              "block": {
+                "ci95": [
+                  -246.240714840102,
+                  169.22726405837446
+                ],
+                "n_units": 49,
+                "excludes_zero": false
+              },
+              "state_year": {
+                "ci95": [
+                  -146.0560636148525,
+                  2.8735086896702273
+                ],
+                "n_units": 48,
+                "excludes_zero": false
+              }
+            },
+            "subset_covered_only": {
+              "n": 7318,
+              "mae_m1c": 1604.9441263922095,
+              "mae_m2": 1682.6300451140057,
+              "m1c_vs_m2": {
+                "delta_mae": -77.68591872179627,
+                "n": 7318,
+                "block": {
+                  "ci95": [
+                    -266.59486463724585,
+                    146.88519162485312
+                  ],
+                  "n_units": 46,
+                  "excludes_zero": false
+                },
+                "state_year": {
+                  "ci95": [
+                    -162.4168777180356,
+                    -8.689347058250805
+                  ],
+                  "n_units": 48,
+                  "excludes_zero": true
+                }
+              }
+            }
+          },
+          "n_aligned_with_m2": 7616
+        },
+        "r300_d150_k3": {
+          "coverage_direct": 0.9985556722689075,
+          "fallback_share": 0.001444327731092437,
+          "aggregate": {
+            "mae_m1c": 1667.3245945422418,
+            "mae_m1": 1917.0797155784246,
+            "m1c_vs_m1": {
+              "delta_mae": -249.7551210361828,
+              "n": 7616,
+              "block": {
+                "ci95": [
+                  -528.9496577954027,
+                  10.477141656859628
+                ],
+                "n_units": 49,
+                "excludes_zero": false
+              },
+              "state_year": {
+                "ci95": [
+                  -340.61582021518956,
+                  -155.8950820581497
+                ],
+                "n_units": 48,
+                "excludes_zero": true
+              }
+            }
+          },
+          "covered_subset": {
+            "n": 7605,
+            "mae_m1c": 1664.6912064239614,
+            "mae_m1": 1914.8075774708473,
+            "m1c_vs_m1": {
+              "delta_mae": -250.1163710468859,
+              "n": 7605,
+              "block": {
+                "ci95": [
+                  -529.776509080935,
+                  10.494793819611248
+                ],
+                "n_units": 49,
+                "excludes_zero": false
+              },
+              "state_year": {
+                "ci95": [
+                  -341.369934394663,
+                  -156.09437225087632
+                ],
+                "n_units": 48,
+                "excludes_zero": true
+              }
+            }
+          },
+          "fallback_subset": {
+            "n": 11,
+            "mae_m1c": 3487.95337995338,
+            "mae_m1": 3487.95337995338
+          },
+          "vs_m2": {
+            "n": 7616,
+            "mae_m1c": 1667.3245945422418,
+            "mae_m2": 1688.5761026833648,
+            "m1c_vs_m2": {
+              "delta_mae": -21.25150814112294,
+              "n": 7616,
+              "block": {
+                "ci95": [
+                  -185.03611741836488,
+                  180.196913406776
+                ],
+                "n_units": 49,
+                "excludes_zero": false
+              },
+              "state_year": {
+                "ci95": [
+                  -114.97102356486114,
+                  42.62028814890526
+                ],
+                "n_units": 48,
+                "excludes_zero": false
+              }
+            },
+            "subset_covered_only": {
+              "n": 7605,
+              "mae_m1c": 1664.6912064239614,
+              "mae_m2": 1685.5781041482262,
+              "m1c_vs_m2": {
+                "delta_mae": -20.886897724264827,
+                "n": 7605,
+                "block": {
+                  "ci95": [
+                    -184.89391027110761,
+                    180.6511984621957
+                  ],
+                  "n_units": 49,
+                  "excludes_zero": false
+                },
+                "state_year": {
+                  "ci95": [
+                    -114.80424248203539,
+                    42.768572217721385
+                  ],
+                  "n_units": 48,
+                  "excludes_zero": false
+                }
+              }
+            }
+          },
+          "n_aligned_with_m2": 7616
+        }
+      }
+    },
+    "milho_2": {
+      "n_rows": 2902,
+      "configs": {
+        "r100_d50_k3": {
+          "coverage_direct": 0.6140592694693315,
+          "fallback_share": 0.3859407305306685,
+          "aggregate": {
+            "mae_m1c": 1351.6023951218895,
+            "mae_m1": 1500.8107059507129,
+            "m1c_vs_m1": {
+              "delta_mae": -149.20831082882341,
+              "n": 2902,
+              "block": {
+                "ci95": [
+                  -281.2143541956984,
+                  14.363362950395771
+                ],
+                "n_units": 30,
+                "excludes_zero": false
+              },
+              "state_year": {
+                "ci95": [
+                  -245.80528994340136,
+                  -43.42949703645282
+                ],
+                "n_units": 32,
+                "excludes_zero": true
+              }
+            }
+          },
+          "covered_subset": {
+            "n": 1782,
+            "mae_m1c": 1298.4388713617536,
+            "mae_m1": 1541.4256940470761,
+            "m1c_vs_m1": {
+              "delta_mae": -242.98682268532252,
+              "n": 1782,
+              "block": {
+                "ci95": [
+                  -444.35676520536856,
+                  27.505149858615592
+                ],
+                "n_units": 20,
+                "excludes_zero": false
+              },
+              "state_year": {
+                "ci95": [
+                  -382.0976148729933,
+                  -78.72580698725237
+                ],
+                "n_units": 28,
+                "excludes_zero": true
+              }
+            }
+          },
+          "fallback_subset": {
+            "n": 1120,
+            "mae_m1c": 1436.18935881882,
+            "mae_m1": 1436.18935881882
+          },
+          "vs_m2": {
+            "n": 2902,
+            "mae_m1c": 1351.6023951218895,
+            "mae_m2": 1272.4017391814725,
+            "m1c_vs_m2": {
+              "delta_mae": 79.20065594041694,
+              "n": 2902,
+              "block": {
+                "ci95": [
+                  -32.8276463826961,
+                  147.12053876006837
+                ],
+                "n_units": 30,
+                "excludes_zero": false
+              },
+              "state_year": {
+                "ci95": [
+                  -27.15315060433977,
+                  185.97794896784984
+                ],
+                "n_units": 32,
+                "excludes_zero": false
+              }
+            },
+            "subset_covered_only": {
+              "n": 1782,
+              "mae_m1c": 1298.4388713617536,
+              "mae_m2": 1295.731070663421,
+              "m1c_vs_m2": {
+                "delta_mae": 2.707800698332676,
+                "n": 1782,
+                "block": {
+                  "ci95": [
+                    -99.84044177643533,
+                    146.20162305249346
+                  ],
+                  "n_units": 20,
+                  "excludes_zero": false
+                },
+                "state_year": {
+                  "ci95": [
+                    -125.69027888937745,
+                    155.0333774747301
+                  ],
+                  "n_units": 28,
+                  "excludes_zero": false
+                }
+              }
+            }
+          },
+          "n_aligned_with_m2": 2902
+        },
+        "r200_d100_k3": {
+          "coverage_direct": 0.9631288766368022,
+          "fallback_share": 0.0368711233631978,
+          "aggregate": {
+            "mae_m1c": 1306.2738348079035,
+            "mae_m1": 1500.8107059507129,
+            "m1c_vs_m1": {
+              "delta_mae": -194.53687114280933,
+              "n": 2902,
+              "block": {
+                "ci95": [
+                  -368.9814281371809,
+                  13.872644439580421
+                ],
+                "n_units": 30,
+                "excludes_zero": false
+              },
+              "state_year": {
+                "ci95": [
+                  -311.4722666331294,
+                  -63.94681469982765
+                ],
+                "n_units": 32,
+                "excludes_zero": true
+              }
+            }
+          },
+          "covered_subset": {
+            "n": 2795,
+            "mae_m1c": 1294.276249495178,
+            "mae_m1": 1496.2605071182304,
+            "m1c_vs_m1": {
+              "delta_mae": -201.98425762305237,
+              "n": 2795,
+              "block": {
+                "ci95": [
+                  -380.9547171167576,
+                  16.712131973140217
+                ],
+                "n_units": 29,
+                "excludes_zero": false
+              },
+              "state_year": {
+                "ci95": [
+                  -321.4411631231745,
+                  -67.25057214417646
+                ],
+                "n_units": 32,
+                "excludes_zero": true
+              }
+            }
+          },
+          "fallback_subset": {
+            "n": 107,
+            "mae_m1c": 1619.6687034907811,
+            "mae_m1": 1619.6687034907811
+          },
+          "vs_m2": {
+            "n": 2902,
+            "mae_m1c": 1306.2738348079035,
+            "mae_m2": 1272.4017391814725,
+            "m1c_vs_m2": {
+              "delta_mae": 33.87209562643102,
+              "n": 2902,
+              "block": {
+                "ci95": [
+                  -50.36389105626289,
+                  155.29630703533743
+                ],
+                "n_units": 30,
+                "excludes_zero": false
+              },
+              "state_year": {
+                "ci95": [
+                  -85.551034287054,
+                  162.36349919596185
+                ],
+                "n_units": 32,
+                "excludes_zero": false
+              }
+            },
+            "subset_covered_only": {
+              "n": 2795,
+              "mae_m1c": 1294.276249495178,
+              "mae_m2": 1268.1228822453852,
+              "m1c_vs_m2": {
+                "delta_mae": 26.153367249792836,
+                "n": 2795,
+                "block": {
+                  "ci95": [
+                    -52.107024213411194,
+                    129.22368085489938
+                  ],
+                  "n_units": 29,
+                  "excludes_zero": false
+                },
+                "state_year": {
+                  "ci95": [
+                    -91.0218140258596,
+                    155.74310715605716
+                  ],
+                  "n_units": 32,
+                  "excludes_zero": false
+                }
+              }
+            }
+          },
+          "n_aligned_with_m2": 2902
+        },
+        "r300_d150_k3": {
+          "coverage_direct": 1.0,
+          "fallback_share": 0.0,
+          "aggregate": {
+            "mae_m1c": 1311.2581973553908,
+            "mae_m1": 1500.8107059507129,
+            "m1c_vs_m1": {
+              "delta_mae": -189.55250859532202,
+              "n": 2902,
+              "block": {
+                "ci95": [
+                  -309.19810313507304,
+                  -21.794413918167653
+                ],
+                "n_units": 30,
+                "excludes_zero": true
+              },
+              "state_year": {
+                "ci95": [
+                  -271.49175539273205,
+                  -93.76602409700459
+                ],
+                "n_units": 32,
+                "excludes_zero": true
+              }
+            }
+          },
+          "covered_subset": {
+            "n": 2902,
+            "mae_m1c": 1311.2581973553908,
+            "mae_m1": 1500.8107059507129,
+            "m1c_vs_m1": {
+              "delta_mae": -189.55250859532202,
+              "n": 2902,
+              "block": {
+                "ci95": [
+                  -309.19810313507304,
+                  -21.794413918167653
+                ],
+                "n_units": 30,
+                "excludes_zero": true
+              },
+              "state_year": {
+                "ci95": [
+                  -271.49175539273205,
+                  -93.76602409700459
+                ],
+                "n_units": 32,
+                "excludes_zero": true
+              }
+            }
+          },
+          "fallback_subset": null,
+          "vs_m2": {
+            "n": 2902,
+            "mae_m1c": 1311.2581973553908,
+            "mae_m2": 1272.4017391814725,
+            "m1c_vs_m2": {
+              "delta_mae": 38.85645817391833,
+              "n": 2902,
+              "block": {
+                "ci95": [
+                  -37.28261767561492,
+                  107.1262880686597
+                ],
+                "n_units": 30,
+                "excludes_zero": false
+              },
+              "state_year": {
+                "ci95": [
+                  -47.43775677980215,
+                  132.7297972164356
+                ],
+                "n_units": 32,
+                "excludes_zero": false
+              }
+            },
+            "subset_covered_only": {
+              "n": 2902,
+              "mae_m1c": 1311.2581973553908,
+              "mae_m2": 1272.4017391814725,
+              "m1c_vs_m2": {
+                "delta_mae": 38.85645817391833,
+                "n": 2902,
+                "block": {
+                  "ci95": [
+                    -37.28261767561492,
+                    107.1262880686597
+                  ],
+                  "n_units": 30,
+                  "excludes_zero": false
+                },
+                "state_year": {
+                  "ci95": [
+                    -47.43775677980215,
+                    132.7297972164356
+                  ],
+                  "n_units": 32,
+                  "excludes_zero": false
+                }
+              }
+            }
+          },
+          "n_aligned_with_m2": 2902
+        }
+      }
+    }
+  },
+  "elapsed_s": 7.9
+}

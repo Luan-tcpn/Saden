@@ -102,6 +102,7 @@ def _design(
     state: np.ndarray | None,
     variant: str,
     columns: Sequence[int] | None = None,
+    interaction_states: Sequence[int] | None = None,
 ) -> tuple[np.ndarray, list[int]]:
     """Monta o design com intercepto e, opcionalmente, dummies de UF.
 
@@ -110,6 +111,11 @@ def _design(
     com exatamente as mesmas colunas do treino. Estados ausentes do treino
     ficam com todas as dummies em zero e caem no intercepto — o análogo da
     queda para a média global nas linhas de base.
+
+    ``interaction_states`` (V3.2) acrescenta, ao final, **interações entre cada
+    coluna climática e o indicador de UF**. É o que permite inclinações
+    específicas por estado. A lista é fixada pelo chamador (e não descoberta no
+    treino) justamente para que treino e teste tenham as mesmas colunas.
     """
     pieces = [np.ones((x_climate.shape[0], 1))]
     if x_climate.shape[1] > 0:
@@ -126,7 +132,18 @@ def _design(
             pieces.append((state == code).astype("float64").reshape(-1, 1))
     elif columns is not None:
         used = []
+    if interaction_states and state is not None and x_climate.shape[1] > 0:
+        for code in interaction_states:
+            indicator = (state == code).astype("float64").reshape(-1, 1)
+            pieces.append(x_climate * indicator)
     return np.hstack(pieces), used
+
+
+def interaction_width(n_climate: int, interaction_states: Sequence[int] | None) -> int:
+    """Quantas colunas de interação são acrescentadas ao design."""
+    if not interaction_states:
+        return 0
+    return len(interaction_states) * n_climate
 
 
 def _fit_predict(
@@ -136,18 +153,104 @@ def _fit_predict(
     state_train: np.ndarray | None = None,
     state_test: np.ndarray | None = None,
     variant: str = "climate_only",
+    interaction_states: Sequence[int] | None = None,
+    penalty: float | None = None,
 ) -> np.ndarray | None:
-    """OLS com intercepto, ajustado no treino e aplicado ao teste."""
+    """Ajusta no treino e aplica ao teste.
+
+    Sem ``penalty`` é MQO (comportamento histórico). Com ``penalty`` e
+    interações, é **ridge sobre os desvios estaduais**, com penalidade
+    ``penalty × variância da coluna no treino`` — isto é, encolhimento
+    invariante à escala em direção à inclinação comum (partial pooling).
+    O intercepto, as inclinações comuns e as dummies de UF nunca são
+    penalizados.
+    """
     if variant not in MODEL_VARIANTS:
         raise ValueError(f"variante de modelo desconhecida: {variant!r}")
-    train_design, columns = _design(x_train, state_train, variant)
+    train_design, columns = _design(
+        x_train, state_train, variant, interaction_states=interaction_states
+    )
     if train_design.shape[0] <= train_design.shape[1]:
         return None
     if float(np.std(x_train, axis=0).max() if x_train.size else 0.0) == 0.0:
         return None
-    beta, *_ = np.linalg.lstsq(train_design, y_train, rcond=None)
-    test_design, _ = _design(x_test, state_test, variant, columns=columns)
+    if penalty is None or not interaction_states:
+        beta, *_ = np.linalg.lstsq(train_design, y_train, rcond=None)
+    else:
+        width = interaction_width(x_train.shape[1], interaction_states)
+        start = train_design.shape[1] - width
+        gram = train_design.T @ train_design
+        diagonal = np.zeros(train_design.shape[1], dtype="float64")
+        # penalidade relativa à diagonal de Gram: o encolhimento de cada desvio
+        # é 1/(1+λ), independente de escala e de n. λ=0 → MQO; λ grande → a
+        # inclinação comum. É isso que torna a grade de λ interpretável.
+        diagonal[start:] = float(penalty) * np.diag(gram)[start:]
+        gram[np.diag_indices_from(gram)] += diagonal
+        rhs = train_design.T @ y_train
+        try:
+            beta = np.linalg.solve(gram, rhs)
+        except np.linalg.LinAlgError:
+            beta, *_ = np.linalg.lstsq(train_design, y_train, rcond=None)
+    test_design, _ = _design(
+        x_test,
+        state_test,
+        variant,
+        columns=columns,
+        interaction_states=interaction_states,
+    )
     return test_design @ beta
+
+
+def select_ridge_penalty(
+    x: np.ndarray,
+    y: np.ndarray,
+    state: np.ndarray,
+    blocks: np.ndarray,
+    interaction_states: Sequence[int],
+    grid: Sequence[float],
+    variant: str = "climate_plus_state",
+    n_inner_folds: int = 5,
+    seed: int = 20261114,
+) -> dict[str, Any]:
+    """Escolhe o encolhimento por validação interna **dentro do treino**.
+
+    A validação interna é 5-fold **bloqueada por bloco espacial** sobre as
+    linhas de treino que o chamador passou. Nada aqui vê o conjunto de teste da
+    célula: o chamador só pode entregar o pool de treino.
+    """
+    from . import analysis  # import tardio evita ciclo
+
+    block_names = sorted({str(b) for b in blocks.tolist() if str(b)})
+    if len(block_names) < n_inner_folds or x.shape[0] < 50:
+        return {"lambda": None, "path": {}, "status": "insufficient_training"}
+    rng = np.random.default_rng(seed)
+    folds = analysis._blocked_folds(block_names, n_inner_folds, rng)
+    path: dict[str, float] = {}
+    for penalty in grid:
+        errors: list[np.ndarray] = []
+        for fold in folds:
+            inside = np.isin(blocks, list(fold))
+            if inside.all() or (~inside).sum() == 0:
+                continue
+            prediction = _fit_predict(
+                x[~inside],
+                y[~inside],
+                x[inside],
+                state_train=state[~inside],
+                state_test=state[inside],
+                variant=variant,
+                interaction_states=interaction_states,
+                penalty=None if penalty == 0 else penalty,
+            )
+            if prediction is None:
+                continue
+            errors.append(np.abs(prediction - y[inside]))
+        if errors:
+            path[str(penalty)] = float(np.concatenate(errors).mean())
+    if not path:
+        return {"lambda": None, "path": {}, "status": "degenerate"}
+    best = min(path, key=path.get)
+    return {"lambda": float(best), "path": path, "status": "ok"}
 
 
 def stratified_subsample(
@@ -310,6 +413,8 @@ def factorial_holdout(
     equalize: str = "global",
     min_cell_train: int = 200,
     keep_errors: bool = False,
+    interactions: bool = False,
+    penalty_grid: Sequence[float] | None = None,
 ) -> dict[str, Any]:
     """Fatorial 2×2 espaço × tempo com controle opcional de tamanho.
 
@@ -337,6 +442,14 @@ def factorial_holdout(
     erros absolutos por linha, na ordem determinística de teste — para que
     duas especificações possam ser comparadas de forma **pareada** (mesmas
     linhas) e não apenas pelas MAEs agregadas.
+
+    ``interactions=True`` (V3.2) libera inclinações climáticas específicas por
+    UF (interações). Se ``penalty_grid`` também for dada, o encolhimento é
+    escolhido por validação interna **dentro do pool de treino de cada célula**
+    (partial pooling); sem a grade, é MQO sobre as interações (inclinações
+    fixas). Nos dois casos as células, a equalização e as linhas de teste são
+    exatamente as mesmas de qualquer outra chamada — é isso que torna a
+    comparação pareada.
     """
     if equalize not in ("global", "per_cell"):
         raise ValueError(f"modo de equalizacao desconhecido: {equalize!r}")
@@ -374,6 +487,16 @@ def factorial_holdout(
     year_position = {name: i for i, name in enumerate(year_names)}
     year_codes = np.array([year_position[y] for y in year_ids.tolist()], dtype="int64")
 
+    # V3.2: a UF de referência (a primeira em ordem) fica de fora das
+    # interações; as demais recebem inclinação própria.
+    interaction_states: list[int] = []
+    if interactions:
+        present_states = sorted({int(s) for s in state_codes.tolist() if s >= 0})
+        if len(present_states) < 2:
+            return {"status": "insufficient_groups", "n_states": len(present_states)}
+        interaction_states = present_states[1:]
+    penalty_choice: dict[str, list[dict[str, Any]]] = {a: [] for a, _, _ in ARMS}
+
     predictions: dict[str, list[np.ndarray]] = {a: [] for a, _, _ in ARMS}
     baselines: dict[str, list[np.ndarray]] = {a: [] for a, _, _ in ARMS}
     train_sizes: dict[str, list[int]] = {a: [] for a, _, _ in ARMS}
@@ -400,6 +523,7 @@ def factorial_holdout(
     block_parts: list[np.ndarray] = []
     year_parts: list[np.ndarray] = []
     state_parts: list[np.ndarray] = []
+    row_index_parts: list[np.ndarray] = []
     fallback_rows: dict[str, int] = {a: 0 for a, _, _ in ARMS}
     test_rows: dict[str, int] = {a: 0 for a, _, _ in ARMS}
     # --- preparação das células e dos alvos de treino -----------------------
@@ -460,6 +584,7 @@ def factorial_holdout(
         block_parts.append(block_ids[test_mask])
         year_parts.append(year_ids[test_mask])
         state_parts.append(state_ids[test_mask])
+        row_index_parts.append(np.flatnonzero(test_mask))
         x_test = x_all[test_mask]
         state_test = state_codes[test_mask]
         year_test = year_codes[test_mask]
@@ -482,6 +607,22 @@ def factorial_holdout(
                 cells_at_target[arm] += 1
             else:
                 cells_below_target[arm] += 1
+            # V3.2: encolhimento escolhido somente no pool de treino desta
+            # célula/braço — antes de qualquer subamostragem, e nunca no teste.
+            selected_penalty: float | None = None
+            if penalty_grid is not None and interaction_states:
+                selection = select_ridge_penalty(
+                    x_all[pool_index],
+                    y_all[pool_index],
+                    state_codes[pool_index],
+                    block_ids[pool_index],
+                    interaction_states,
+                    penalty_grid,
+                    variant=variant,
+                    seed=seed + 104729 * arm_index + 7919 * len(observed_parts),
+                )
+                penalty_choice[arm].append(selection)
+                selected_penalty = selection.get("lambda")
             cell_abs: list[np.ndarray] = []
             cell_sq: list[np.ndarray] = []
             cell_rel: list[np.ndarray] = []
@@ -521,6 +662,8 @@ def factorial_holdout(
                     state_train=state_codes[chosen],
                     state_test=state_test,
                     variant=variant,
+                    interaction_states=interaction_states or None,
+                    penalty=selected_penalty,
                 )
                 if fitted is None:
                     continue
@@ -580,6 +723,9 @@ def factorial_holdout(
         "n_repeats": n_repeats,
         "target_train_size": target_size,
         "variables": list(variables),
+        "interactions": bool(interactions),
+        "interaction_states": [str(s) for s in interaction_states],
+        "penalty_grid": None if penalty_grid is None else [float(v) for v in penalty_grid],
         "arms": {},
     }
     if not observed_parts:
@@ -810,6 +956,29 @@ def factorial_holdout(
         out["row_blocks"] = out["test_blocks"]
         out["row_years"] = out["test_years"]
         out["row_states"] = out["test_states"]
+        keys = np.concatenate(row_index_parts) if row_index_parts else np.array([], dtype="int64")
+        out["row_codes"] = np.array([str(data[i]["ibge_code"]) for i in keys])
+        out["row_years_raw"] = np.array([str(data[i]["year"]) for i in keys])
+    if penalty_grid is not None and interaction_states:
+        summary: dict[str, Any] = {}
+        for arm, entries in penalty_choice.items():
+            chosen = [e.get("lambda") for e in entries if e.get("lambda") is not None]
+            path_sum: dict[str, float] = {}
+            for entry in entries:
+                for key, value in (entry.get("path") or {}).items():
+                    path_sum.setdefault(key, 0.0)
+                    path_sum[key] += value
+            count = sum(1 for entry in entries if entry.get("path"))
+            summary[arm] = {
+                "cells_evaluated": len(entries),
+                "cells_with_selection": len(chosen),
+                "lambda_counts": {str(v): chosen.count(v) for v in sorted(set(chosen))},
+                "lambda_median": float(np.median(chosen)) if chosen else None,
+                "inner_cv_path_mean": (
+                    {key: value / count for key, value in path_sum.items()} if count else {}
+                ),
+            }
+        out["penalty_selection"] = summary
     return out
 
 
@@ -1017,8 +1186,11 @@ def neighbor_holdout(
         ),
         "worse_rows_share": float(np.mean(state_alignment > 0)),
         "row_predictions": predictions,
+        "row_fallback": fallback_state | fallback_global,
+        "row_codes": codes,
+        "row_years": years,
+        "row_states": states,
         "row_abs_errors": errors_neighbor,
         "row_abs_baseline": errors_state,
         "row_blocks": blocks,
-        "row_codes": codes,
     }

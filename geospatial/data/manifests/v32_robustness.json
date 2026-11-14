@@ -1,0 +1,849 @@
+{
+  "generated_at": "2026-11-14T12:30:23.853317+00:00",
+  "preregistration": "docs/V3_2_PREREGISTRATION.md",
+  "protocol": {
+    "arm": "TE (bloco espacial e grupo temporal fora do treino)",
+    "variant": "climate_plus_state",
+    "equalize": "per_cell",
+    "n_repeats": 3,
+    "n_boot": 1000,
+    "variables": [
+      "precip_corrected",
+      "temp_corrected"
+    ],
+    "penalty_grid": [
+      0.0,
+      0.01,
+      0.1,
+      1.0,
+      10.0,
+      100.0
+    ],
+    "penalty_scale": "relativa a diagonal de Gram; encolhimento 1/(1+lambda)",
+    "descricao_mae": "MAE em kg/ha; delta = MAE(modelo) - MAE(M2 comum); negativo = melhor"
+  },
+  "crops": {
+    "soja": {
+      "n_rows": 8884,
+      "leave_one_uf_out": {
+        "GO": {
+          "n": 7326,
+          "delta_mae": 13.45560678645029,
+          "block": {
+            "ci95": [
+              -3.407877712148948,
+              37.01842705151781
+            ],
+            "n_units": 38,
+            "excludes_zero": false
+          },
+          "state_year": {
+            "ci95": [
+              -6.4145009426923165,
+              35.609434437648204
+            ],
+            "n_units": 32,
+            "excludes_zero": false
+          }
+        },
+        "MS": {
+          "n": 8298,
+          "delta_mae": 17.1926028902069,
+          "block": {
+            "ci95": [
+              -3.453134833974383,
+              48.624403609666366
+            ],
+            "n_units": 42,
+            "excludes_zero": false
+          },
+          "state_year": {
+            "ci95": [
+              -3.3848867325356733,
+              43.438062890372905
+            ],
+            "n_units": 32,
+            "excludes_zero": false
+          }
+        },
+        "MT": {
+          "n": 7973,
+          "delta_mae": -2.478221844453401,
+          "block": {
+            "ci95": [
+              -13.869470738763386,
+              10.423076185624705
+            ],
+            "n_units": 31,
+            "excludes_zero": false
+          },
+          "state_year": {
+            "ci95": [
+              -15.388847631428305,
+              12.524843612439568
+            ],
+            "n_units": 32,
+            "excludes_zero": false
+          }
+        },
+        "PR": {
+          "n": 6021,
+          "delta_mae": 11.946395127327378,
+          "block": {
+            "ci95": [
+              -12.736604695809032,
+              43.89789607130094
+            ],
+            "n_units": 41,
+            "excludes_zero": false
+          },
+          "state_year": {
+            "ci95": [
+              -5.76036297978045,
+              31.65402316947603
+            ],
+            "n_units": 32,
+            "excludes_zero": false
+          }
+        },
+        "RS": {
+          "n": 5918,
+          "delta_mae": 4.903962434998675,
+          "block": {
+            "ci95": [
+              -1.6816976322228043,
+              12.206739728170717
+            ],
+            "n_units": 38,
+            "excludes_zero": false
+          },
+          "state_year": {
+            "ci95": [
+              -5.296168272478202,
+              16.99978140470399
+            ],
+            "n_units": 32,
+            "excludes_zero": false
+          }
+        }
+      },
+      "leave_one_year_out": {
+        "2018": {
+          "n": 7867,
+          "delta_mae": 1.3569847534497512,
+          "block": {
+            "ci95": [
+              -9.534835973048786,
+              10.832241205794656
+            ],
+            "n_units": 46,
+            "excludes_zero": false
+          },
+          "state_year": {
+            "ci95": [
+              -9.410329323177384,
+              14.119040179781482
+            ],
+            "n_units": 35,
+            "excludes_zero": false
+          }
+        },
+        "2019": {
+          "n": 7795,
+          "delta_mae": 13.424636468014683,
+          "block": {
+            "ci95": [
+              -2.9034282106004907,
+              34.728814191179616
+            ],
+            "n_units": 46,
+            "excludes_zero": false
+          },
+          "state_year": {
+            "ci95": [
+              -4.905676217801556,
+              43.58059632014481
+            ],
+            "n_units": 35,
+            "excludes_zero": false
+          }
+        },
+        "2020": {
+          "n": 7792,
+          "delta_mae": 21.16198092384525,
+          "block": {
+            "ci95": [
+              -4.399347892470814,
+              61.03595754260885
+            ],
+            "n_units": 46,
+            "excludes_zero": false
+          },
+          "state_year": {
+            "ci95": [
+              -11.176427940430681,
+              57.74858115506068
+            ],
+            "n_units": 35,
+            "excludes_zero": false
+          }
+        },
+        "2021": {
+          "n": 7779,
+          "delta_mae": -5.684457393974753,
+          "block": {
+            "ci95": [
+              -25.543384722189558,
+              9.939076687414142
+            ],
+            "n_units": 46,
+            "excludes_zero": false
+          },
+          "state_year": {
+            "ci95": [
+              -29.363370113911206,
+              18.46905164171807
+            ],
+            "n_units": 35,
+            "excludes_zero": false
+          }
+        },
+        "2022": {
+          "n": 7770,
+          "delta_mae": 4.370633637232459,
+          "block": {
+            "ci95": [
+              -2.4941707916741196,
+              13.31393647507786
+            ],
+            "n_units": 46,
+            "excludes_zero": false
+          },
+          "state_year": {
+            "ci95": [
+              -7.761104536356617,
+              17.4360673434116
+            ],
+            "n_units": 35,
+            "excludes_zero": false
+          }
+        },
+        "2023": {
+          "n": 7765,
+          "delta_mae": 0.8297410429573802,
+          "block": {
+            "ci95": [
+              -3.189724860620609,
+              4.392782312569497
+            ],
+            "n_units": 46,
+            "excludes_zero": false
+          },
+          "state_year": {
+            "ci95": [
+              -5.502493635539437,
+              5.994928473255648
+            ],
+            "n_units": 35,
+            "excludes_zero": false
+          }
+        },
+        "2024": {
+          "n": 7740,
+          "delta_mae": 26.11646550317812,
+          "block": {
+            "ci95": [
+              2.604955687929588,
+              57.228232129719636
+            ],
+            "n_units": 46,
+            "excludes_zero": true
+          },
+          "state_year": {
+            "ci95": [
+              1.7956348992395021,
+              53.549649116106714
+            ],
+            "n_units": 35,
+            "excludes_zero": true
+          }
+        },
+        "2025": {
+          "n": 7680,
+          "delta_mae": 0.7435903963158808,
+          "block": {
+            "ci95": [
+              -9.096556555877813,
+              10.306038066476518
+            ],
+            "n_units": 46,
+            "excludes_zero": false
+          },
+          "state_year": {
+            "ci95": [
+              -14.56918353975168,
+              18.04676989629764
+            ],
+            "n_units": 35,
+            "excludes_zero": false
+          }
+        }
+      }
+    },
+    "milho": {
+      "n_rows": 7616,
+      "leave_one_uf_out": {
+        "BA": {
+          "n": 7510,
+          "delta_mae": 36.28485750267441,
+          "block": {
+            "ci95": [
+              -35.25341750297055,
+              95.80550985491587
+            ],
+            "n_units": 43,
+            "excludes_zero": false
+          },
+          "state_year": {
+            "ci95": [
+              -36.84099072944038,
+              108.6645190044614
+            ],
+            "n_units": 40,
+            "excludes_zero": false
+          }
+        },
+        "GO": {
+          "n": 6049,
+          "delta_mae": -14.808583202476257,
+          "block": {
+            "ci95": [
+              -119.18538669038402,
+              87.59566714993062
+            ],
+            "n_units": 43,
+            "excludes_zero": false
+          },
+          "state_year": {
+            "ci95": [
+              -120.26575015180744,
+              86.6680582327054
+            ],
+            "n_units": 40,
+            "excludes_zero": false
+          }
+        },
+        "MS": {
+          "n": 7064,
+          "delta_mae": 5.188744207463969,
+          "block": {
+            "ci95": [
+              -96.86025757510856,
+              96.90958473717032
+            ],
+            "n_units": 45,
+            "excludes_zero": false
+          },
+          "state_year": {
+            "ci95": [
+              -92.88523775242805,
+              100.95759341127113
+            ],
+            "n_units": 40,
+            "excludes_zero": false
+          }
+        },
+        "MT": {
+          "n": 6619,
+          "delta_mae": 2.9450207542629414,
+          "block": {
+            "ci95": [
+              -81.51667739953889,
+              95.50758668436835
+            ],
+            "n_units": 34,
+            "excludes_zero": false
+          },
+          "state_year": {
+            "ci95": [
+              -70.97206120700768,
+              72.26034895596648
+            ],
+            "n_units": 40,
+            "excludes_zero": false
+          }
+        },
+        "PR": {
+          "n": 4650,
+          "delta_mae": 74.23833540187161,
+          "block": {
+            "ci95": [
+              -27.22628821614383,
+              154.50151325501395
+            ],
+            "n_units": 44,
+            "excludes_zero": false
+          },
+          "state_year": {
+            "ci95": [
+              -32.113536001400355,
+              204.09566300333276
+            ],
+            "n_units": 40,
+            "excludes_zero": false
+          }
+        },
+        "RS": {
+          "n": 6188,
+          "delta_mae": -46.78754890892833,
+          "block": {
+            "ci95": [
+              -97.19928932722675,
+              -16.623180143109277
+            ],
+            "n_units": 44,
+            "excludes_zero": true
+          },
+          "state_year": {
+            "ci95": [
+              -105.89219825960934,
+              4.567358633326066
+            ],
+            "n_units": 40,
+            "excludes_zero": false
+          }
+        }
+      },
+      "leave_one_year_out": {
+        "2018": {
+          "n": 6708,
+          "delta_mae": -68.82651183678786,
+          "block": {
+            "ci95": [
+              -139.48366814219077,
+              3.7519454467421207
+            ],
+            "n_units": 49,
+            "excludes_zero": false
+          },
+          "state_year": {
+            "ci95": [
+              -136.02459552840364,
+              -1.8384297123476803
+            ],
+            "n_units": 42,
+            "excludes_zero": true
+          }
+        },
+        "2019": {
+          "n": 6709,
+          "delta_mae": -98.09948884834762,
+          "block": {
+            "ci95": [
+              -169.92074287908665,
+              -32.42257805891493
+            ],
+            "n_units": 49,
+            "excludes_zero": true
+          },
+          "state_year": {
+            "ci95": [
+              -166.92559071031482,
+              -26.41459386202445
+            ],
+            "n_units": 42,
+            "excludes_zero": true
+          }
+        },
+        "2020": {
+          "n": 6705,
+          "delta_mae": -84.87198238808946,
+          "block": {
+            "ci95": [
+              -166.76335572071503,
+              -3.7085563818755958
+            ],
+            "n_units": 49,
+            "excludes_zero": true
+          },
+          "state_year": {
+            "ci95": [
+              -173.7705542134915,
+              4.487900313310345
+            ],
+            "n_units": 42,
+            "excludes_zero": false
+          }
+        },
+        "2021": {
+          "n": 6636,
+          "delta_mae": -111.2592392106344,
+          "block": {
+            "ci95": [
+              -194.57978614988522,
+              -22.242692811577264
+            ],
+            "n_units": 49,
+            "excludes_zero": true
+          },
+          "state_year": {
+            "ci95": [
+              -190.34362278650795,
+              -22.829528438444065
+            ],
+            "n_units": 42,
+            "excludes_zero": true
+          }
+        },
+        "2022": {
+          "n": 6638,
+          "delta_mae": -81.46845825826381,
+          "block": {
+            "ci95": [
+              -158.60661235003707,
+              2.9573144339563537
+            ],
+            "n_units": 49,
+            "excludes_zero": false
+          },
+          "state_year": {
+            "ci95": [
+              -144.8037168212797,
+              -9.554617227037108
+            ],
+            "n_units": 42,
+            "excludes_zero": true
+          }
+        },
+        "2023": {
+          "n": 6634,
+          "delta_mae": -64.58267451086272,
+          "block": {
+            "ci95": [
+              -132.3189272552302,
+              7.299586891306044
+            ],
+            "n_units": 49,
+            "excludes_zero": false
+          },
+          "state_year": {
+            "ci95": [
+              -134.49266475204138,
+              7.803182550533258
+            ],
+            "n_units": 42,
+            "excludes_zero": false
+          }
+        },
+        "2024": {
+          "n": 6641,
+          "delta_mae": -28.543361994527686,
+          "block": {
+            "ci95": [
+              -73.74485937409675,
+              34.24634589159437
+            ],
+            "n_units": 49,
+            "excludes_zero": false
+          },
+          "state_year": {
+            "ci95": [
+              -85.7805565017495,
+              15.747507289882197
+            ],
+            "n_units": 42,
+            "excludes_zero": false
+          }
+        },
+        "2025": {
+          "n": 6641,
+          "delta_mae": -53.39470380995385,
+          "block": {
+            "ci95": [
+              -133.21551752795946,
+              54.24828600453171
+            ],
+            "n_units": 49,
+            "excludes_zero": false
+          },
+          "state_year": {
+            "ci95": [
+              -130.32792174591268,
+              35.218301591513665
+            ],
+            "n_units": 42,
+            "excludes_zero": false
+          }
+        }
+      }
+    },
+    "milho_2": {
+      "n_rows": 2902,
+      "leave_one_uf_out": {
+        "GO": {
+          "n": 2617,
+          "delta_mae": -4.5543108164326895,
+          "block": {
+            "ci95": [
+              -31.309748308031146,
+              33.08157835950888
+            ],
+            "n_units": 26,
+            "excludes_zero": false
+          },
+          "state_year": {
+            "ci95": [
+              -46.16597615708683,
+              34.18665740866082
+            ],
+            "n_units": 27,
+            "excludes_zero": false
+          }
+        },
+        "MS": {
+          "n": 2474,
+          "delta_mae": -7.782699250491305,
+          "block": {
+            "ci95": [
+              -33.7032921821483,
+              34.56156828460912
+            ],
+            "n_units": 26,
+            "excludes_zero": false
+          },
+          "state_year": {
+            "ci95": [
+              -43.498767522881806,
+              23.916912992218684
+            ],
+            "n_units": 23,
+            "excludes_zero": false
+          }
+        },
+        "MT": {
+          "n": 2549,
+          "delta_mae": 9.04305201792613,
+          "block": {
+            "ci95": [
+              -1.4110714582368928,
+              30.227218967265035
+            ],
+            "n_units": 18,
+            "excludes_zero": false
+          },
+          "state_year": {
+            "ci95": [
+              -3.1184491576748483,
+              26.740184545828864
+            ],
+            "n_units": 23,
+            "excludes_zero": false
+          }
+        },
+        "PR": {
+          "n": 1066,
+          "delta_mae": 4.9046926770256505,
+          "block": {
+            "ci95": [
+              -6.739335027208557,
+              16.257060445953602
+            ],
+            "n_units": 26,
+            "excludes_zero": false
+          },
+          "state_year": {
+            "ci95": [
+              -2.5965776643910488,
+              13.362345295876521
+            ],
+            "n_units": 23,
+            "excludes_zero": false
+          }
+        }
+      },
+      "leave_one_year_out": {
+        "2017": {
+          "n": 2679,
+          "delta_mae": 12.852531996775042,
+          "block": {
+            "ci95": [
+              -0.014854776671279268,
+              29.41196258495751
+            ],
+            "n_units": 30,
+            "excludes_zero": false
+          },
+          "state_year": {
+            "ci95": [
+              -5.491296470976278,
+              37.061983449608064
+            ],
+            "n_units": 29,
+            "excludes_zero": false
+          }
+        },
+        "2018": {
+          "n": 2681,
+          "delta_mae": 4.420871694449943,
+          "block": {
+            "ci95": [
+              -5.19069496303801,
+              20.828891187960625
+            ],
+            "n_units": 30,
+            "excludes_zero": false
+          },
+          "state_year": {
+            "ci95": [
+              -8.479152817939513,
+              18.513880844263035
+            ],
+            "n_units": 29,
+            "excludes_zero": false
+          }
+        },
+        "2019": {
+          "n": 2682,
+          "delta_mae": 18.9638318939094,
+          "block": {
+            "ci95": [
+              4.787845051255807,
+              46.11017556256004
+            ],
+            "n_units": 30,
+            "excludes_zero": true
+          },
+          "state_year": {
+            "ci95": [
+              -4.4992945238927575,
+              46.7442067896055
+            ],
+            "n_units": 29,
+            "excludes_zero": false
+          }
+        },
+        "2020": {
+          "n": 2680,
+          "delta_mae": 15.746928104275185,
+          "block": {
+            "ci95": [
+              0.6841692169957583,
+              32.237602608198834
+            ],
+            "n_units": 30,
+            "excludes_zero": true
+          },
+          "state_year": {
+            "ci95": [
+              -9.205397858279218,
+              45.33609936437789
+            ],
+            "n_units": 29,
+            "excludes_zero": false
+          }
+        },
+        "2021": {
+          "n": 2497,
+          "delta_mae": 9.644206961228065,
+          "block": {
+            "ci95": [
+              -3.2927097878844163,
+              26.340034456601334
+            ],
+            "n_units": 30,
+            "excludes_zero": false
+          },
+          "state_year": {
+            "ci95": [
+              -5.127020936497433,
+              25.967654683904126
+            ],
+            "n_units": 28,
+            "excludes_zero": false
+          }
+        },
+        "2022": {
+          "n": 2497,
+          "delta_mae": 10.613652067502699,
+          "block": {
+            "ci95": [
+              -13.201115897579887,
+              31.659755797955505
+            ],
+            "n_units": 30,
+            "excludes_zero": false
+          },
+          "state_year": {
+            "ci95": [
+              -16.731746084504273,
+              43.60053176145613
+            ],
+            "n_units": 28,
+            "excludes_zero": false
+          }
+        },
+        "2023": {
+          "n": 2496,
+          "delta_mae": 14.958419743178183,
+          "block": {
+            "ci95": [
+              -1.1472948987836444,
+              48.27613448109881
+            ],
+            "n_units": 30,
+            "excludes_zero": false
+          },
+          "state_year": {
+            "ci95": [
+              -7.916287210819547,
+              45.77188539328988
+            ],
+            "n_units": 28,
+            "excludes_zero": false
+          }
+        },
+        "2024": {
+          "n": 2503,
+          "delta_mae": 8.621073681663802,
+          "block": {
+            "ci95": [
+              -7.987138474393538,
+              28.064612801435832
+            ],
+            "n_units": 30,
+            "excludes_zero": false
+          },
+          "state_year": {
+            "ci95": [
+              -16.502543434363663,
+              33.2743542357991
+            ],
+            "n_units": 28,
+            "excludes_zero": false
+          }
+        },
+        "2025": {
+          "n": 2501,
+          "delta_mae": 12.591711819971579,
+          "block": {
+            "ci95": [
+              -3.65369838870443,
+              37.36490259694883
+            ],
+            "n_units": 30,
+            "excludes_zero": false
+          },
+          "state_year": {
+            "ci95": [
+              -9.526859864467053,
+              40.70541399839426
+            ],
+            "n_units": 28,
+            "excludes_zero": false
+          }
+        }
+      }
+    }
+  },
+  "elapsed_s": 285.3
+}

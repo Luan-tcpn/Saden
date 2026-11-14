@@ -1844,3 +1844,95 @@ diferentes carrega informação sobre municípios não observados — mais do qu
 média da UF. Isso é consistente com a V3.0 (a CAD não explicava o efeito do
 bloco) e com D102 (não é um gradiente suave). Não é evidência causal.
 
+## D104 - A unidade de inferência das inclinações climáticas é UF×ano, não bloco espacial (2026-11-14)
+
+Decisão: testes de inclinação climática passam a usar **agrupamento duplo**
+(`two_way_cluster_vcov`) por **UF×ano** e por **município**. O agrupamento por
+bloco espacial fica disponível apenas como sensibilidade histórica.
+
+Motivo: a anomalia climática de um ano é essencialmente a mesma para todos os
+municípios de uma UF. Um bloco de 250 km é **menor** que a UF, então agrupar por
+bloco trata milhares de linhas praticamente independentes como se fossem
+observações distintas e produz erros-padrão otimistas. A unidade que varia de
+fato é o par UF×ano.
+
+Efeito medido no painel (mesmo modelo, mesmos dados, só o agrupamento muda):
+
+| cultura | variável | F (bloco) | p (bloco) | F (UF×ano + município) | p |
+|---|---|---:|---:|---:|---:|
+| soja | precipitação | 8,74 | 0,0000 | 1,13 | 0,3565 |
+| soja | temperatura | 10,33 | 0,0000 | 1,89 | 0,1308 |
+| milho | precipitação | 2,28 | 0,0614 | 1,03 | 0,4099 |
+| milho | temperatura | 4,89 | 0,0011 | 2,47 | 0,0454 |
+| milho 2ª | precipitação | 3,30 | 0,0342 | 2,77 | 0,0584 |
+| milho 2ª | temperatura | 10,05 | 0,0001 | 6,27 | 0,0019 |
+
+A razão entre os erros-padrão é de ~2,5–3×. **Consequência retroativa:** os
+p-valores de associação reportados na V2.7–V3.1 com agrupamento por bloco são
+otimistas e não devem ser citados como evidência confirmatória. Os resultados
+*preditivos* dessas versões não são afetados por esta decisão (o estimando lá é
+diferença de MAE, não coeficiente), mas o mesmo cuidado de unidade foi aplicado
+a eles por bootstrap por UF×ano.
+
+## D105 - A heterogeneidade de inclinações NÃO está estabelecida (2026-11-14)
+
+Decisão: os desníveis de desempenho por UF da V3.1 (PR −607,4; MS +261,4; …)
+**não** são evidência de inclinações climáticas diferentes. São diferenças de
+erro preditivo, e a estimação direta das inclinações não sustenta a leitura
+mecanicista.
+
+Família confirmatória: 6 testes globais (3 culturas × 2 variáveis primárias),
+Holm. Somente **milho 2ª × temperatura** sobrevive (p = 0,0019; Holm = 0,0113).
+Os demais: soja precipitação 0,357 (Holm 0,713); soja temperatura 0,131 (0,392);
+milho precipitação 0,410 (0,713); milho temperatura 0,045 (0,227); milho 2ª
+precipitação 0,058 (0,234).
+
+Nenhum contraste individual por UF sobrevive ao Holm em nenhuma cultura
+(p_holm ≥ 0,195 em todos). Em soja, os quatro contrastes de temperatura têm
+p individual entre 0,029 e 0,050 com IC95 excluindo zero, e **todos** deixam de
+ser significativos após Holm — o exemplo didático de por que não se lê uma
+tabela de p-valores estaduais como evidência.
+
+Registrado também: a inclinação de referência de milho 2ª em GO para
+temperatura (+856 kg/ha/°C) é implausível e vem de 5 anos e 285 linhas. É
+justamente o tipo de estimativa que o partial pooling existe para evitar, e um
+sinal de que aquele contraste não é interpretável.
+
+## D106 - Partial pooling implementado como ridge sobre os desvios estaduais (2026-11-14)
+
+Decisão: `M2-HET-PP` é implementado como **ridge sobre os desvios estaduais**
+em direção à inclinação comum, com λ escolhido por validação interna 5-fold
+**bloqueada por bloco espacial dentro do pool de treino de cada célula**. A
+penalidade é relativa à diagonal de Gram, de modo que o encolhimento de cada
+desvio é `1/(1+λ)`, independente de escala e de n.
+
+Com 4–6 UFs não é possível estimar de forma confiável a variância de uma
+distribuição de efeitos aleatórios. O estimador implementado é o MAP de um prior
+normal centrado em zero, não um modelo hierárquico completo: **não há estimativa
+REML da variância entre UFs nem intervalos que incorporem a incerteza do
+encolhimento**. Essa limitação é declarada em todo resultado que use o modelo.
+
+Resultado do partial pooling em TE (ΔMAE contra a inclinação comum; negativo =
+melhor): soja +10,9; milho **−77,6** [−143,9; −4,8] (bootstrap UF×ano) e
+[−162,7; 14,5] (bloco); milho 2ª +6,1. Ver D105 e o relatório: o ganho do milho
+é instável (ver D107 e a análise leave-one-UF-out).
+
+## D107 - M1c não substitui M1 nem M2 (2026-11-14)
+
+Decisão: os vizinhos históricos continuam como **baseline secundário**. A V3.2
+fez a comparação pareada que faltava (mesmas linhas, alinhadas por município e
+ano) e decompôs cobertura × fallback:
+
+* **M1c bate M1** de forma consistente no protocolo TE, em todas as culturas, com
+  bootstrap por UF×ano: soja −27,7 [−46,2; −8,1]; milho −292,6 [−401,2; −169,3];
+  milho 2ª −194,5 [−311,5; −63,9] (raio 200 km, decaimento 100 km, 3 vizinhos).
+* **M1c não bate M2**: soja −9,2 [−49,2; 25,6]; milho −64,1 [−146,1; 2,9];
+  milho 2ª +33,9 [−85,6; 162,4]. Nenhum IC exclui zero. Não há base para trocar
+  o modelo climático pelo baseline de vizinhos.
+* O **fallback não é neutro**: os casos atendidos por vizinhos vão muito melhor
+  que os casos que caem na média da UF (milho: 1.604,9 contra 2.103,5 kg/ha de
+  MAE). Relatar a cobertura agregada esconderia que o baseline degenera
+  exatamente onde não há vizinho — em raio de 100 km no milho isso é 45% das
+  linhas.
+
+

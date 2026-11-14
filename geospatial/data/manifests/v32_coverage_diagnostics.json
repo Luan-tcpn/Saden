@@ -1,0 +1,842 @@
+{
+  "generated_at": "2026-11-14T12:26:18.768332+00:00",
+  "crops": {
+    "soja": {
+      "states": {
+        "GO": {
+          "n_rows": 1558,
+          "n_municipalities": 210,
+          "n_years": 8,
+          "n_blocks": 11,
+          "yield_mean": 3434.8600770218227,
+          "yield_sd": 436.22893370780116,
+          "variables": {
+            "precip_corrected": {
+              "missing_share": 0.0,
+              "mean": 525.055648468442,
+              "sd": 161.24314824250337,
+              "unique_values": 644,
+              "between_municipality_sd": 54.1768728002309,
+              "within_municipality_sd": 157.00395358414283,
+              "within_share_of_variance": 0.8935982002149239
+            },
+            "temp_corrected": {
+              "missing_share": 0.0,
+              "mean": 26.045671427634254,
+              "sd": 1.6676758240839575,
+              "unique_values": 641,
+              "between_municipality_sd": 1.1005865063775977,
+              "within_municipality_sd": 1.2570373505543757,
+              "within_share_of_variance": 0.5660686050573384
+            },
+            "degree_days_corrected": {
+              "missing_share": 0.0,
+              "mean": 1551.3970446262188,
+              "sd": 196.0335097268222,
+              "unique_values": 643,
+              "between_municipality_sd": 106.77960669660214,
+              "within_municipality_sd": 173.84586440120827,
+              "within_share_of_variance": 0.7260760444119346
+            },
+            "heat_corrected": {
+              "missing_share": 0.0,
+              "mean": 20.065468549422338,
+              "sd": 16.88063740682099,
+              "unique_values": 76,
+              "between_municipality_sd": 7.366625525518361,
+              "within_municipality_sd": 15.37826384344344,
+              "within_share_of_variance": 0.8133597706122382
+            },
+            "deficit_cad100": {
+              "missing_share": 0.0,
+              "mean": 48.0673435873864,
+              "sd": 77.52232107652797,
+              "unique_values": 749,
+              "between_municipality_sd": 25.552167129413178,
+              "within_municipality_sd": 73.82678889065689,
+              "within_share_of_variance": 0.8930230549240483
+            }
+          }
+        },
+        "MS": {
+          "n_rows": 586,
+          "n_municipalities": 77,
+          "n_years": 8,
+          "n_blocks": 9,
+          "yield_mean": 3039.476109215017,
+          "yield_sd": 777.1557644344765,
+          "variables": {
+            "precip_corrected": {
+              "missing_share": 0.0,
+              "mean": 404.5925085492966,
+              "sd": 137.42635214181553,
+              "unique_values": 471,
+              "between_municipality_sd": 86.96555279437466,
+              "within_municipality_sd": 111.02263072397423,
+              "within_share_of_variance": 0.6197397938377031
+            },
+            "temp_corrected": {
+              "missing_share": 0.0,
+              "mean": 27.220669526353028,
+              "sd": 1.8972143863517814,
+              "unique_values": 471,
+              "between_municipality_sd": 1.3738560031229565,
+              "within_municipality_sd": 1.4111221659323951,
+              "within_share_of_variance": 0.5133787373042306
+            },
+            "degree_days_corrected": {
+              "missing_share": 0.0,
+              "mean": 1702.8342575762458,
+              "sd": 268.4057861234725,
+              "unique_values": 471,
+              "between_municipality_sd": 156.93176351083662,
+              "within_municipality_sd": 225.14323034153503,
+              "within_share_of_variance": 0.6730145755951644
+            },
+            "heat_corrected": {
+              "missing_share": 0.0,
+              "mean": 37.525597269624576,
+              "sd": 23.65898641732452,
+              "unique_values": 89,
+              "between_municipality_sd": 12.354374997030538,
+              "within_municipality_sd": 20.821393132884964,
+              "within_share_of_variance": 0.7396097945038973
+            },
+            "deficit_cad100": {
+              "missing_share": 0.0,
+              "mean": 160.79530340075263,
+              "sd": 150.11001851063997,
+              "unique_values": 452,
+              "between_municipality_sd": 74.5056982609749,
+              "within_municipality_sd": 136.7354686816182,
+              "within_share_of_variance": 0.7710668664602869
+            }
+          }
+        },
+        "MT": {
+          "n_rows": 911,
+          "n_municipalities": 120,
+          "n_years": 8,
+          "n_blocks": 17,
+          "yield_mean": 3469.3216245883646,
+          "yield_sd": 317.59914182681285,
+          "variables": {
+            "precip_corrected": {
+              "missing_share": 0.0,
+              "mean": 613.679868424712,
+              "sd": 237.08814300962496,
+              "unique_values": 784,
+              "between_municipality_sd": 113.13181026093655,
+              "within_municipality_sd": 210.28131999501582,
+              "within_share_of_variance": 0.775526641057013
+            },
+            "temp_corrected": {
+              "missing_share": 0.0,
+              "mean": 27.434917876238774,
+              "sd": 1.5673492476188844,
+              "unique_values": 781,
+              "between_municipality_sd": 1.1236984877450542,
+              "within_municipality_sd": 1.1543349589370235,
+              "within_share_of_variance": 0.5134462165768805
+            },
+            "degree_days_corrected": {
+              "missing_share": 0.0,
+              "mean": 1984.14398449836,
+              "sd": 504.23304676077777,
+              "unique_values": 785,
+              "between_municipality_sd": 211.21624570046077,
+              "within_municipality_sd": 461.87579091580153,
+              "within_share_of_variance": 0.8270449151144108
+            },
+            "heat_corrected": {
+              "missing_share": 0.0,
+              "mean": 32.66190998902305,
+              "sd": 26.61375287770566,
+              "unique_values": 107,
+              "between_municipality_sd": 14.460972998386898,
+              "within_municipality_sd": 23.303632631337095,
+              "within_share_of_variance": 0.7219814290989136
+            },
+            "deficit_cad100": {
+              "missing_share": 0.0,
+              "mean": 70.2544996526762,
+              "sd": 131.7549123395124,
+              "unique_values": 428,
+              "between_municipality_sd": 70.83349510686872,
+              "within_municipality_sd": 117.39671015425324,
+              "within_share_of_variance": 0.7331089495938636
+            }
+          }
+        },
+        "PR": {
+          "n_rows": 2863,
+          "n_municipalities": 389,
+          "n_years": 8,
+          "n_blocks": 7,
+          "yield_mean": 3238.728955640936,
+          "yield_sd": 765.3147799591245,
+          "variables": {
+            "precip_corrected": {
+              "missing_share": 0.0,
+              "mean": 588.3772163699429,
+              "sd": 192.9094605881846,
+              "unique_values": 626,
+              "between_municipality_sd": 99.3094950457055,
+              "within_municipality_sd": 168.1201121069649,
+              "within_share_of_variance": 0.7413265922439013
+            },
+            "temp_corrected": {
+              "missing_share": 0.0,
+              "mean": 23.44468331428441,
+              "sd": 2.3348670705856183,
+              "unique_values": 625,
+              "between_municipality_sd": 2.1738179098354107,
+              "within_municipality_sd": 0.9830925185493711,
+              "within_share_of_variance": 0.16979594272869128
+            },
+            "degree_days_corrected": {
+              "missing_share": 0.0,
+              "mean": 1726.8735625998274,
+              "sd": 341.9241543036287,
+              "unique_values": 626,
+              "between_municipality_sd": 228.54800324018166,
+              "within_municipality_sd": 274.04919639653014,
+              "within_share_of_variance": 0.5897961511300425
+            },
+            "heat_corrected": {
+              "missing_share": 0.0,
+              "mean": 15.345092560251484,
+              "sd": 19.04089619085131,
+              "unique_values": 71,
+              "between_municipality_sd": 14.102010000560497,
+              "within_municipality_sd": 13.522400425754816,
+              "within_share_of_variance": 0.47902744299576355
+            },
+            "deficit_cad100": {
+              "missing_share": 0.0,
+              "mean": 61.62802746853152,
+              "sd": 94.8804689539072,
+              "unique_values": 1343,
+              "between_municipality_sd": 60.11926383119077,
+              "within_municipality_sd": 74.83158716275209,
+              "within_share_of_variance": 0.6077393455885255
+            }
+          }
+        },
+        "RS": {
+          "n_rows": 2966,
+          "n_municipalities": 429,
+          "n_years": 8,
+          "n_blocks": 8,
+          "yield_mean": 2631.101146325017,
+          "yield_sd": 873.7491723614547,
+          "variables": {
+            "precip_corrected": {
+              "missing_share": 0.0,
+              "mean": 453.5782166148592,
+              "sd": 284.5850832512445,
+              "unique_values": 664,
+              "between_municipality_sd": 117.12756873889239,
+              "within_municipality_sd": 263.51202743942196,
+              "within_share_of_variance": 0.8350254081289299
+            },
+            "temp_corrected": {
+              "missing_share": 0.0,
+              "mean": 21.290284600711434,
+              "sd": 1.3649379652199898,
+              "unique_values": 661,
+              "between_municipality_sd": 1.3297817762628419,
+              "within_municipality_sd": 0.7546768757498679,
+              "within_share_of_variance": 0.24361509084450936
+            },
+            "degree_days_corrected": {
+              "missing_share": 0.0,
+              "mean": 1241.9109931588575,
+              "sd": 351.06718275716565,
+              "unique_values": 664,
+              "between_municipality_sd": 223.0490800517759,
+              "within_municipality_sd": 301.0450379934402,
+              "within_share_of_variance": 0.6455959251261588
+            },
+            "heat_corrected": {
+              "missing_share": 0.0,
+              "mean": 4.024949426837492,
+              "sd": 6.466474403766693,
+              "unique_values": 35,
+              "between_municipality_sd": 7.61784660618331,
+              "within_municipality_sd": 4.371280144363219,
+              "within_share_of_variance": 0.24770767573449606
+            },
+            "deficit_cad100": {
+              "missing_share": 0.0,
+              "mean": 31.55508550214633,
+              "sd": 50.924989788890734,
+              "unique_values": 1268,
+              "between_municipality_sd": 32.87676362337958,
+              "within_municipality_sd": 45.36198713256895,
+              "within_share_of_variance": 0.6556157119833653
+            }
+          }
+        }
+      }
+    },
+    "milho": {
+      "states": {
+        "BA": {
+          "n_rows": 106,
+          "n_municipalities": 31,
+          "n_years": 8,
+          "n_blocks": 8,
+          "yield_mean": 3116.933962264151,
+          "yield_sd": 3608.4163025654548,
+          "variables": {
+            "precip_corrected": {
+              "missing_share": 0.0,
+              "mean": 311.7982069017752,
+              "sd": 162.00374824660813,
+              "unique_values": 80,
+              "between_municipality_sd": 96.05756627605665,
+              "within_municipality_sd": 109.29355230071064,
+              "within_share_of_variance": 0.5641887161711999
+            },
+            "temp_corrected": {
+              "missing_share": 0.0,
+              "mean": 26.519658886164148,
+              "sd": 1.1331541044346414,
+              "unique_values": 80,
+              "between_municipality_sd": 0.7546128685594348,
+              "within_municipality_sd": 0.8459279742132982,
+              "within_share_of_variance": 0.5568675515165447
+            },
+            "degree_days_corrected": {
+              "missing_share": 0.0,
+              "mean": 1407.2579245657291,
+              "sd": 339.9135517789764,
+              "unique_values": 80,
+              "between_municipality_sd": 340.11481401352904,
+              "within_municipality_sd": 93.73540667727275,
+              "within_share_of_variance": 0.0705930815139931
+            },
+            "heat_corrected": {
+              "missing_share": 0.0,
+              "mean": 20.10377358490566,
+              "sd": 14.343448471756846,
+              "unique_values": 37,
+              "between_municipality_sd": 9.65200384974085,
+              "within_municipality_sd": 10.88732313433594,
+              "within_share_of_variance": 0.5599273216466867
+            },
+            "deficit_cad100": {
+              "missing_share": 0.0,
+              "mean": 102.66085008548194,
+              "sd": 113.64529335309219,
+              "unique_values": 86,
+              "between_municipality_sd": 64.06874325871715,
+              "within_municipality_sd": 94.84358375715406,
+              "within_share_of_variance": 0.6866588066772088
+            }
+          }
+        },
+        "GO": {
+          "n_rows": 1567,
+          "n_municipalities": 208,
+          "n_years": 8,
+          "n_blocks": 11,
+          "yield_mean": 5757.564773452457,
+          "yield_sd": 1413.0522746195877,
+          "variables": {
+            "precip_corrected": {
+              "missing_share": 0.0,
+              "mean": 501.4735866944343,
+              "sd": 138.87793583330134,
+              "unique_values": 623,
+              "between_municipality_sd": 46.80275718498456,
+              "within_municipality_sd": 134.2828524144603,
+              "within_share_of_variance": 0.8916795250719507
+            },
+            "temp_corrected": {
+              "missing_share": 0.0,
+              "mean": 26.09891880419109,
+              "sd": 1.656323554957881,
+              "unique_values": 618,
+              "between_municipality_sd": 1.0935887613513178,
+              "within_municipality_sd": 1.237475353170981,
+              "within_share_of_variance": 0.5614914256061972
+            },
+            "degree_days_corrected": {
+              "missing_share": 0.0,
+              "mean": 1396.176314756531,
+              "sd": 83.2563358783762,
+              "unique_values": 623,
+              "between_municipality_sd": 71.48331006612698,
+              "within_municipality_sd": 51.252779593123215,
+              "within_share_of_variance": 0.33953024799124665
+            },
+            "heat_corrected": {
+              "missing_share": 0.0,
+              "mean": 20.294192724952136,
+              "sd": 16.7746309419285,
+              "unique_values": 77,
+              "between_municipality_sd": 6.758832706690295,
+              "within_municipality_sd": 15.370303766761326,
+              "within_share_of_variance": 0.8379663947891303
+            },
+            "deficit_cad100": {
+              "missing_share": 0.0,
+              "mean": 48.94485072554438,
+              "sd": 76.97393536976845,
+              "unique_values": 761,
+              "between_municipality_sd": 26.170490192332178,
+              "within_municipality_sd": 73.3123285348122,
+              "within_share_of_variance": 0.8869734878590205
+            }
+          }
+        },
+        "MS": {
+          "n_rows": 552,
+          "n_municipalities": 76,
+          "n_years": 8,
+          "n_blocks": 9,
+          "yield_mean": 4446.902173913043,
+          "yield_sd": 1619.727076400299,
+          "variables": {
+            "precip_corrected": {
+              "missing_share": 0.0,
+              "mean": 411.79465575437604,
+              "sd": 147.05736842261624,
+              "unique_values": 452,
+              "between_municipality_sd": 70.83216497922778,
+              "within_municipality_sd": 129.36404203627305,
+              "within_share_of_variance": 0.7693482112211739
+            },
+            "temp_corrected": {
+              "missing_share": 0.0,
+              "mean": 27.14447119640904,
+              "sd": 2.1199495425287753,
+              "unique_values": 452,
+              "between_municipality_sd": 1.5422952837200168,
+              "within_municipality_sd": 1.505153044640304,
+              "within_share_of_variance": 0.4878138302819525
+            },
+            "degree_days_corrected": {
+              "missing_share": 0.0,
+              "mean": 1630.2197553403137,
+              "sd": 231.16349458668395,
+              "unique_values": 452,
+              "between_municipality_sd": 145.2440327278734,
+              "within_municipality_sd": 191.5934762756588,
+              "within_share_of_variance": 0.6350448155470798
+            },
+            "heat_corrected": {
+              "missing_share": 0.0,
+              "mean": 41.63405797101449,
+              "sd": 22.2848034149511,
+              "unique_values": 85,
+              "between_municipality_sd": 11.89936398565972,
+              "within_municipality_sd": 18.994655442688963,
+              "within_share_of_variance": 0.7181584897608017
+            },
+            "deficit_cad100": {
+              "missing_share": 0.0,
+              "mean": 190.08726838051174,
+              "sd": 143.75319217799185,
+              "unique_values": 478,
+              "between_municipality_sd": 63.56661342920564,
+              "within_municipality_sd": 129.83448449946943,
+              "within_share_of_variance": 0.8066431783189466
+            }
+          }
+        },
+        "MT": {
+          "n_rows": 997,
+          "n_municipalities": 125,
+          "n_years": 8,
+          "n_blocks": 17,
+          "yield_mean": 5724.457372116349,
+          "yield_sd": 1108.1867781398798,
+          "variables": {
+            "precip_corrected": {
+              "missing_share": 0.0,
+              "mean": 488.25504517206997,
+              "sd": 194.2927572361613,
+              "unique_values": 823,
+              "between_municipality_sd": 90.15189973357548,
+              "within_municipality_sd": 172.16214594745776,
+              "within_share_of_variance": 0.7848034383232033
+            },
+            "temp_corrected": {
+              "missing_share": 0.0,
+              "mean": 27.96679095303778,
+              "sd": 1.7858873523976488,
+              "unique_values": 824,
+              "between_municipality_sd": 1.0584630445869814,
+              "within_municipality_sd": 1.4373141144243666,
+              "within_share_of_variance": 0.6483778692804886
+            },
+            "degree_days_corrected": {
+              "missing_share": 0.0,
+              "mean": 1625.2451504895776,
+              "sd": 202.65612156896557,
+              "unique_values": 825,
+              "between_municipality_sd": 117.8539625756024,
+              "within_municipality_sd": 165.63262058494539,
+              "within_share_of_variance": 0.6638841810045688
+            },
+            "heat_corrected": {
+              "missing_share": 0.0,
+              "mean": 34.97893681043129,
+              "sd": 22.26179057560094,
+              "unique_values": 95,
+              "between_municipality_sd": 10.195929964068974,
+              "within_municipality_sd": 19.798443767200478,
+              "within_share_of_variance": 0.7903819822161503
+            },
+            "deficit_cad100": {
+              "missing_share": 0.0,
+              "mean": 83.05435134541105,
+              "sd": 118.50166076181063,
+              "unique_values": 570,
+              "between_municipality_sd": 55.298694742464974,
+              "within_municipality_sd": 104.78856102529552,
+              "within_share_of_variance": 0.7821756999394244
+            }
+          }
+        },
+        "PR": {
+          "n_rows": 2966,
+          "n_municipalities": 391,
+          "n_years": 8,
+          "n_blocks": 7,
+          "yield_mean": 5719.359743762643,
+          "yield_sd": 2169.1259165367596,
+          "variables": {
+            "precip_corrected": {
+              "missing_share": 0.0,
+              "mean": 582.782174885153,
+              "sd": 170.28562779270695,
+              "unique_values": 663,
+              "between_municipality_sd": 91.85512817376903,
+              "within_municipality_sd": 144.044783301875,
+              "within_share_of_variance": 0.7109131705529298
+            },
+            "temp_corrected": {
+              "missing_share": 0.0,
+              "mean": 22.847143744780922,
+              "sd": 2.372248799349098,
+              "unique_values": 665,
+              "between_municipality_sd": 2.069945394094314,
+              "within_municipality_sd": 1.1413640398195108,
+              "within_share_of_variance": 0.23315230353550995
+            },
+            "degree_days_corrected": {
+              "missing_share": 0.0,
+              "mean": 1607.8507300878166,
+              "sd": 275.47968965509847,
+              "unique_values": 666,
+              "between_municipality_sd": 223.0579173633745,
+              "within_municipality_sd": 165.54001700266784,
+              "within_share_of_variance": 0.355159275941099
+            },
+            "heat_corrected": {
+              "missing_share": 0.0,
+              "mean": 14.510114632501686,
+              "sd": 18.252658445019115,
+              "unique_values": 68,
+              "between_municipality_sd": 13.426013519488482,
+              "within_municipality_sd": 12.194768286732378,
+              "within_share_of_variance": 0.45205422215922364
+            },
+            "deficit_cad100": {
+              "missing_share": 0.0,
+              "mean": 67.04780618729923,
+              "sd": 103.78095239890726,
+              "unique_values": 1374,
+              "between_municipality_sd": 64.69910829653595,
+              "within_municipality_sd": 80.82310441513368,
+              "within_share_of_variance": 0.6094571389666666
+            }
+          }
+        },
+        "RS": {
+          "n_rows": 1428,
+          "n_municipalities": 232,
+          "n_years": 8,
+          "n_blocks": 5,
+          "yield_mean": 5859.691176470588,
+          "yield_sd": 2522.4453647628247,
+          "variables": {
+            "precip_corrected": {
+              "missing_share": 0.0,
+              "mean": 689.5323044561744,
+              "sd": 330.6338993951583,
+              "unique_values": 431,
+              "between_municipality_sd": 133.86152403353375,
+              "within_municipality_sd": 306.5217050914743,
+              "within_share_of_variance": 0.8398302249984834
+            },
+            "temp_corrected": {
+              "missing_share": 0.0,
+              "mean": 20.03026507328605,
+              "sd": 1.4311862385381975,
+              "unique_values": 431,
+              "between_municipality_sd": 1.2637354088658597,
+              "within_municipality_sd": 0.8052992358271399,
+              "within_share_of_variance": 0.2887984981969386
+            },
+            "degree_days_corrected": {
+              "missing_share": 0.0,
+              "mean": 1612.7980951204354,
+              "sd": 337.8202246026923,
+              "unique_values": 431,
+              "between_municipality_sd": 333.337628913978,
+              "within_municipality_sd": 119.2171623821441,
+              "within_share_of_variance": 0.11340545192344123
+            },
+            "heat_corrected": {
+              "missing_share": 0.0,
+              "mean": 3.8746498599439776,
+              "sd": 7.508098443970265,
+              "unique_values": 31,
+              "between_municipality_sd": 4.760264616144298,
+              "within_municipality_sd": 6.055931917650921,
+              "within_share_of_variance": 0.6180949411004285
+            },
+            "deficit_cad100": {
+              "missing_share": 0.0,
+              "mean": 38.20973828535732,
+              "sd": 65.26986504901994,
+              "unique_values": 624,
+              "between_municipality_sd": 39.91579702095914,
+              "within_municipality_sd": 53.09487553236304,
+              "within_share_of_variance": 0.638905420250222
+            }
+          }
+        }
+      }
+    },
+    "milho_2": {
+      "states": {
+        "GO": {
+          "n_rows": 285,
+          "n_municipalities": 57,
+          "n_years": 5,
+          "n_blocks": 7,
+          "yield_mean": 5833.259649122807,
+          "yield_sd": 1432.4105027441703,
+          "variables": {
+            "precip_corrected": {
+              "missing_share": 0.0,
+              "mean": 371.8128069900499,
+              "sd": 112.48376686954487,
+              "unique_values": 115,
+              "between_municipality_sd": 39.26462563339733,
+              "within_municipality_sd": 105.40819220075485,
+              "within_share_of_variance": 0.8781506494251763
+            },
+            "temp_corrected": {
+              "missing_share": 0.0,
+              "mean": 24.15759808237766,
+              "sd": 0.9832059637734539,
+              "unique_values": 115,
+              "between_municipality_sd": 0.5948134286687826,
+              "within_municipality_sd": 0.7828735225277279,
+              "within_share_of_variance": 0.6340072174551707
+            },
+            "degree_days_corrected": {
+              "missing_share": 0.0,
+              "mean": 837.2011578509682,
+              "sd": 44.813110016139476,
+              "unique_values": 115,
+              "between_municipality_sd": 26.716104600550853,
+              "within_municipality_sd": 35.97866846189621,
+              "within_share_of_variance": 0.644584715436173
+            },
+            "heat_corrected": {
+              "missing_share": 0.0,
+              "mean": 0.8491228070175438,
+              "sd": 2.4181421610885963,
+              "unique_values": 13,
+              "between_municipality_sd": 1.303318679912808,
+              "within_municipality_sd": 2.036853438474296,
+              "within_share_of_variance": 0.7095057226353599
+            },
+            "deficit_cad100": {
+              "missing_share": 0.0,
+              "mean": 0.7394023668565467,
+              "sd": 5.18147025228868,
+              "unique_values": 8,
+              "between_municipality_sd": 3.104015351431833,
+              "within_municipality_sd": 4.148821841610944,
+              "within_share_of_variance": 0.6411262418591589
+            }
+          }
+        },
+        "MS": {
+          "n_rows": 428,
+          "n_municipalities": 73,
+          "n_years": 9,
+          "n_blocks": 9,
+          "yield_mean": 4494.5817757009345,
+          "yield_sd": 1579.116772343297,
+          "variables": {
+            "precip_corrected": {
+              "missing_share": 0.0,
+              "mean": 389.09133173851296,
+              "sd": 172.4996315215945,
+              "unique_values": 325,
+              "between_municipality_sd": 111.15769134499718,
+              "within_municipality_sd": 131.26456020947765,
+              "within_share_of_variance": 0.5823748344276252
+            },
+            "temp_corrected": {
+              "missing_share": 0.0,
+              "mean": 27.28112587339097,
+              "sd": 1.668794717002246,
+              "unique_values": 325,
+              "between_municipality_sd": 1.201672360737402,
+              "within_municipality_sd": 1.21097281802242,
+              "within_share_of_variance": 0.5038548225670463
+            },
+            "degree_days_corrected": {
+              "missing_share": 0.0,
+              "mean": 1370.4409345143308,
+              "sd": 320.47431446955056,
+              "unique_values": 325,
+              "between_municipality_sd": 258.930494445448,
+              "within_municipality_sd": 172.71219944586244,
+              "within_share_of_variance": 0.3079190329976237
+            },
+            "heat_corrected": {
+              "missing_share": 0.0,
+              "mean": 23.66355140186916,
+              "sd": 19.68012609432367,
+              "unique_values": 69,
+              "between_municipality_sd": 9.800574113330962,
+              "within_municipality_sd": 17.46210553749747,
+              "within_share_of_variance": 0.760456582776053
+            },
+            "deficit_cad100": {
+              "missing_share": 0.0,
+              "mean": 86.95818089295446,
+              "sd": 111.57345301812953,
+              "unique_values": 241,
+              "between_municipality_sd": 48.62511342161847,
+              "within_municipality_sd": 100.5766397061224,
+              "within_share_of_variance": 0.8105456820282207
+            }
+          }
+        },
+        "MT": {
+          "n_rows": 353,
+          "n_municipalities": 69,
+          "n_years": 9,
+          "n_blocks": 14,
+          "yield_mean": 6025.371104815864,
+          "yield_sd": 1098.82230593255,
+          "variables": {
+            "precip_corrected": {
+              "missing_share": 0.0,
+              "mean": 411.5383856661576,
+              "sd": 116.57476330508922,
+              "unique_values": 304,
+              "between_municipality_sd": 69.34136837055392,
+              "within_municipality_sd": 94.1424044329723,
+              "within_share_of_variance": 0.6482906042494251
+            },
+            "temp_corrected": {
+              "missing_share": 0.0,
+              "mean": 25.509752977540973,
+              "sd": 1.1794361776359727,
+              "unique_values": 303,
+              "between_municipality_sd": 0.8313272173179159,
+              "within_municipality_sd": 0.8445681709049218,
+              "within_share_of_variance": 0.5079003302899733
+            },
+            "degree_days_corrected": {
+              "missing_share": 0.0,
+              "mean": 914.1619971453637,
+              "sd": 47.38730247351781,
+              "unique_values": 304,
+              "between_municipality_sd": 30.87598500814886,
+              "within_municipality_sd": 36.197043349140415,
+              "within_share_of_variance": 0.5788361465365873
+            },
+            "heat_corrected": {
+              "missing_share": 0.0,
+              "mean": 1.9660056657223797,
+              "sd": 5.84007646443516,
+              "unique_values": 22,
+              "between_municipality_sd": 3.558511805163377,
+              "within_municipality_sd": 4.657890033655577,
+              "within_share_of_variance": 0.6314495116063036
+            },
+            "deficit_cad100": {
+              "missing_share": 0.0,
+              "mean": 1.0089952352197982,
+              "sd": 9.392688920049196,
+              "unique_values": 11,
+              "between_municipality_sd": 4.146826666528973,
+              "within_municipality_sd": 8.449410702931237,
+              "within_share_of_variance": 0.8058875573207297
+            }
+          }
+        },
+        "PR": {
+          "n_rows": 1836,
+          "n_municipalities": 306,
+          "n_years": 9,
+          "n_blocks": 6,
+          "yield_mean": 5275.996187363834,
+          "yield_sd": 1911.2740148935345,
+          "variables": {
+            "precip_corrected": {
+              "missing_share": 0.0,
+              "mean": 414.14745086300223,
+              "sd": 140.5446290614772,
+              "unique_values": 526,
+              "between_municipality_sd": 93.13682064582066,
+              "within_municipality_sd": 109.74211871927277,
+              "within_share_of_variance": 0.5813036438249147
+            },
+            "temp_corrected": {
+              "missing_share": 0.0,
+              "mean": 25.13165175264955,
+              "sd": 1.7774782410676377,
+              "unique_values": 526,
+              "between_municipality_sd": 1.5761665176991297,
+              "within_municipality_sd": 0.9377409034597858,
+              "within_share_of_variance": 0.2614290062857124
+            },
+            "degree_days_corrected": {
+              "missing_share": 0.0,
+              "mean": 1262.3585104531971,
+              "sd": 369.05707125762723,
+              "unique_values": 526,
+              "between_municipality_sd": 336.8576226372722,
+              "within_municipality_sd": 159.05736859068048,
+              "within_share_of_variance": 0.18230760530045206
+            },
+            "heat_corrected": {
+              "missing_share": 0.0,
+              "mean": 10.339324618736384,
+              "sd": 15.61763291704795,
+              "unique_values": 60,
+              "between_municipality_sd": 9.588824523034603,
+              "within_municipality_sd": 12.460711434752797,
+              "within_share_of_variance": 0.6280743545782163
+            },
+            "deficit_cad100": {
+              "missing_share": 0.0,
+              "mean": 35.99237662947883,
+              "sd": 75.96839536670024,
+              "unique_values": 560,
+              "between_municipality_sd": 40.75025223734565,
+              "within_municipality_sd": 64.69013435848893,
+              "within_share_of_variance": 0.7159160981060035
+            }
+          }
+        }
+      }
+    }
+  }
+}

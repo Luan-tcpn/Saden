@@ -41,3 +41,4 @@ data/processed/v30_panel_cad.csv
 # V3.1 - painel com as duas janelas (legada e corrigida): derivado e regeneravel
 # por 	ools/v31_rebuild_panel.py; a evidencia fica em 31_window_rebuild.json.
 data/processed/v31_panel_windows.csv
+# V3.2 - nenhum artefato binario novo; manifests ficam versionados
