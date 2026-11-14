@@ -4,6 +4,7 @@ const { connect, cacheGet, cacheSet } = require('../db');
 const config = require('../config');
 const yahoo = require('../integrations/yahooProvider');
 const bcb = require('../integrations/bcbProvider');
+const alertEngine = require('./alertEngine');
 const { toBRL, converter } = require('./fxService');
 const { notFound } = require('../utils/errors');
 
@@ -22,11 +23,17 @@ function todayIso() {
 }
 
 // Série BRL com rastreabilidade. Cache em memória-DB por TTL.
-async function getSeries(commodityKey, range = '1y') {
+// `options.evaluateAlerts === false` deixa a avaliação com quem chamou (usado
+// pelo worker, que precisa contar observações/eventos de forma exata).
+// `options.bypassCache === true` força consulta à fonte (worker), respeitando o
+// intervalo mínimo por série controlado pelo próprio worker.
+async function getSeries(commodityKey, range = '1y', options = {}) {
   const commodity = getCommodity(commodityKey);
   const cacheKey = `prices:${commodityKey}:${range}`;
-  const cached = cacheGet(cacheKey);
-  if (cached) return { ...cached, cached: true };
+  if (!options.bypassCache) {
+    const cached = cacheGet(cacheKey);
+    if (cached) return { ...cached, cached: true };
+  }
 
   const { series, meta } = await yahoo.dailyCloses(commodity.yahoo_symbol, range);
   const start = series[0].date;
@@ -57,6 +64,10 @@ async function getSeries(commodityKey, range = '1y') {
   }
 
   persistObservations(commodityKey, commodity.unit_br, points);
+  // Motor de alertas: avaliado contra as observações recém-persistidas.
+  // Best-effort — falha aqui nunca impede a resposta de preço (ver alertEngine).
+  const alerts =
+    options.evaluateAlerts === false ? null : alertEngine.runAfterPriceRefresh(commodityKey);
 
   const payload = {
     cached: false,

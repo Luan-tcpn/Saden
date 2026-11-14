@@ -557,4 +557,177 @@ describe('API SADEN — integração', () => {
     assert.equal(r.status, 400);
     assert.match(r.data.error, /model/i);
   });
+
+  // ---------------- product release 1: séries + alertas de preço ----------------
+
+  function seedPrice(commodityKey, price, unit, date) {
+    const d = date || new Date().toISOString().slice(0, 10);
+    db.connect()
+      .prepare(
+        `INSERT OR REPLACE INTO price_observations
+           (commodity_key, data_date, price_usd, fx_rate, price_brl, unit_br, provider)
+         VALUES (?, ?, ?, ?, ?, ?, 'yahoo')`
+      )
+      .run(commodityKey, d, price / 5.5, 5.5, price, unit);
+    return d;
+  }
+
+  it('séries: catálogo real com identidade estável e metadados honestos', async () => {
+    const T = process.env.SADEN_TEST_TOKEN;
+    const { status, data } = await api('/api/series', { token: T });
+    assert.equal(status, 200);
+    assert.equal(data.series.length, 5);
+    const ids = data.series.map((s) => s.series_id);
+    assert.equal(new Set(ids).size, 5, 'ids únicos');
+    for (const s of data.series) {
+      assert.match(s.series_id, /^yahoo:[A-Z]{2}=F:brl:(sc60|lp)$/);
+      assert.equal(s.currency, 'BRL');
+      assert.ok(s.unit.startsWith('R$/'));
+      assert.ok(s.market && s.instrument && s.source);
+      assert.ok(Array.isArray(s.limitations) && s.limitations.length >= 2);
+      assert.ok(['fresh', 'stale', 'unknown'].includes(s.freshness_status));
+    }
+    assert.match(data.note, /produtor/);
+    assert.equal(data.stale_after_days, 4);
+    assert.deepEqual(data.conditions.map((c) => c.value).sort(), ['price_above', 'price_below']);
+    const single = await api('/api/series/yahoo:ZS=F:brl:sc60', { token: T });
+    assert.equal(single.status, 200);
+    assert.equal(single.data.series.commodity_key, 'soja');
+    const missing = await api('/api/series/yahoo:ZS=F:usd:sc60', { token: T });
+    assert.equal(missing.status, 404);
+  });
+
+  it('alerta de preço: criação por série, disparo, idempotência e leitura', { timeout: 60000 }, async () => {
+    const T = process.env.SADEN_TEST_TOKEN;
+    const SERIES = 'yahoo:KC=F:brl:sc60';
+    // Fixture determinístico (não é preço de produção): observação de hoje.
+    const date = seedPrice('cafe', 200, 'R$/sc 60kg');
+
+    const created = await api('/api/alerts', {
+      method: 'POST',
+      token: T,
+      body: { series_id: SERIES, condition: 'price_above', threshold: 150, label: 'café caro' },
+    });
+    assert.equal(created.status, 201);
+    assert.equal(created.data.would_trigger_now, true, 'última observação já satisfaz');
+    assert.ok(created.data.note);
+    const id = created.data.alert.id;
+    assert.equal(created.data.alert.series_id, SERIES);
+    assert.equal(created.data.alert.unit, 'R$/sc 60kg');
+    assert.equal(created.data.alert.currency, 'BRL');
+    assert.equal(created.data.alert.condition, 'price_above');
+
+    const first = await api('/api/alerts/evaluate', { method: 'POST', token: T });
+    assert.equal(first.status, 200);
+    assert.equal(first.data.events_created, 1, 'primeiro evento criado');
+
+    const second = await api('/api/alerts/evaluate', { method: 'POST', token: T });
+    assert.equal(second.status, 200);
+    assert.equal(second.data.events_created, 0, 'mesma observação não duplica evento');
+
+    const list = await api('/api/alerts', { token: T });
+    const mine = list.data.alerts.find((a) => a.id === id);
+    assert.equal(mine.status, 'triggered');
+    assert.equal(mine.active, false, 'disparo único desativa');
+    assert.equal(mine.unread_events, 1);
+
+    const feed = await api('/api/alerts/events', { token: T });
+    assert.equal(feed.status, 200);
+    const event = feed.data.events.find((e) => e.alert_id === id);
+    assert.ok(event, 'evento no feed');
+    assert.equal(event.read, false);
+    assert.equal(event.observed_price, 200);
+    assert.equal(event.observation_date, date);
+    assert.equal(event.condition, 'price_above');
+
+    const read = await api('/api/alerts/events/read', { method: 'POST', token: T, body: {} });
+    assert.equal(read.status, 200);
+    assert.ok(read.data.updated >= 1);
+    const unreadFeed = await api('/api/alerts/events?unread=1', { token: T });
+    assert.ok(!unreadFeed.data.events.some((e) => e.alert_id === id), 'nada mais não lido');
+
+    const rearm = await api(`/api/alerts/${id}`, { method: 'PATCH', token: T, body: { active: true } });
+    assert.equal(rearm.status, 200);
+    assert.equal(rearm.data.alert.status, 'active');
+
+    // Nova observação (outro dia) pode disparar de novo — uma vez por observação.
+    const nextDay = new Date(Date.now() + 86400000).toISOString().slice(0, 10);
+    seedPrice('cafe', 210, 'R$/sc 60kg', nextDay);
+    const third = await api('/api/alerts/evaluate', { method: 'POST', token: T });
+    assert.equal(third.data.events_created, 1, 'observação nova dispara de novo');
+
+    const del = await api(`/api/alerts/${id}`, { method: 'DELETE', token: T });
+    assert.equal(del.status, 200);
+    db.connect().prepare("DELETE FROM price_observations WHERE commodity_key = 'cafe'").run();
+  });
+
+  it('alerta: validação rejeita série, moeda, condição e chuva', async () => {
+    const T = process.env.SADEN_TEST_TOKEN;
+    const unknownSeries = await api('/api/alerts', {
+      method: 'POST',
+      token: T,
+      body: { series_id: 'yahoo:XX=F:brl:sc60', condition: 'price_above', threshold: 10 },
+    });
+    assert.equal(unknownSeries.status, 404);
+
+    const badCondition = await api('/api/alerts', {
+      method: 'POST',
+      token: T,
+      body: { series_id: 'yahoo:ZS=F:brl:sc60', condition: 'price_crosses', threshold: 10 },
+    });
+    assert.equal(badCondition.status, 400);
+
+    const badCurrency = await api('/api/alerts', {
+      method: 'POST',
+      token: T,
+      body: { series_id: 'yahoo:ZS=F:brl:sc60', condition: 'price_above', threshold: 10, currency: 'USD' },
+    });
+    assert.equal(badCurrency.status, 400);
+
+    const badUnit = await api('/api/alerts', {
+      method: 'POST',
+      token: T,
+      body: { series_id: 'yahoo:ZS=F:brl:sc60', condition: 'price_above', threshold: 10, unit: 'R$/ton' },
+    });
+    assert.equal(badUnit.status, 400);
+
+    const rain = await api('/api/alerts', {
+      method: 'POST',
+      token: T,
+      body: { series_id: 'yahoo:ZS=F:brl:sc60', kind: 'rain_above', threshold: 10 },
+    });
+    assert.equal(rain.status, 400, 'alerta de chuva não é oferecido');
+  });
+
+  it('alerta: isolamento entre usuários (alertas e eventos)', async () => {
+    const T = process.env.SADEN_TEST_TOKEN;
+    seedPrice('cafe', 200, 'R$/sc 60kg');
+    const created = await api('/api/alerts', {
+      method: 'POST',
+      token: T,
+      body: { series_id: 'yahoo:KC=F:brl:sc60', condition: 'price_above', threshold: 150 },
+    });
+    assert.equal(created.status, 201);
+    const id = created.data.alert.id;
+    await api('/api/alerts/evaluate', { method: 'POST', token: T });
+
+    const other = await api('/api/auth/register', {
+      method: 'POST',
+      body: { name: 'Outro Alerta', email: 'outro-alerta@saden.local', password: '123456' },
+    });
+    const otherToken = other.data.token;
+    const otherList = await api('/api/alerts', { token: otherToken });
+    assert.equal(otherList.data.alerts.length, 0);
+    const otherFeed = await api('/api/alerts/events', { token: otherToken });
+    assert.equal(otherFeed.data.events.length, 0, 'não vê eventos de terceiros');
+    const otherRead = await api('/api/alerts/events/read', { method: 'POST', token: otherToken, body: {} });
+    assert.equal(otherRead.data.updated, 0, 'não marca evento alheio como lido');
+    const otherEvents = await api(`/api/alerts/${id}/events`, { token: otherToken });
+    assert.equal(otherEvents.status, 404, 'não acessa alerta alheio');
+    const otherDelete = await api(`/api/alerts/${id}`, { method: 'DELETE', token: otherToken });
+    assert.equal(otherDelete.status, 404);
+
+    await api(`/api/alerts/${id}`, { method: 'DELETE', token: T });
+    db.connect().prepare("DELETE FROM price_observations WHERE commodity_key = 'cafe'").run();
+  });
 });

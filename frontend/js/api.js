@@ -75,6 +75,22 @@
     alertDelete: (id) => request(`/api/alerts/${id}`, { method: 'DELETE' }),
     alertCheck: () => request('/api/alerts/check', { method: 'POST' }),
     alertEvents: (id) => request(`/api/alerts/${id}/events`),
+    alertEvaluate: () => request('/api/alerts/evaluate', { method: 'POST' }),
+    alertFeed: (onlyUnread) => request(`/api/alerts/events${onlyUnread ? '?unread=1' : ''}`),
+    alertMarkRead: (ids) => request('/api/alerts/events/read', { method: 'POST', body: ids ? { ids } : {} }),
+    seriesList: () => request('/api/series'),
+    // Saúde do worker: 503 é resposta válida ("worker parado"), não erro de rede.
+    workerHealth: async () => {
+      const res = await fetch('/api/health/worker');
+      let data = null;
+      try {
+        data = await res.json();
+      } catch {
+        data = null;
+      }
+      return { status: res.status, data };
+    },
+    feedback: (body) => request('/api/feedback', { method: 'POST', body }),
     places: () => request('/api/places'),
     placeCreate: (body) => request('/api/places', { method: 'POST', body }),
     placeDelete: (id) => request(`/api/places/${id}`, { method: 'DELETE' }),
