@@ -493,9 +493,10 @@ referência −1,260169893887058).
 
 `geospatial/agroclimate/{robust,spatial,spatial_inference,phenology,soil}.py` ·
 `geospatial/run_robustness.py` · `geospatial/tests/test_v27_robustness.py` ·
-`tools/{calibrate_wild_bootstrap,validate_v27_stats,s27_wcs_probe,s27_cad_metadata,s27_cad_sample,s27_phenology_window}.py` ·
+`tools/{calibrate_wild_bootstrap,validate_v27_stats,s27_wcs_probe,s27_cad_metadata,s27_cad_sample,s27_phenology_window,s27_panel_coverage}.py` ·
 `docs/execution/v2.7/{MASTER_STATUS,EXECUTION_LOG,NEXT_ACTIONS,EVIDENCE_MATRIX,DATA_MANIFEST,DECISIONS_V2_7,RECOVERY}.md` ·
-12 manifests `geospatial/data/manifests/v27_*`.
+15 manifests `geospatial/data/manifests/v27_*`. A V2.7 acrescenta
+`analysis.two_way_blocked_holdout` (P5) ao módulo de análise.
 
 ## 18. Arquivos modificados
 
@@ -511,7 +512,8 @@ D76 dependência espacial além da grade · D77 esquemas pré-declarados e Holm 
 D78 janela fenológica como experimento · D79 calibração Monte Carlo ·
 D80 pesos por grupo (CGM) · D81 política de nulidade explícita · D82 CAD
 territorial oficial · D83 ERA5-Land bloqueado · D84 artefatos grandes fora
-do Git.
+do Git · **D85 réplica com erro-padrão nulo não é contada** ·
+**D86 holdout espacial e temporal simultâneos (P5)**.
 
 > Detalhes completos em `docs/execution/v2.7/DECISIONS_V2_7.md`.
 
@@ -523,7 +525,14 @@ do Git.
 |---|---|
 | Branch | `v2/agroclimatic-robustness` |
 | Base | `d87addb` (V2.6) |
-| Commits da V2.7 | ver seção de publicação ao final |
+| Checkpoint de recuperação | `ac41210` |
+| Correções (D85) + P5 (D86) | `feb309d` |
+| Consolidação final | `e40f91d` |
+| V1 congelada | `3f7ad33` (tag `v1-final`) — intacta |
+| `main` | `3f7ad33` — intacta |
+
+Commits da V2.7: `d232f63` · `38d4138` · `d82ce45` · `fdd7af3` · `aafb687`
+· `ac41210` · `feb309d` · `e40f91d` · commit de encerramento desta sessão.
 
 ## 21. Bundle e hash
 
@@ -531,23 +540,43 @@ do Git.
 |---|---|
 | Diretório | `C:\Users\luanf\OneDrive\Área de Trabalho\SADEN_V2_7_RECOVERY_2026-11-14` |
 | Bundle | `saden-v2-7-final-2026-11-14.bundle` |
-| Tamanho / SHA-256 / `git bundle verify` | ver seção de publicação ao final |
+| Gerado de | `HEAD` da branch `v2/agroclimatic-robustness` no commit final |
+| Tamanho / SHA-256 / `git bundle verify` / refs | **`BUNDLE_INFO.txt`** no mesmo diretório |
+| Conteúdo | todas as branches locais, `archive/v1-final`, tag `v1-final` e `HEAD` |
+
+> O tamanho, o SHA-256 e a saída de `git bundle verify` ficam em
+> `BUNDLE_INFO.txt`, **fora do Git**: gravá-los dentro do repositório
+> criaria uma referência circular (o bundle teria que conter o próprio
+> hash). A primeira geração, a partir de `e40f91d`, tinha 15.248.966 bytes
+> e SHA-256 `25D2BCC2…1D70033`.
 
 ## 22. Estado da publicação remota
 
-Ver seção de publicação ao final.
+`v2/agroclimatic-robustness` é publicada em `origin`
+(`https://github.com/Luan-tcpn/Saden.git`) por *fast-forward*, sem force
+push e sem merge em `main`. A V1 (`v1-final`, `main`) e as branches das
+V2.1–V2.6 permanecem inalteradas.
 
 ## 23. Recomendação para a V2.8
 
-1. **Fixar o método estatístico** (bloco de 250 km + Conley + bootstrap wild
+1. **Explicar a heterogeneidade de P5 entre culturas.** A soja inverte de
+   sinal (−3,3%), o milho quase não se move (+1,2%) e o milho 2ª safra
+   mantém +16,9%. Antes de qualquer alegação de ganho territorial, é
+   preciso entender se a diferença vem da escala de heterogeneidade
+   regional, da agregação de sistemas produtivos no milho ou da fraqueza
+   da linha de base agregada na 2ª safra.
+2. **Linha de base territorial mais forte**: média municipal quando
+   disponível, ou efeitos fixos de município, para não depender da média
+   agregada do treino.
+3. **Fixar o método estatístico** (bloco de 250 km + Conley + bootstrap wild
    com pesos por grupo) como protocolo único e repetir a inferência sobre
    qualquer expansão.
-2. **Substituir os cenários de CAD** pela CAD geoespacial oficial, com o
+4. **Substituir os cenários de CAD** pela CAD geoespacial oficial, com o
    balanço hídrico recalculado e a comparação preservada.
-3. **Estratificar a fenologia por grupo de maturação** derivado do ZARC
+5. **Estratificar a fenologia por grupo de maturação** derivado do ZARC
    (o ZARC já codifica o ciclo por decend), eliminando o cenário único.
-4. **Ampliar o painel** apenas após o diagnóstico de cobertura completo.
-5. **Modelar a dependência além de 250 km** (correlograma estendido,
+6. **Ampliar o painel** apenas após o diagnóstico de cobertura completo.
+7. **Modelar a dependência além de 250 km** (correlograma estendido,
    formas de variograma) se a escala de decisão for maior que 250 km.
-6. Manter a **Ridge Regression** como único modelo de preços: a V2.7 não
+8. Manter a **Ridge Regression** como único modelo de preços: a V2.7 não
    toca na previsão de preços.
