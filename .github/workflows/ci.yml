@@ -1,0 +1,117 @@
+name: ci
+
+on:
+  push:
+    branches: [main, 'product/**', 'release/**']
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: testes (Node 22)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          # Versão suportada pelo projeto (módulo nativo better-sqlite3).
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+      - name: instalação limpa
+        working-directory: backend
+        run: npm ci
+      - name: versão do runtime
+        run: node --version
+      - name: suite completa (unitários + integração + worker)
+        working-directory: backend
+        run: npm test
+
+  e2e:
+    name: e2e (Chrome headless)
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+      - name: instalação limpa
+        working-directory: backend
+        run: npm ci
+      - name: sobe web (banco temporário)
+        env:
+          DATABASE_PATH: tmp/e2e-saden.db
+          PORT: 3100
+          JWT_SECRET: ci-secret-nao-producao
+        run: |
+          mkdir -p tmp
+          node backend/src/index.js > tmp/e2e-server.log 2>&1 &
+          for i in $(seq 1 40); do
+            if curl -fsS http://127.0.0.1:3100/api/health > /dev/null; then break; fi
+            sleep 1
+          done
+      - name: e2e do fluxo de alertas
+        env:
+          BASE_URL: http://127.0.0.1:3100
+          DATABASE_PATH: tmp/e2e-saden.db
+          # Chrome pré-instalado no runner do GitHub.
+          CHROME_PATH: /usr/bin/google-chrome
+        run: node tests/e2e/alerts.e2e.mjs
+      - name: log do servidor em caso de falha
+        if: failure()
+        run: tail -n 100 tmp/e2e-server.log
+
+  docker:
+    name: docker (web + worker)
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+      - name: build da imagem
+        run: docker build -t saden:ci .
+      - name: sobe compose com banco temporário
+        env:
+          JWT_SECRET: ci-secret-nao-producao
+          SADEN_DATA_DIR: ./tmp/ci-data
+        run: |
+          mkdir -p tmp/ci-data tmp/mail-outbox data
+          docker compose up -d
+          for i in $(seq 1 60); do
+            if curl -fsS http://127.0.0.1:3001/api/health > /dev/null; then break; fi
+            sleep 2
+          done
+      - name: health do worker
+        run: |
+          # O worker executa um ciclo no start; health deve responder 200.
+          for i in $(seq 1 30); do
+            code=$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:3001/api/health/worker || true)
+            if [ "$code" = "200" ]; then echo "worker saudável"; exit 0; fi
+            sleep 2
+          done
+          echo "worker não ficou saudável"; docker compose logs saden-worker; exit 1
+      - name: persistência e idempotência
+        env:
+          JWT_SECRET: ci-secret-nao-producao
+        run: |
+          set -e
+          TOKEN=$(curl -fsS -X POST http://127.0.0.1:3001/api/auth/register \
+            -H 'Content-Type: application/json' \
+            -d '{"name":"CI","email":"ci-'$RANDOM'@saden.local","password":"123456"}' \
+            | node -e "let d='';process.stdin.on('data',c=>d+=c).on('end',()=>console.log(JSON.parse(d).token))")
+          curl -fsS -X POST http://127.0.0.1:3001/api/alerts \
+            -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' \
+            -d '{"series_id":"yahoo:ZS=F:brl:sc60","condition":"price_above","threshold":0.01}' > /dev/null
+          docker compose restart saden-worker
+          sleep 25
+          N1=$(curl -fsS http://127.0.0.1:3001/api/alerts/events -H "Authorization: Bearer $TOKEN" | node -e "let d='';process.stdin.on('data',c=>d+=c).on('end',()=>console.log(JSON.parse(d).events.length))")
+          docker compose restart saden-worker
+          sleep 25
+          N2=$(curl -fsS http://127.0.0.1:3001/api/alerts/events -H "Authorization: Bearer $TOKEN" | node -e "let d='';process.stdin.on('data',c=>d+=c).on('end',()=>console.log(JSON.parse(d).events.length))")
+          echo "eventos: $N1 -> $N2"
+          test "$N1" = "$N2"
+      - name: logs e limpeza
+        if: always()
+        run: docker compose logs --tail=80

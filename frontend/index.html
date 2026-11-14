@@ -367,41 +367,70 @@
         </section>
         <!-- ALERTAS -->
         <section id="page-alertas" class="page hidden">
+          <div id="al-monitor" class="monitor-banner" role="status" aria-live="polite">
+            <span class="monitor-dot"></span>
+            <span id="al-monitor-text">Verificando o monitoramento automático…</span>
+          </div>
           <div class="panel">
-            <h2>Novo alerta</h2>
+            <h2>Novo alerta de preço</h2>
+            <p class="meta">Escolha a série, a condição e o limite. O alerta dispara <strong>uma vez</strong> quando a
+              primeira observação nova satisfizer a condição — depois fica como “disparado” até você reativar.</p>
             <div class="filters">
-              <label>Commodity
-                <select id="al-commodity"></select>
+              <label>Série de preço
+                <select id="al-series"></select>
               </label>
               <label>Condição
-                <select id="al-kind">
-                  <option value="price_below">Preço abaixo de (R$)</option>
-                  <option value="price_above">Preço acima de (R$)</option>
-                  <option value="rain_above">Chuva 7 dias acima de (mm)</option>
+                <select id="al-condition">
+                  <option value="price_above">Preço maior ou igual a</option>
+                  <option value="price_below">Preço menor ou igual a</option>
                 </select>
               </label>
-              <label>Valor
-                <input id="al-threshold" type="number" min="0" step="any" placeholder="Ex.: 150" />
+              <label>Limite <span id="al-unit-inline" class="unit-hint">(R$/sc 60kg)</span>
+                <input id="al-threshold" type="number" min="0" step="any" placeholder="Ex.: 150" inputmode="decimal" />
               </label>
               <label>Rótulo (opcional)
                 <input id="al-label" type="text" maxlength="120" placeholder="Ex.: vender soja" />
               </label>
               <button id="btn-al-create" class="btn primary" type="button">Criar alerta</button>
             </div>
-            <p class="meta" id="al-coords-note"></p>
+            <div id="al-series-info" class="al-series-info"></div>
             <p class="status" id="al-form-status" aria-live="polite"></p>
           </div>
+
           <div class="panel">
-            <h2>Meus alertas</h2>
+            <h2>Meus alertas <span id="al-unread-badge" class="badge hidden"></span></h2>
             <div class="report-actions">
-              <button id="btn-al-check" class="btn primary" type="button">Verificar agora</button>
+              <button id="btn-al-evaluate" class="btn primary" type="button">Verificar agora</button>
+              <button id="btn-al-read" class="btn" type="button">Marcar eventos como lidos</button>
             </div>
             <p class="status" id="al-status" aria-live="polite"></p>
             <div id="al-list"></div>
           </div>
+
           <div class="panel">
-            <h2>Últimas avaliações</h2>
+            <h2>Eventos disparados</h2>
+            <p class="meta">Só aparecem eventos de condição atingida — avaliações sem disparo não entram aqui.</p>
             <div id="al-events"></div>
+          </div>
+
+          <div class="panel">
+            <h2>Enviar retorno</h2>
+            <p class="meta">Problema, sugestão ou dificuldade com os alertas. Sem dados pessoais além da sua conta.</p>
+            <div class="filters">
+              <label>Tipo
+                <select id="fb-kind">
+                  <option value="problem">Problema</option>
+                  <option value="suggestion">Sugestão</option>
+                  <option value="difficulty">Dificuldade</option>
+                  <option value="usefulness">Utilidade</option>
+                </select>
+              </label>
+              <label class="fb-message">Mensagem
+                <input id="fb-message" type="text" maxlength="1000" placeholder="Ex.: o alerta de milho não disparou ontem" />
+              </label>
+              <button id="btn-fb-send" class="btn" type="button">Enviar</button>
+            </div>
+            <p class="status" id="fb-status" aria-live="polite"></p>
           </div>
         </section>
         <!-- APARÊNCIA -->

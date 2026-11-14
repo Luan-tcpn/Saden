@@ -21,6 +21,10 @@ function unauthorized(msg) {
   return new AppError(401, msg || 'Não autenticado');
 }
 
+function forbidden(msg) {
+  return new AppError(403, msg || 'Acesso negado');
+}
+
 function upstream(msg, details) {
   return new AppError(502, msg || 'Fonte externa indisponível', details);
 }
@@ -46,4 +50,4 @@ function errorHandler(err, req, res, next) {
   res.status(status).json(payload);
 }
 
-module.exports = { AppError, notFound, badRequest, unauthorized, upstream, errorHandler };
+module.exports = { AppError, notFound, badRequest, unauthorized, forbidden, upstream, errorHandler };

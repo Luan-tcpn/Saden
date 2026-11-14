@@ -1,13 +1,17 @@
-# SADEN — execução reproduzível da Release Candidate.
+# SADEN — execução reproduzível da Release 2 (web + worker).
 # Uso:
 #   $env:JWT_SECRET = "segredo-forte-aqui"   # PowerShell (obrigatório)
 #   docker compose build
-#   docker compose up
+#   docker compose up -d
 # Acesso: http://localhost:3001
+#
+# Topologia suportada: **um host** com volume local para o SQLite.
+# O worker e o web compartilham o mesmo arquivo de banco — não use este compose
+# com SQLite em volume de rede (SMB/NFS), onde as garantias de lock não valem.
 services:
   saden:
     build: .
-    image: saden:rc
+    image: saden:r2
     ports:
       - "3001:3001"
     environment:
@@ -17,10 +21,46 @@ services:
       JWT_EXPIRES_IN: 12h
       DATABASE_PATH: data/saden.db
       FRONTEND_ORIGIN: http://localhost:3001
+      SADEN_ROLE: web
     volumes:
-      # SQLite persiste fora do ciclo de vida do container.
-      - ./data:/app/data
-      # Outbox de e-mails de desenvolvimento (recuperação de senha sem SMTP):
-      # montado para inspeção local e para os testes E2E.
+      # SQLite persiste fora do ciclo de vida do container (migrations: web).
+      # SADEN_DATA_DIR permite testar uma cópia sem tocar no banco real.
+      - ${SADEN_DATA_DIR:-./data}:/app/data
+      # Outbox de e-mails de desenvolvimento (recuperação de senha sem SMTP).
       - ./tmp/mail-outbox:/app/tmp/mail-outbox
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3001/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      start_period: 20s
+      retries: 3
+
+  # Monitoramento automático: processo independente do web. Só inicia depois que
+  # o web está saudável — o web é o dono das migrations, então não há migração
+  # concorrente nos dois processos.
+  saden-worker:
+    image: saden:r2
+    command: ["node", "backend/src/worker/index.js"]
+    environment:
+      NODE_ENV: production
+      JWT_SECRET: ${JWT_SECRET:?Defina JWT_SECRET no ambiente antes do up}
+      DATABASE_PATH: data/saden.db
+      SADEN_ROLE: worker
+      SADEN_WORKER_HOUR: ${SADEN_WORKER_HOUR:-18}
+      SADEN_WORKER_INTERVAL_MS: ${SADEN_WORKER_INTERVAL_MS:-900000}
+      SADEN_WORKER_MIN_SERIES_MS: ${SADEN_WORKER_MIN_SERIES_MS:-3600000}
+      SADEN_WORKER_LOCK_TTL_MS: ${SADEN_WORKER_LOCK_TTL_MS:-300000}
+      SADEN_STALE_AFTER_DAYS: ${SADEN_STALE_AFTER_DAYS:-4}
+    volumes:
+      - ${SADEN_DATA_DIR:-./data}:/app/data
+    depends_on:
+      saden:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "backend/src/worker/healthcheck.js"]
+      interval: 60s
+      timeout: 10s
+      start_period: 40s
+      retries: 3
