@@ -47,6 +47,12 @@ def load_panel_rows():
 
 
 def main() -> int:
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Cobertura e interseção de fontes.")
+    parser.add_argument("--cad", default=CAD_MANIFEST)
+    args = parser.parse_args()
+
     import run_robustness as rr
 
     rows = load_panel_rows()
@@ -65,10 +71,10 @@ def main() -> int:
             }
         )
     cad = {}
-    if os.path.exists(CAD_MANIFEST):
+    if os.path.exists(args.cad):
         cad = {
             str(r["ibge_code"]): r
-            for r in json.load(open(CAD_MANIFEST, encoding="utf-8"))["municipalities"]
+            for r in json.load(open(args.cad, encoding="utf-8"))["municipalities"]
             if r.get("cad_0_100_pixels")
         }
 

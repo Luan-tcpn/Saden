@@ -57,8 +57,8 @@ def _to_float(value: Any) -> float | None:
         return None
 
 
-def load_cad() -> dict[str, float]:
-    data = json.load(open(CAD_MANIFEST, encoding="utf-8"))
+def load_cad(path: str) -> dict[str, float]:
+    data = json.load(open(path, encoding="utf-8"))
     out: dict[str, float] = {}
     for record in data["municipalities"]:
         value = (record.get("cad_0_100_pixels") or {}).get("median")
@@ -133,9 +133,10 @@ def annual_deficit(daily, latitude, cad_mm) -> dict[int, float]:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--limit", type=int, default=0)
+    parser.add_argument("--cad", default=CAD_MANIFEST)
     args = parser.parse_args()
 
-    cad = load_cad()
+    cad = load_cad(args.cad)
     centroids = load_centroids()
     codes = {code for code in cad if code in centroids}
     if args.limit:

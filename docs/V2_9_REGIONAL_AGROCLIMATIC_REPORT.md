@@ -201,10 +201,17 @@ reportado apenas como limite superior. A soja é insensível à escala em
 resolução nativa (126–240 mm, mediana 159). A agregação em 450 m reproduz a
 de 90 m para fins de mediana municipal.
 
+**Amostra entregue.** 120 municípios, 20 por UF nas seis UFs do painel,
+cobrindo a distribuição de área dentro de cada UF. CAD 0–100 cm entre
+**116,2 e 205,4 mm** (mediana 162,9), com mediana por UF de 162,9 (BA), 167,4
+(GO), 138,5 (MS), 146,5 (MT), 180,2 (PR) e 194,7 (RS) — há estrutura regional
+real, não ruído.
+
 **Custo medido.** ~15 s por município (6 camadas sequenciais). A cobertura dos
-1.296 municípios do painel custaria ~5 h; por isso a V2.9 entrega uma
-**amostra estratificada por UF e por porte de área** (120 municípios) e
-registra o plano para a cobertura completa (retomável, com cache local).
+1.296 municípios do painel custaria ~5 h; por isso a V2.9 entrega a amostra
+estratificada e registra o plano para a cobertura completa (retomável, com
+cache local e escrita incremental: uma interrupção não perde o que já foi
+coletado).
 
 **Correção durante a implementação.** A CAD por pixel usava inicialmente
 todas as seis camadas para qualquer profundidade, o que atribuía à "0–100 cm"
@@ -225,7 +232,39 @@ Método: balanço anual sequencial (Thornthwaite & Mather, 1955), ET0 FAO-56,
 mesma implementação do painel; compara-se CAD = 50 mm (referência da V2.6)
 com a **CAD oficial do próprio município** (0–100 cm, mediana por pixel).
 
-<!-- RESULTADOS_CAD_BALANCO -->
+Amostra: **120 municípios** (20 por UF nas seis UFs do painel), **1.167
+município-anos**. CAD oficial de 0–100 cm entre 116,2 e 205,4 mm (mediana
+162,9).
+
+| Estatística | Valor |
+|---|---|
+| Déficit mediano com CAD = 50 mm | 825,8 mm/ano |
+| Déficit mediano com CAD oficial | 719,2 mm/ano |
+| Razão mediana (oficial / 50 mm) | **0,875** |
+| Razão entre os casos com déficit > 0 | mediana 0,888; p10 0,407; p90 0,934 |
+| Município-anos com déficit **eliminado** (razão 0) | **13,6%** (159 de 1.167) |
+| Municípios com razão mediana 0 | 16 de 120 |
+| Desvio-padrão da razão mediana entre municípios | **0,360** |
+
+**O ponto que importa para a inferência.** O reescalonamento **não é
+uniforme**: a razão vai de 0,007 a 0,959, com 13,6% dos município-anos em que
+o déficit desaparece, e o desvio entre municípios é 0,36. Se a CAD apenas
+multiplicasse o déficit por uma constante, o teste t não mudaria (o regressor
+seria uma transformação afim de si mesmo). Como a razão varia — e varia de
+forma extrema nas regiões úmidas — a escolha da CAD muda o **padrão
+transversal** do déficit, e portanto os coeficientes e as estatísticas de
+teste, não só a escala.
+
+Interpretação agronômica: a CAD de 50 mm **satura** o déficit. Em municípios
+úmidos ela gera um déficit que a capacidade real de 0–100 cm elimina
+inteiramente; em municípios secos ela subestima a água disponível mas o sinal
+permanece. Isso reforça que os cenários 35/50/70 da V2.6 não eram uma análise
+de sensibilidade adequada.
+
+Heterogeneidade intra-municipal: a diferença p90−p10 da CAD por pixel tem
+mediana 24,4 mm e máximo 100,1 mm. Um único número municipal é uma
+simplificação aceitável para a mediana, mas não descreve a distribuição — o
+manifesto guarda p10/p50/p90 por município.
 
 ## 12. Profundidade radicular (não conclusivo)
 
@@ -281,7 +320,23 @@ Na mesma população (linhas `paired_usable` de NASA POWER): **19.402 linhas**,
 **1.296 municípios**, 46 (soja) / 49 (milho) / 30 (milho 2ª) blocos de 250 km,
 5–6 UFs, 8–9 anos.
 
-<!-- RESULTADOS_COBERTURA -->
+| Cultura | linhas | municípios | blocos | UFs | linhas com CAD |
+|---|---|---|---|---|---|
+| soja | 8.884 | 1.225 | 46 | 5 | 708 (8,0%) |
+| milho | 7.616 | 1.063 | 49 | 6 | 722 (9,5%) |
+| milho 2ª | 2.902 | 505 | 30 | 4 | 284 (9,8%) |
+
+A CAD foi coletada para **120 municípios** (9,3% dos municípios do painel),
+cobrindo ~8,8% das linhas. A interseção é medida na mesma população, não
+somando coberturas de fontes diferentes.
+
+Distribuição por grupo de ciclo (rótulos oficiais): soja **89% Grupo III**,
+9% Grupo II, 2% Grupo I; milho 79% Grupo III, 16% Grupo II, 4% Grupo I;
+milho 2ª 62% Grupo II, 38% Grupo I. A concentração limita qualquer
+estratificação: só há duas classes com ≥ 250 linhas em cada cultura.
+
+UFs cobertas: GO, MS, MT, PR, RS (soja); + BA (milho). Isso é **5–6 UFs de
+27** — não há base para generalização nacional.
 
 Nenhuma expansão do painel é proposta: as lacunas que limitam as conclusões
 são de **CAD**, de **estrutura de ciclo** (3 grupos, um deles com 89% das
@@ -291,14 +346,15 @@ linhas) e de **número de UFs** — não de quantidade de linhas.
 
 | Suíte | Resultado |
 |---|---|
-| Offline (`geospatial/tests`) | **354/354** (338 da V2.8 + 16 da V2.9) |
+| Offline (`geospatial/tests`) | **364/364** (338 da V2.8 + 26 da V2.9) |
 | Externos opt-in | 10/10 (V2.8; não reexecutados) |
 
-Novos testes: equalização estrita por célula (quatro braços com o mesmo
+Novos testes (26): equalização estrita por célula (quatro braços com o mesmo
 tamanho em todas as células; células abaixo do mínimo caídas para todos;
 conjunto de teste idêntico), métricas por repetição, dicionário do ZARC
-(rótulos e códigos desconhecidos) e teste de interação (detecta diferença
-verdadeira, não inventa sob a nula, EP, IC e casos degenerados).
+(rótulos e códigos desconhecidos), teste de interação (detecta diferença
+verdadeira, não inventa sob a nula, EP, IC e casos degenerados) e integração
+da CAD por profundidade (0–100 cm **não** é 0–200 cm; ausência propagada).
 
 ## 17. Fontes
 

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-14T10:08:19.699249+00:00",
+  "generated_at": "2026-11-14T10:16:12.140897+00:00",
   "note": "Coberturas medidas na MESMA população (linhas paired_usable de NASA POWER). A CAD foi coletada para todos os municípios do painel; 'rows_with_cad' é a interseção efetiva.",
   "panel": {
     "rows": 19402,
@@ -11,11 +11,11 @@
     ]
   },
   "cad": {
-    "municipalities_collected": 193,
-    "coverage_of_panel_municipalities": 0.14891975308641975,
+    "municipalities_collected": 120,
+    "coverage_of_panel_municipalities": 0.09259259259259259,
     "cad_0_100_mm_range": [
-      112.10000097751617,
-      202.90000081062317
+      116.17500007152557,
+      205.42499393224716
     ]
   },
   "per_crop": {
@@ -46,8 +46,8 @@
         "Grupo II (21)": 1238,
         "Grupo I (20)": 323
       },
-      "rows_with_cad": 1328,
-      "municipalities_with_cad": 191,
+      "rows_with_cad": 722,
+      "municipalities_with_cad": 109,
       "state_share": {
         "PR": 0.3894432773109244,
         "GO": 0.20575105042016806,
@@ -83,8 +83,8 @@
         "Grupo I (20)": 1098,
         "Grupo III (22)": 14
       },
-      "rows_with_cad": 740,
-      "municipalities_with_cad": 121,
+      "rows_with_cad": 284,
+      "municipalities_with_cad": 50,
       "state_share": {
         "PR": 0.6326671261199173,
         "MS": 0.1474844934527912,
@@ -118,8 +118,8 @@
         "Grupo II (21)": 784,
         "Grupo I (20)": 207
       },
-      "rows_with_cad": 1169,
-      "municipalities_with_cad": 158,
+      "rows_with_cad": 708,
+      "municipalities_with_cad": 95,
       "state_share": {
         "RS": 0.3338586222422332,
         "PR": 0.32226474561008556,

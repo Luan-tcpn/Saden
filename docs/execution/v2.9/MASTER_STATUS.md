@@ -19,7 +19,7 @@ culturas o resultado é generalizável**.
 | Bundle V2.8 | `..\SADEN_V2_8_RECOVERY_2026-11-14\`, SHA-256 `73297BAB…46890AA8`, *okay*, 26 refs |
 | V1 / `main` | `3f7ad33` (tag `v1-final`) — intactas |
 | Suíte de referência | **338/338** ao abrir a V2.9 |
-| Suíte atual | **354/354** |
+| Suíte atual | **364/364** |
 
 ## Estado das fases
 
@@ -51,8 +51,14 @@ culturas o resultado é generalizável**.
    cultivar). O teste formal **retira** a "inversão de sinal" da temperatura
    na soja (p=0,38); o déficit difere (p=0,003).
 5. **CAD:** `scaleFactor=0.2` reduz o volume 60× (450 m); piloto valida contra
-   a amostra de 90 m da V2.7 (112–201 mm, mediana 161,5). Amostra
-   estratificada por UF em curso.
+   a amostra de 90 m da V2.7 (112–201 mm, mediana 161,5). Amostra entregue:
+   **120 municípios** (20 por UF), CAD 0–100 de 116,2 a 205,4 mm (mediana
+   162,9), com medianas por UF de 138,5 (MS) a 194,7 (RS).
+6. **Balanço hídrico com a CAD do próprio município:** razão do déficit
+   (oficial/50 mm) mediana 0,875, **p10 0,407**, com **13,6%** dos
+   município-anos em que o déficit é eliminado e desvio entre municípios de
+   0,36. O reescalonamento **não é uniforme** — logo a escolha da CAD altera
+   o padrão transversal do déficit e não apenas a sua escala.
 
 ## Manifestos
 
