@@ -1,0 +1,96 @@
+{
+  "generated_at": "2026-11-14T04:22:28Z",
+  "base_url": "https://geoinfo.dados.embrapa.br/geoserver/ows",
+  "layers": {
+    "geonode__aw_0_5_def": {
+      "title": "Mapa de água disponível do solo (mm/cm) a 0-5 cm do Brasil na resolução espacial de 90 m - Versão 2021 [CNPS]",
+      "abstract": null,
+      "description": "Generated from GeoTIFF",
+      "crs": "http://www.opengis.net/def/crs/EPSG/0/4326",
+      "axis_labels": [],
+      "axis_limits": [],
+      "fields": [],
+      "service_parameters": {
+        "CoverageSubtype": "RectifiedGridCoverage",
+        "nativeFormat": "image/tiff"
+      },
+      "metadata_url": null,
+      "service_metadata_url": null
+    },
+    "geonode__aw_5_15_def": {
+      "title": "Mapa de água disponível do solo (mm/cm) a 5-15 cm do Brasil na resolução espacial de 90 m - Versão 2021 [CNPS]",
+      "abstract": null,
+      "description": "Generated from GeoTIFF",
+      "crs": "http://www.opengis.net/def/crs/EPSG/0/4326",
+      "axis_labels": [],
+      "axis_limits": [],
+      "fields": [],
+      "service_parameters": {
+        "CoverageSubtype": "RectifiedGridCoverage",
+        "nativeFormat": "image/tiff"
+      },
+      "metadata_url": null,
+      "service_metadata_url": null
+    },
+    "geonode__aw_15_30_def": {
+      "title": "Mapa de água disponível do solo (mm/cm) a 15-30 cm do Brasil na resolução espacial de 90 m - Versão 2021 [CNPS]",
+      "abstract": null,
+      "description": "Generated from GeoTIFF",
+      "crs": "http://www.opengis.net/def/crs/EPSG/0/4326",
+      "axis_labels": [],
+      "axis_limits": [],
+      "fields": [],
+      "service_parameters": {
+        "CoverageSubtype": "RectifiedGridCoverage",
+        "nativeFormat": "image/tiff"
+      },
+      "metadata_url": null,
+      "service_metadata_url": null
+    },
+    "geonode__aw_30_60_def": {
+      "title": "Mapa de água disponível do solo (mm/cm) a 30-60 cm do Brasil na resolução espacial de 90 m - Versão 2021 [CNPS]",
+      "abstract": null,
+      "description": "Generated from GeoTIFF",
+      "crs": "http://www.opengis.net/def/crs/EPSG/0/4326",
+      "axis_labels": [],
+      "axis_limits": [],
+      "fields": [],
+      "service_parameters": {
+        "CoverageSubtype": "RectifiedGridCoverage",
+        "nativeFormat": "image/tiff"
+      },
+      "metadata_url": null,
+      "service_metadata_url": null
+    },
+    "geonode__aw_60_100_def": {
+      "title": "Mapa de água disponível do solo (mm/cm) a 60-100 cm do Brasil na resolução espacial de 90 m - Versão 2021 [CNPS]",
+      "abstract": null,
+      "description": "Generated from GeoTIFF",
+      "crs": "http://www.opengis.net/def/crs/EPSG/0/4326",
+      "axis_labels": [],
+      "axis_limits": [],
+      "fields": [],
+      "service_parameters": {
+        "CoverageSubtype": "RectifiedGridCoverage",
+        "nativeFormat": "image/tiff"
+      },
+      "metadata_url": null,
+      "service_metadata_url": null
+    },
+    "geonode__aw_100_200_def": {
+      "title": "Mapa de água disponível do solo (mm/cm) a 100-200 cm do Brasil na resolução espacial de 90 m - Versão 2021 [CNPS]",
+      "abstract": null,
+      "description": "Generated from GeoTIFF",
+      "crs": "http://www.opengis.net/def/crs/EPSG/0/4326",
+      "axis_labels": [],
+      "axis_limits": [],
+      "fields": [],
+      "service_parameters": {
+        "CoverageSubtype": "RectifiedGridCoverage",
+        "nativeFormat": "image/tiff"
+      },
+      "metadata_url": null,
+      "service_metadata_url": null
+    }
+  }
+}
