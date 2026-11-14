@@ -1,0 +1,104 @@
+{
+  "generated_at": "2026-11-14T17:50:34.631927+00:00",
+  "source": {
+    "normative": "IN SPA/MAPA 1/2021 (anexo atualizado pelas Portarias 387/2023 e 281/2025)",
+    "xlsx_sha256": "91126b6b512724cd90ab2bfc951ac418c0114bf78a697562a9c8c377f7458c84",
+    "frozen_in": "V3.4 (D112)"
+  },
+  "joined": {
+    "n": 2065,
+    "unmatched": 362,
+    "unmatched_examples": [
+      {
+        "uf": "BA",
+        "municipality": "Abaíra"
+      },
+      {
+        "uf": "BA",
+        "municipality": "Abaré"
+      },
+      {
+        "uf": "BA",
+        "municipality": "Érico Cardoso"
+      },
+      {
+        "uf": "BA",
+        "municipality": "Aiquara"
+      },
+      {
+        "uf": "BA",
+        "municipality": "Alcobaça"
+      },
+      {
+        "uf": "BA",
+        "municipality": "Almadina"
+      },
+      {
+        "uf": "BA",
+        "municipality": "Amargosa"
+      },
+      {
+        "uf": "BA",
+        "municipality": "Amélia Rodrigues"
+      },
+      {
+        "uf": "BA",
+        "municipality": "América Dourada"
+      },
+      {
+        "uf": "BA",
+        "municipality": "Anagé"
+      }
+    ]
+  },
+  "legacy_six_states_unchanged": true,
+  "sp": {
+    "n_municipalities": 643,
+    "by_macroregion": {
+      "1": 44,
+      "2": 431,
+      "3": 168
+    },
+    "by_macroregion_edapho": {
+      "MRS1/RE103": 44,
+      "MRS2/RE201": 15,
+      "MRS2/RE202": 9,
+      "MRS2/RE203": 407,
+      "MRS3/RE302": 168
+    },
+    "municipalities_by_crop": {
+      "milho": {
+        "1": 37,
+        "2": 375,
+        "3": 168
+      },
+      "milho_2": {
+        "1": 36,
+        "2": 363,
+        "3": 165
+      },
+      "soja": {
+        "1": 26,
+        "2": 319,
+        "3": 160
+      }
+    },
+    "rows_by_crop": {
+      "milho": {
+        "1": 296,
+        "2": 2785,
+        "3": 1305
+      },
+      "milho_2": {
+        "1": 180,
+        "2": 1776,
+        "3": 809
+      },
+      "soja": {
+        "1": 178,
+        "2": 2272,
+        "3": 1173
+      }
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "generated_at": "2026-11-14T17:47:11.566698+00:00",
+  "sp": {
+    "n_rows_panel": 10805,
+    "n_municipalities": 584,
+    "n_window_rows": 10805,
+    "n_water_rows": 43220,
+    "n_codes_with_cad": 584,
+    "elapsed_s": 115.1
+  },
+  "merged_panel": {
+    "legacy_rows": 19402,
+    "extra_rows": 10805,
+    "total_rows": 30207,
+    "n_columns": 81
+  },
+  "merged_water": {
+    "legacy_rows": 77608,
+    "extra_rows": 43220,
+    "total_rows": 120828,
+    "n_columns": 22
+  },
+  "legacy_panel_untouched": "C:\\Users\\luanf\\OneDrive\\Área de Trabalho\\Saden_AgroClima\\geospatial\\data\\processed\\v31_panel_windows.csv",
+  "definition": "janela corrigida da V3.1 (D100) e descritores da V3.3 aplicados às linhas de SP; as linhas históricas são copiadas sem recálculo"
+}

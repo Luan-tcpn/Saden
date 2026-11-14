@@ -1,0 +1,67 @@
+{
+  "generated_at": "2026-11-14T17:26:06.817926+00:00",
+  "stages": {
+    "municipalities": {
+      "sp_municipalities": 645,
+      "legacy_municipalities": 1782,
+      "combined_municipalities": 2427,
+      "sp_municipalities_sha256": "8a1c1486849075280e6d8df090b1c4405aee0485a1a591c5e7275fe5e6cbe8a3",
+      "v35_municipalities_sha256": "eb19e2526e313169a48082a601fb34cf7a1af65384f6023f581f4451984710f2",
+      "legacy_snapshot_sha256": "97e8123084381851c604d31212525fced9823d40e970203588c5368615739298",
+      "boundary_source": "IBGE — malhas municipais (geoftp)",
+      "boundary_year": 2025,
+      "sp_geojson": "C:\\Users\\luanf\\OneDrive\\Área de Trabalho\\Saden_AgroClima\\geospatial\\data\\processed\\panel_municipalities_sp.geojson",
+      "legacy_rows_unchanged": true
+    },
+    "productivity": {
+      "municipalities": 645,
+      "years": [
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "n_records": 46440,
+      "n_yield_records": 11610,
+      "sha256": "da10560a2f9715fc6fc5f8afb10f8c3b5e8a49b28e363ff335f195f105404721",
+      "source": "IBGE/SIDRA tabela 5457 (PAM), produtos soja 40124 e milho 40122"
+    },
+    "zarc": {
+      "municipalities": 645,
+      "n_rows": 1082148,
+      "sha256": "2e00bf5415e0531d25fc3ff5535c951857de0bb56134a844437acdd6772d8cd2",
+      "source": "MAPA/ZARC — tábua de risco por município, cultura e safra"
+    },
+    "climate": {
+      "municipalities_requested": 645,
+      "municipalities_with_climate": 645,
+      "failures": [],
+      "n_failures": 0,
+      "n_rows": 2356185,
+      "start_year": 2016,
+      "end_year": 2025,
+      "source": "NASA POWER (comunidade AG), endpoint temporal/daily/point",
+      "elapsed_s": 34.7,
+      "sha256": "3b0f874fd9b38f53bfc5652b8581b301eb2370e902deeb2be1752aa772ea110b"
+    },
+    "panel": {
+      "n_rows": 19608,
+      "n_paired_usable": 10805,
+      "by_crop_paired_usable": {
+        "milho": 4397,
+        "milho_2": 2775,
+        "soja": 3633
+      },
+      "soil_profile": "tipo2_medio",
+      "et_method": "fao56_penman_monteith",
+      "min_coverage": 0.6,
+      "sha256": "65127a2d9aaa42edfa72cc518d36ebd25b88c043a5074d226a520be5698a96d2"
+    }
+  },
+  "updated_at": "2026-11-14T17:42:09.548359+00:00"
+}

@@ -49,3 +49,13 @@ data/processed/v33_water_variables.csv
 # o mapeamento derivado e o hash ficam em municipality_region_mapping.csv e
 # v34_region_mapping.json.
 data/external/
+# V3.5 - paineis e series de SP: derivados e regeneraveis. A evidencia fica nos
+# manifests v35_*.json; os snapshots pequenos do cadastro municipal ficam.
+data/processed/panel_sp_v35.csv
+data/processed/climate_daily_sp.csv
+data/processed/pam_panel_sp.csv
+data/processed/zarc_panel_sp.csv
+data/processed/v35_sp_windows.csv
+data/processed/v35_sp_water.csv
+data/processed/v35_panel_windows.csv
+data/processed/v35_water_variables.csv

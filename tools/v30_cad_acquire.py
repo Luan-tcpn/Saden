@@ -112,14 +112,14 @@ def read_raster(data: bytes):
     return array, transform
 
 
-def load_panel_municipalities() -> list[dict[str, Any]]:
-    path = os.path.join(PROCESSED, "panel_municipalities.csv")
+def load_panel_municipalities(given: str | None = None) -> list[dict[str, Any]]:
+    path = given or os.path.join(PROCESSED, "panel_municipalities.csv")
     with open(path, newline="", encoding="utf-8-sig") as handle:
         return list(csv.DictReader(handle))
 
 
-def load_panel_codes() -> set[str]:
-    path = os.path.join(PROCESSED, "agroclimatic_productivity_panel.csv")
+def load_panel_codes(given: str | None = None) -> set[str]:
+    path = given or os.path.join(PROCESSED, "agroclimatic_productivity_panel.csv")
     codes: set[str] = set()
     with open(path, newline="", encoding="utf-8-sig") as handle:
         for row in csv.DictReader(handle):
@@ -130,12 +130,12 @@ def load_panel_codes() -> set[str]:
     return codes
 
 
-def load_geometries(codes: set[str]):
+def load_geometries(codes: set[str], given: str | None = None):
     import json as _json
 
     from shapely.geometry import shape
 
-    path = os.path.join(PROCESSED, "panel_municipalities.geojson")
+    path = given or os.path.join(PROCESSED, "panel_municipalities.geojson")
     with open(path, encoding="utf-8") as handle:
         collection = _json.load(handle)
     out = {}
@@ -221,19 +221,28 @@ def municipality_stats(
 
 
 def main() -> int:
-    global SCALE
+    global SCALE, OUT
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--states", default="")
     parser.add_argument("--reset", action="store_true")
     parser.add_argument("--scale", type=float, default=SCALE)
+    # V3.5: permite processar um recorte diferente (ex.: SP) sem tocar no
+    # manifesto histórico da V3.0.
+    parser.add_argument("--municipalities", default="")
+    parser.add_argument("--geojson", default="")
+    parser.add_argument("--panel", default="")
+    parser.add_argument("--out", default="")
     args = parser.parse_args()
     SCALE = args.scale
+    if args.out:
+        OUT = args.out if os.path.isabs(args.out) else os.path.join(ROOT, args.out)
 
-    codes = load_panel_codes()
+    codes = load_panel_codes(args.panel or None)
     municipalities = {
-        str(m["ibge_code"]): m for m in load_panel_municipalities()
+        str(m["ibge_code"]): m
+        for m in load_panel_municipalities(args.municipalities or None)
     }
-    geometries = load_geometries(codes)
+    geometries = load_geometries(codes, args.geojson or None)
     print(f"municípios no painel: {len(codes)}; com geometria: {len(geometries)}", flush=True)
 
     by_state: dict[str, list[str]] = defaultdict(list)

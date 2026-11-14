@@ -2204,6 +2204,119 @@ aceitação estão em `docs/V3_4_TERRITORIAL_COVERAGE_GAP_ANALYSIS.md` §7.
 **Consequência.** Enquanto não houver uma UF com os dois grupos, toda afirmação
 "regional" do SADEN permanece não identificável — e é assim que fica registrada.
 
+## D116 - São Paulo integrada pela cadeia existente, com snapshot do painel histórico (2026-11-14)
+
+**Contexto.** A V3.4 identificou SP como a única UF ausente com municípios em
+MRS 1 e MRS 3 (D115).
+
+**Alternativas.** (i) pipeline novo só para SP; (ii) integrar pela cadeia
+existente; (iii) reescrever o painel inteiro.
+
+**Decisão.** SP entra pela **cadeia existente** — as mesmas funções de geometria,
+clima (NASA POWER), PAM (SIDRA 5457), ZARC, CAD (WCS + polígono) e
+`panel.build_panel` —, e o painel histórico é congelado como snapshot
+(`panel_municipalities_v34.csv`, `v31_panel_windows.csv` intocado).
+
+**Evidência.** 645 municípios com geometria; 645/645 com clima (0 falhas, 430 s);
+46.440 registros de PAM; 1.082.148 linhas de janela ZARC; CAD para 584; painel
+com 19.608 linhas e 10.805 utilizáveis. A reprodução da V3.4 com o código novo é
+**exata** (M2 = 1.661,2 / 592,7 / 1.272,3; D = −78,3 / −35,0 / −22,5).
+
+**Justificativa.** Um pipeline paralelo criaria duas metodologias concorrentes —
+o erro que o projeto evitou desde a V2.2. O snapshot garante que a expansão possa
+ser atribuída à nova composição, e não a uma regressão de código.
+
+**Limitações.** A classificação regional de SP usa a lista de **soja** (D112);
+milho e milho 2ª são exploração geográfica. A PAM de milho 2ª continua sendo o
+total anual.
+
+**Consequências.** (i) O painel tem 7 UFs e 1.856 municípios (30.081 linhas);
+(ii) M0/M1/M2 precisam ser reestimados e **não são comparáveis** com os valores
+anteriores; (iii) 63 municípios de SP não entram no painel (sem rendimento
+observado ou sem janela ZARC aplicável), e nenhum foi imputado.
+
+## D117 - O contraste MRS 1 × MRS 3 não se sustenta dentro de São Paulo (2026-11-14)
+
+**Contexto.** Com SP, a classificação regional deixa de ser determinada pela UF
+para o par MRS 1 × MRS 3 — a condição que faltava em D113.
+
+**Decisão.** A hipótese regional fica **encerrada como explicação** do padrão
+observado na V3.3. Classificação: **Nível D** para a cultura primária (soja).
+
+**Evidência** (soja, MAE no braço TE, kg/ha; Δ = MAE(com bloco) − MAE(M2)):
+
+| grupo | n | Δ |
+|---|---:|---:|
+| MRS 1 (RE 103) | 178 | +2,5 |
+| MRS 2 (transição) | 2.272 | +16,4 |
+| MRS 3 (RE 302) | 1.173 | −4,8 |
+
+D = Δ_MRS1 − Δ_MRS3 = **+7,3**; IC por ano [−18,8; +26,9]; por município
+[−9,8; +23,6]; interação associativa +54,0 kg/ha por 100 mm (p = 0,77, G = 7).
+O sinal de D **inverte** entre anos (−17,8 a +13,2) e não há gradiente
+MRS 1 → 2 → 3.
+
+**Justificativa.** O intervalo descarta efeitos da ordem do contraste entre
+estados (−78,3 no milho, V3.4). Não é falta de poder para o que importa: é
+ausência de diferença material. E o padrão entre estados continua sendo o que
+sempre foi — uma descrição de **estados**, não de regiões agronômicas.
+
+**Limitações.** MRS 1 tem 178 linhas de soja (~20 municípios) e há 7 anos de
+exposição: efeitos menores que ~20 kg/ha não seriam detectados. O desenho foi
+escolhido **depois** da V3.4 (ver pré-registro §0), embora os dados sejam novos.
+
+**Consequências.** Nenhum modelo regional é adotado; a linha de especificação
+hídrica e de geografia regional está encerrada com esta base (reforça D108 e
+D114).
+
+## D118 - MRS permanece estratificação sojícola, nunca zona agronômica de milho (2026-11-14)
+
+**Contexto.** A V3.4 usou as macrorregiões sojícolas para milho e milho 2ª
+declarando a aproximação.
+
+**Decisão.** A MRS é usada como estratificação **geográfica** para milho e milho
+2ª, sempre rotulada como derivada da soja; resultados dessas culturas **não** são
+evidência sobre zonas de produção de milho.
+
+**Justificativa.** Não foi encontrada classificação municipal oficial de milho com
+o mesmo nível de detalhe (o ZARC de milho é por safra, solo e ciclo). Rotular a
+MRS como "zona de milho" seria inventar.
+
+**Evidência.** Em SP, os resultados de milho e milho 2ª são n.s. (p = 0,19 e
+0,18) e com `G` = 4–7 anos — precisão insuficiente para qualquer conclusão.
+
+**Consequências.** Todo texto do projeto deve manter o rótulo; os números de
+milho por MRS ficam em tabelas exploratórias.
+
+**Limitações.** Se aparecer no futuro uma classificação municipal oficial de
+milho, a questão pode ser reaberta.
+
+## D119 - A próxima expansão é Minas Gerais, por identificação e território (2026-11-14)
+
+**Contexto.** Com SP integrada, 14 UFs com indicação de soja seguem ausentes.
+
+**Alternativas.** MG (852 municípios, MRS 2 e 3), SC (295, MRS 1), TO (139, MRS 4
+e 5), PI/MA/PA (MRS 5).
+
+**Decisão.** **MG** é a prioridade da V3.6.
+
+**Justificativa.** É o maior bloco não integrado (852 municípios) e, mais
+importante, tem municípios em **MRS 2 e MRS 3** — permite repetir o teste de
+identificação dentro de UF em um segundo estado e num par de grupos diferente
+(transição × Cerrado). Combina os dois critérios que a V3.4 estabeleceu:
+identificação e território.
+
+**Evidência.** Contagens da planilha oficial; cobertura atual em 48,3% do
+território indicado.
+
+**Limitações.** O ranking é **territorial**, não produtivo: não há PAM nacional no
+repositório. UFs com muita agricultura e pouca soja ficam sub-representadas.
+
+**Consequências.** SC é a alternativa de menor custo e menor ganho (reforça
+apenas o grupo Sul). Escolher estado por proximidade de onde o bloco hídrico
+"funcionou" é proibido por D111.
+
+
 
 
 
