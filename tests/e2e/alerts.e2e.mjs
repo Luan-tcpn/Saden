@@ -31,9 +31,11 @@ const HEADLESS = process.env.HEADLESS !== '0';
 
 const CHROME_CANDIDATES = [
   process.env.CHROME_PATH,
+  process.env.CHROME_BIN,
   'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
   'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
   '/usr/bin/google-chrome',
+  '/usr/bin/google-chrome-stable',
   '/usr/bin/chromium-browser',
   '/usr/bin/chromium',
 ].filter(Boolean);
@@ -152,29 +154,50 @@ async function main() {
   const chrome = findChrome();
   const userDataDir = path.join(ROOT, 'tmp', 'e2e-chrome-' + Date.now());
   fs.mkdirSync(userDataDir, { recursive: true });
+  const chromeLog = path.join(ROOT, 'tmp', 'e2e-chrome.log');
 
-  const args = [
+  const baseArgs = [
     `--remote-debugging-port=${PORT}`,
     `--user-data-dir=${userDataDir}`,
     '--no-first-run',
     '--no-default-browser-check',
     '--disable-gpu',
     '--disable-dev-shm-usage',
+    '--disable-setuid-sandbox',
     '--no-sandbox',
   ];
-  if (HEADLESS) args.push('--headless=new');
-  args.push('about:blank');
 
-  const browser = spawn(chrome, args, { stdio: 'ignore' });
   const checks = [];
   const record = (name, ok, detail = '') => {
     checks.push({ name, ok, detail });
     if (!ok) throw new Error(`FALHOU: ${name} ${detail}`);
   };
 
-  let cdp;
+  let browser = null;
+  let cdp = null;
   try {
-    await fetchJson(`http://127.0.0.1:${PORT}/json/version`);
+    // Sobe o navegador com retry: o primeiro headless pode não expor CDP em
+    // tempo (runner frio); a segunda tentativa usa o modo headless legado.
+    for (const headlessFlag of HEADLESS ? ['--headless=new', '--headless'] : [null]) {
+      const args = [...baseArgs];
+      if (headlessFlag) args.push(headlessFlag);
+      args.push('about:blank');
+      const out = fs.openSync(chromeLog, 'a');
+      browser = spawn(chrome, args, { stdio: ['ignore', out, out] });
+      try {
+        await fetchJson(`http://127.0.0.1:${PORT}/json/version`, 120);
+        break;
+      } catch (error) {
+        browser.kill();
+        browser = null;
+        const tail = fs.existsSync(chromeLog) ? fs.readFileSync(chromeLog, 'utf8').slice(-400) : '';
+        if (headlessFlag === (HEADLESS ? '--headless' : null)) {
+          throw new Error(`${error.message} | chrome: ${tail.replace(/\n/g, ' ')}`);
+        }
+      }
+    }
+    if (!browser) throw new Error('não foi possível iniciar o Chrome com CDP');
+
     const target = await fetch(`http://127.0.0.1:${PORT}/json/new?about:blank`, { method: 'PUT' }).then((r) => r.json());
     cdp = await Cdp.connect(target.webSocketDebuggerUrl);
     await cdp.send('Runtime.enable');
@@ -281,7 +304,7 @@ async function main() {
     console.log(JSON.stringify({ ok: true, base: BASE_URL, email, observationDate, checks }, null, 2));
   } finally {
     if (cdp) cdp.close();
-    browser.kill();
+    if (browser) browser.kill();
   }
 }
 

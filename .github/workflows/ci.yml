@@ -72,36 +72,49 @@ jobs:
       - uses: actions/checkout@v4
       - name: build das imagens (via compose)
         # A imagem é construída pelo compose porque o serviço worker referencia
-        # a mesma tag (`saden:r2`). Construir com outro nome faz o worker tentar
-        # puxar do registry e falhar.
+        # a mesma tag (`saden:r2`).
         # JWT_SECRET é exigido pela interpolação do compose (valor de CI, sem uso real).
         env:
           JWT_SECRET: ci-secret-nao-producao
         run: docker compose build
-      - name: sobe compose com banco temporário
+      - name: valida o arquivo compose
         env:
           JWT_SECRET: ci-secret-nao-producao
-          SADEN_DATA_DIR: ./tmp/ci-data
+        run: docker compose config --quiet
+      # Os containers são criados com `docker run` (e não `compose up`) para que
+      # esta etapa não dependa de interpolação/estado do compose no runner.
+      # O compose em si é validado no passo anterior e no ensaio de staging.
+      - name: sobe web
         run: |
-          mkdir -p tmp/ci-data tmp/mail-outbox
-          docker compose up -d
+          mkdir -p tmp/ci-data
+          docker run -d --name saden-web -p 3001:3001 \
+            -e JWT_SECRET=ci-secret-nao-producao \
+            -e NODE_ENV=production \
+            -e DATABASE_PATH=data/saden.db \
+            -v "$PWD/tmp/ci-data:/app/data" \
+            saden:r2
           for i in $(seq 1 60); do
-            if curl -fsS http://127.0.0.1:3001/api/health > /dev/null; then break; fi
+            if curl -fsS http://127.0.0.1:3001/api/health > /dev/null; then echo "web ok"; exit 0; fi
             sleep 2
           done
-          curl -fsS http://127.0.0.1:3001/api/health > /dev/null
+          echo "web não respondeu"; docker logs saden-web; exit 1
+      - name: sobe worker
+        run: |
+          docker run -d --name saden-worker \
+            -e JWT_SECRET=ci-secret-nao-producao \
+            -e NODE_ENV=production \
+            -e DATABASE_PATH=data/saden.db \
+            -v "$PWD/tmp/ci-data:/app/data" \
+            saden:r2 node backend/src/worker/index.js
       - name: health do worker
         run: |
-          # O worker executa um ciclo no start; health deve responder 200.
-          for i in $(seq 1 30); do
+          for i in $(seq 1 40); do
             code=$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:3001/api/health/worker || true)
             if [ "$code" = "200" ]; then echo "worker saudável"; exit 0; fi
             sleep 2
           done
-          echo "worker não ficou saudável"; docker compose logs saden-worker; exit 1
+          echo "worker não ficou saudável"; docker logs saden-worker; exit 1
       - name: persistência e idempotência
-        env:
-          JWT_SECRET: ci-secret-nao-producao
         run: |
           set -e
           TOKEN=$(curl -fsS -X POST http://127.0.0.1:3001/api/auth/register \
@@ -111,17 +124,18 @@ jobs:
           curl -fsS -X POST http://127.0.0.1:3001/api/alerts \
             -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' \
             -d '{"series_id":"yahoo:ZS=F:brl:sc60","condition":"price_above","threshold":0.01}' > /dev/null
-          docker compose restart saden-worker
-          sleep 25
+          docker restart saden-worker > /dev/null
+          sleep 30
           N1=$(curl -fsS http://127.0.0.1:3001/api/alerts/events -H "Authorization: Bearer $TOKEN" | node -e "let d='';process.stdin.on('data',c=>d+=c).on('end',()=>console.log(JSON.parse(d).events.length))")
-          docker compose restart saden-worker
-          sleep 25
+          docker restart saden-worker > /dev/null
+          sleep 30
           N2=$(curl -fsS http://127.0.0.1:3001/api/alerts/events -H "Authorization: Bearer $TOKEN" | node -e "let d='';process.stdin.on('data',c=>d+=c).on('end',()=>console.log(JSON.parse(d).events.length))")
           echo "eventos: $N1 -> $N2"
           test "$N1" = "$N2"
       - name: logs e limpeza
         if: always()
         continue-on-error: true
-        env:
-          JWT_SECRET: ci-secret-nao-producao
-        run: docker compose logs --tail=80
+        run: |
+          docker logs saden-web || true
+          docker logs saden-worker || true
+          docker rm -f saden-web saden-worker || true
