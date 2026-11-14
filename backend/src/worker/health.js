@@ -41,6 +41,38 @@ function lastRuns(limit = 5) {
 }
 
 /**
+ * Decisão de saúde, pura e testável (sem relógio global nem banco).
+ *
+ * Distingue **processo vivo** (heartbeat recente) de **worker operacional**
+ * (última execução concluída com sucesso). Um alerta "ativo" com worker parado
+ * é exatamente o caso que isto precisa expor.
+ */
+function assess({ heartbeatAt, lastRun, nowMs = Date.now(), heartbeatStaleMs }) {
+  if (!heartbeatAt) return { status: 'not_started', alive: false, reason: 'no_heartbeat' };
+  const ageMs = nowMs - new Date(heartbeatAt).getTime();
+  if (!Number.isFinite(ageMs) || ageMs > heartbeatStaleMs) {
+    return { status: 'down', alive: false, reason: 'heartbeat_stale' };
+  }
+  if (lastRun && lastRun.status !== 'ok') {
+    return { status: 'degraded', alive: true, reason: `last_run_${lastRun.status}` };
+  }
+  return { status: 'ok', alive: true, reason: 'running' };
+}
+
+/** Falhas consecutivas a partir da execução mais recente. */
+function consecutiveFailures(limit = 20) {
+  const rows = connect()
+    .prepare("SELECT status FROM worker_runs WHERE status != 'running' ORDER BY id DESC LIMIT ?")
+    .all(limit);
+  let count = 0;
+  for (const row of rows) {
+    if (row.status === 'ok') break;
+    count++;
+  }
+  return count;
+}
+
+/**
  * Estado consolidado do worker.
  * status: 'ok' | 'degraded' | 'down' | 'not_started'
  */
@@ -53,15 +85,17 @@ function status({ now = new Date() } = {}) {
     .prepare("SELECT * FROM worker_runs WHERE status IN ('failed','partial') ORDER BY id DESC LIMIT 1")
     .get();
 
+  const verdict = assess({
+    heartbeatAt: heartbeat ? heartbeat.heartbeat_at : null,
+    lastRun: last,
+    nowMs: now.getTime(),
+    heartbeatStaleMs: config.heartbeatStaleMs,
+  });
   const heartbeatAgeMs = heartbeat
     ? now.getTime() - new Date(heartbeat.heartbeat_at).getTime()
     : null;
-  const alive = heartbeatAgeMs != null && heartbeatAgeMs <= config.heartbeatStaleMs;
-
-  let state = 'ok';
-  if (!heartbeat) state = 'not_started';
-  else if (!alive) state = 'down';
-  else if (last && last.status !== 'ok') state = 'degraded';
+  const sinceLastSuccessMs =
+    lastOk && lastOk.finished_at ? now.getTime() - new Date(lastOk.finished_at).getTime() : null;
 
   const anchor = last ? new Date(last.started_at) : now;
   const next = scheduler.nextRun(anchor, {
@@ -70,8 +104,11 @@ function status({ now = new Date() } = {}) {
   });
 
   return {
-    status: state,
-    alive,
+    status: verdict.status,
+    alive: verdict.alive,
+    reason: verdict.reason,
+    consecutive_failures: consecutiveFailures(),
+    since_last_success_ms: sinceLastSuccessMs,
     worker_id: heartbeat ? heartbeat.owner : null,
     started_at: heartbeat ? heartbeat.started_at : null,
     heartbeat_at: heartbeat ? heartbeat.heartbeat_at : null,
@@ -137,4 +174,4 @@ function sources() {
   });
 }
 
-module.exports = { beat, status, sources, lastRuns, pruneRuns, RUNS_KEEP };
+module.exports = { beat, status, sources, lastRuns, pruneRuns, assess, consecutiveFailures, RUNS_KEEP };

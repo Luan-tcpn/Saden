@@ -1,14 +1,19 @@
 'use strict';
 
 // Integração contra o app Express real com banco temporário (não toca o
-// data/saden.db do servidor em execução). Inclui 2 testes "live" contra as
-// fontes externas reais (Yahoo e Open-Meteo) com timeout generoso.
+// data/saden.db do servidor em execução). Preços vêm de fixture de cache;
+// os testes contra provedores externos são opt-in (SADEN_LIVE_TESTS=1).
 process.env.DATABASE_PATH = require('path').join(__dirname, '..', '..', 'tmp', 'test-saden.db');
 
 const fs = require('fs');
 const path = require('path');
 const { describe, it, before, after } = require('node:test');
 const assert = require('node:assert/strict');
+
+// Testes que dependem de provedores externos (Yahoo, Open-Meteo, Nominatim,
+// Esri) são opt-in: o CI não pode falhar porque um provedor público oscilou.
+// Rodar com provedores: SADEN_LIVE_TESTS=1 npm test
+const LIVE = { skip: process.env.SADEN_LIVE_TESTS !== '1' ? 'teste live (use SADEN_LIVE_TESTS=1)' : false };
 
 const db = require('../../backend/src/db');
 
@@ -32,6 +37,66 @@ async function api(pathname, { method = 'GET', body, token } = {}) {
   return { status: res.status, data };
 }
 
+// Fixture determinística do cache de mercado: permite exercitar preço,
+// referência, previsão e CSV sem rede. Substitui o cache que a fonte real
+// preencheria; não altera nenhum código de produção.
+function seedMarketCache() {
+  const { cacheSet } = require('../../backend/src/db');
+  const build = (count, startPrice) => {
+    const points = [];
+    const d0 = new Date('2026-01-01T12:00:00Z');
+    for (let i = 0; i < count; i++) {
+      const d = new Date(d0);
+      d.setUTCDate(d.getUTCDate() + i);
+      const price = startPrice + i * 0.12 + Math.sin(i / 5) * 1.5;
+      points.push({
+        date: d.toISOString().slice(0, 10),
+        price_usd_cents: Math.round((price / 5.5) * 100) / 100,
+        fx_venda: 5.5,
+        price_brl: Math.round(price * 100) / 100,
+      });
+    }
+    return {
+      cached: false,
+      commodity: { key: 'soja', name: 'Soja', unit_br: 'R$/sc 60kg', yahoo_symbol: 'ZS=F' },
+      unit: 'R$/sc 60kg',
+      count: points.length,
+      data_start: points[0].date,
+      data_end: points[points.length - 1].date,
+      provider: 'yahoo',
+      fx_provider: 'bcb-ptax',
+      fx_last: 5.5,
+      fx_fallback_days: 0,
+      retrieved_at: new Date().toISOString(),
+      points,
+    };
+  };
+  // 1y: relatórios/previsão; 3mo: /latest e /reference.
+  cacheSet('prices:soja:1y', build(120, 150), 60 * 60 * 1000);
+  cacheSet('prices:soja:3mo', build(70, 150), 60 * 60 * 1000);
+
+  // Observação persistida: é dela que o motor de alertas avalia (não do cache).
+  const store = require('../../backend/src/db').connect();
+  const insert = store.prepare(
+    `INSERT OR REPLACE INTO price_observations(commodity_key, data_date, price_usd, fx_rate, price_brl, unit_br, provider)
+     VALUES('soja', ?, ?, 5.5, ?, 'R$/sc 60kg', 'yahoo')`
+  );
+  const today = new Date();
+  for (let i = 0; i < 3; i++) {
+    const d = new Date(today);
+    d.setUTCDate(d.getUTCDate() - i);
+    const price = 157 + i * 0.1;
+    insert.run(d.toISOString().slice(0, 10), price / 5.5, Math.round(price * 100) / 100);
+  }
+}
+
+function clearMarketCache() {
+  require('../../backend/src/db')
+    .connect()
+    .prepare("DELETE FROM kv_cache WHERE key IN ('prices:soja:1y','prices:soja:3mo')")
+    .run();
+}
+
 describe('API SADEN — integração', () => {
   before(async () => {
     try {
@@ -40,6 +105,7 @@ describe('API SADEN — integração', () => {
       /* primeiro run */
     }
     db.connect();
+    seedMarketCache();
     const app = require('../../backend/src/index');
     await new Promise((resolve) => {
       server = app.listen(0, '127.0.0.1', resolve);
@@ -48,6 +114,7 @@ describe('API SADEN — integração', () => {
   });
 
   after(() => {
+    clearMarketCache();
     server.close();
   });
 
@@ -203,7 +270,7 @@ describe('API SADEN — integração', () => {
     assert.equal(exp.status, 400);
   });
 
-  it('LIVE: busca de rua retorna endereço Nominatim com rótulo', { timeout: 90000 }, async () => {
+  it('LIVE: busca de rua retorna endereço Nominatim com rótulo', { ...LIVE, timeout: 90000 }, async () => {
     const { status, data } = await api('/api/geo/search?q=Av.%20Paulista%2C%20S%C3%A3o%20Paulo', {
       token: process.env.SADEN_TEST_TOKEN,
     });
@@ -215,7 +282,7 @@ describe('API SADEN — integração', () => {
     assert.ok(Number.isFinite(street.latitude) && Number.isFinite(street.longitude));
   });
 
-  it('LIVE: busca por coordenadas faz reverse', { timeout: 90000 }, async () => {
+  it('LIVE: busca por coordenadas faz reverse', { ...LIVE, timeout: 90000 }, async () => {
     const { status, data } = await api('/api/geo/search?q=-21.1775%2C%20-47.8103', {
       token: process.env.SADEN_TEST_TOKEN,
     });
@@ -225,7 +292,7 @@ describe('API SADEN — integração', () => {
     assert.match(data.results[0].label, /Ribeir.o Preto|Brasil/);
   });
 
-  it('LIVE: reverse dedicado + coordenada inválida', { timeout: 90000 }, async () => {
+  it('LIVE: reverse dedicado + coordenada inválida', { ...LIVE, timeout: 90000 }, async () => {
     const ok = await api('/api/geo/reverse?lat=-23.55&lon=-46.63', { token: process.env.SADEN_TEST_TOKEN });
     assert.equal(ok.status, 200);
     assert.ok(ok.data.label);
@@ -334,7 +401,7 @@ describe('API SADEN — integração', () => {
     assert.equal(bad.status, 404);
   });
 
-  it('LIVE: landcover info + tile PNG real', { timeout: 90000 }, async () => {
+  it('LIVE: landcover info + tile PNG real', { ...LIVE, timeout: 90000 }, async () => {
     const info = await api('/api/landcover/info');
     assert.equal(info.status, 200);
     assert.ok(info.data.classes.length === 9);
@@ -354,7 +421,7 @@ describe('API SADEN — integração', () => {
     assert.equal(bad.status, 400);
   });
 
-  it('LIVE: preço real soja (Yahoo + PTAX)', { timeout: 90000 }, async () => {
+  it('LIVE: preço real soja (Yahoo + PTAX)', { ...LIVE, timeout: 90000 }, async () => {
     const { status, data } = await api('/api/commodities/soja/latest', {
       token: process.env.SADEN_TEST_TOKEN,
     });
@@ -365,7 +432,7 @@ describe('API SADEN — integração', () => {
     assert.match(data.data_date, /^\d{4}-\d{2}-\d{2}$/);
   });
 
-  it('LIVE: clima real Ribeirão Preto (Open-Meteo)', { timeout: 60000 }, async () => {
+  it('LIVE: clima real Ribeirão Preto (Open-Meteo)', { ...LIVE, timeout: 60000 }, async () => {
     const { status, data } = await api('/api/weather/forecast?lat=-21.1775&lon=-47.8103', {
       token: process.env.SADEN_TEST_TOKEN,
     });

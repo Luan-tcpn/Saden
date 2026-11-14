@@ -325,3 +325,107 @@ describe('encerramento', () => {
     assert.equal(locks.info(worker.config.jobKey), null, 'lock liberado no shutdown');
   });
 });
+
+describe('avaliação de saúde (pura)', () => {
+  const health = require('../../backend/src/worker/health');
+  const STALE = 60000;
+  const now = Date.parse('2026-11-16T12:00:00Z');
+
+  it('sem heartbeat → not_started', () => {
+    const verdict = health.assess({ heartbeatAt: null, lastRun: null, nowMs: now, heartbeatStaleMs: STALE });
+    assert.equal(verdict.status, 'not_started');
+    assert.equal(verdict.alive, false);
+    assert.equal(verdict.reason, 'no_heartbeat');
+  });
+
+  it('heartbeat recente e última execução ok → ok', () => {
+    const verdict = health.assess({
+      heartbeatAt: new Date(now - 5000).toISOString(),
+      lastRun: { status: 'ok' },
+      nowMs: now,
+      heartbeatStaleMs: STALE,
+    });
+    assert.equal(verdict.status, 'ok');
+    assert.equal(verdict.alive, true);
+  });
+
+  it('heartbeat antigo → down (processo não está rodando)', () => {
+    const verdict = health.assess({
+      heartbeatAt: new Date(now - 10 * 60000).toISOString(),
+      lastRun: { status: 'ok' },
+      nowMs: now,
+      heartbeatStaleMs: STALE,
+    });
+    assert.equal(verdict.status, 'down');
+    assert.equal(verdict.alive, false);
+    assert.equal(verdict.reason, 'heartbeat_stale');
+  });
+
+  it('vivo mas última execução falhou → degraded', () => {
+    const verdict = health.assess({
+      heartbeatAt: new Date(now - 1000).toISOString(),
+      lastRun: { status: 'failed' },
+      nowMs: now,
+      heartbeatStaleMs: STALE,
+    });
+    assert.equal(verdict.status, 'degraded');
+    assert.equal(verdict.alive, true);
+    assert.match(verdict.reason, /last_run_failed/);
+  });
+
+  it('limite é estrito: exatamente no prazo ainda é saudável', () => {
+    const verdict = health.assess({
+      heartbeatAt: new Date(now - STALE).toISOString(),
+      lastRun: { status: 'ok' },
+      nowMs: now,
+      heartbeatStaleMs: STALE,
+    });
+    assert.equal(verdict.status, 'ok');
+  });
+});
+
+describe('preflight de runtime', () => {
+  const preflight = require('../../backend/scripts/preflight.js');
+
+  it('aceita Node 22 (ABI 127)', () => {
+    const verdict = preflight.checkRuntime({ major: 22, abi: '127' });
+    assert.equal(verdict.ok, true);
+    assert.equal(verdict.reason, null);
+  });
+
+  it('recusa Node 26 (ABI 147) com motivo explícito', () => {
+    const verdict = preflight.checkRuntime({ major: 26, abi: '147' });
+    assert.equal(verdict.ok, false);
+    assert.equal(verdict.reason, 'unsupported_node');
+    assert.equal(verdict.detail.expectedMajor, 22);
+    assert.equal(verdict.detail.expectedAbi, '127');
+  });
+
+  it('reconhece erro de ABI vindo do módulo nativo', () => {
+    assert.equal(
+      preflight.isAbiError('The module was compiled against a different Node.js version using NODE_MODULE_VERSION 127'),
+      true
+    );
+    assert.equal(preflight.isAbiError('ERR_DLOPEN_FAILED: cannot open shared object'), true);
+    assert.equal(preflight.isAbiError('ENOENT: no such file'), false);
+  });
+});
+
+describe('tolerância de calendário no agendamento', () => {
+  const scheduler = require('../../backend/src/worker/scheduler');
+
+  it('sábado não gera execução e a próxima é segunda', () => {
+    const saturday = new Date('2026-11-21T12:00:00Z');
+    const next = scheduler.nextRun(saturday, { preferredHourLocal: 18 });
+    assert.equal(next.toISOString(), '2026-11-23T21:00:00.000Z');
+  });
+
+  it('sexta à noite: a próxima execução é segunda, não sábado', () => {
+    const fridayEvening = new Date('2026-11-20T22:00:00Z');
+    const next = scheduler.nextRun(fridayEvening, { preferredHourLocal: 18 });
+    const parts = scheduler.localParts(next);
+    assert.notEqual(parts.weekday, 'Sat');
+    assert.notEqual(parts.weekday, 'Sun');
+    assert.equal(next.toISOString(), '2026-11-23T21:00:00.000Z');
+  });
+});

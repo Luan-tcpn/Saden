@@ -22,12 +22,17 @@ const router = express.Router();
 router.get('/health/worker', (req, res, next) => {
   try {
     const status = health.status();
-    const code = status.status === 'ok' ? 200 : status.status === 'degraded' ? 200 : 503;
+    // 200 = processo vivo (mesmo com falha de fonte recente); 503 = parado ou
+    // sem heartbeat. Um monitor externo alerta pelo código HTTP.
+    const code = status.status === 'ok' || status.status === 'degraded' ? 200 : 503;
     res.status(code).json({
       status: status.status,
       alive: status.alive,
+      reason: status.reason,
       last_run_at: status.last_run ? status.last_run.started_at : null,
       last_success_at: status.last_success_at,
+      since_last_success_ms: status.since_last_success_ms,
+      consecutive_failures: status.consecutive_failures,
       next_run_at: status.next_run_at,
       heartbeat_age_ms: status.heartbeat_age_ms,
     });
