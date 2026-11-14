@@ -300,3 +300,37 @@ ciclo na soja (temperatura).
 
 Relatorio: `docs/V2_8_GENERALIZATION_REPORT.md`. Checkpoints:
 `docs/execution/v2.8/`. Decisoes D87-D89.
+
+---
+
+## Consolidacao tecnica (2026-11-14) — branch `maintenance/technical-consolidation`
+
+Etapa de consolidacao, nao de expansao. Base `32dfb88` (V3.5). Relatorio:
+`docs/TECHNICAL_CONSOLIDATION_REPORT.md`. Checkpoints em
+`docs/execution/consolidation/`. Decisoes D120-D127.
+
+**Estado:** 482 testes passando (458 herdados + 24 novos); compilacao limpa.
+
+**O que ficou provado:**
+- pipeline canonico unico (`tools/pipeline/build_panel.py` + `config/panel_v35.json`)
+  reconstroi o painel V3.5 **bit-a-bit** (0,000 em 2.040 comparacoes);
+- PAM auditada: 43.650 celulas, 0 duplicidades, 0 alteracao de codigo municipal,
+  rendimento consistente em 99,8%; 27 de 30.207 linhas analiticas com algum flag;
+- deficit hidrico **replicado independentemente** (8/8 casos manuais, 90 janelas,
+  diferenca maxima 4,3e-6 mm);
+- reproducao em **clone limpo**: 479 testes passam, painel reconstruido,
+  replicacao reexecutada (niveis 1 a 4 atingidos).
+
+**O que ficou exposto:**
+- excedente hidrico superestimado na implementacao de referencia (D124) — sem
+  afetar conclusao publicada;
+- p-valores liberais: erro tipo I de 6% a 10% para nominal de 5% (D125);
+- acrescentar municipios nas UFs atuais reduz o erro-padrao em menos de 1% (D126);
+- `requirements.txt` nao declarava `pytest` — o projeto nao rodava a propria
+  suite em ambiente novo. Corrigido.
+
+**Estado da aplicacao:** V1.1 intacta (`v1-final` = `3f7ad33`). Nada integrado ao
+produto; avaliacao em `docs/product/PRODUCTIZATION_READINESS.md`.
+
+**Fora de escopo, por decisao:** `SADEN-TCC` nao foi acessado, lido nem
+verificado nesta etapa.

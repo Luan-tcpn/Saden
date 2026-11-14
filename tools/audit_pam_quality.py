@@ -32,7 +32,9 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, ".."))
 sys.path.insert(0, HERE)
 
-PROCESSED = os.path.join(ROOT, "geospatial", "data", "processed")
+# SADEN_DATA_ROOT permite rodar de um clone limpo lendo os derivados externos.
+_DATA_ROOT = os.environ.get("SADEN_DATA_ROOT") or os.path.join(ROOT, "geospatial", "data")
+PROCESSED = os.path.join(_DATA_ROOT, "processed")
 MANIFESTS = os.path.join(ROOT, "geospatial", "data", "manifests")
 OUTDIR = os.path.join(ROOT, "docs", "data_quality", "pam")
 OUT_JSON = os.path.join(MANIFESTS, "pam_quality_audit.json")

@@ -37,7 +37,9 @@ from typing import Any, Iterable, Sequence
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
-PROCESSED = os.path.join(ROOT, "geospatial", "data", "processed")
+# SADEN_DATA_ROOT permite rodar de um clone limpo lendo os derivados externos.
+_DATA_ROOT = os.environ.get("SADEN_DATA_ROOT") or os.path.join(ROOT, "geospatial", "data")
+PROCESSED = os.path.join(_DATA_ROOT, "processed")
 OUT_JSON = os.path.join(ROOT, "geospatial", "data", "manifests", "independent_replication.json")
 
 STEFAN_BOLTZMANN_MJ = 4.903e-9  # MJ m-2 dia-1 K-4 (FAO-56, eq. 39)

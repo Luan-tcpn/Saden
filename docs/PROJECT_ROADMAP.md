@@ -865,3 +865,27 @@ robusto**, milho 2a safra **robusto**. O ganho aparente da V2.6 dependia,
 em parte, do ano compartilhado entre treino e teste.
 
 **Caminho final: A.** Nenhuma integracao ao produto.
+
+---
+
+## Consolidacao tecnica (2026-11-14) — caminho ainda A
+
+Etapa de consolidacao concluida na branch `maintenance/technical-consolidation`,
+base `32dfb88`. Nenhuma hipotese nova, nenhuma UF nova, nenhum modelo novo.
+Relatorio: `docs/TECHNICAL_CONSOLIDATION_REPORT.md`.
+
+**Ordem de prioridade revisada pela analise de poder (D126):**
+
+| prioridade | acao | por que |
+|---|---|---|
+| 1 | wild cluster bootstrap no fluxo oficial | erro tipo I de 6-10% para nominal de 5% |
+| 2 | manifestos deterministicos | hash do manifesto nao serve como integridade |
+| 3 | build completo do pipeline canonico | equivalencia provada em 14 de 2.425 municipios |
+| 4 | validar clima contra INMET | 627.381 registros disponiveis e nunca usados |
+| 5 | MG (D119) | acrescenta *clusters*, a unica dimensao que compra precisao |
+| — | **nao fazer** | mais municipios nas 7 UFs (reduz EP em <1%); nova hipotese de temperatura com o desenho atual (MDE 203-433 kg/ha por C); novo contraste regional sem variacao interna (nao identificado) |
+
+**Sobre o produto:** a linha de pesquisa nao supera a V1.1. O unico candidato
+defensavel e contexto agroclimatico **descritivo**. Alerta de safra e indicador
+de oferta estao fora: nao ha validacao preditiva. Ver
+`docs/product/PRODUCTIZATION_READINESS.md`.

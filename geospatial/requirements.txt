@@ -14,3 +14,7 @@ pyproj==3.7.2
 openpyxl==3.1.5
 xlrd==2.0.1
 pandas==2.2.3
+# Consolidação — executor da suíte de testes (estava ausente e impedia rodar os
+# testes em ambiente limpo; detectado no teste de clone do dia 2026-11-14)
+pytest==9.2.0
+
