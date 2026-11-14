@@ -2069,5 +2069,141 @@ primário e o histórico, e o p após Holm na família declarada. O registro
 (parte UF×ano, parte municipal); nesses casos o duplo agrupamento deve ser
 justificado no diagnóstico e a sensibilidade reportada.
 
+## D112 - Classificação regional congelada em fonte oficial (MAPA/ZARC), com MRS 2 fora do contraste (2026-11-14)
+
+**Contexto.** A V3.3 sugeriu, de forma exploratória, que o bloco hídrico ajudava
+em PR/RS e atrapalhava no Centro-Oeste. Classificar os estados olhando esse
+resultado seria circular.
+
+**Alternativas.** (i) divisão político-administrativa do IBGE; (ii) bioma
+Cerrado; (iii) macrorregiões sojícolas do MAPA (MRS 1–5); (iv) regiões
+edafoclimáticas (101–503); (v) agrupamento definido pelo analista.
+
+**Decisão.** Usar as **macrorregiões sojícolas** da IN SPA/MAPA nº 1/2021 (anexo
+atualizado pelas Portarias 387/2023 e 281/2025), em lista municipal oficial:
+**Sul = MRS 1**; **Cerrado = MRS 3 ∪ 4**; **MRS 2 é transição e fica fora do
+contraste primário**.
+
+**Justificativa.** É a única classificação federal com lista municipal explícita
+para o território e o período do painel, obtida em formato legível por máquina
+(planilha oficial, 4.286 pares UF–município, SHA-256 registrado) e parseada — sem
+transcrição manual. Manter a MRS 2 fora evita que o analista decida onde
+colocá-la: incluí-la em "Sul" ou em "Cerrado" seria escolha nossa, não da fonte.
+
+**Evidência de cobertura.** 1.422 dos 1.782 municípios candidatos têm região;
+os 360 restantes são municípios **sem indicação de soja** (quase todos na BA),
+não erro de correspondência.
+
+**Limitações.** (i) a finalidade original é indicação de cultivares de **soja**;
+a extensão ao milho é aproximação declarada; (ii) **MRS 4 não é o bioma
+Cerrado** (inclui MT com transição amazônica); (iii) não existe lista municipal
+oficial equivalente para milho.
+
+**Consequência.** A classificação está congelada em
+`docs/V3_4_REGIONAL_CLASSIFICATION_PROTOCOL.md` e qualquer mudança posterior só
+entra como sensibilidade identificada.
+
+## D113 - O contraste regional Sul × Cerrado não é identificável como efeito independente de estado (2026-11-14)
+
+**Contexto.** Com a classificação congelada, testou-se o contraste preditivo e o
+associativo.
+
+**Evidência.**
+
+| indicador | milho | soja | milho 2ª |
+|---|---|---|---|
+| Cramér's V (região × UF) | 1,000 | 1,000 | 1,000 |
+| UFs com municípios nos dois grupos | nenhuma | nenhuma | nenhuma |
+
+O contraste existe e é grande: D = **−78,3 kg/ha** no milho (IC UF×ano
+[−131,7; −26,7]), estável nas 6 exclusões de UF e nas 8 de ano; a interação
+associativa é −1.287 kg/ha por 100 mm (p = 1,8×10⁻⁶, 47 clusters UF×ano).
+Mas é, na prática, {RS, PR-sul/oeste} contra {GO, MS-norte, MT, BA-oeste}.
+
+**Decisão.** Classificar a hipótese como **Nível E — não identificável** para a
+alegação de efeito regional. O contraste é reportado como **descritivo entre
+grupos de estados**, nunca como efeito de região.
+
+**Justificativa.** Regra 1 do pré-registro, fixada antes dos resultados: "E tem
+precedência sobre B; se não houver nenhuma UF com municípios nos dois grupos, a
+alegação é não identificável, mesmo que D seja grande". Nenhum bootstrap de
+linhas ou de UF×ano representa a incerteza do tratamento (2 vs 4 UFs); o
+leave-one-UF-out é a única medida honesta e foi reportado.
+
+**Limitações.** Não identificação **não é ausência de efeito**. O contraste é
+grande e estável; o que falta é uma UF que contenha os dois grupos.
+
+**Consequência.** Nenhum modelo regional é adotado. A prioridade passa a ser
+aquisição de uma UF com municípios nos dois grupos (D115).
+
+## D114 - A fronteira Sul/Cerrado não organiza o fenômeno; a linha de especificação hídrica fica encerrada (2026-11-14)
+
+**Contexto.** Além do confundimento, era preciso verificar se a fronteira testada
+é sequer a descrição correta da heterogeneidade.
+
+**Evidência.**
+
+* Dentro do PR (milho), MRS 1 × MRS 2 difere em **+1.012 kg/ha por 100 mm**
+  (p = 0,0022) — magnitude comparável ao contraste Sul×Cerrado (−1.287).
+* **MS-MRS3 (Cerrado) tem ΔMAE = −50,3**, comportando-se como o Sul, enquanto
+  MS-MRS2 tem +31,6: o grupo "Cerrado" não é homogêneo.
+* Na milho 2ª, as três comparações dentro de estado são significativas
+  (GO p = 0,025; MS p = 0,033; PR p = 0,002).
+* A soja **não** é estável: D inverte sinal em um dos anos (até +3,8) e nos decis
+  intermediários de déficit (+4,7 e +23,2); o agregado −35,0 é sustentado por uma
+  cauda de 37 linhas.
+* A milho 2ª **não** é estável: D vai de −9,7 a +47,0 no leave-one-UF-out.
+
+**Decisão.** Encerrar a linha de **especificação hídrica regional** com a base
+atual. M2 permanece (reforça D108). Não se cria interação regional regularizada,
+modelo por UF, nem limiar.
+
+**Justificativa.** Há heterogeneidade real de inclinação, mas ela aparece
+**dentro de um único estado** e não segue a fronteira agronômica testada. Ajustar
+um modelo "regional" com essa fronteira seria codificar uma divisão que os dados
+não sustentam. Somado a D108 (a forma funcional não melhora a previsão), o
+caminho da especificação está esgotado com esta base.
+
+**Limitações.** A conclusão vale para MRS 1 × MRS 3∪4 e para as culturas
+avaliadas. Outra classificação (ex.: edafoclimática, que deu D = −91,4) também
+não muda o problema de identificação.
+
+**Consequência.** V3.5 não deve adicionar variáveis, limiares ou interações
+regionais.
+
+## D115 - A prioridade científica passa a ser cobertura territorial, e SP é a única UF que resolve a identificação (2026-11-14)
+
+**Contexto.** A V3.3 apontou a generalização territorial como gargalo; a V3.4
+mostra que a especificação não é o gargalo e que a região não é identificável.
+
+**Evidência** (`v34_coverage_gap.json`).
+
+* O SADEN cobre **6 de 27 UFs**; 1.425 dos 4.286 municípios com indicação de soja
+  (**33,25%**) e 2.861 fora do escopo (66,75%).
+* A correspondência municipal é alta (98,6–100% dos indicados em cada UF coberta):
+  falta **território**, não mapeamento.
+* Das 15 UFs ausentes, **apenas SP tem municípios em MRS 1 e em MRS 3**
+  (645 indicados) — é a única que permitiria comparar Sul e Cerrado **dentro do
+  mesmo estado**, que é exatamente o que falta.
+
+**Decisão.** A prioridade da V3.5 é **expansão de cobertura**, com **SP** em
+primeiro lugar, seguida de MG, SC e TO — ordenadas por capacidade de
+identificação e tamanho do território indicado, **não** por proximidade dos
+estados com efeito negativo.
+
+**Justificativa.** Adicionar UFs que só reforçam os mesmos grupos aumenta a
+amostra sem aumentar a identificação; só uma UF com os dois grupos ataca o
+problema. A escolha é feita pelo território indicado oficial, não pelos
+resultados da V3.4.
+
+**Limitações.** A expansão tem custos reais: reprocessar o clima diário com a
+janela corrigida (D100), reestimar baselines (M0/M1 mudam de composição) e
+conviver com heterogeneidade de qualidade do PAM entre UFs. Os critérios de
+aceitação estão em `docs/V3_4_TERRITORIAL_COVERAGE_GAP_ANALYSIS.md` §7.
+
+**Consequência.** Enquanto não houver uma UF com os dois grupos, toda afirmação
+"regional" do SADEN permanece não identificável — e é assim que fica registrada.
+
+
 
 

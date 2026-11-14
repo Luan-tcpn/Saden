@@ -45,3 +45,7 @@ data/processed/v31_panel_windows.csv
 # V3.3 - descritores de estresse: derivado e regeneravel por
 # tools/v33_water_variables.py; a evidencia fica em v33_water_variables.json.
 data/processed/v33_water_variables.csv
+# V3.4 - arquivos de terceiros baixados do sitio oficial (nao redistribuidos):
+# o mapeamento derivado e o hash ficam em municipality_region_mapping.csv e
+# v34_region_mapping.json.
+data/external/

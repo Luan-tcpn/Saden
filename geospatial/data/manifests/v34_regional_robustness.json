@@ -1,0 +1,951 @@
+{
+  "generated_at": "2026-11-14T16:41:57.702097+00:00",
+  "preregistration": "docs/V3_4_REGIONAL_WATER_PREREGISTRATION.md",
+  "protocol": {
+    "arm": "TE",
+    "metric": "MAE kg/ha; delta = MAE(com bloco) - MAE(sem bloco); negativo = bloco melhor",
+    "D": "delta_Sul - delta_Cerrado; negativo = bloco relativamente melhor no Sul",
+    "equalize": "per_cell",
+    "n_repeats": 3,
+    "n_boot": 1000
+  },
+  "crops": {
+    "milho": {
+      "leave_one_uf_out": {
+        "BA": {
+          "D": -74.1291563009288,
+          "n_sul": 2482,
+          "n_cerrado": 2714
+        },
+        "GO": {
+          "D": -150.14447651220962,
+          "n_sul": 2482,
+          "n_cerrado": 1180
+        },
+        "MS": {
+          "D": -91.43602685681662,
+          "n_sul": 2482,
+          "n_cerrado": 2581
+        },
+        "MT": {
+          "D": -129.87287081857585,
+          "n_sul": 2482,
+          "n_cerrado": 1766
+        },
+        "PR": {
+          "D": -49.08360626358967,
+          "n_sul": 1428,
+          "n_cerrado": 2747
+        },
+        "RS": {
+          "D": -40.34826326785242,
+          "n_sul": 1054,
+          "n_cerrado": 2747
+        }
+      },
+      "leave_one_year_out": {
+        "2018": {
+          "D": -126.11381591274107
+        },
+        "2019": {
+          "D": -120.98818356895299
+        },
+        "2020": {
+          "D": -111.98920471462475
+        },
+        "2021": {
+          "D": -64.68083563818323
+        },
+        "2022": {
+          "D": -44.47862809872959
+        },
+        "2023": {
+          "D": -63.411760432812116
+        },
+        "2024": {
+          "D": -133.03039833810885
+        },
+        "2025": {
+          "D": -80.03481881250354
+        }
+      },
+      "within_state": {
+        "BA": {
+          "macroregions": [
+            "4",
+            "5"
+          ],
+          "reference": "4",
+          "predictive": {
+            "status": "insufficient_cells",
+            "m2": "no_test_rows",
+            "wb": "no_test_rows"
+          },
+          "by_macroregion_delta": {},
+          "spread": null,
+          "association": {
+            "status": "insufficient_rows",
+            "n": 48
+          }
+        },
+        "GO": {
+          "macroregions": [
+            "3",
+            "4"
+          ],
+          "reference": "3",
+          "predictive": {
+            "status": "ok",
+            "by_macroregion": {
+              "3": {
+                "n": 796,
+                "delta": 42.18044092180139
+              },
+              "4": {
+                "n": 771,
+                "delta": 39.415730839450816
+              }
+            }
+          },
+          "by_macroregion_delta": {
+            "3": {
+              "n": 796,
+              "delta": 42.18044092180139
+            },
+            "4": {
+              "n": 771,
+              "delta": 39.415730839450816
+            }
+          },
+          "spread": 2.7647100823505752,
+          "association": {
+            "status": "ok",
+            "n": 1567,
+            "n_clusters": 8,
+            "cluster_info": {
+              "scheme": "two_way",
+              "n_clusters_a": 8,
+              "n_clusters_b": 208
+            },
+            "df": 7,
+            "variables": [
+              "x_water",
+              "x_macro"
+            ],
+            "tested": [
+              "x_macro"
+            ],
+            "joint_test": {
+              "status": "ok",
+              "wald": 0.12384305734332525,
+              "statistic": 0.12384305734332525,
+              "df1": 1,
+              "df2": 7,
+              "p_value": 0.7352591306939827,
+              "n_restrictions": 1
+            },
+            "coefficients": {
+              "x_water": {
+                "coefficient": -179.65325049408742,
+                "std_error": 127.89421650692276,
+                "t_statistic": -1.4047019122585813,
+                "p_value": 0.2028962909675771,
+                "ci95": [
+                  -482.0750164848155,
+                  122.76851549664062
+                ],
+                "tested": false
+              },
+              "x_macro": {
+                "coefficient": 54.35762610822129,
+                "std_error": 154.463065468198,
+                "t_statistic": 0.3519134230792075,
+                "p_value": 0.7352591306939827,
+                "ci95": [
+                  -310.88948447324407,
+                  419.6047366896866
+                ],
+                "tested": true
+              }
+            }
+          }
+        },
+        "MS": {
+          "macroregions": [
+            "2",
+            "3"
+          ],
+          "reference": "2",
+          "predictive": {
+            "status": "ok",
+            "by_macroregion": {
+              "2": {
+                "n": 386,
+                "delta": 18.19814504685769
+              },
+              "3": {
+                "n": 166,
+                "delta": 26.58201342021266
+              }
+            }
+          },
+          "by_macroregion_delta": {
+            "2": {
+              "n": 386,
+              "delta": 18.19814504685769
+            },
+            "3": {
+              "n": 166,
+              "delta": 26.58201342021266
+            }
+          },
+          "spread": 8.383868373354971,
+          "association": {
+            "status": "ok",
+            "n": 552,
+            "n_clusters": 8,
+            "cluster_info": {
+              "scheme": "two_way",
+              "n_clusters_a": 8,
+              "n_clusters_b": 76
+            },
+            "df": 7,
+            "variables": [
+              "x_water",
+              "x_macro"
+            ],
+            "tested": [
+              "x_macro"
+            ],
+            "joint_test": {
+              "status": "ok",
+              "wald": 3.340231282944775,
+              "statistic": 3.340231282944775,
+              "df1": 1,
+              "df2": 7,
+              "p_value": 0.11032798496539255,
+              "n_restrictions": 1
+            },
+            "coefficients": {
+              "x_water": {
+                "coefficient": -41.85807147683783,
+                "std_error": 69.96341284537327,
+                "t_statistic": -0.5982851575486848,
+                "p_value": 0.568494504757822,
+                "ci95": [
+                  -207.29525421520577,
+                  123.5791112615301
+                ],
+                "tested": false
+              },
+              "x_macro": {
+                "coefficient": 222.15516868555787,
+                "std_error": 121.55369146937092,
+                "t_statistic": 1.8276299633527502,
+                "p_value": 0.11032798496539255,
+                "ci95": [
+                  -65.27363803354385,
+                  509.58397540465955
+                ],
+                "tested": true
+              }
+            }
+          }
+        },
+        "PR": {
+          "macroregions": [
+            "1",
+            "2"
+          ],
+          "reference": "1",
+          "predictive": {
+            "status": "ok",
+            "by_macroregion": {
+              "1": {
+                "n": 1054,
+                "delta": -28.997136107778715
+              },
+              "2": {
+                "n": 1912,
+                "delta": 115.44797983846934
+              }
+            }
+          },
+          "by_macroregion_delta": {
+            "1": {
+              "n": 1054,
+              "delta": -28.997136107778715
+            },
+            "2": {
+              "n": 1912,
+              "delta": 115.44797983846934
+            }
+          },
+          "spread": 144.44511594624805,
+          "association": {
+            "status": "ok",
+            "n": 2966,
+            "n_clusters": 8,
+            "cluster_info": {
+              "scheme": "two_way",
+              "n_clusters_a": 8,
+              "n_clusters_b": 391
+            },
+            "df": 7,
+            "variables": [
+              "x_water",
+              "x_macro"
+            ],
+            "tested": [
+              "x_macro"
+            ],
+            "joint_test": {
+              "status": "ok",
+              "wald": 22.110246854607688,
+              "statistic": 22.110246854607688,
+              "df1": 1,
+              "df2": 7,
+              "p_value": 0.002202968991177906,
+              "n_restrictions": 1
+            },
+            "coefficients": {
+              "x_water": {
+                "coefficient": -1214.129627317903,
+                "std_error": 206.9040139648902,
+                "t_statistic": -5.868081551689617,
+                "p_value": 0.0006191428094595698,
+                "ci95": [
+                  -1703.3798764911749,
+                  -724.879378144631
+                ],
+                "tested": false
+              },
+              "x_macro": {
+                "coefficient": 1011.735574727514,
+                "std_error": 215.16430511106483,
+                "t_statistic": 4.7021534273785335,
+                "p_value": 0.002202968991177906,
+                "ci95": [
+                  502.9528407847803,
+                  1520.5183086702477
+                ],
+                "tested": true
+              }
+            }
+          }
+        }
+      },
+      "by_year": {},
+      "baseline_D": -78.27599329542613
+    },
+    "soja": {
+      "leave_one_uf_out": {
+        "GO": {
+          "D": -50.206149708469525,
+          "n_sul": 3943,
+          "n_cerrado": 1089
+        },
+        "MS": {
+          "D": -47.16196227504986,
+          "n_sul": 3943,
+          "n_cerrado": 2453
+        },
+        "MT": {
+          "D": -67.04344871325299,
+          "n_sul": 3943,
+          "n_cerrado": 1752
+        },
+        "PR": {
+          "D": -25.901140049226058,
+          "n_sul": 2966,
+          "n_cerrado": 2647
+        },
+        "RS": {
+          "D": -29.680913615346924,
+          "n_sul": 977,
+          "n_cerrado": 2647
+        }
+      },
+      "leave_one_year_out": {
+        "2018": {
+          "D": -41.03304393119231
+        },
+        "2019": {
+          "D": -62.10682144104112
+        },
+        "2020": {
+          "D": -29.236848789585622
+        },
+        "2021": {
+          "D": -80.79870588616046
+        },
+        "2022": {
+          "D": 3.8417593607713343
+        },
+        "2023": {
+          "D": -32.16465780770153
+        },
+        "2024": {
+          "D": -34.037544443308946
+        },
+        "2025": {
+          "D": -22.01022677671591
+        }
+      },
+      "within_state": {
+        "GO": {
+          "macroregions": [
+            "3",
+            "4"
+          ],
+          "reference": "3",
+          "predictive": {
+            "status": "ok",
+            "by_macroregion": {
+              "3": {
+                "n": 827,
+                "delta": 7.386627086480928
+              },
+              "4": {
+                "n": 731,
+                "delta": 7.141265441372241
+              }
+            }
+          },
+          "by_macroregion_delta": {
+            "3": {
+              "n": 827,
+              "delta": 7.386627086480928
+            },
+            "4": {
+              "n": 731,
+              "delta": 7.141265441372241
+            }
+          },
+          "spread": 0.2453616451086873,
+          "association": {
+            "status": "ok",
+            "n": 1558,
+            "n_clusters": 8,
+            "cluster_info": {
+              "scheme": "two_way",
+              "n_clusters_a": 8,
+              "n_clusters_b": 210
+            },
+            "df": 7,
+            "variables": [
+              "x_water",
+              "x_macro"
+            ],
+            "tested": [
+              "x_macro"
+            ],
+            "joint_test": {
+              "status": "ok",
+              "wald": 0.3531536396187641,
+              "statistic": 0.3531536396187641,
+              "df1": 1,
+              "df2": 7,
+              "p_value": 0.5710320083664703,
+              "n_restrictions": 1
+            },
+            "coefficients": {
+              "x_water": {
+                "coefficient": 8.693815935039467,
+                "std_error": 36.25663411152244,
+                "t_statistic": 0.239785521962629,
+                "p_value": 0.8173666681304383,
+                "ci95": [
+                  -77.03950036619278,
+                  94.42713223627172
+                ],
+                "tested": false
+              },
+              "x_macro": {
+                "coefficient": -22.144809887597567,
+                "std_error": 37.26405506945811,
+                "t_statistic": -0.5942673132679973,
+                "p_value": 0.5710320083664703,
+                "ci95": [
+                  -110.26029821752735,
+                  65.9706784423322
+                ],
+                "tested": true
+              }
+            }
+          }
+        },
+        "MS": {
+          "macroregions": [
+            "2",
+            "3"
+          ],
+          "reference": "2",
+          "predictive": {
+            "status": "ok",
+            "by_macroregion": {
+              "2": {
+                "n": 392,
+                "delta": -3.5448314096437343
+              },
+              "3": {
+                "n": 194,
+                "delta": -0.5881365060830603
+              }
+            }
+          },
+          "by_macroregion_delta": {
+            "2": {
+              "n": 392,
+              "delta": -3.5448314096437343
+            },
+            "3": {
+              "n": 194,
+              "delta": -0.5881365060830603
+            }
+          },
+          "spread": 2.956694903560674,
+          "association": {
+            "status": "ok",
+            "n": 586,
+            "n_clusters": 8,
+            "cluster_info": {
+              "scheme": "two_way",
+              "n_clusters_a": 8,
+              "n_clusters_b": 77
+            },
+            "df": 7,
+            "variables": [
+              "x_water",
+              "x_macro"
+            ],
+            "tested": [
+              "x_macro"
+            ],
+            "joint_test": {
+              "status": "ok",
+              "wald": 0.28632110017430035,
+              "statistic": 0.28632110017430035,
+              "df1": 1,
+              "df2": 7,
+              "p_value": 0.6091576021020778,
+              "n_restrictions": 1
+            },
+            "coefficients": {
+              "x_water": {
+                "coefficient": -230.1242115720489,
+                "std_error": 79.82355768935508,
+                "t_statistic": -2.8829109881021657,
+                "p_value": 0.02355344774461029,
+                "ci95": [
+                  -418.8769319327138,
+                  -41.37149121138398
+                ],
+                "tested": false
+              },
+              "x_macro": {
+                "coefficient": 41.552705746583264,
+                "std_error": 77.65557351906857,
+                "t_statistic": 0.5350898057095653,
+                "p_value": 0.6091576021020778,
+                "ci95": [
+                  -142.07354666795288,
+                  225.1789581611194
+                ],
+                "tested": true
+              }
+            }
+          }
+        },
+        "PR": {
+          "macroregions": [
+            "1",
+            "2"
+          ],
+          "reference": "1",
+          "predictive": {
+            "status": "ok",
+            "by_macroregion": {
+              "1": {
+                "n": 977,
+                "delta": -11.973326636560671
+              },
+              "2": {
+                "n": 1886,
+                "delta": -23.735599230496405
+              }
+            }
+          },
+          "by_macroregion_delta": {
+            "1": {
+              "n": 977,
+              "delta": -11.973326636560671
+            },
+            "2": {
+              "n": 1886,
+              "delta": -23.735599230496405
+            }
+          },
+          "spread": 11.762272593935734,
+          "association": {
+            "status": "ok",
+            "n": 2863,
+            "n_clusters": 8,
+            "cluster_info": {
+              "scheme": "two_way",
+              "n_clusters_a": 8,
+              "n_clusters_b": 389
+            },
+            "df": 7,
+            "variables": [
+              "x_water",
+              "x_macro"
+            ],
+            "tested": [
+              "x_macro"
+            ],
+            "joint_test": {
+              "status": "ok",
+              "wald": 2.546637717225694,
+              "statistic": 2.546637717225694,
+              "df1": 1,
+              "df2": 7,
+              "p_value": 0.15455972481403515,
+              "n_restrictions": 1
+            },
+            "coefficients": {
+              "x_water": {
+                "coefficient": -599.7262897513144,
+                "std_error": 345.9161119253613,
+                "t_statistic": -1.7337333216809456,
+                "p_value": 0.12655967802087434,
+                "ci95": [
+                  -1417.6879170267084,
+                  218.23533752407968
+                ],
+                "tested": false
+              },
+              "x_macro": {
+                "coefficient": 365.2407611831018,
+                "std_error": 228.87357626048782,
+                "t_statistic": 1.5958188234338178,
+                "p_value": 0.15455972481403515,
+                "ci95": [
+                  -175.95924779121873,
+                  906.4407701574223
+                ],
+                "tested": true
+              }
+            }
+          }
+        }
+      },
+      "by_year": {},
+      "baseline_D": -34.950657663663094
+    },
+    "milho_2": {
+      "leave_one_uf_out": {
+        "GO": {
+          "D": -9.737375829389748,
+          "n_sul": 388,
+          "n_cerrado": 458
+        },
+        "MS": {
+          "D": 46.970205495920936,
+          "n_sul": 388,
+          "n_cerrado": 633
+        },
+        "MT": {
+          "D": -1.1978881453392205,
+          "n_sul": 388,
+          "n_cerrado": 395
+        },
+        "PR": {
+          "D": null,
+          "n_sul": null,
+          "n_cerrado": 743
+        }
+      },
+      "leave_one_year_out": {
+        "2017": {
+          "D": -6.392780307673547
+        },
+        "2018": {
+          "D": -35.00358516216511
+        },
+        "2019": {
+          "D": 30.908739938267217
+        },
+        "2020": {
+          "D": -24.232572400644585
+        },
+        "2021": {
+          "D": 1.0094916220111827
+        },
+        "2022": {
+          "D": 4.612017528903834
+        },
+        "2023": {
+          "D": -49.57772036078177
+        },
+        "2024": {
+          "D": -33.465013590491026
+        },
+        "2025": {
+          "D": -29.46902558679676
+        }
+      },
+      "within_state": {
+        "GO": {
+          "macroregions": [
+            "3",
+            "4"
+          ],
+          "reference": "3",
+          "predictive": {
+            "status": "ok",
+            "by_macroregion": {
+              "3": {
+                "n": 75,
+                "delta": -42.03904375980915
+              },
+              "4": {
+                "n": 10,
+                "delta": -9.998496804091019
+              }
+            }
+          },
+          "by_macroregion_delta": {
+            "3": {
+              "n": 75,
+              "delta": -42.03904375980915
+            },
+            "4": {
+              "n": 10,
+              "delta": -9.998496804091019
+            }
+          },
+          "spread": 32.04054695571813,
+          "association": {
+            "status": "ok",
+            "n": 285,
+            "n_clusters": 5,
+            "cluster_info": {
+              "scheme": "two_way",
+              "n_clusters_a": 5,
+              "n_clusters_b": 57
+            },
+            "df": 4,
+            "variables": [
+              "x_water",
+              "x_macro"
+            ],
+            "tested": [
+              "x_macro"
+            ],
+            "joint_test": {
+              "status": "ok",
+              "wald": 12.194448479521368,
+              "statistic": 12.194448479521368,
+              "df1": 1,
+              "df2": 4,
+              "p_value": 0.025076062528062493,
+              "n_restrictions": 1
+            },
+            "coefficients": {
+              "x_water": {
+                "coefficient": 1570.224957384999,
+                "std_error": 602.6541947357385,
+                "t_statistic": 2.6055156856139305,
+                "p_value": 0.05970072846821224,
+                "ci95": [
+                  -103.01133171596052,
+                  3243.4612464859583
+                ],
+                "tested": false
+              },
+              "x_macro": {
+                "coefficient": 3123.5531599749547,
+                "std_error": 894.4742033895467,
+                "t_statistic": 3.4920550510439217,
+                "p_value": 0.025076062528062507,
+                "ci95": [
+                  640.0946362483514,
+                  5607.011683701558
+                ],
+                "tested": true
+              }
+            }
+          }
+        },
+        "MS": {
+          "macroregions": [
+            "2",
+            "3"
+          ],
+          "reference": "2",
+          "predictive": {
+            "status": "ok",
+            "by_macroregion": {
+              "2": {
+                "n": 318,
+                "delta": 67.09238409312661
+              },
+              "3": {
+                "n": 110,
+                "delta": 7.223613615435397
+              }
+            }
+          },
+          "by_macroregion_delta": {
+            "2": {
+              "n": 318,
+              "delta": 67.09238409312661
+            },
+            "3": {
+              "n": 110,
+              "delta": 7.223613615435397
+            }
+          },
+          "spread": 59.868770477691214,
+          "association": {
+            "status": "ok",
+            "n": 428,
+            "n_clusters": 9,
+            "cluster_info": {
+              "scheme": "two_way",
+              "n_clusters_a": 9,
+              "n_clusters_b": 73
+            },
+            "df": 8,
+            "variables": [
+              "x_water",
+              "x_macro"
+            ],
+            "tested": [
+              "x_macro"
+            ],
+            "joint_test": {
+              "status": "ok",
+              "wald": 6.586018139246515,
+              "statistic": 6.586018139246515,
+              "df1": 1,
+              "df2": 8,
+              "p_value": 0.03331755025663547,
+              "n_restrictions": 1
+            },
+            "coefficients": {
+              "x_water": {
+                "coefficient": -136.2471737106505,
+                "std_error": 64.23688531790532,
+                "t_statistic": -2.1210115191041665,
+                "p_value": 0.06672006469127545,
+                "ci95": [
+                  -284.37769688637593,
+                  11.883349465074957
+                ],
+                "tested": false
+              },
+              "x_macro": {
+                "coefficient": 626.8451986436205,
+                "std_error": 244.25802570569297,
+                "t_statistic": 2.5663238570465956,
+                "p_value": 0.03331755025663547,
+                "ci95": [
+                  63.5851813094871,
+                  1190.105215977754
+                ],
+                "tested": true
+              }
+            }
+          }
+        },
+        "PR": {
+          "macroregions": [
+            "1",
+            "2"
+          ],
+          "reference": "1",
+          "predictive": {
+            "status": "ok",
+            "by_macroregion": {
+              "1": {
+                "n": 388,
+                "delta": 0.4530831760055207
+              },
+              "2": {
+                "n": 1448,
+                "delta": 28.42336240946429
+              }
+            }
+          },
+          "by_macroregion_delta": {
+            "1": {
+              "n": 388,
+              "delta": 0.4530831760055207
+            },
+            "2": {
+              "n": 1448,
+              "delta": 28.42336240946429
+            }
+          },
+          "spread": 27.97027923345877,
+          "association": {
+            "status": "ok",
+            "n": 1836,
+            "n_clusters": 9,
+            "cluster_info": {
+              "scheme": "two_way",
+              "n_clusters_a": 9,
+              "n_clusters_b": 306
+            },
+            "df": 8,
+            "variables": [
+              "x_water",
+              "x_macro"
+            ],
+            "tested": [
+              "x_macro"
+            ],
+            "joint_test": {
+              "status": "ok",
+              "wald": 20.398167623503866,
+              "statistic": 20.398167623503866,
+              "df1": 1,
+              "df2": 8,
+              "p_value": 0.001959104942226244,
+              "n_restrictions": 1
+            },
+            "coefficients": {
+              "x_water": {
+                "coefficient": -1201.165692751847,
+                "std_error": 316.909727109474,
+                "t_statistic": -3.790245580997625,
+                "p_value": 0.005309968478526422,
+                "ci95": [
+                  -1931.9608339527176,
+                  -470.3705515509763
+                ],
+                "tested": false
+              },
+              "x_macro": {
+                "coefficient": 1181.7065738424633,
+                "std_error": 261.6459841298993,
+                "t_statistic": 4.5164330642116095,
+                "p_value": 0.0019591049422262416,
+                "ci95": [
+                  578.349852479352,
+                  1785.0632952055746
+                ],
+                "tested": true
+              }
+            }
+          }
+        }
+      },
+      "by_year": {},
+      "baseline_D": -22.499020847569682
+    }
+  },
+  "elapsed_s": 57.9
+}

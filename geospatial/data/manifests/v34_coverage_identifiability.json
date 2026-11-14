@@ -1,0 +1,632 @@
+{
+  "generated_at": "2026-11-14T16:35:39.760595+00:00",
+  "classification": "docs/V3_4_REGIONAL_CLASSIFICATION_PROTOCOL.md",
+  "groups": {
+    "Sul": "MRS 1",
+    "Cerrado": "MRS 3 + MRS 4",
+    "Transicao": "MRS 2 (excluida do contraste primario)"
+  },
+  "crops": {
+    "soja": {
+      "scenario": "cad_0_100",
+      "n_rows": 8868,
+      "groups": {
+        "Sul": {
+          "n_rows": 3943,
+          "n_municipalities": 556,
+          "n_years": 8,
+          "years": [
+            2018,
+            2019,
+            2020,
+            2021,
+            2022,
+            2023,
+            2024,
+            2025
+          ],
+          "n_blocks": 13,
+          "n_state_years": 16,
+          "by_uf": {
+            "PR": 977,
+            "RS": 2966
+          },
+          "by_macroregion": {
+            "1": 3943
+          },
+          "yield_median": 3000.0,
+          "yield_sd": 904.4124462235885,
+          "deficit_median": 0.0,
+          "deficit_sd": 46.78697225634582,
+          "deficit_p10": 0.0,
+          "deficit_p90": 101.8959589320037,
+          "stress_share_median": 0.0,
+          "etr_over_etp_median": 1.0,
+          "precip_median": 446.08999984897673,
+          "temp_median": 21.165217513623446
+        },
+        "Cerrado": {
+          "n_rows": 2647,
+          "n_municipalities": 353,
+          "n_years": 8,
+          "years": [
+            2018,
+            2019,
+            2020,
+            2021,
+            2022,
+            2023,
+            2024,
+            2025
+          ],
+          "n_blocks": 30,
+          "n_state_years": 24,
+          "by_uf": {
+            "GO": 1558,
+            "MS": 194,
+            "MT": 895
+          },
+          "by_macroregion": {
+            "3": 1021,
+            "4": 1626
+          },
+          "yield_median": 3480.0,
+          "yield_sd": 418.63505221381064,
+          "deficit_median": 0.0,
+          "deficit_sd": 106.8280489840818,
+          "deficit_p10": 0.0,
+          "deficit_p90": 205.62022601644983,
+          "stress_share_median": 0.0,
+          "etr_over_etp_median": 1.0,
+          "precip_median": 539.7300059981644,
+          "temp_median": 26.387723566070804
+        },
+        "Transicao": {
+          "n_rows": 2278,
+          "n_municipalities": 314,
+          "n_years": 8,
+          "years": [
+            2018,
+            2019,
+            2020,
+            2021,
+            2022,
+            2023,
+            2024,
+            2025
+          ],
+          "n_blocks": 8,
+          "n_state_years": 16,
+          "by_uf": {
+            "MS": 392,
+            "PR": 1886
+          },
+          "by_macroregion": {
+            "2": 2278
+          },
+          "yield_median": 3200.0,
+          "yield_sd": 797.7365694460925,
+          "deficit_median": 65.82141970485037,
+          "deficit_sd": 118.55480864125605,
+          "deficit_p10": 0.0,
+          "deficit_p90": 272.05162720833414,
+          "stress_share_median": 0.3333333333333333,
+          "etr_over_etp_median": 0.8949821172579255,
+          "precip_median": 504.24999979510903,
+          "temp_median": 25.18212131865944
+        }
+      },
+      "confounding": {
+        "crosstab": {
+          "Cerrado|GO": 1558,
+          "Cerrado|MS": 194,
+          "Cerrado|MT": 895,
+          "Sul|PR": 977,
+          "Sul|RS": 2966
+        },
+        "cramers_v": 0.9999999999999999,
+        "ufs_in_both_groups": [],
+        "regions_nested_in_uf": true
+      },
+      "within_state_variation": {
+        "GO": {
+          "macroregions": [
+            "3",
+            "4"
+          ],
+          "by_macroregion": {
+            "3": {
+              "n_rows": 827,
+              "n_municipalities": 107,
+              "deficit_median": 0.0
+            },
+            "4": {
+              "n_rows": 731,
+              "n_municipalities": 103,
+              "deficit_median": 0.0
+            }
+          }
+        },
+        "MS": {
+          "macroregions": [
+            "2",
+            "3"
+          ],
+          "by_macroregion": {
+            "2": {
+              "n_rows": 392,
+              "n_municipalities": 52,
+              "deficit_median": 160.9392005231195
+            },
+            "3": {
+              "n_rows": 194,
+              "n_municipalities": 25,
+              "deficit_median": 67.15514822606184
+            }
+          }
+        },
+        "PR": {
+          "macroregions": [
+            "1",
+            "2"
+          ],
+          "by_macroregion": {
+            "1": {
+              "n_rows": 977,
+              "n_municipalities": 127,
+              "deficit_median": 0.0
+            },
+            "2": {
+              "n_rows": 1886,
+              "n_municipalities": 262,
+              "deficit_median": 53.194168702125296
+            }
+          }
+        }
+      }
+    },
+    "milho": {
+      "scenario": "cad_0_60",
+      "n_rows": 7542,
+      "groups": {
+        "Sul": {
+          "n_rows": 2482,
+          "n_municipalities": 364,
+          "n_years": 8,
+          "years": [
+            2018,
+            2019,
+            2020,
+            2021,
+            2022,
+            2023,
+            2024,
+            2025
+          ],
+          "n_blocks": 10,
+          "n_state_years": 16,
+          "by_uf": {
+            "PR": 1054,
+            "RS": 1428
+          },
+          "by_macroregion": {
+            "1": 2482
+          },
+          "yield_median": 6600.0,
+          "yield_sd": 2499.7163501385417,
+          "deficit_median": 0.9704518782128986,
+          "deficit_sd": 80.7143004930633,
+          "deficit_p10": 0.0,
+          "deficit_p90": 170.0273655846504,
+          "stress_share_median": 0.08333333333333333,
+          "etr_over_etp_median": 0.9983850425356937,
+          "precip_median": 590.6500011663884,
+          "temp_median": 20.241337716126
+        },
+        "Cerrado": {
+          "n_rows": 2747,
+          "n_municipalities": 361,
+          "n_years": 8,
+          "years": [
+            2018,
+            2019,
+            2020,
+            2021,
+            2022,
+            2023,
+            2024,
+            2025
+          ],
+          "n_blocks": 32,
+          "n_state_years": 32,
+          "by_uf": {
+            "BA": 33,
+            "GO": 1567,
+            "MS": 166,
+            "MT": 981
+          },
+          "by_macroregion": {
+            "3": 962,
+            "4": 1785
+          },
+          "yield_median": 5803.0,
+          "yield_sd": 1384.8120929696704,
+          "deficit_median": 74.44142684087268,
+          "deficit_sd": 122.84810703545038,
+          "deficit_p10": 0.0,
+          "deficit_p90": 285.33809413545436,
+          "stress_share_median": 0.3333333333333333,
+          "etr_over_etp_median": 0.8633709432076805,
+          "precip_median": 487.3399999346584,
+          "temp_median": 26.603043473285176
+        },
+        "Transicao": {
+          "n_rows": 2298,
+          "n_municipalities": 311,
+          "n_years": 8,
+          "years": [
+            2018,
+            2019,
+            2020,
+            2021,
+            2022,
+            2023,
+            2024,
+            2025
+          ],
+          "n_blocks": 8,
+          "n_state_years": 16,
+          "by_uf": {
+            "MS": 386,
+            "PR": 1912
+          },
+          "by_macroregion": {
+            "2": 2298
+          },
+          "yield_median": 4840.5,
+          "yield_sd": 1538.343005195671,
+          "deficit_median": 143.28422502366692,
+          "deficit_sd": 142.6434676702738,
+          "deficit_p10": 1.5726037766053524,
+          "deficit_p90": 381.01391589704593,
+          "stress_share_median": 0.5,
+          "etr_over_etp_median": 0.7874554341223192,
+          "precip_median": 532.9000033736229,
+          "temp_median": 24.34639349140105
+        }
+      },
+      "confounding": {
+        "crosstab": {
+          "Cerrado|BA": 33,
+          "Cerrado|GO": 1567,
+          "Cerrado|MS": 166,
+          "Cerrado|MT": 981,
+          "Sul|PR": 1054,
+          "Sul|RS": 1428
+        },
+        "cramers_v": 1.0,
+        "ufs_in_both_groups": [],
+        "regions_nested_in_uf": true
+      },
+      "within_state_variation": {
+        "BA": {
+          "macroregions": [
+            "4",
+            "5"
+          ],
+          "by_macroregion": {
+            "4": {
+              "n_rows": 33,
+              "n_municipalities": 6,
+              "deficit_median": 235.41416631237445
+            },
+            "5": {
+              "n_rows": 15,
+              "n_municipalities": 5,
+              "deficit_median": 75.76779545424188
+            }
+          }
+        },
+        "GO": {
+          "macroregions": [
+            "3",
+            "4"
+          ],
+          "by_macroregion": {
+            "3": {
+              "n_rows": 796,
+              "n_municipalities": 108,
+              "deficit_median": 62.83561350443449
+            },
+            "4": {
+              "n_rows": 771,
+              "n_municipalities": 100,
+              "deficit_median": 57.1988264894004
+            }
+          }
+        },
+        "MS": {
+          "macroregions": [
+            "2",
+            "3"
+          ],
+          "by_macroregion": {
+            "2": {
+              "n_rows": 386,
+              "n_municipalities": 52,
+              "deficit_median": 247.77917795718014
+            },
+            "3": {
+              "n_rows": 166,
+              "n_municipalities": 24,
+              "deficit_median": 221.03703181598388
+            }
+          }
+        },
+        "PR": {
+          "macroregions": [
+            "1",
+            "2"
+          ],
+          "by_macroregion": {
+            "1": {
+              "n_rows": 1054,
+              "n_municipalities": 132,
+              "deficit_median": 0.0
+            },
+            "2": {
+              "n_rows": 1912,
+              "n_municipalities": 259,
+              "deficit_median": 125.63826861964515
+            }
+          }
+        }
+      }
+    },
+    "milho_2": {
+      "scenario": "cad_0_60",
+      "n_rows": 2897,
+      "groups": {
+        "Sul": {
+          "n_rows": 388,
+          "n_municipalities": 72,
+          "n_years": 9,
+          "years": [
+            2017,
+            2018,
+            2019,
+            2020,
+            2021,
+            2022,
+            2023,
+            2024,
+            2025
+          ],
+          "n_blocks": 3,
+          "n_state_years": 9,
+          "by_uf": {
+            "PR": 388
+          },
+          "by_macroregion": {
+            "1": 388
+          },
+          "yield_median": 6561.5,
+          "yield_sd": 2371.6295015201267,
+          "deficit_median": 0.0,
+          "deficit_sd": 34.17344288303552,
+          "deficit_p10": 0.0,
+          "deficit_p90": 50.03983671231899,
+          "stress_share_median": 0.0,
+          "etr_over_etp_median": 1.0,
+          "precip_median": 314.94000453688204,
+          "temp_median": 23.273709697108114
+        },
+        "Cerrado": {
+          "n_rows": 743,
+          "n_municipalities": 149,
+          "n_years": 9,
+          "years": [
+            2017,
+            2018,
+            2019,
+            2020,
+            2021,
+            2022,
+            2023,
+            2024,
+            2025
+          ],
+          "n_blocks": 23,
+          "n_state_years": 19,
+          "by_uf": {
+            "GO": 285,
+            "MS": 110,
+            "MT": 348
+          },
+          "by_macroregion": {
+            "3": 225,
+            "4": 518
+          },
+          "yield_median": 5960.0,
+          "yield_sd": 1389.395250017125,
+          "deficit_median": 0.0,
+          "deficit_sd": 46.378709952244336,
+          "deficit_p10": 0.0,
+          "deficit_p90": 45.55928309365693,
+          "stress_share_median": 0.0,
+          "etr_over_etp_median": 1.0,
+          "precip_median": 375.94000027514994,
+          "temp_median": 25.017457574100817
+        },
+        "Transicao": {
+          "n_rows": 1766,
+          "n_municipalities": 283,
+          "n_years": 9,
+          "years": [
+            2017,
+            2018,
+            2019,
+            2020,
+            2021,
+            2022,
+            2023,
+            2024,
+            2025
+          ],
+          "n_blocks": 8,
+          "n_state_years": 18,
+          "by_uf": {
+            "MS": 318,
+            "PR": 1448
+          },
+          "by_macroregion": {
+            "2": 1766
+          },
+          "yield_median": 4831.5,
+          "yield_sd": 1485.5432890916481,
+          "deficit_median": 25.842893948088715,
+          "deficit_sd": 113.24340037687529,
+          "deficit_p10": 0.0,
+          "deficit_p90": 272.0700249747622,
+          "stress_share_median": 0.3333333333333333,
+          "etr_over_etp_median": 0.9512359315910508,
+          "precip_median": 412.7399989515543,
+          "temp_median": 25.78327768113878
+        }
+      },
+      "confounding": {
+        "crosstab": {
+          "Cerrado|GO": 285,
+          "Cerrado|MS": 110,
+          "Cerrado|MT": 348,
+          "Sul|PR": 388
+        },
+        "cramers_v": 1.0,
+        "ufs_in_both_groups": [],
+        "regions_nested_in_uf": true
+      },
+      "within_state_variation": {
+        "GO": {
+          "macroregions": [
+            "3",
+            "4"
+          ],
+          "by_macroregion": {
+            "3": {
+              "n_rows": 115,
+              "n_municipalities": 23,
+              "deficit_median": 0.0
+            },
+            "4": {
+              "n_rows": 170,
+              "n_municipalities": 34,
+              "deficit_median": 0.0
+            }
+          }
+        },
+        "MS": {
+          "macroregions": [
+            "2",
+            "3"
+          ],
+          "by_macroregion": {
+            "2": {
+              "n_rows": 318,
+              "n_municipalities": 49,
+              "deficit_median": 97.95769557147332
+            },
+            "3": {
+              "n_rows": 110,
+              "n_municipalities": 24,
+              "deficit_median": 51.074358364460025
+            }
+          }
+        },
+        "PR": {
+          "macroregions": [
+            "1",
+            "2"
+          ],
+          "by_macroregion": {
+            "1": {
+              "n_rows": 388,
+              "n_municipalities": 72,
+              "deficit_median": 0.0
+            },
+            "2": {
+              "n_rows": 1448,
+              "n_municipalities": 234,
+              "deficit_median": 6.842720328532195
+            }
+          }
+        }
+      }
+    }
+  },
+  "climate_support": {
+    "soja": {
+      "deficit_median_sul": 0.0,
+      "deficit_median_cerrado": 0.0,
+      "deficit_ratio_cerrado_over_sul": null,
+      "range_overlap": {
+        "sul": [
+          0.0,
+          101.8959589320037
+        ],
+        "cerrado": [
+          0.0,
+          205.62022601644983
+        ],
+        "overlaps": true
+      },
+      "yield_median_sul": 3000.0,
+      "yield_median_cerrado": 3480.0
+    },
+    "milho": {
+      "deficit_median_sul": 0.9704518782128986,
+      "deficit_median_cerrado": 74.44142684087268,
+      "deficit_ratio_cerrado_over_sul": 76.70800429379112,
+      "range_overlap": {
+        "sul": [
+          0.0,
+          170.0273655846504
+        ],
+        "cerrado": [
+          0.0,
+          285.33809413545436
+        ],
+        "overlaps": true
+      },
+      "yield_median_sul": 6600.0,
+      "yield_median_cerrado": 5803.0
+    },
+    "milho_2": {
+      "deficit_median_sul": 0.0,
+      "deficit_median_cerrado": 0.0,
+      "deficit_ratio_cerrado_over_sul": null,
+      "range_overlap": {
+        "sul": [
+          0.0,
+          50.03983671231899
+        ],
+        "cerrado": [
+          0.0,
+          45.55928309365693
+        ],
+        "overlaps": true
+      },
+      "yield_median_sul": 6561.5,
+      "yield_median_cerrado": 5960.0
+    }
+  },
+  "identifiability_verdict": {
+    "regions_nested_in_uf": true,
+    "implication": "o contraste Sul x Cerrado nao e separavel de um contraste entre grupos de estados; inclinacoes (interacoes com o bloco hidrico) continuam identificaveis por variacao temporal dentro do municipio; o nivel regional nao",
+    "within_state_tests_available": [
+      "BA",
+      "GO",
+      "MS",
+      "PR"
+    ]
+  }
+}

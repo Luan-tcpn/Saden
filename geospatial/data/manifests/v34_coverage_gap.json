@@ -1,0 +1,323 @@
+{
+  "generated_at": "2026-11-14T16:57:56.777333+00:00",
+  "denominator": {
+    "source": "planilha oficial MAPA/ZARC (municípios com indicação de soja)",
+    "total_municipalities_with_soybean_indication": 4286,
+    "in_the_six_panel_states": 1425,
+    "share_of_indicated_territory_covered_by_scope": 0.3325,
+    "n_states_with_indication": 21
+  },
+  "covered_states": {
+    "BA": {
+      "municipalities_with_soybean_indication": 62,
+      "by_macroregion": {
+        "mrs4": 27,
+        "mrs5": 35
+      },
+      "municipalities_in_panel": 31,
+      "municipalities_matched_to_a_region": 62,
+      "rows_by_crop": {
+        "soja": 0,
+        "milho": 106,
+        "milho_2": 0
+      },
+      "coverage_of_indicated_municipalities": 1.0
+    },
+    "GO": {
+      "municipalities_with_soybean_indication": 246,
+      "by_macroregion": {
+        "mrs3": 119,
+        "mrs4": 127
+      },
+      "municipalities_in_panel": 214,
+      "municipalities_matched_to_a_region": 246,
+      "rows_by_crop": {
+        "soja": 1558,
+        "milho": 1567,
+        "milho_2": 285
+      },
+      "coverage_of_indicated_municipalities": 1.0
+    },
+    "MS": {
+      "municipalities_with_soybean_indication": 79,
+      "by_macroregion": {
+        "mrs2": 53,
+        "mrs3": 26
+      },
+      "municipalities_in_panel": 77,
+      "municipalities_matched_to_a_region": 79,
+      "rows_by_crop": {
+        "soja": 586,
+        "milho": 552,
+        "milho_2": 428
+      },
+      "coverage_of_indicated_municipalities": 1.0
+    },
+    "MT": {
+      "municipalities_with_soybean_indication": 141,
+      "by_macroregion": {
+        "mrs4": 141
+      },
+      "municipalities_in_panel": 125,
+      "municipalities_matched_to_a_region": 139,
+      "rows_by_crop": {
+        "soja": 911,
+        "milho": 997,
+        "milho_2": 353
+      },
+      "coverage_of_indicated_municipalities": 0.9858
+    },
+    "PR": {
+      "municipalities_with_soybean_indication": 400,
+      "by_macroregion": {
+        "mrs1": 134,
+        "mrs2": 266
+      },
+      "municipalities_in_panel": 394,
+      "municipalities_matched_to_a_region": 399,
+      "rows_by_crop": {
+        "soja": 2863,
+        "milho": 2966,
+        "milho_2": 1836
+      },
+      "coverage_of_indicated_municipalities": 0.9975
+    },
+    "RS": {
+      "municipalities_with_soybean_indication": 497,
+      "by_macroregion": {
+        "mrs1": 497
+      },
+      "municipalities_in_panel": 455,
+      "municipalities_matched_to_a_region": 497,
+      "rows_by_crop": {
+        "soja": 2966,
+        "milho": 1428,
+        "milho_2": 0
+      },
+      "coverage_of_indicated_municipalities": 1.0
+    }
+  },
+  "absent_states": {
+    "AC": {
+      "municipalities_with_soybean_indication": 22,
+      "by_macroregion": {
+        "mrs4": 22
+      }
+    },
+    "AL": {
+      "municipalities_with_soybean_indication": 86,
+      "by_macroregion": {
+        "mrs5": 86
+      }
+    },
+    "AP": {
+      "municipalities_with_soybean_indication": 16,
+      "by_macroregion": {
+        "mrs5": 16
+      }
+    },
+    "DF": {
+      "municipalities_with_soybean_indication": 1,
+      "by_macroregion": {
+        "mrs3": 1
+      }
+    },
+    "MA": {
+      "municipalities_with_soybean_indication": 217,
+      "by_macroregion": {
+        "mrs5": 217
+      }
+    },
+    "MG": {
+      "municipalities_with_soybean_indication": 852,
+      "by_macroregion": {
+        "mrs2": 146,
+        "mrs3": 706
+      }
+    },
+    "PA": {
+      "municipalities_with_soybean_indication": 132,
+      "by_macroregion": {
+        "mrs5": 132
+      }
+    },
+    "PI": {
+      "municipalities_with_soybean_indication": 224,
+      "by_macroregion": {
+        "mrs5": 224
+      }
+    },
+    "RJ": {
+      "municipalities_with_soybean_indication": 92,
+      "by_macroregion": {
+        "mrs2": 44,
+        "mrs3": 48
+      }
+    },
+    "RO": {
+      "municipalities_with_soybean_indication": 52,
+      "by_macroregion": {
+        "mrs4": 52
+      }
+    },
+    "RR": {
+      "municipalities_with_soybean_indication": 15,
+      "by_macroregion": {
+        "mrs5": 15
+      }
+    },
+    "SC": {
+      "municipalities_with_soybean_indication": 295,
+      "by_macroregion": {
+        "mrs1": 295
+      }
+    },
+    "SE": {
+      "municipalities_with_soybean_indication": 73,
+      "by_macroregion": {
+        "mrs5": 73
+      }
+    },
+    "SP": {
+      "municipalities_with_soybean_indication": 645,
+      "by_macroregion": {
+        "mrs1": 44,
+        "mrs2": 433,
+        "mrs3": 168
+      }
+    },
+    "TO": {
+      "municipalities_with_soybean_indication": 139,
+      "by_macroregion": {
+        "mrs4": 38,
+        "mrs5": 101
+      }
+    }
+  },
+  "not_measurable_here": {
+    "production_share": "o painel PAM do repositório cobre apenas MT, GO, MS, PR, RS e BA; a participação nacional na produção não pode ser calculada sem aquisição de PAM para as demais UFs",
+    "agricultural_area_share": "mesma razão: sem dados de área fora das 6 UFs"
+  },
+  "gap": {
+    "n_absent_states": 15,
+    "absent_states": [
+      "AC",
+      "AL",
+      "AP",
+      "DF",
+      "MA",
+      "MG",
+      "PA",
+      "PI",
+      "RJ",
+      "RO",
+      "RR",
+      "SC",
+      "SE",
+      "SP",
+      "TO"
+    ],
+    "municipalities_with_indication_outside_scope": 2861,
+    "share_of_indicated_territory_outside_scope": 0.6675
+  },
+  "expansion_priorities": [
+    {
+      "uf": "MG",
+      "municipalities": 852,
+      "macroregions": [
+        "mrs2",
+        "mrs3"
+      ],
+      "adds_macroregion_not_covered": []
+    },
+    {
+      "uf": "SP",
+      "municipalities": 645,
+      "macroregions": [
+        "mrs1",
+        "mrs2",
+        "mrs3"
+      ],
+      "adds_macroregion_not_covered": []
+    },
+    {
+      "uf": "SC",
+      "municipalities": 295,
+      "macroregions": [
+        "mrs1"
+      ],
+      "adds_macroregion_not_covered": []
+    },
+    {
+      "uf": "PI",
+      "municipalities": 224,
+      "macroregions": [
+        "mrs5"
+      ],
+      "adds_macroregion_not_covered": []
+    },
+    {
+      "uf": "MA",
+      "municipalities": 217,
+      "macroregions": [
+        "mrs5"
+      ],
+      "adds_macroregion_not_covered": []
+    },
+    {
+      "uf": "TO",
+      "municipalities": 139,
+      "macroregions": [
+        "mrs4",
+        "mrs5"
+      ],
+      "adds_macroregion_not_covered": []
+    },
+    {
+      "uf": "PA",
+      "municipalities": 132,
+      "macroregions": [
+        "mrs5"
+      ],
+      "adds_macroregion_not_covered": []
+    },
+    {
+      "uf": "RJ",
+      "municipalities": 92,
+      "macroregions": [
+        "mrs2",
+        "mrs3"
+      ],
+      "adds_macroregion_not_covered": []
+    },
+    {
+      "uf": "AL",
+      "municipalities": 86,
+      "macroregions": [
+        "mrs5"
+      ],
+      "adds_macroregion_not_covered": []
+    },
+    {
+      "uf": "SE",
+      "municipalities": 73,
+      "macroregions": [
+        "mrs5"
+      ],
+      "adds_macroregion_not_covered": []
+    }
+  ],
+  "would_break_confounding": [
+    {
+      "uf": "SP",
+      "municipalities": 645,
+      "macroregions": [
+        "mrs1",
+        "mrs2",
+        "mrs3"
+      ],
+      "spans_sul_and_cerrado": true
+    }
+  ],
+  "identification_note": "uma UF que tenha municípios em MRS 1 e em MRS 3/4 permitiria comparar Sul e Cerrado DENTRO do mesmo estado, que é o que falta para separar região de efeito de estado"
+}

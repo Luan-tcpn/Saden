@@ -1,0 +1,145 @@
+{
+  "generated_at": "2026-11-14T16:31:27.337185+00:00",
+  "source": {
+    "normative": "Instrução Normativa SPA/MAPA nº 1, de 9 de novembro de 2021",
+    "annex_updates": [
+      "Portaria SPA/MAPA nº 387, de 16 de outubro de 2023",
+      "Portaria SPA/MAPA nº 281, de 28 de maio de 2025"
+    ],
+    "institution": "Ministério da Agricultura e Pecuária (MAPA) — Secretaria de Política Agrícola",
+    "published_spreadsheet": "Planilha dos municípios e suas respectivas regiões edafoclimáticas",
+    "url_xlsx": "https://www.gov.br/agricultura/pt-br/assuntos/riscos-seguro/programa-nacional-de-zoneamento-agricola-de-risco-climatico/MacrorregioSojicolasAtualizado_2025.xlsx",
+    "url_pdf": "https://www.gov.br/agricultura/pt-br/assuntos/riscos-seguro/programa-nacional-de-zoneamento-agricola-de-risco-climatico/INSTRUONORMATIVAN1DE9DENOVEMBRODE2021MACRORREGIOSOJCOLASATUALIZADO2025.pdf",
+    "url_landing": "https://www.gov.br/agricultura/pt-br/assuntos/riscos-seguro/programa-nacional-de-zoneamento-agricola-de-risco-climatico/normativos-do-zarc",
+    "accessed_at": "2026-11-14",
+    "xlsx_sha256": "91126b6b512724cd90ab2bfc951ac418c0114bf78a697562a9c8c377f7458c84",
+    "xlsx_bytes": 140020,
+    "purpose_original": "indicação de cultivares de soja no ZARC"
+  },
+  "coverage": {
+    "rows_total": 4286,
+    "rows_panel_states": 1425,
+    "by_state": {
+      "BA": 62,
+      "GO": 246,
+      "MS": 79,
+      "MT": 141,
+      "PR": 400,
+      "RS": 497
+    },
+    "by_macroregion": {
+      "1": 631,
+      "2": 319,
+      "3": 145,
+      "4": 295,
+      "5": 35
+    },
+    "by_state_macroregion": {
+      "BA|MRS4": 27,
+      "BA|MRS5": 35,
+      "GO|MRS3": 119,
+      "GO|MRS4": 127,
+      "MS|MRS2": 53,
+      "MS|MRS3": 26,
+      "MT|MRS4": 141,
+      "PR|MRS1": 134,
+      "PR|MRS2": 266,
+      "RS|MRS1": 497
+    },
+    "duplicate_state_municipality": 0
+  },
+  "join": {
+    "panel_municipalities": 1782,
+    "matched": 1422,
+    "unmatched": 360,
+    "unmatched_examples": [
+      {
+        "uf": "BA",
+        "municipality": "Abaíra"
+      },
+      {
+        "uf": "BA",
+        "municipality": "Abaré"
+      },
+      {
+        "uf": "BA",
+        "municipality": "Érico Cardoso"
+      },
+      {
+        "uf": "BA",
+        "municipality": "Aiquara"
+      },
+      {
+        "uf": "BA",
+        "municipality": "Alcobaça"
+      },
+      {
+        "uf": "BA",
+        "municipality": "Almadina"
+      },
+      {
+        "uf": "BA",
+        "municipality": "Amargosa"
+      },
+      {
+        "uf": "BA",
+        "municipality": "Amélia Rodrigues"
+      },
+      {
+        "uf": "BA",
+        "municipality": "América Dourada"
+      },
+      {
+        "uf": "BA",
+        "municipality": "Anagé"
+      },
+      {
+        "uf": "BA",
+        "municipality": "Andaraí"
+      },
+      {
+        "uf": "BA",
+        "municipality": "Andorinha"
+      },
+      {
+        "uf": "BA",
+        "municipality": "Anguera"
+      },
+      {
+        "uf": "BA",
+        "municipality": "Antas"
+      },
+      {
+        "uf": "BA",
+        "municipality": "Antônio Cardoso"
+      },
+      {
+        "uf": "BA",
+        "municipality": "Antônio Gonçalves"
+      },
+      {
+        "uf": "BA",
+        "municipality": "Apuarema"
+      },
+      {
+        "uf": "BA",
+        "municipality": "Aracatu"
+      },
+      {
+        "uf": "BA",
+        "municipality": "Araci"
+      },
+      {
+        "uf": "BA",
+        "municipality": "Arataca"
+      }
+    ]
+  },
+  "limitations": [
+    "finalidade original é indicação de cultivares de SOJA; extensão ao milho é aproximação declarada",
+    "macrorregião sojícola não é bioma: MRS 4 inclui MT (Cerrado e transição amazônica), GO e oeste da BA",
+    "MRS 2 é uma faixa de transição (norte do PR e centro-sul do MS) e não é classificada como Sul nem como Cerrado",
+    "a planilha só lista municípios com indicação de soja; ausência não é erro de parse"
+  ],
+  "elapsed_s": 0.8
+}
