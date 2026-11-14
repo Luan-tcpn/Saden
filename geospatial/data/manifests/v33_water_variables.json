@@ -1,0 +1,57 @@
+{
+  "generated_at": "2026-11-14T15:45:48.983894+00:00",
+  "definition": "descritores mensais do balanco sequencial de Thornthwaite-Mather na janela ZARC corrigida; nenhuma duracao em dias e inventada",
+  "granularity": "mensal (o balanco sequencial implementado e mensal)",
+  "n_rows": 77608,
+  "scenarios": {
+    "cad50": {
+      "n": 19402,
+      "median_months": 3.0,
+      "median_deficit_months": 2.0,
+      "median_stress_share": 0.5,
+      "median_max_consecutive": 2.0,
+      "share_all_months_stressed": 0.1633336769405216,
+      "share_no_stress": 0.1900319554685084,
+      "median_etr_over_etp": 0.8076183856555084,
+      "median_deficit_total_mm": 105.96998135621962,
+      "median_storage_min_mm": 0.0
+    },
+    "cad_0_60": {
+      "n": 19402,
+      "median_months": 3.0,
+      "median_deficit_months": 1.0,
+      "median_stress_share": 0.3333333333333333,
+      "median_max_consecutive": 1.0,
+      "share_all_months_stressed": 0.11601896711679208,
+      "share_no_stress": 0.3520255643748067,
+      "median_etr_over_etp": 0.9034871087961202,
+      "median_deficit_total_mm": 53.114621864020776,
+      "median_storage_min_mm": 0.0
+    },
+    "cad_0_100": {
+      "n": 19402,
+      "median_months": 3.0,
+      "median_deficit_months": 0.0,
+      "median_stress_share": 0.0,
+      "median_max_consecutive": 0.0,
+      "share_all_months_stressed": 0.050819503144005775,
+      "share_no_stress": 0.5424183073909906,
+      "median_etr_over_etp": 1.0,
+      "median_deficit_total_mm": 0.0,
+      "median_storage_min_mm": 14.053154155504828
+    },
+    "cad_0_200": {
+      "n": 19402,
+      "median_months": 3.0,
+      "median_deficit_months": 0.0,
+      "median_stress_share": 0.0,
+      "median_max_consecutive": 0.0,
+      "share_all_months_stressed": 0.0004123286259148541,
+      "share_no_stress": 0.8608390887537367,
+      "median_etr_over_etp": 1.0,
+      "median_deficit_total_mm": 0.0,
+      "median_storage_min_mm": 186.00174241336575
+    }
+  },
+  "elapsed_s": 113.1
+}

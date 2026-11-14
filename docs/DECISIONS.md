@@ -1941,4 +1941,133 @@ ano) e decompôs cobertura × fallback:
   exatamente onde não há vizinho — em raio de 100 km no milho isso é 45% das
   linhas.
 
+## D108 - M2 permanece o modelo de referência; nenhuma forma funcional melhora a generalização (2026-11-14)
+
+**Contexto.** A V3.2 deixou três rejeições exploratórias no milho (déficit,
+graus-dia, calor) que não identificavam a variável responsável. A V3.3 testou se
+uma representação fisicamente coerente do balanço hídrico e da exposição térmica
+melhora a previsão.
+
+**Alternativas consideradas.** (i) especificação funcional hídrica incremental;
+(ii) forma não linear quadrática; (iii) bloco térmico ortogonal (graus-dia);
+(iv) interação água × calor; (v) combinações.
+
+**Decisão.** Nenhuma supera M2. M2 continua sendo o modelo de referência e o
+único recomendado para qualquer uso preditivo.
+
+**Evidência** (TE, ΔMAE contra M2; negativo = melhor; IC por UF×ano):
+
+| comparação (milho) | ΔMAE | IC95% UF×ano | p | Holm |
+|---|---:|---|---:|---:|
+| bloco hídrico incremental | +1,33 | [−47,9; 49,8] | 0,953 | 0,953 |
+| graus-dia além da água | +34,13 | [−16,1; 77,8] | 0,169 | 0,334 |
+| não linearidade | +51,10 | [−10,8; 103,8] | 0,101 | 0,303 |
+
+Família confirmatória de 3 testes, Holm, α = 0,05. Nenhuma rejeição. Em soja e
+milho 2ª todas as variantes também pioram; no milho 2ª a forma quadrática piora
++195,0 [86,5; 294,0].
+
+**Justificativa.** O desenho impôs três restrições que tornam o resultado
+informativo e não um artefato de má especificação: (a) todas as comparações usam
+as mesmas células e as mesmas linhas de teste; (b) as transformações usam
+constantes fixas, sem padronização estimada nos dados; (c) a auditoria de
+dependência foi feita **antes** da escolha e eliminou variáveis redundantes
+(`etr/etp` = `1 − deficit/etp`; `heat` 0,84 com déficit).
+
+**Consequências.** (i) O sinal exploratório da V3.2 não se converte em ganho
+preditivo e não deve ser citado como tal; (ii) a associação hídrica permanece —
+ver D111 — e é outro estimando; (iii) não se adicionam variáveis climáticas na
+V3.4 sem hipótese nova.
+
+**Limitações.** A não linearidade foi testada apenas na forma quadrática; splines
+e limiares não foram testados por falta de limiar defensável na literatura
+disponível. O resultado negativo vale para as formas testadas.
+
+## D109 - Duração e intensidade do estresse hídrico não são identificáveis com o balanço mensal (2026-11-14)
+
+**Contexto.** H3 previa que a duração do estresse carregasse informação distinta
+do déficit acumulado.
+
+**Problema.** O balanço sequencial implementado é **mensal**, e as janelas ZARC
+têm 3–5 meses. Nessa resolução, `stress_share` e `max_consecutive_deficit_months`
+têm correlação 0,94, e o déficit acumulado é 0,73 com a duração. Além disso, com
+CAD 0–100 ou 0–200 a mediana de meses de estresse é **zero** (54% e 86% das
+linhas sem nenhum mês), o que degenera a variável.
+
+**Decisão.** A hipótese é registrada como **não identificável** com o desenho
+atual, não como rejeitada. Nenhum modelo usa duração como preditor primário.
+
+**Justificativa.** Declarar "H3 não confirmada" sugeriria que houve teste. Não
+houve: os dados não separam duração de intensidade. Registro antecipado no
+pré-registro, com a razão medida.
+
+**Consequências.** Para testar duração seria necessário um balanço **diário** de
+armazenamento (não existente) ou janelas mais longas. Fica como limitação de
+dados, não como pendência de modelagem.
+
+**Limitações.** A implementação de um balanço diário é viável em princípio, mas
+introduziria uma segunda metodologia de balanço no projeto; não foi feita sem
+justificativa de que a duração importaria — justificativa que este teste não pode
+fornecer.
+
+## D110 - As famílias de associação de V2.7 e V2.9 são supersedidas; as de V3.0 permanecem (2026-11-14)
+
+**Contexto.** A V3.2 (D104) mostrou que agrupar por bloco espacial de 250 km
+subestima erros-padrão quando a exposição climática varia em UF×ano.
+
+**Decisão.** Reauditadas as três famílias de associação com modelo, amostra e
+variável idênticos, mudando apenas a VCV:
+
+| família | hipóteses | histórico (bloco) | auditado (UF×ano + município) |
+|---|---:|---|---|
+| V2.7 (variáveis meteorológicas) | 21 | 10 brutos / 4 Holm | 4 brutos / **0 Holm** |
+| V3.0 (déficit, 5 definições) | 15 | **10 Holm** | 9 brutos / **8 Holm** |
+| V2.9 (interação por ciclo) | 9 | 2 brutos / 1 Holm | 0 / **0** |
+
+Reprodução dos coeficientes: 1,5×10⁻⁶ (V2.7), 3,6×10⁻¹⁵ (V3.0), 9,2×10⁻⁸
+(V2.9). O Holm por bloco recomputado reproduz exatamente o `p_adjusted` da V2.7.
+
+**Justificativa.** A mudança é de inferência, não de dados: o coeficiente é
+idêntico em todas as estruturas. O que muda é a unidade que define a dependência,
+e ela é UF×ano porque a anomalia climática de um ano é essencialmente a mesma em
+toda a UF, enquanto o bloco de 250 km é menor que a UF.
+
+**Consequências.** (i) Nenhuma associação de variável meteorológica bruta da V2.7
+pode ser citada como confirmatória; (ii) a associação do déficit hídrico é
+mantida e é a evidência mais sólida de associação do projeto; (iii) a interação
+por grupo de ciclo perde até o p bruto; (iv) `milho|deficit_cad200` fica
+enfraquecida (p 0,0016 → 0,085); (v) a associação da soja com déficit **histórico**
+cai (Holm 0,253), enquanto com janela corrigida é a mais forte (Holm 0,0000) —
+efeito da D100, registrado separadamente como cenário C3.
+
+**Limitações.** Dependência espacial residual não foi re-testada (o Conley da
+V2.7 segue como referência); CR1 com duplo agrupamento é o método usado, sem wild
+bootstrap multidimensional; `G` = 31–48 clusters UF×ano, o que torna a
+aproximação assintótica razoável mas não exata.
+
+## D111 - Toda alegação de associação exige agrupamento na unidade de exposição e Holm declarado (2026-11-14)
+
+**Contexto.** D104 e D110 mostram que o agrupamento escolhido pode inverter
+conclusões publicadas.
+
+**Decisão.** A partir da V3.3, uma alegação de associação só é reportada como
+evidência se: (i) o agrupamento corresponder à unidade de variação da exposição,
+justificado com o diagnóstico de variância; (ii) a família de hipóteses for
+declarada **antes** da estimativa; (iii) houver correção de multiplicidade sobre
+essa família. Resultados com agrupamento por bloco ficam disponíveis como
+**diagnóstico**, nunca como evidência confirmatória.
+
+**Justificativa.** Os números mostram que o mesmo coeficiente pode ter p = 4×10⁻⁵
+ou 0,185 dependendo do agrupamento. Publicar o primeiro sem justificar a unidade
+é o que produziu as reclassificações da D110.
+
+**Consequências.** Toda reanálise futura deve reportar, no mínimo, o esquema
+primário e o histórico, e o p após Holm na família declarada. O registro
+`docs/execution/v3.3/INFERENCE_AUDIT_REGISTER.md` é o modelo a seguir.
+
+**Limitações.** A decisão não resolve o caso de exposições com estrutura mista
+(parte UF×ano, parte municipal); nesses casos o duplo agrupamento deve ser
+justificado no diagnóstico e a sensibilidade reportada.
+
+
 

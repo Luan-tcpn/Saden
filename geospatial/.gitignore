@@ -42,3 +42,6 @@ data/processed/v30_panel_cad.csv
 # por tools/v31_rebuild_panel.py; a evidencia fica em v31_window_rebuild.json.
 data/processed/v31_panel_windows.csv
 # V3.2 - nenhum artefato binario novo; manifests ficam versionados
+# V3.3 - descritores de estresse: derivado e regeneravel por
+# tools/v33_water_variables.py; a evidencia fica em v33_water_variables.json.
+data/processed/v33_water_variables.csv

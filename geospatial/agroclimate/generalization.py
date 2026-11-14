@@ -322,12 +322,19 @@ def block_bootstrap_difference(
     mae_a = sum_a[picks].sum(axis=1) / total_n
     mae_b = sum_b[picks].sum(axis=1) / total_n
     deltas = mae_a - mae_b
+    # p bilateral por bootstrap: proporção de reamostragens com sinal contrário
+    # (duas caudas, com correção de (1 + contagem)/(1 + n_boot)). É um teste de
+    # sinal da diferença de MAE, não um teste t; reportado junto do IC.
+    below = float(np.mean(deltas <= 0.0))
+    above = float(np.mean(deltas >= 0.0))
+    p_value = min(1.0, 2.0 * min(below, above) + 1.0 / (n_boot + 1.0))
     return {
         "delta_mae": float(np.mean(abs_errors_a) - np.mean(abs_errors_b)),
         "ci95": [
             float(np.quantile(deltas, 0.025)),
             float(np.quantile(deltas, 0.975)),
         ],
+        "p_value": p_value,
         "n_blocks": len(names),
         "n_boot": n_boot,
     }

@@ -186,6 +186,72 @@ def aggregate_water_balance(
     }
 
 
+def stress_descriptors(
+    balance: Sequence[dict[str, Any]],
+    threshold_mm: float = 1.0,
+) -> dict[str, Any]:
+    """Descritores temporais do estresse hídrico (V3.3).
+
+    ``aggregate_water_balance`` resume a **intensidade** (déficit acumulado). Estes
+    descritores descrevem **duração, sequência e intensidade relativa**, que a
+    intensidade acumulada não distingue:
+
+    * ``deficit_months`` — meses com déficit acima de ``threshold_mm``;
+    * ``stress_share`` — fração da janela em estresse;
+    * ``max_consecutive_deficit_months`` — maior sequência contínua;
+    * ``storage_min_mm`` — menor armazenamento (quão perto do esgotamento);
+    * ``etr_over_etp`` — ETR/ETP acumulados (atendimento relativo da demanda);
+    * ``deficit_over_etp`` — complemento exato de ``etr_over_etp`` (DEF = ETP − ETR);
+    * ``months_to_first_stress`` — posição do primeiro mês em estresse (ou ``None``).
+
+    A granularidade é a do balanço recebido (mensal no SADEN). Nenhuma duração em
+    dias é inferida: o balanço sequencial de armazenamento não é diário.
+
+    ``threshold_mm`` é fixo e não escolhido nos dados: 1 mm descarta ruído
+    numérico do balanço, sem transformar meses quase nulos em meses de estresse.
+    """
+    valid = [row for row in balance if row.get("status") == "ok"]
+    if not valid:
+        return {
+            "months": 0,
+            "deficit_months": None,
+            "stress_share": None,
+            "max_consecutive_deficit_months": None,
+            "storage_min_mm": None,
+            "etr_over_etp": None,
+            "deficit_over_etp": None,
+            "months_to_first_stress": None,
+            "excess_months": None,
+        }
+    deficit = [float(row.get("def_mm") or 0.0) for row in valid]
+    excess = [float(row.get("exc_mm") or 0.0) for row in valid]
+    storage = [float(row.get("arm_mm") or 0.0) for row in valid]
+    etr = [float(row.get("etr_mm") or 0.0) for row in valid]
+    etp = [float(row.get("etp_mm") or 0.0) for row in valid]
+
+    stressed = [value > threshold_mm for value in deficit]
+    best = 0
+    current = 0
+    for flag in stressed:
+        current = current + 1 if flag else 0
+        best = max(best, current)
+    first = next((index for index, flag in enumerate(stressed) if flag), None)
+    total_etp = sum(etp)
+    total_etr = sum(etr)
+    total_deficit = sum(deficit)
+    return {
+        "months": len(valid),
+        "deficit_months": int(sum(1 for flag in stressed if flag)),
+        "stress_share": float(sum(1 for flag in stressed if flag) / len(valid)),
+        "max_consecutive_deficit_months": int(best),
+        "storage_min_mm": float(min(storage)),
+        "etr_over_etp": (total_etr / total_etp) if total_etp > 0 else None,
+        "deficit_over_etp": (total_deficit / total_etp) if total_etp > 0 else None,
+        "months_to_first_stress": first,
+        "excess_months": int(sum(1 for value in excess if value > 0.0)),
+    }
+
+
 def daily_to_monthly(
     daily_records: Sequence[dict[str, Any]],
     variables: Sequence[str] = ("precip_mm", "et0_mm"),

@@ -1,0 +1,3042 @@
+{
+  "generated_at": "2026-11-14T15:41:25.778719+00:00",
+  "method": "within de municipio e ano; mesmo coeficiente sob todas as estruturas; somente a VCV muda (CR1). C1 = historico (bloco), C2 = duplo UFxano+municipio",
+  "scenarios": {
+    "C1": "dados historicos + agrupamento por bloco (base das familias historicas)",
+    "C2": "mesmos dados e coeficiente + agrupamento duplo UFxano+municipio",
+    "C3": "reanalise com janela corrigida (separada; nao e efeito de inferencia)"
+  },
+  "families": {
+    "F1_v27": {
+      "source": "v27_robust_inference.json",
+      "hypotheses": 21,
+      "reproduction_max_abs_diff": 1.4794231333326024e-06,
+      "reproduction_n": 21,
+      "historical": {
+        "n_significant_raw": 10,
+        "n_significant_holm": 4,
+        "method": "Holm sobre 21, agrupamento por bloco 250 km"
+      },
+      "audited": {
+        "n_significant_raw_block": 10,
+        "n_significant_holm_block": 4,
+        "n_significant_raw_two_way": 4,
+        "n_significant_holm_two_way": 0
+      },
+      "holm_block": {
+        "milho|et0_total_mm": 5.0848077925996295e-05,
+        "soja|deficiency_total_mm": 8.155769612496603e-05,
+        "soja|temp_media_c": 0.000816917797794036,
+        "milho|temp_media_c": 0.006881094185396708,
+        "milho|extreme_heat_days": 0.07847685434829527,
+        "milho|deficiency_total_mm": 0.07847685434829527,
+        "soja|precip_acumulada_mm": 0.07847685434829527,
+        "milho|precip_acumulada_mm": 0.10664190085939185,
+        "soja|extreme_heat_days": 0.17971579595006054,
+        "milho|excess_total_mm": 0.30369573378882825,
+        "milho_2|deficiency_total_mm": 1.0,
+        "soja|degree_days_total": 1.0,
+        "soja|excess_total_mm": 1.0,
+        "milho_2|extreme_heat_days": 1.0,
+        "milho|degree_days_total": 1.0,
+        "milho_2|temp_media_c": 1.0,
+        "milho_2|degree_days_total": 1.0,
+        "milho_2|precip_acumulada_mm": 1.0,
+        "milho_2|excess_total_mm": 1.0,
+        "soja|et0_total_mm": 1.0,
+        "milho_2|et0_total_mm": 1.0
+      },
+      "holm_two_way": {
+        "milho|deficiency_total_mm": 0.06876882590872617,
+        "milho|extreme_heat_days": 0.34354527101527194,
+        "milho|et0_total_mm": 0.4061674132674905,
+        "soja|deficiency_total_mm": 0.6505882618573211,
+        "milho|temp_media_c": 1.0,
+        "soja|precip_acumulada_mm": 1.0,
+        "milho|precip_acumulada_mm": 1.0,
+        "soja|temp_media_c": 1.0,
+        "soja|degree_days_total": 1.0,
+        "milho|excess_total_mm": 1.0,
+        "soja|excess_total_mm": 1.0,
+        "milho|degree_days_total": 1.0,
+        "soja|extreme_heat_days": 1.0,
+        "milho_2|degree_days_total": 1.0,
+        "milho_2|extreme_heat_days": 1.0,
+        "milho_2|deficiency_total_mm": 1.0,
+        "milho_2|temp_media_c": 1.0,
+        "milho_2|precip_acumulada_mm": 1.0,
+        "milho_2|excess_total_mm": 1.0,
+        "milho_2|et0_total_mm": 1.0,
+        "soja|et0_total_mm": 1.0
+      },
+      "results": {
+        "soja|precip_acumulada_mm": {
+          "status": "ok",
+          "n": 8884,
+          "n_municipalities": 1225,
+          "n_years": 8,
+          "coefficient": 0.5806225532551131,
+          "r_squared_within": 0.024910029064564743,
+          "schemes": {
+            "municipio": {
+              "n_clusters": 1225,
+              "std_error": 0.035895600704183184,
+              "t_statistic": 16.175312346491776,
+              "p_value": 1.755524718218733e-53,
+              "ci95": [
+                0.5101988306518394,
+                0.6510462758583869
+              ],
+              "df": 1224
+            },
+            "bloco_espacial_250km": {
+              "n_clusters": 46,
+              "std_error": 0.19656862948810722,
+              "t_statistic": 2.9537905146265566,
+              "p_value": 0.00497689699025069,
+              "ci95": [
+                0.1847130104554528,
+                0.9765320960547734
+              ],
+              "df": 45
+            },
+            "uf": {
+              "n_clusters": 5,
+              "std_error": 0.16012868214502185,
+              "t_statistic": 3.62597471906543,
+              "p_value": 0.022239061485886336,
+              "ci95": [
+                0.13603405751179376,
+                1.0252110489984325
+              ],
+              "df": 4
+            },
+            "uf_ano": {
+              "n_clusters": 40,
+              "std_error": 0.31221467856442764,
+              "t_statistic": 1.8596901206722019,
+              "p_value": 0.07048456029555641,
+              "ci95": [
+                -0.05089124217934993,
+                1.2121363486895762
+              ],
+              "df": 39
+            },
+            "two_way": {
+              "n_clusters": 40,
+              "std_error": 0.3121995335098337,
+              "t_statistic": 1.8597803357602538,
+              "p_value": 0.07047148621207698,
+              "ci95": [
+                -0.05086060841493922,
+                1.2121057149251655
+              ],
+              "df": 39
+            }
+          },
+          "historical_coefficient": 0.5806225536205303,
+          "historical_scheme": {
+            "municipio": {
+              "std_error": 0.035897621481268085,
+              "p_value": 1.7770381279065779e-53
+            },
+            "bloco_espacial_250km": {
+              "std_error": 0.19657969638014214,
+              "p_value": 0.004979137430447987
+            }
+          },
+          "p_holm_block": 0.07847685434829527,
+          "p_holm_two_way": 1.0,
+          "classification": "enfraquecida"
+        },
+        "soja|temp_media_c": {
+          "status": "ok",
+          "n": 8884,
+          "n_municipalities": 1225,
+          "n_years": 8,
+          "coefficient": -92.78901609857866,
+          "r_squared_within": 0.011086535351979454,
+          "schemes": {
+            "municipio": {
+              "n_clusters": 1225,
+              "std_error": 7.925095188288558,
+              "t_statistic": -11.708252569092064,
+              "p_value": 4.346255599543973e-30,
+              "ci95": [
+                -108.33729204871568,
+                -77.24074014844163
+              ],
+              "df": 1224
+            },
+            "bloco_espacial_250km": {
+              "n_clusters": 46,
+              "std_error": 20.477011516614844,
+              "t_statistic": -4.531374904159748,
+              "p_value": 4.299567356810716e-05,
+              "ci95": [
+                -134.03183438834475,
+                -51.546197808812565
+              ],
+              "df": 45
+            },
+            "uf": {
+              "n_clusters": 5,
+              "std_error": 37.853452520752995,
+              "t_statistic": -2.4512695651131815,
+              "p_value": 0.07034906500327158,
+              "ci95": [
+                -197.8870490646604,
+                12.309016867503104
+              ],
+              "df": 4
+            },
+            "uf_ano": {
+              "n_clusters": 40,
+              "std_error": 68.84491470210618,
+              "t_statistic": -1.347797676852085,
+              "p_value": 0.18550093764326958,
+              "ci95": [
+                -232.040999957234,
+                46.46296776007668
+              ],
+              "df": 39
+            },
+            "two_way": {
+              "n_clusters": 40,
+              "std_error": 68.75507354941473,
+              "t_statistic": -1.3495588224757054,
+              "p_value": 0.18493987556471148,
+              "ci95": [
+                -231.85927907343935,
+                46.28124687628204
+              ],
+              "df": 39
+            }
+          },
+          "historical_coefficient": -92.78901723571678,
+          "historical_scheme": {
+            "municipio": {
+              "std_error": 7.925541339911797,
+              "p_value": 4.3767325324805216e-30
+            },
+            "bloco_espacial_250km": {
+              "std_error": 20.478163810455023,
+              "p_value": 4.303126645800975e-05
+            }
+          },
+          "p_holm_block": 0.000816917797794036,
+          "p_holm_two_way": 1.0,
+          "classification": "nao_sustentada"
+        },
+        "soja|degree_days_total": {
+          "status": "ok",
+          "n": 8884,
+          "n_municipalities": 1225,
+          "n_years": 8,
+          "coefficient": 0.2460813625876733,
+          "r_squared_within": 0.005372895729641947,
+          "schemes": {
+            "municipio": {
+              "n_clusters": 1225,
+              "std_error": 0.03404791768080188,
+              "t_statistic": 7.227501102847994,
+              "p_value": 8.63576974390387e-13,
+              "ci95": [
+                0.17928261669866913,
+                0.31288010847667747
+              ],
+              "df": 1224
+            },
+            "bloco_espacial_250km": {
+              "n_clusters": 46,
+              "std_error": 0.15953697140829975,
+              "t_statistic": 1.5424723210890234,
+              "p_value": 0.12996257437099057,
+              "ci95": [
+                -0.07524259217757004,
+                0.5674053173529167
+              ],
+              "df": 45
+            },
+            "uf": {
+              "n_clusters": 5,
+              "std_error": 0.24970911143205668,
+              "t_statistic": 0.9854721006230865,
+              "p_value": 0.38018355050374686,
+              "ci95": [
+                -0.4472222775711511,
+                0.9393850027464977
+              ],
+              "df": 4
+            },
+            "uf_ano": {
+              "n_clusters": 40,
+              "std_error": 0.19320661596154706,
+              "t_statistic": 1.2736694411988958,
+              "p_value": 0.21031935379087074,
+              "ci95": [
+                -0.14471590520877706,
+                0.6368786303841236
+              ],
+              "df": 39
+            },
+            "two_way": {
+              "n_clusters": 40,
+              "std_error": 0.19354608838610052,
+              "t_statistic": 1.2714354737915003,
+              "p_value": 0.21110433194413436,
+              "ci95": [
+                -0.14540255299952418,
+                0.6375652781748707
+              ],
+              "df": 39
+            }
+          },
+          "historical_coefficient": 0.2460813623504836,
+          "historical_scheme": {
+            "municipio": {
+              "std_error": 0.03404983429420643,
+              "p_value": 8.660607075629384e-13
+            },
+            "bloco_espacial_250km": {
+              "std_error": 0.1595459520362349,
+              "p_value": 0.12998363965209647
+            }
+          },
+          "p_holm_block": 1.0,
+          "p_holm_two_way": 1.0,
+          "classification": "sem_evidencia_em_nenhum"
+        },
+        "soja|extreme_heat_days": {
+          "status": "ok",
+          "n": 8884,
+          "n_municipalities": 1225,
+          "n_years": 8,
+          "coefficient": -4.402927796600348,
+          "r_squared_within": 0.004930689388007448,
+          "schemes": {
+            "municipio": {
+              "n_clusters": 1225,
+              "std_error": 0.5860940629197584,
+              "t_statistic": -7.512322808161851,
+              "p_value": 1.1166356591380938e-13,
+              "ci95": [
+                -5.552788083007999,
+                -3.2530675101926976
+              ],
+              "df": 1224
+            },
+            "bloco_espacial_250km": {
+              "n_clusters": 46,
+              "std_error": 1.7185134462988707,
+              "t_statistic": -2.5620560642588215,
+              "p_value": 0.013824291996158504,
+              "ci95": [
+                -7.864191552628208,
+                -0.9416640405724892
+              ],
+              "df": 45
+            },
+            "uf": {
+              "n_clusters": 5,
+              "std_error": 1.9915086414023078,
+              "t_statistic": -2.210850460332452,
+              "p_value": 0.0915393998222521,
+              "ci95": [
+                -9.932242215980896,
+                1.1263866227801982
+              ],
+              "df": 4
+            },
+            "uf_ano": {
+              "n_clusters": 40,
+              "std_error": 4.936316624183911,
+              "t_statistic": -0.891945985601816,
+              "p_value": 0.3778922675666232,
+              "ci95": [
+                -14.387570610763651,
+                5.581715017562955
+              ],
+              "df": 39
+            },
+            "two_way": {
+              "n_clusters": 40,
+              "std_error": 4.9345403104810615,
+              "t_statistic": -0.8922670643197387,
+              "p_value": 0.37772232448131604,
+              "ci95": [
+                -14.38397767716576,
+                5.578122083965063
+              ],
+              "df": 39
+            }
+          },
+          "historical_coefficient": -4.402927796600345,
+          "historical_scheme": {
+            "municipio": {
+              "std_error": 0.5861270553520465,
+              "p_value": 1.1200897726478231e-13
+            },
+            "bloco_espacial_250km": {
+              "std_error": 1.7186101849319675,
+              "p_value": 0.013829286598038695
+            }
+          },
+          "p_holm_block": 0.17971579595006054,
+          "p_holm_two_way": 1.0,
+          "classification": "nao_sustentada"
+        },
+        "soja|et0_total_mm": {
+          "status": "ok",
+          "n": 8884,
+          "n_municipalities": 1225,
+          "n_years": 8,
+          "coefficient": 0.04856038602727187,
+          "r_squared_within": 2.784275135647718e-05,
+          "schemes": {
+            "municipio": {
+              "n_clusters": 1225,
+              "std_error": 0.09294257994068124,
+              "t_statistic": 0.5224772763814451,
+              "p_value": 0.6014326125245024,
+              "ci95": [
+                -0.13378403332694588,
+                0.2309048053814896
+              ],
+              "df": 1224
+            },
+            "bloco_espacial_250km": {
+              "n_clusters": 46,
+              "std_error": 0.3864869105595593,
+              "t_statistic": 0.12564561619167308,
+              "p_value": 0.9005721265994086,
+              "ci95": [
+                -0.7298642102888254,
+                0.8269849823433691
+              ],
+              "df": 45
+            },
+            "uf": {
+              "n_clusters": 5,
+              "std_error": 0.6605369049788219,
+              "t_statistic": 0.07351653732175466,
+              "p_value": 0.9449245924083768,
+              "ci95": [
+                -1.7853840706036788,
+                1.8825048426582225
+              ],
+              "df": 4
+            },
+            "uf_ano": {
+              "n_clusters": 40,
+              "std_error": 0.5835333570744371,
+              "t_statistic": 0.08321784082872467,
+              "p_value": 0.9341040042156382,
+              "ci95": [
+                -1.1317472368657597,
+                1.2288680089203035
+              ],
+              "df": 39
+            },
+            "two_way": {
+              "n_clusters": 40,
+              "std_error": 0.5836726209971757,
+              "t_statistic": 0.08319798510389072,
+              "p_value": 0.9341196897865092,
+              "ci95": [
+                -1.1320289247377717,
+                1.2291496967923154
+              ],
+              "df": 39
+            }
+          },
+          "historical_coefficient": 0.04856038813869434,
+          "historical_scheme": {
+            "municipio": {
+              "std_error": 0.09294781178851001,
+              "p_value": 0.6014530620500135
+            },
+            "bloco_espacial_250km": {
+              "std_error": 0.3865086662982966,
+              "p_value": 0.9005776888484901
+            }
+          },
+          "p_holm_block": 1.0,
+          "p_holm_two_way": 1.0,
+          "classification": "sem_evidencia_em_nenhum"
+        },
+        "soja|deficiency_total_mm": {
+          "status": "ok",
+          "n": 8884,
+          "n_municipalities": 1225,
+          "n_years": 8,
+          "coefficient": -1.260169892330329,
+          "r_squared_within": 0.023518138967343116,
+          "schemes": {
+            "municipio": {
+              "n_clusters": 1225,
+              "std_error": 0.07230711409529585,
+              "t_statistic": -17.42802085379194,
+              "p_value": 6.19436277612401e-61,
+              "ci95": [
+                -1.4020295087010046,
+                -1.1183102759596535
+              ],
+              "df": 1224
+            },
+            "bloco_espacial_250km": {
+              "n_clusters": 46,
+              "std_error": 0.24034784513260773,
+              "t_statistic": -5.243108760284713,
+              "p_value": 4.0778848062483015e-06,
+              "ci95": [
+                -1.7442553017221232,
+                -0.7760844829385348
+              ],
+              "df": 45
+            },
+            "uf": {
+              "n_clusters": 5,
+              "std_error": 0.22139319062870053,
+              "t_statistic": -5.691999328216762,
+              "p_value": 0.004705687419425314,
+              "ci95": [
+                -1.8748559327755068,
+                -0.6454838518851513
+              ],
+              "df": 4
+            },
+            "uf_ano": {
+              "n_clusters": 40,
+              "std_error": 0.581289936107444,
+              "t_statistic": -2.167885273859967,
+              "p_value": 0.03633216176358524,
+              "ci95": [
+                -2.4359397680036032,
+                -0.08440001665705466
+              ],
+              "df": 39
+            },
+            "two_way": {
+              "n_clusters": 40,
+              "std_error": 0.5806690279112521,
+              "t_statistic": -2.1702033891205406,
+              "p_value": 0.03614379232540673,
+              "ci95": [
+                -2.4346838626329896,
+                -0.08565592202766825
+              ],
+              "df": 39
+            }
+          },
+          "historical_coefficient": -1.2601698938861403,
+          "historical_scheme": {
+            "municipio": {
+              "std_error": 0.07231118444939834,
+              "p_value": 6.280074315486612e-61
+            },
+            "bloco_espacial_250km": {
+              "std_error": 0.24036137484578707,
+              "p_value": 4.081932516475207e-06
+            }
+          },
+          "p_holm_block": 8.155769612496603e-05,
+          "p_holm_two_way": 0.6505882618573211,
+          "classification": "mantida_apenas_bruta"
+        },
+        "soja|excess_total_mm": {
+          "status": "ok",
+          "n": 8884,
+          "n_municipalities": 1225,
+          "n_years": 8,
+          "coefficient": 0.46419051970755854,
+          "r_squared_within": 0.008409240342209023,
+          "schemes": {
+            "municipio": {
+              "n_clusters": 1225,
+              "std_error": 0.05476521386846144,
+              "t_statistic": 8.476010352529267,
+              "p_value": 6.613389921537908e-17,
+              "ci95": [
+                0.35674642755918473,
+                0.5716346118559323
+              ],
+              "df": 1224
+            },
+            "bloco_espacial_250km": {
+              "n_clusters": 46,
+              "std_error": 0.33513388326440796,
+              "t_statistic": 1.3850897891495195,
+              "p_value": 0.17285343371307382,
+              "ci95": [
+                -0.2108037703040837,
+                1.1391848097192008
+              ],
+              "df": 45
+            },
+            "uf": {
+              "n_clusters": 5,
+              "std_error": 0.30983551764505934,
+              "t_statistic": 1.4981836919010842,
+              "p_value": 0.20844686263054266,
+              "ci95": [
+                -0.39605078667449134,
+                1.3244318260896084
+              ],
+              "df": 4
+            },
+            "uf_ano": {
+              "n_clusters": 40,
+              "std_error": 0.49452083556165033,
+              "t_statistic": 0.9386672639998187,
+              "p_value": 0.3536789265254806,
+              "ci95": [
+                -0.5360722841519826,
+                1.4644533235670996
+              ],
+              "df": 39
+            },
+            "two_way": {
+              "n_clusters": 40,
+              "std_error": 0.49462696712106013,
+              "t_statistic": 0.938465855206693,
+              "p_value": 0.35378107371418455,
+              "ci95": [
+                -0.5362869554935302,
+                1.4646679949086474
+              ],
+              "df": 39
+            }
+          },
+          "historical_coefficient": 0.4641905181803096,
+          "historical_scheme": {
+            "municipio": {
+              "std_error": 0.05476829703614087,
+              "p_value": 6.639046514426152e-17
+            },
+            "bloco_espacial_250km": {
+              "std_error": 0.33515275102081116,
+              "p_value": 0.17287712070747818
+            }
+          },
+          "p_holm_block": 1.0,
+          "p_holm_two_way": 1.0,
+          "classification": "sem_evidencia_em_nenhum"
+        },
+        "milho|precip_acumulada_mm": {
+          "status": "ok",
+          "n": 7616,
+          "n_municipalities": 1063,
+          "n_years": 8,
+          "coefficient": 0.9747995022816687,
+          "r_squared_within": 0.013807633629908667,
+          "schemes": {
+            "municipio": {
+              "n_clusters": 1063,
+              "std_error": 0.09552503582651158,
+              "t_statistic": 10.204649428784903,
+              "p_value": 2.1767048498974948e-23,
+              "ci95": [
+                0.7873602515456014,
+                1.162238753017736
+              ],
+              "df": 1062
+            },
+            "bloco_espacial_250km": {
+              "n_clusters": 49,
+              "std_error": 0.349884008018404,
+              "t_statistic": 2.786064752723405,
+              "p_value": 0.007617278632813703,
+              "ci95": [
+                0.2713105546229899,
+                1.6782884499403474
+              ],
+              "df": 48
+            },
+            "uf": {
+              "n_clusters": 6,
+              "std_error": 0.34828300668097517,
+              "t_statistic": 2.7988718472692478,
+              "p_value": 0.038044237060534836,
+              "ci95": [
+                0.07950953164675267,
+                1.8700894729165847
+              ],
+              "df": 5
+            },
+            "uf_ano": {
+              "n_clusters": 48,
+              "std_error": 0.5937746447643485,
+              "t_statistic": 1.6416994408182208,
+              "p_value": 0.10732787024198953,
+              "ci95": [
+                -0.21972100661627203,
+                2.169320011179609
+              ],
+              "df": 47
+            },
+            "two_way": {
+              "n_clusters": 48,
+              "std_error": 0.5929626910249745,
+              "t_statistic": 1.6439474473455733,
+              "p_value": 0.10686071592970059,
+              "ci95": [
+                -0.2180875663834989,
+                2.1676865709468363
+              ],
+              "df": 47
+            }
+          },
+          "historical_coefficient": 0.9747995078110018,
+          "historical_scheme": {
+            "municipio": {
+              "std_error": 0.09553130888067836,
+              "p_value": 2.1904291080352682e-23
+            },
+            "bloco_espacial_250km": {
+              "std_error": 0.3499069859545813,
+              "p_value": 0.007620969926883033
+            }
+          },
+          "p_holm_block": 0.10664190085939185,
+          "p_holm_two_way": 1.0,
+          "classification": "nao_sustentada"
+        },
+        "milho|temp_media_c": {
+          "status": "ok",
+          "n": 7616,
+          "n_municipalities": 1063,
+          "n_years": 8,
+          "coefficient": -182.66541341157424,
+          "r_squared_within": 0.013504507172357294,
+          "schemes": {
+            "municipio": {
+              "n_clusters": 1063,
+              "std_error": 16.774412379325174,
+              "t_statistic": -10.889526815062286,
+              "p_value": 2.973937585437287e-26,
+              "ci95": [
+                -215.5801698491311,
+                -149.75065697401737
+              ],
+              "df": 1062
+            },
+            "bloco_espacial_250km": {
+              "n_clusters": 49,
+              "std_error": 47.80804611239408,
+              "t_statistic": -3.8208090115654993,
+              "p_value": 0.0003822830102998171,
+              "ci95": [
+                -278.7899326192558,
+                -86.54089420389265
+              ],
+              "df": 48
+            },
+            "uf": {
+              "n_clusters": 6,
+              "std_error": 72.44463901339881,
+              "t_statistic": -2.5214483210799052,
+              "p_value": 0.053080757108223964,
+              "ci95": [
+                -368.89028654864717,
+                3.5594597254986695
+              ],
+              "df": 5
+            },
+            "uf_ano": {
+              "n_clusters": 48,
+              "std_error": 95.01796763632925,
+              "t_statistic": -1.9224302303613343,
+              "p_value": 0.06062424124784499,
+              "ci95": [
+                -373.8169084378417,
+                8.486081614693205
+              ],
+              "df": 47
+            },
+            "two_way": {
+              "n_clusters": 48,
+              "std_error": 95.0117907325582,
+              "t_statistic": -1.9225552113394628,
+              "p_value": 0.06060811777911697,
+              "ci95": [
+                -373.804482110276,
+                8.47365528712757
+              ],
+              "df": 47
+            }
+          },
+          "historical_coefficient": -182.66541428027145,
+          "historical_scheme": {
+            "municipio": {
+              "std_error": 16.775514037556746,
+              "p_value": 2.995015274904227e-26
+            },
+            "bloco_espacial_250km": {
+              "std_error": 47.811185186723,
+              "p_value": 0.0003825807367438835
+            }
+          },
+          "p_holm_block": 0.006881094185396708,
+          "p_holm_two_way": 1.0,
+          "classification": "enfraquecida"
+        },
+        "milho|degree_days_total": {
+          "status": "ok",
+          "n": 7616,
+          "n_municipalities": 1063,
+          "n_years": 8,
+          "coefficient": -0.3375540056354106,
+          "r_squared_within": 0.001140503674727955,
+          "schemes": {
+            "municipio": {
+              "n_clusters": 1063,
+              "std_error": 0.10605890602681262,
+              "t_statistic": -3.1827030683314232,
+              "p_value": 0.0015014355283716457,
+              "ci95": [
+                -0.5456628192835645,
+                -0.12944519198725668
+              ],
+              "df": 1062
+            },
+            "bloco_espacial_250km": {
+              "n_clusters": 49,
+              "std_error": 0.34457204939634883,
+              "t_statistic": -0.9796325796789581,
+              "p_value": 0.33217943108464243,
+              "ci95": [
+                -1.0303625446575233,
+                0.3552545333867022
+              ],
+              "df": 48
+            },
+            "uf": {
+              "n_clusters": 6,
+              "std_error": 0.42464539568064785,
+              "t_statistic": -0.7949079610161749,
+              "p_value": 0.4627134722710612,
+              "ci95": [
+                -1.4291397463586795,
+                0.7540317350878584
+              ],
+              "df": 5
+            },
+            "uf_ano": {
+              "n_clusters": 48,
+              "std_error": 0.36164527637610655,
+              "t_statistic": -0.9333842516011703,
+              "p_value": 0.3553921715336511,
+              "ci95": [
+                -1.0650904597202229,
+                0.3899824484494018
+              ],
+              "df": 47
+            },
+            "two_way": {
+              "n_clusters": 48,
+              "std_error": 0.36482000542503684,
+              "t_statistic": -0.9252617746171574,
+              "p_value": 0.3595563514556198,
+              "ci95": [
+                -1.071477190768071,
+                0.3963691794972497
+              ],
+              "df": 47
+            }
+          },
+          "historical_coefficient": -0.3375540167034237,
+          "historical_scheme": {
+            "municipio": {
+              "std_error": 0.10606587048686034,
+              "p_value": 0.0015025085787807543
+            },
+            "bloco_espacial_250km": {
+              "std_error": 0.34459467066316335,
+              "p_value": 0.3322108442659645
+            }
+          },
+          "p_holm_block": 1.0,
+          "p_holm_two_way": 1.0,
+          "classification": "sem_evidencia_em_nenhum"
+        },
+        "milho|extreme_heat_days": {
+          "status": "ok",
+          "n": 7616,
+          "n_municipalities": 1063,
+          "n_years": 8,
+          "coefficient": -19.19541318785023,
+          "r_squared_within": 0.018241458229227736,
+          "schemes": {
+            "municipio": {
+              "n_clusters": 1063,
+              "std_error": 1.416047429293083,
+              "t_statistic": -13.55562871042599,
+              "p_value": 9.986621241779273e-39,
+              "ci95": [
+                -21.97398183068727,
+                -16.416844545013195
+              ],
+              "df": 1062
+            },
+            "bloco_espacial_250km": {
+              "n_clusters": 49,
+              "std_error": 6.459199330705756,
+              "t_statistic": -2.9717945220546196,
+              "p_value": 0.004616285549899722,
+              "ci95": [
+                -32.1825038685904,
+                -6.208322507110061
+              ],
+              "df": 48
+            },
+            "uf": {
+              "n_clusters": 6,
+              "std_error": 7.8429940569213965,
+              "t_statistic": -2.4474598665429808,
+              "p_value": 0.058117702272354875,
+              "ci95": [
+                -39.35647124757594,
+                0.9656448718754795
+              ],
+              "df": 5
+            },
+            "uf_ano": {
+              "n_clusters": 48,
+              "std_error": 7.767003510070535,
+              "t_statistic": -2.4714052417978,
+              "p_value": 0.017138040313674975,
+              "ci95": [
+                -34.820608819340436,
+                -3.5702175563600242
+              ],
+              "df": 47
+            },
+            "two_way": {
+              "n_clusters": 48,
+              "std_error": 7.769916880186364,
+              "t_statistic": -2.470478575748911,
+              "p_value": 0.017177263550763596,
+              "ci95": [
+                -34.826469764033945,
+                -3.564356611666522
+              ],
+              "df": 47
+            }
+          },
+          "historical_coefficient": -19.195413187850185,
+          "historical_scheme": {
+            "municipio": {
+              "std_error": 1.4161404159582707,
+              "p_value": 1.0090428933714741e-38
+            },
+            "bloco_espacial_250km": {
+              "std_error": 6.459623482745522,
+              "p_value": 0.0046187577587048214
+            }
+          },
+          "p_holm_block": 0.07847685434829527,
+          "p_holm_two_way": 0.34354527101527194,
+          "classification": "mantida_apenas_bruta"
+        },
+        "milho|et0_total_mm": {
+          "status": "ok",
+          "n": 7616,
+          "n_municipalities": 1063,
+          "n_years": 8,
+          "coefficient": -2.492194091975111,
+          "r_squared_within": 0.015920896243450278,
+          "schemes": {
+            "municipio": {
+              "n_clusters": 1063,
+              "std_error": 0.20565790196303005,
+              "t_statistic": -12.118153828210882,
+              "p_value": 9.463555188120835e-32,
+              "ci95": [
+                -2.8957360819714486,
+                -2.0886521019787736
+              ],
+              "df": 1062
+            },
+            "bloco_espacial_250km": {
+              "n_clusters": 49,
+              "std_error": 0.46580072046309956,
+              "t_statistic": -5.350344004400356,
+              "p_value": 2.421337044095062e-06,
+              "ci95": [
+                -3.428749210664628,
+                -1.5556389732855942
+              ],
+              "df": 48
+            },
+            "uf": {
+              "n_clusters": 6,
+              "std_error": 0.5148184697293411,
+              "t_statistic": -4.840918184783364,
+              "p_value": 0.004711156772975124,
+              "ci95": [
+                -3.8155770989114393,
+                -1.168811085038783
+              ],
+              "df": 5
+            },
+            "uf_ano": {
+              "n_clusters": 48,
+              "std_error": 1.0451687306074378,
+              "t_statistic": -2.3844897182550437,
+              "p_value": 0.02119038181785441,
+              "ci95": [
+                -4.594802371021608,
+                -0.38958581292861494
+              ],
+              "df": 47
+            },
+            "two_way": {
+              "n_clusters": 48,
+              "std_error": 1.0467642351204545,
+              "t_statistic": -2.380855218738273,
+              "p_value": 0.02137723227723634,
+              "ci95": [
+                -4.598012112090282,
+                -0.3863760718599405
+              ],
+              "df": 47
+            }
+          },
+          "historical_coefficient": -2.4921940894785957,
+          "historical_scheme": {
+            "municipio": {
+              "std_error": 0.2056714069354081,
+              "p_value": 9.544604961036805e-32
+            },
+            "bloco_espacial_250km": {
+              "std_error": 0.46583130015413104,
+              "p_value": 2.424279441886634e-06
+            }
+          },
+          "p_holm_block": 5.0848077925996295e-05,
+          "p_holm_two_way": 0.4061674132674905,
+          "classification": "mantida_apenas_bruta"
+        },
+        "milho|deficiency_total_mm": {
+          "status": "ok",
+          "n": 7616,
+          "n_municipalities": 1063,
+          "n_years": 8,
+          "coefficient": -3.0394987287652495,
+          "r_squared_within": 0.03868506706990327,
+          "schemes": {
+            "municipio": {
+              "n_clusters": 1063,
+              "std_error": 0.17682665017791444,
+              "t_statistic": -17.189143863252813,
+              "p_value": 1.292283884575479e-58,
+              "ci95": [
+                -3.386468028831382,
+                -2.692529428699117
+              ],
+              "df": 1062
+            },
+            "bloco_espacial_250km": {
+              "n_clusters": 49,
+              "std_error": 1.0249484421696307,
+              "t_statistic": -2.965513779728451,
+              "p_value": 0.0046964814091372325,
+              "ci95": [
+                -5.10029569136432,
+                -0.9787017661661799
+              ],
+              "df": 48
+            },
+            "uf": {
+              "n_clusters": 6,
+              "std_error": 1.2598445573814576,
+              "t_statistic": -2.412598213769118,
+              "p_value": 0.06066911214094091,
+              "ci95": [
+                -6.278032263695297,
+                0.19903480616479818
+              ],
+              "df": 5
+            },
+            "uf_ano": {
+              "n_clusters": 48,
+              "std_error": 0.9785972473714777,
+              "t_statistic": -3.105975146496043,
+              "p_value": 0.003211616575554222,
+              "ci95": [
+                -5.008182457926883,
+                -1.0708149996036165
+              ],
+              "df": 47
+            },
+            "two_way": {
+              "n_clusters": 48,
+              "std_error": 0.9807932847423706,
+              "t_statistic": -3.099020737650797,
+              "p_value": 0.0032747059956536274,
+              "ci95": [
+                -5.012600315275573,
+                -1.0663971422549265
+              ],
+              "df": 47
+            }
+          },
+          "historical_coefficient": -3.039498720805295,
+          "historical_scheme": {
+            "municipio": {
+              "std_error": 0.1768382613391293,
+              "p_value": 1.3121145178677806e-58
+            },
+            "bloco_espacial_250km": {
+              "std_error": 1.0250157391298738,
+              "p_value": 0.004698988198233215
+            }
+          },
+          "p_holm_block": 0.07847685434829527,
+          "p_holm_two_way": 0.06876882590872617,
+          "classification": "mantida_apenas_bruta"
+        },
+        "milho|excess_total_mm": {
+          "status": "ok",
+          "n": 7616,
+          "n_municipalities": 1063,
+          "n_years": 8,
+          "coefficient": 0.7344873240428951,
+          "r_squared_within": 0.005995191032469482,
+          "schemes": {
+            "municipio": {
+              "n_clusters": 1063,
+              "std_error": 0.10818437098890547,
+              "t_statistic": 6.789218417863872,
+              "p_value": 1.872187859518842e-11,
+              "ci95": [
+                0.5222079224801341,
+                0.946766725605656
+              ],
+              "df": 1062
+            },
+            "bloco_espacial_250km": {
+              "n_clusters": 49,
+              "std_error": 0.31813192734372,
+              "t_statistic": 2.308750744307821,
+              "p_value": 0.025307977815735686,
+              "ci95": [
+                0.09484021341562476,
+                1.3741344346701654
+              ],
+              "df": 48
+            },
+            "uf": {
+              "n_clusters": 6,
+              "std_error": 0.22354398595382063,
+              "t_statistic": 3.285650118964168,
+              "p_value": 0.02181798497581806,
+              "ci95": [
+                0.15984921428426435,
+                1.3091254338015257
+              ],
+              "df": 5
+            },
+            "uf_ano": {
+              "n_clusters": 48,
+              "std_error": 0.6244168099264565,
+              "t_statistic": 1.1762773076679383,
+              "p_value": 0.24540766034139394,
+              "ci95": [
+                -0.5216772699400574,
+                1.9906519180258475
+              ],
+              "df": 47
+            },
+            "two_way": {
+              "n_clusters": 48,
+              "std_error": 0.6232050868791339,
+              "t_statistic": 1.178564391572984,
+              "p_value": 0.2445041800585629,
+              "ci95": [
+                -0.5192395975943382,
+                1.9882142456801284
+              ],
+              "df": 47
+            }
+          },
+          "historical_coefficient": 0.7344873313182219,
+          "historical_scheme": {
+            "municipio": {
+              "std_error": 0.10819147548282414,
+              "p_value": 1.8777390440586694e-11
+            },
+            "bloco_espacial_250km": {
+              "std_error": 0.3181528206660908,
+              "p_value": 0.025317097337178723
+            }
+          },
+          "p_holm_block": 0.30369573378882825,
+          "p_holm_two_way": 1.0,
+          "classification": "nao_sustentada"
+        },
+        "milho_2|precip_acumulada_mm": {
+          "status": "ok",
+          "n": 2902,
+          "n_municipalities": 505,
+          "n_years": 9,
+          "coefficient": 0.196759800425814,
+          "r_squared_within": 0.00029572735204153044,
+          "schemes": {
+            "municipio": {
+              "n_clusters": 505,
+              "std_error": 0.23129046982614965,
+              "t_statistic": 0.8507043138167745,
+              "p_value": 0.39533759673986646,
+              "ci95": [
+                -0.25765242319714554,
+                0.6511720240487736
+              ],
+              "df": 504
+            },
+            "bloco_espacial_250km": {
+              "n_clusters": 30,
+              "std_error": 0.4741091786271153,
+              "t_statistic": 0.415009473125102,
+              "p_value": 0.6811893364690808,
+              "ci95": [
+                -0.7729023453095503,
+                1.1664219461611782
+              ],
+              "df": 29
+            },
+            "uf": {
+              "n_clusters": 4,
+              "std_error": 0.4275441599578339,
+              "t_statistic": 0.4602093043329588,
+              "p_value": 0.6766719455342374,
+              "ci95": [
+                -1.163876531777622,
+                1.55739613262925
+              ],
+              "df": 3
+            },
+            "uf_ano": {
+              "n_clusters": 32,
+              "std_error": 0.8444491396859226,
+              "t_statistic": 0.23300373128332538,
+              "p_value": 0.8172901566260345,
+              "ci95": [
+                -1.525505574761504,
+                1.919025175613132
+              ],
+              "df": 31
+            },
+            "two_way": {
+              "n_clusters": 32,
+              "std_error": 0.8458221505734304,
+              "t_statistic": 0.2326254996897628,
+              "p_value": 0.8175812665908369,
+              "ci95": [
+                -1.5283058489286248,
+                1.9218254497802527
+              ],
+              "df": 31
+            }
+          },
+          "historical_coefficient": 0.19675980202517782,
+          "historical_scheme": {
+            "municipio": {
+              "std_error": 0.2313303441280836,
+              "p_value": 0.3954189963895568
+            },
+            "bloco_espacial_250km": {
+              "std_error": 0.47419091536636226,
+              "p_value": 0.6812411126508064
+            }
+          },
+          "p_holm_block": 1.0,
+          "p_holm_two_way": 1.0,
+          "classification": "sem_evidencia_em_nenhum"
+        },
+        "milho_2|temp_media_c": {
+          "status": "ok",
+          "n": 2902,
+          "n_municipalities": 505,
+          "n_years": 9,
+          "coefficient": -83.47622747554527,
+          "r_squared_within": 0.004090939849423769,
+          "schemes": {
+            "municipio": {
+              "n_clusters": 505,
+              "std_error": 31.1326201611048,
+              "t_statistic": -2.6813106973834278,
+              "p_value": 0.007573872857966922,
+              "ci95": [
+                -144.64192602443183,
+                -22.310528926658705
+              ],
+              "df": 504
+            },
+            "bloco_espacial_250km": {
+              "n_clusters": 30,
+              "std_error": 85.59512630478487,
+              "t_statistic": -0.9752450995668296,
+              "p_value": 0.3375041236044177,
+              "ci95": [
+                -258.5379170161838,
+                91.58546206509328
+              ],
+              "df": 29
+            },
+            "uf": {
+              "n_clusters": 4,
+              "std_error": 85.46145429871315,
+              "t_statistic": -0.9767705003447645,
+              "p_value": 0.40071952740473793,
+              "ci95": [
+                -355.45271695265757,
+                188.50026200156702
+              ],
+              "df": 3
+            },
+            "uf_ano": {
+              "n_clusters": 32,
+              "std_error": 122.45326340872987,
+              "t_statistic": -0.6816986754931526,
+              "p_value": 0.5004911892979863,
+              "ci95": [
+                -333.2213047527711,
+                166.26884980168057
+              ],
+              "df": 31
+            },
+            "two_way": {
+              "n_clusters": 32,
+              "std_error": 123.04918675257399,
+              "t_statistic": -0.6783972302344297,
+              "p_value": 0.5025529840023772,
+              "ci95": [
+                -334.43669842556267,
+                167.48424347447215
+              ],
+              "df": 31
+            }
+          },
+          "historical_coefficient": -83.4762289549684,
+          "historical_scheme": {
+            "municipio": {
+              "std_error": 31.13798752931929,
+              "p_value": 0.007584189869772796
+            },
+            "bloco_espacial_250km": {
+              "std_error": 85.60988123921705,
+              "p_value": 0.33758606299020033
+            }
+          },
+          "p_holm_block": 1.0,
+          "p_holm_two_way": 1.0,
+          "classification": "sem_evidencia_em_nenhum"
+        },
+        "milho_2|degree_days_total": {
+          "status": "ok",
+          "n": 2902,
+          "n_municipalities": 505,
+          "n_years": 9,
+          "coefficient": -0.1269997436235381,
+          "r_squared_within": 0.00022469895806243034,
+          "schemes": {
+            "municipio": {
+              "n_clusters": 505,
+              "std_error": 0.13623654982069247,
+              "t_statistic": -0.932200234009806,
+              "p_value": 0.3516793907361887,
+              "ci95": [
+                -0.39466124126014207,
+                0.14066175401306585
+              ],
+              "df": 504
+            },
+            "bloco_espacial_250km": {
+              "n_clusters": 30,
+              "std_error": 0.23861277434945097,
+              "t_statistic": -0.5322420141578238,
+              "p_value": 0.5986129352404534,
+              "ci95": [
+                -0.6150176627145568,
+                0.3610181754674806
+              ],
+              "df": 29
+            },
+            "uf": {
+              "n_clusters": 4,
+              "std_error": 0.06620539262795662,
+              "t_statistic": -1.9182688687795773,
+              "p_value": 0.1508940762231997,
+              "ci95": [
+                -0.33769485078223604,
+                0.0836953635351598
+              ],
+              "df": 3
+            },
+            "uf_ano": {
+              "n_clusters": 32,
+              "std_error": 0.15446202209051446,
+              "t_statistic": -0.8222069211881513,
+              "p_value": 0.417238642630674,
+              "ci95": [
+                -0.4420271146347214,
+                0.18802762738764517
+              ],
+              "df": 31
+            },
+            "two_way": {
+              "n_clusters": 32,
+              "std_error": 0.15674546815481033,
+              "t_statistic": -0.8102291257193239,
+              "p_value": 0.42398491283004636,
+              "ci95": [
+                -0.4466842335869738,
+                0.19268474633989757
+              ],
+              "df": 31
+            }
+          },
+          "historical_coefficient": -0.12699974967903419,
+          "historical_scheme": {
+            "municipio": {
+              "std_error": 0.1362600366835456,
+              "p_value": 0.3517623167510493
+            },
+            "bloco_espacial_250km": {
+              "std_error": 0.23865391104968717,
+              "p_value": 0.5986756444723678
+            }
+          },
+          "p_holm_block": 1.0,
+          "p_holm_two_way": 1.0,
+          "classification": "sem_evidencia_em_nenhum"
+        },
+        "milho_2|extreme_heat_days": {
+          "status": "ok",
+          "n": 2902,
+          "n_municipalities": 505,
+          "n_years": 9,
+          "coefficient": -4.684707460932076,
+          "r_squared_within": 0.001286255973399153,
+          "schemes": {
+            "municipio": {
+              "n_clusters": 505,
+              "std_error": 2.6123299762867607,
+              "t_statistic": -1.7933061686146752,
+              "p_value": 0.07352340602011136,
+              "ci95": [
+                -9.817105152257833,
+                0.4476902303936807
+              ],
+              "df": 504
+            },
+            "bloco_espacial_250km": {
+              "n_clusters": 30,
+              "std_error": 3.7391536571112858,
+              "t_statistic": -1.2528790979270121,
+              "p_value": 0.22025840077689474,
+              "ci95": [
+                -12.332135356944974,
+                2.962720435080821
+              ],
+              "df": 29
+            },
+            "uf": {
+              "n_clusters": 4,
+              "std_error": 1.9872847844975443,
+              "t_statistic": -2.357340778471534,
+              "p_value": 0.09963984567331967,
+              "ci95": [
+                -11.00913458090282,
+                1.6397196590386676
+              ],
+              "df": 3
+            },
+            "uf_ano": {
+              "n_clusters": 32,
+              "std_error": 6.006886429147453,
+              "t_statistic": -0.7798894678947623,
+              "p_value": 0.44137004656734014,
+              "ci95": [
+                -16.935833104154412,
+                7.56641818229026
+              ],
+              "df": 31
+            },
+            "two_way": {
+              "n_clusters": 32,
+              "std_error": 6.113955260765977,
+              "t_statistic": -0.7662318844552946,
+              "p_value": 0.4493339772143281,
+              "ci95": [
+                -17.154201425930346,
+                7.784786504066192
+              ],
+              "df": 31
+            }
+          },
+          "historical_coefficient": -4.684707460932068,
+          "historical_scheme": {
+            "municipio": {
+              "std_error": 2.6127803391857687,
+              "p_value": 0.07357288969866958
+            },
+            "bloco_espacial_250km": {
+              "std_error": 3.7397982832098804,
+              "p_value": 0.22033588699116902
+            }
+          },
+          "p_holm_block": 1.0,
+          "p_holm_two_way": 1.0,
+          "classification": "sem_evidencia_em_nenhum"
+        },
+        "milho_2|et0_total_mm": {
+          "status": "ok",
+          "n": 2902,
+          "n_municipalities": 505,
+          "n_years": 9,
+          "coefficient": 0.06355610441860354,
+          "r_squared_within": 1.129513066033816e-05,
+          "schemes": {
+            "municipio": {
+              "n_clusters": 505,
+              "std_error": 0.3420659967649913,
+              "t_statistic": 0.18580070810799804,
+              "p_value": 0.8526758023778127,
+              "ci95": [
+                -0.6084948033970972,
+                0.7356070122343041
+              ],
+              "df": 504
+            },
+            "bloco_espacial_250km": {
+              "n_clusters": 30,
+              "std_error": 0.5932773750153342,
+              "t_statistic": 0.10712713326875281,
+              "p_value": 0.9154258135851308,
+              "ci95": [
+                -1.149832368969437,
+                1.276944577806644
+              ],
+              "df": 29
+            },
+            "uf": {
+              "n_clusters": 4,
+              "std_error": 0.4149470363659511,
+              "t_statistic": 0.15316678720064889,
+              "p_value": 0.8879891885969855,
+              "ci95": [
+                -1.2569905583526428,
+                1.3841027671898498
+              ],
+              "df": 3
+            },
+            "uf_ano": {
+              "n_clusters": 32,
+              "std_error": 0.7414114276060388,
+              "t_statistic": 0.08572312491030976,
+              "p_value": 0.9322377922524578,
+              "ci95": [
+                -1.4485624714958698,
+                1.5756746803330768
+              ],
+              "df": 31
+            },
+            "two_way": {
+              "n_clusters": 32,
+              "std_error": 0.7494048773495533,
+              "t_statistic": 0.08480876804990203,
+              "p_value": 0.932958774462029,
+              "ci95": [
+                -1.4648652197308616,
+                1.5919774285680686
+              ],
+              "df": 31
+            }
+          },
+          "historical_coefficient": 0.06355610962068943,
+          "historical_scheme": {
+            "municipio": {
+              "std_error": 0.34212496986833435,
+              "p_value": 0.8527008938024565
+            },
+            "bloco_espacial_250km": {
+              "std_error": 0.5933796594970745,
+              "p_value": 0.9154403276888279
+            }
+          },
+          "p_holm_block": 1.0,
+          "p_holm_two_way": 1.0,
+          "classification": "sem_evidencia_em_nenhum"
+        },
+        "milho_2|deficiency_total_mm": {
+          "status": "ok",
+          "n": 2902,
+          "n_municipalities": 505,
+          "n_years": 9,
+          "coefficient": -0.7419606727956436,
+          "r_squared_within": 0.0015813492226446346,
+          "schemes": {
+            "municipio": {
+              "n_clusters": 505,
+              "std_error": 0.3912651053867714,
+              "t_statistic": -1.8963118933445506,
+              "p_value": 0.05849041769844381,
+              "ci95": [
+                -1.5106721839033654,
+                0.02675083831207814
+              ],
+              "df": 504
+            },
+            "bloco_espacial_250km": {
+              "n_clusters": 30,
+              "std_error": 0.4378707493706417,
+              "t_statistic": -1.694474165863043,
+              "p_value": 0.10088979553880664,
+              "ci95": [
+                -1.637506908831339,
+                0.1535855632400518
+              ],
+              "df": 29
+            },
+            "uf": {
+              "n_clusters": 4,
+              "std_error": 0.13973404208813578,
+              "t_statistic": -5.309806126753706,
+              "p_value": 0.013043225780527816,
+              "ci95": [
+                -1.1866567587613897,
+                -0.2972645868298975
+              ],
+              "df": 3
+            },
+            "uf_ano": {
+              "n_clusters": 32,
+              "std_error": 0.9950254768214252,
+              "t_statistic": -0.7456700256216671,
+              "p_value": 0.46148379383773586,
+              "ci95": [
+                -2.771328512279938,
+                1.2874071666886506
+              ],
+              "df": 31
+            },
+            "two_way": {
+              "n_clusters": 32,
+              "std_error": 1.0111412839701075,
+              "t_statistic": -0.7337853617077496,
+              "p_value": 0.4685932892405432,
+              "ci95": [
+                -2.8041969176592065,
+                1.3202755720679196
+              ],
+              "df": 31
+            }
+          },
+          "historical_coefficient": -0.7419606599952716,
+          "historical_scheme": {
+            "municipio": {
+              "std_error": 0.39133255956410967,
+              "p_value": 0.058533733077485904
+            },
+            "bloco_espacial_250km": {
+              "std_error": 0.4379462346576798,
+              "p_value": 0.10094587489007303
+            }
+          },
+          "p_holm_block": 1.0,
+          "p_holm_two_way": 1.0,
+          "classification": "sem_evidencia_em_nenhum"
+        },
+        "milho_2|excess_total_mm": {
+          "status": "ok",
+          "n": 2902,
+          "n_municipalities": 505,
+          "n_years": 9,
+          "coefficient": -0.12430294008139806,
+          "r_squared_within": 5.894259631500365e-05,
+          "schemes": {
+            "municipio": {
+              "n_clusters": 505,
+              "std_error": 0.3293027433341871,
+              "t_statistic": -0.3774731386165569,
+              "p_value": 0.705980923158015,
+              "ci95": [
+                -0.7712781135768972,
+                0.5226722334141011
+              ],
+              "df": 504
+            },
+            "bloco_espacial_250km": {
+              "n_clusters": 30,
+              "std_error": 0.6707844602682175,
+              "t_statistic": -0.18530980880459683,
+              "p_value": 0.8542760349753538,
+              "ci95": [
+                -1.4962112017039417,
+                1.2476053215411458
+              ],
+              "df": 29
+            },
+            "uf": {
+              "n_clusters": 4,
+              "std_error": 0.6328799129997025,
+              "t_statistic": -0.1964084141843454,
+              "p_value": 0.8568427093277073,
+              "ci95": [
+                -2.1384092808955772,
+                1.889803400732781
+              ],
+              "df": 3
+            },
+            "uf_ano": {
+              "n_clusters": 32,
+              "std_error": 1.122963519440872,
+              "t_statistic": -0.11069187727780239,
+              "p_value": 0.9125742357036454,
+              "ci95": [
+                -2.414602137793691,
+                2.1659962576308947
+              ],
+              "df": 31
+            },
+            "two_way": {
+              "n_clusters": 32,
+              "std_error": 1.1234582056884217,
+              "t_statistic": -0.11064313692491028,
+              "p_value": 0.9126125695368267,
+              "ci95": [
+                -2.415611057047316,
+                2.1670051768845195
+              ],
+              "df": 31
+            }
+          },
+          "historical_coefficient": -0.12430293265139321,
+          "historical_scheme": {
+            "municipio": {
+              "std_error": 0.32935951575970346,
+              "p_value": 0.7060292553366105
+            },
+            "bloco_espacial_250km": {
+              "std_error": 0.6709001022630552,
+              "p_value": 0.8543008660517053
+            }
+          },
+          "p_holm_block": 1.0,
+          "p_holm_two_way": 1.0,
+          "classification": "sem_evidencia_em_nenhum"
+        }
+      }
+    },
+    "F2_v30": {
+      "source": "v30_association_cad.json",
+      "hypotheses": 15,
+      "reproduction_max_abs_diff": 3.552713678800501e-15,
+      "reproduction_n": 15,
+      "historical": {
+        "n_significant_holm": 10,
+        "n_tests": 15,
+        "method": "Holm sobre 15, agrupamento por bloco 250 km"
+      },
+      "audited": {
+        "n_significant_raw_block": 10,
+        "n_significant_holm_block": 10,
+        "n_significant_raw_two_way": 9,
+        "n_significant_holm_two_way": 8
+      },
+      "holm_block": {
+        "soja|deficit_corr50": 1.7784031672696454e-09,
+        "soja|deficit_cad60": 4.856573912984922e-09,
+        "soja|deficit_cad100": 7.970572604587896e-09,
+        "soja|deficit_cad200": 4.609551048045083e-06,
+        "soja|deficit_hist": 4.485673286873132e-05,
+        "milho|deficit_cad200": 0.015557646877677744,
+        "milho|deficit_hist": 0.042268332682235094,
+        "milho|deficit_cad100": 0.042268332682235094,
+        "milho|deficit_cad60": 0.0423873559448175,
+        "milho|deficit_corr50": 0.0423873559448175,
+        "milho_2|deficit_hist": 0.5044489776940332,
+        "milho_2|deficit_corr50": 1.0,
+        "milho_2|deficit_cad60": 1.0,
+        "milho_2|deficit_cad200": 1.0,
+        "milho_2|deficit_cad100": 1.0
+      },
+      "holm_two_way": {
+        "soja|deficit_corr50": 5.910900815539853e-06,
+        "soja|deficit_cad60": 0.00013081985516408737,
+        "soja|deficit_cad100": 0.002254655409469587,
+        "milho|deficit_corr50": 0.029398276520209064,
+        "milho|deficit_cad60": 0.03302547564764899,
+        "soja|deficit_cad200": 0.03302547564764899,
+        "milho|deficit_hist": 0.03302547564764899,
+        "milho|deficit_cad100": 0.036707674981156214,
+        "soja|deficit_hist": 0.25300654627784713,
+        "milho|deficit_cad200": 0.5104465403090913,
+        "milho_2|deficit_hist": 1.0,
+        "milho_2|deficit_corr50": 1.0,
+        "milho_2|deficit_cad60": 1.0,
+        "milho_2|deficit_cad200": 1.0,
+        "milho_2|deficit_cad100": 1.0
+      },
+      "results": {
+        "soja|deficit_hist": {
+          "status": "ok",
+          "n": 8884,
+          "n_municipalities": 1225,
+          "n_years": 8,
+          "coefficient": -1.260169892330329,
+          "r_squared_within": 0.023518138967343116,
+          "schemes": {
+            "municipio": {
+              "n_clusters": 1225,
+              "std_error": 0.07230711409529585,
+              "t_statistic": -17.42802085379194,
+              "p_value": 6.19436277612401e-61,
+              "ci95": [
+                -1.4020295087010046,
+                -1.1183102759596535
+              ],
+              "df": 1224
+            },
+            "bloco_espacial_250km": {
+              "n_clusters": 46,
+              "std_error": 0.24034784513260773,
+              "t_statistic": -5.243108760284713,
+              "p_value": 4.0778848062483015e-06,
+              "ci95": [
+                -1.7442553017221232,
+                -0.7760844829385348
+              ],
+              "df": 45
+            },
+            "uf": {
+              "n_clusters": 5,
+              "std_error": 0.22139319062870053,
+              "t_statistic": -5.691999328216762,
+              "p_value": 0.004705687419425314,
+              "ci95": [
+                -1.8748559327755068,
+                -0.6454838518851513
+              ],
+              "df": 4
+            },
+            "uf_ano": {
+              "n_clusters": 40,
+              "std_error": 0.581289936107444,
+              "t_statistic": -2.167885273859967,
+              "p_value": 0.03633216176358524,
+              "ci95": [
+                -2.4359397680036032,
+                -0.08440001665705466
+              ],
+              "df": 39
+            },
+            "two_way": {
+              "n_clusters": 40,
+              "std_error": 0.5806690279112521,
+              "t_statistic": -2.1702033891205406,
+              "p_value": 0.03614379232540673,
+              "ci95": [
+                -2.4346838626329896,
+                -0.08565592202766825
+              ],
+              "df": 39
+            }
+          },
+          "historical_coefficient": -1.2601698923303288,
+          "historical_std_error": 0.24036137480388067,
+          "historical_p_value": 4.081932592752468e-06,
+          "p_holm_block": 4.485673286873132e-05,
+          "p_holm_two_way": 0.25300654627784713,
+          "classification": "mantida_apenas_bruta"
+        },
+        "soja|deficit_corr50": {
+          "status": "ok",
+          "n": 8884,
+          "n_municipalities": 1225,
+          "n_years": 8,
+          "coefficient": -2.4477499919945163,
+          "r_squared_within": 0.1466430534226233,
+          "schemes": {
+            "municipio": {
+              "n_clusters": 1225,
+              "std_error": 0.07057578757307338,
+              "t_statistic": -34.6825742392197,
+              "p_value": 3.824508597595095e-184,
+              "ci95": [
+                -2.5862129119359696,
+                -2.309287072053063
+              ],
+              "df": 1224
+            },
+            "bloco_espacial_250km": {
+              "n_clusters": 46,
+              "std_error": 0.29420582782585175,
+              "t_statistic": -8.319855558549317,
+              "p_value": 1.185602111513097e-10,
+              "ci95": [
+                -3.0403109468470593,
+                -1.8551890371419733
+              ],
+              "df": 45
+            },
+            "uf": {
+              "n_clusters": 5,
+              "std_error": 0.3913599247087451,
+              "t_statistic": -6.254472769065872,
+              "p_value": 0.0033325424480948056,
+              "ci95": [
+                -3.534339339322689,
+                -1.3611606446663436
+              ],
+              "df": 4
+            },
+            "uf_ano": {
+              "n_clusters": 40,
+              "std_error": 0.4009603096885685,
+              "t_statistic": -6.104718928154555,
+              "p_value": 3.7048840304126205e-07,
+              "ci95": [
+                -3.2587687696967107,
+                -1.6367312142923218
+              ],
+              "df": 39
+            },
+            "two_way": {
+              "n_clusters": 40,
+              "std_error": 0.40223110128713757,
+              "t_statistic": -6.085431942387667,
+              "p_value": 3.940600543693235e-07,
+              "ci95": [
+                -3.261339188324395,
+                -1.6341607956646373
+              ],
+              "df": 39
+            }
+          },
+          "historical_coefficient": -2.447749991994517,
+          "historical_std_error": 0.29422238927301075,
+          "historical_p_value": 1.1874480838518374e-10,
+          "p_holm_block": 1.7784031672696454e-09,
+          "p_holm_two_way": 5.910900815539853e-06,
+          "classification": "mantida"
+        },
+        "soja|deficit_cad60": {
+          "status": "ok",
+          "n": 8884,
+          "n_municipalities": 1225,
+          "n_years": 8,
+          "coefficient": -2.403475810263485,
+          "r_squared_within": 0.11616370520989205,
+          "schemes": {
+            "municipio": {
+              "n_clusters": 1225,
+              "std_error": 0.079231611595924,
+              "t_statistic": -30.33480907243252,
+              "p_value": 3.380429291027656e-151,
+              "ci95": [
+                -2.5589206259785047,
+                -2.2480309945484653
+              ],
+              "df": 1224
+            },
+            "bloco_espacial_250km": {
+              "n_clusters": 46,
+              "std_error": 0.30050551845827517,
+              "t_statistic": -7.9981087288991155,
+              "p_value": 3.468981366417802e-10,
+              "ci95": [
+                -3.008724993367693,
+                -1.798226627159277
+              ],
+              "df": 45
+            },
+            "uf": {
+              "n_clusters": 5,
+              "std_error": 0.37561015498128375,
+              "t_statistic": -6.39885737483122,
+              "p_value": 0.0030629722806433442,
+              "ci95": [
+                -3.4463367865238554,
+                -1.3606148340031148
+              ],
+              "df": 4
+            },
+            "uf_ano": {
+              "n_clusters": 40,
+              "std_error": 0.47073869397548346,
+              "t_statistic": -5.105753661262995,
+              "p_value": 8.965753769257496e-06,
+              "ci95": [
+                -3.3556346922776576,
+                -1.4513169282493124
+              ],
+              "df": 39
+            },
+            "two_way": {
+              "n_clusters": 40,
+              "std_error": 0.47194646881544394,
+              "t_statistic": -5.092687347139303,
+              "p_value": 9.344275368863383e-06,
+              "ci95": [
+                -3.358077647479895,
+                -1.4488739730470752
+              ],
+              "df": 39
+            }
+          },
+          "historical_coefficient": -2.4034758102634863,
+          "historical_std_error": 0.3005224345278911,
+          "historical_p_value": 3.4742188053853203e-10,
+          "p_holm_block": 4.856573912984922e-09,
+          "p_holm_two_way": 0.00013081985516408737,
+          "classification": "mantida"
+        },
+        "soja|deficit_cad100": {
+          "status": "ok",
+          "n": 8884,
+          "n_municipalities": 1225,
+          "n_years": 8,
+          "coefficient": -2.317524756453304,
+          "r_squared_within": 0.07633078892573719,
+          "schemes": {
+            "municipio": {
+              "n_clusters": 1225,
+              "std_error": 0.09050423102729102,
+              "t_statistic": -25.606811197086113,
+              "p_value": 3.671052459784505e-116,
+              "ci95": [
+                -2.495085369320991,
+                -2.139964143585617
+              ],
+              "df": 1224
+            },
+            "bloco_espacial_250km": {
+              "n_clusters": 46,
+              "std_error": 0.29603666541994456,
+              "t_statistic": -7.828505814189488,
+              "p_value": 6.131209695836844e-10,
+              "ci95": [
+                -2.9137732075086,
+                -1.7212763053980082
+              ],
+              "df": 45
+            },
+            "uf": {
+              "n_clusters": 5,
+              "std_error": 0.3717734154462644,
+              "t_statistic": -6.233702196461317,
+              "p_value": 0.0033736839927880004,
+              "ci95": [
+                -3.349733236011751,
+                -1.2853162768948572
+              ],
+              "df": 4
+            },
+            "uf_ano": {
+              "n_clusters": 40,
+              "std_error": 0.5574910652652697,
+              "t_statistic": -4.157061701698415,
+              "p_value": 0.00017073570274346039,
+              "ci95": [
+                -3.445156872166985,
+                -1.189892640739623
+              ],
+              "df": 39
+            },
+            "two_way": {
+              "n_clusters": 40,
+              "std_error": 0.5581872614677703,
+              "t_statistic": -4.151876827785898,
+              "p_value": 0.00017343503149766054,
+              "ci95": [
+                -3.446565061904347,
+                -1.188484451002261
+              ],
+              "df": 39
+            }
+          },
+          "historical_coefficient": -2.317524756453306,
+          "historical_std_error": 0.2960533299286926,
+          "historical_p_value": 6.140307534934649e-10,
+          "p_holm_block": 7.970572604587896e-09,
+          "p_holm_two_way": 0.002254655409469587,
+          "classification": "mantida"
+        },
+        "soja|deficit_cad200": {
+          "status": "ok",
+          "n": 8884,
+          "n_municipalities": 1225,
+          "n_years": 8,
+          "coefficient": -2.2851576379651175,
+          "r_squared_within": 0.02593513621442589,
+          "schemes": {
+            "municipio": {
+              "n_clusters": 1225,
+              "std_error": 0.14243190269943237,
+              "t_statistic": -16.043860923401287,
+              "p_value": 1.0141301721454294e-52,
+              "ci95": [
+                -2.564595357596102,
+                -2.005719918334133
+              ],
+              "df": 1224
+            },
+            "bloco_espacial_250km": {
+              "n_clusters": 46,
+              "std_error": 0.3847484099859855,
+              "t_statistic": -5.939355637748717,
+              "p_value": 3.841292540037569e-07,
+              "ci95": [
+                -3.0600807143844087,
+                -1.5102345615458266
+              ],
+              "df": 45
+            },
+            "uf": {
+              "n_clusters": 5,
+              "std_error": 0.646700033541756,
+              "t_statistic": -3.533566598798653,
+              "p_value": 0.024152850240433867,
+              "ci95": [
+                -4.0806847806233755,
+                -0.48963049530685976
+              ],
+              "df": 4
+            },
+            "uf_ano": {
+              "n_clusters": 40,
+              "std_error": 0.7285979003935693,
+              "t_statistic": -3.1363769189160933,
+              "p_value": 0.0032484340222488028,
+              "ci95": [
+                -3.758885995449037,
+                -0.8114292804811982
+              ],
+              "df": 39
+            },
+            "two_way": {
+              "n_clusters": 40,
+              "std_error": 0.7283150802022307,
+              "t_statistic": -3.137594840588224,
+              "p_value": 0.003237708116431328,
+              "ci95": [
+                -3.758313937616013,
+                -0.8120013383142219
+              ],
+              "df": 39
+            }
+          },
+          "historical_coefficient": -2.285157637965121,
+          "historical_std_error": 0.38477006826008836,
+          "historical_p_value": 3.845681478175635e-07,
+          "p_holm_block": 4.609551048045083e-06,
+          "p_holm_two_way": 0.03302547564764899,
+          "classification": "mantida"
+        },
+        "milho|deficit_hist": {
+          "status": "ok",
+          "n": 7616,
+          "n_municipalities": 1063,
+          "n_years": 8,
+          "coefficient": -3.0394987287652495,
+          "r_squared_within": 0.03868506706990327,
+          "schemes": {
+            "municipio": {
+              "n_clusters": 1063,
+              "std_error": 0.17682665017791444,
+              "t_statistic": -17.189143863252813,
+              "p_value": 1.292283884575479e-58,
+              "ci95": [
+                -3.386468028831382,
+                -2.692529428699117
+              ],
+              "df": 1062
+            },
+            "bloco_espacial_250km": {
+              "n_clusters": 49,
+              "std_error": 1.0249484421696307,
+              "t_statistic": -2.965513779728451,
+              "p_value": 0.0046964814091372325,
+              "ci95": [
+                -5.10029569136432,
+                -0.9787017661661799
+              ],
+              "df": 48
+            },
+            "uf": {
+              "n_clusters": 6,
+              "std_error": 1.2598445573814576,
+              "t_statistic": -2.412598213769118,
+              "p_value": 0.06066911214094091,
+              "ci95": [
+                -6.278032263695297,
+                0.19903480616479818
+              ],
+              "df": 5
+            },
+            "uf_ano": {
+              "n_clusters": 48,
+              "std_error": 0.9785972473714777,
+              "t_statistic": -3.105975146496043,
+              "p_value": 0.003211616575554222,
+              "ci95": [
+                -5.008182457926883,
+                -1.0708149996036165
+              ],
+              "df": 47
+            },
+            "two_way": {
+              "n_clusters": 48,
+              "std_error": 0.9807932847423706,
+              "t_statistic": -3.099020737650797,
+              "p_value": 0.0032747059956536274,
+              "ci95": [
+                -5.012600315275573,
+                -1.0663971422549265
+              ],
+              "df": 47
+            }
+          },
+          "historical_coefficient": -3.0394987287652526,
+          "historical_std_error": 1.0250157467920995,
+          "historical_p_value": 0.004698988383684,
+          "p_holm_block": 0.042268332682235094,
+          "p_holm_two_way": 0.03302547564764899,
+          "classification": "mantida"
+        },
+        "milho|deficit_corr50": {
+          "status": "ok",
+          "n": 7616,
+          "n_municipalities": 1063,
+          "n_years": 8,
+          "coefficient": -2.437407523840826,
+          "r_squared_within": 0.0390093960935437,
+          "schemes": {
+            "municipio": {
+              "n_clusters": 1063,
+              "std_error": 0.1469011783947316,
+              "t_statistic": -16.592157738118186,
+              "p_value": 3.759069989342829e-55,
+              "ci95": [
+                -2.725657055205167,
+                -2.149157992476485
+              ],
+              "df": 1062
+            },
+            "bloco_espacial_250km": {
+              "n_clusters": 49,
+              "std_error": 0.8630203668850602,
+              "t_statistic": -2.8242757846356223,
+              "p_value": 0.006881516582708836,
+              "ci95": [
+                -4.172626270037545,
+                -0.7021887776441071
+              ],
+              "df": 48
+            },
+            "uf": {
+              "n_clusters": 6,
+              "std_error": 0.8891372316092245,
+              "t_statistic": -2.7413175797727316,
+              "p_value": 0.04072821228504785,
+              "ci95": [
+                -4.723007540803458,
+                -0.15180750687819478
+              ],
+              "df": 5
+            },
+            "uf_ano": {
+              "n_clusters": 48,
+              "std_error": 0.7582661395171861,
+              "t_statistic": -3.2144485910880927,
+              "p_value": 0.0023642233745683116,
+              "ci95": [
+                -3.9628422368970178,
+                -0.9119728107846343
+              ],
+              "df": 47
+            },
+            "two_way": {
+              "n_clusters": 48,
+              "std_error": 0.7612268996249676,
+              "t_statistic": -3.2019461280751638,
+              "p_value": 0.0024498563766840887,
+              "ci95": [
+                -3.9687985179572767,
+                -0.9060165297243756
+              ],
+              "df": 47
+            }
+          },
+          "historical_coefficient": -2.4374075238408253,
+          "historical_std_error": 0.8630770382819685,
+          "historical_p_value": 0.006884922723268174,
+          "p_holm_block": 0.0423873559448175,
+          "p_holm_two_way": 0.029398276520209064,
+          "classification": "mantida"
+        },
+        "milho|deficit_cad60": {
+          "status": "ok",
+          "n": 7616,
+          "n_municipalities": 1063,
+          "n_years": 8,
+          "coefficient": -2.604778592899255,
+          "r_squared_within": 0.03623138271616089,
+          "schemes": {
+            "municipio": {
+              "n_clusters": 1063,
+              "std_error": 0.16226074302290117,
+              "t_statistic": -16.053042432645718,
+              "p_value": 4.3806452295267495e-52,
+              "ci95": [
+                -2.9231666660670768,
+                -2.2863905197314334
+              ],
+              "df": 1062
+            },
+            "bloco_espacial_250km": {
+              "n_clusters": 49,
+              "std_error": 0.9069613874663404,
+              "t_statistic": -2.8719839994245895,
+              "p_value": 0.006055336563545357,
+              "ci95": [
+                -4.428346682362178,
+                -0.7812105034363324
+              ],
+              "df": 48
+            },
+            "uf": {
+              "n_clusters": 6,
+              "std_error": 0.9644497403839918,
+              "t_statistic": -2.7007924662431586,
+              "p_value": 0.042743570965118396,
+              "ci95": [
+                -5.083975576914504,
+                -0.12558160888400627
+              ],
+              "df": 5
+            },
+            "uf_ano": {
+              "n_clusters": 48,
+              "std_error": 0.8290159007059141,
+              "t_statistic": -3.1420128259075173,
+              "p_value": 0.002902593619910797,
+              "ci95": [
+                -4.272543466875517,
+                -0.9370137189229932
+              ],
+              "df": 47
+            },
+            "two_way": {
+              "n_clusters": 48,
+              "std_error": 0.8321965289361374,
+              "t_statistic": -3.1300041544623474,
+              "p_value": 0.00300231596796809,
+              "ci95": [
+                -4.27894206554537,
+                -0.9306151202531405
+              ],
+              "df": 47
+            }
+          },
+          "historical_coefficient": -2.6047785928992564,
+          "historical_std_error": 0.9070209443096571,
+          "historical_p_value": 0.006058412721140296,
+          "p_holm_block": 0.0423873559448175,
+          "p_holm_two_way": 0.03302547564764899,
+          "classification": "mantida"
+        },
+        "milho|deficit_cad100": {
+          "status": "ok",
+          "n": 7616,
+          "n_municipalities": 1063,
+          "n_years": 8,
+          "coefficient": -2.7806000309189134,
+          "r_squared_within": 0.02908020631345809,
+          "schemes": {
+            "municipio": {
+              "n_clusters": 1063,
+              "std_error": 0.18991516563206595,
+              "t_statistic": -14.641274285098099,
+              "p_value": 2.362072956858835e-44,
+              "ci95": [
+                -3.1532516194945126,
+                -2.407948442343314
+              ],
+              "df": 1062
+            },
+            "bloco_espacial_250km": {
+              "n_clusters": 49,
+              "std_error": 0.9501102369817017,
+              "t_statistic": -2.9266078005351135,
+              "p_value": 0.005222948593745028,
+              "ci95": [
+                -4.690924696968919,
+                -0.8702753648689077
+              ],
+              "df": 48
+            },
+            "uf": {
+              "n_clusters": 6,
+              "std_error": 1.1388839112603752,
+              "t_statistic": -2.4415131370515986,
+              "p_value": 0.05854455551867105,
+              "ci95": [
+                -5.708194326103275,
+                0.1469942642654476
+              ],
+              "df": 5
+            },
+            "uf_ano": {
+              "n_clusters": 48,
+              "std_error": 0.9305913304646534,
+              "t_statistic": -2.9879926234972904,
+              "p_value": 0.004453532007850619,
+              "ci95": [
+                -4.652708312140343,
+                -0.9084917496974836
+              ],
+              "df": 47
+            },
+            "two_way": {
+              "n_clusters": 48,
+              "std_error": 0.9339964577546724,
+              "t_statistic": -2.977099118345134,
+              "p_value": 0.004588459372644527,
+              "ci95": [
+                -4.6595585446640815,
+                -0.9016415171737453
+              ],
+              "df": 47
+            }
+          },
+          "historical_coefficient": -2.7806000309189156,
+          "historical_std_error": 0.9501726272524441,
+          "historical_p_value": 0.005225680376285245,
+          "p_holm_block": 0.042268332682235094,
+          "p_holm_two_way": 0.036707674981156214,
+          "classification": "mantida"
+        },
+        "milho|deficit_cad200": {
+          "status": "ok",
+          "n": 7616,
+          "n_municipalities": 1063,
+          "n_years": 8,
+          "coefficient": -2.0102041316451147,
+          "r_squared_within": 0.00496668122663857,
+          "schemes": {
+            "municipio": {
+              "n_clusters": 1063,
+              "std_error": 0.28888481639314567,
+              "t_statistic": -6.958497011865836,
+              "p_value": 6.0076531684711446e-12,
+              "ci95": [
+                -2.5770539952986544,
+                -1.443354267991575
+              ],
+              "df": 1062
+            },
+            "bloco_espacial_250km": {
+              "n_clusters": 49,
+              "std_error": 0.5990898391879246,
+              "t_statistic": -3.3554301878495836,
+              "p_value": 0.0015557646877677744,
+              "ci95": [
+                -3.2147549852558677,
+                -0.8056532780343617
+              ],
+              "df": 48
+            },
+            "uf": {
+              "n_clusters": 6,
+              "std_error": 0.7604589785402441,
+              "t_statistic": -2.643409031087839,
+              "p_value": 0.04578796119005308,
+              "ci95": [
+                -3.965026168627212,
+                -0.055382094663017245
+              ],
+              "df": 5
+            },
+            "uf_ano": {
+              "n_clusters": 48,
+              "std_error": 1.1420717682153145,
+              "t_statistic": -1.7601381871004549,
+              "p_value": 0.08489117033479902,
+              "ci95": [
+                -4.307756177350855,
+                0.2873479140606263
+              ],
+              "df": 47
+            },
+            "two_way": {
+              "n_clusters": 48,
+              "std_error": 1.1427648730944016,
+              "t_statistic": -1.7590706355908927,
+              "p_value": 0.08507442338484855,
+              "ci95": [
+                -4.3091505245163795,
+                0.28874226122614965
+              ],
+              "df": 47
+            }
+          },
+          "historical_coefficient": -2.010204131645114,
+          "historical_std_error": 0.5991291792305974,
+          "historical_p_value": 0.001556766575235104,
+          "p_holm_block": 0.015557646877677744,
+          "p_holm_two_way": 0.5104465403090913,
+          "classification": "enfraquecida"
+        },
+        "milho_2|deficit_hist": {
+          "status": "ok",
+          "n": 2902,
+          "n_municipalities": 505,
+          "n_years": 9,
+          "coefficient": -0.7419606727956436,
+          "r_squared_within": 0.0015813492226446346,
+          "schemes": {
+            "municipio": {
+              "n_clusters": 505,
+              "std_error": 0.3912651053867714,
+              "t_statistic": -1.8963118933445506,
+              "p_value": 0.05849041769844381,
+              "ci95": [
+                -1.5106721839033654,
+                0.02675083831207814
+              ],
+              "df": 504
+            },
+            "bloco_espacial_250km": {
+              "n_clusters": 30,
+              "std_error": 0.4378707493706417,
+              "t_statistic": -1.694474165863043,
+              "p_value": 0.10088979553880664,
+              "ci95": [
+                -1.637506908831339,
+                0.1535855632400518
+              ],
+              "df": 29
+            },
+            "uf": {
+              "n_clusters": 4,
+              "std_error": 0.13973404208813578,
+              "t_statistic": -5.309806126753706,
+              "p_value": 0.013043225780527816,
+              "ci95": [
+                -1.1866567587613897,
+                -0.2972645868298975
+              ],
+              "df": 3
+            },
+            "uf_ano": {
+              "n_clusters": 32,
+              "std_error": 0.9950254768214252,
+              "t_statistic": -0.7456700256216671,
+              "p_value": 0.46148379383773586,
+              "ci95": [
+                -2.771328512279938,
+                1.2874071666886506
+              ],
+              "df": 31
+            },
+            "two_way": {
+              "n_clusters": 32,
+              "std_error": 1.0111412839701075,
+              "t_statistic": -0.7337853617077496,
+              "p_value": 0.4685932892405432,
+              "ci95": [
+                -2.8041969176592065,
+                1.3202755720679196
+              ],
+              "df": 31
+            }
+          },
+          "historical_coefficient": -0.741960672795644,
+          "historical_std_error": 0.4379462378203654,
+          "historical_p_value": 0.10094587162671186,
+          "p_holm_block": 0.5044489776940332,
+          "p_holm_two_way": 1.0,
+          "classification": "sem_evidencia_em_nenhum"
+        },
+        "milho_2|deficit_corr50": {
+          "status": "ok",
+          "n": 2902,
+          "n_municipalities": 505,
+          "n_years": 9,
+          "coefficient": -0.5546754996056004,
+          "r_squared_within": 0.001312221706158745,
+          "schemes": {
+            "municipio": {
+              "n_clusters": 505,
+              "std_error": 0.3117855419086466,
+              "t_statistic": -1.7790289319064085,
+              "p_value": 0.0758376265185272,
+              "ci95": [
+                -1.1672349427105897,
+                0.05788394349938886
+              ],
+              "df": 504
+            },
+            "bloco_espacial_250km": {
+              "n_clusters": 30,
+              "std_error": 0.5466006853583808,
+              "t_statistic": -1.0147727847101495,
+              "p_value": 0.3186062236374827,
+              "ci95": [
+                -1.672599423710611,
+                0.5632484244994101
+              ],
+              "df": 29
+            },
+            "uf": {
+              "n_clusters": 4,
+              "std_error": 0.5106050089780151,
+              "t_statistic": -1.0863103374481051,
+              "p_value": 0.3568298557196262,
+              "ci95": [
+                -2.1796485238870402,
+                1.0702975246758393
+              ],
+              "df": 3
+            },
+            "uf_ano": {
+              "n_clusters": 32,
+              "std_error": 0.892624541064891,
+              "t_statistic": -0.6213984425566865,
+              "p_value": 0.5388805343374907,
+              "ci95": [
+                -2.3751952536908685,
+                1.2658442544796675
+              ],
+              "df": 31
+            },
+            "two_way": {
+              "n_clusters": 32,
+              "std_error": 0.9039087266355279,
+              "t_statistic": -0.6136410494344695,
+              "p_value": 0.5439294587513223,
+              "ci95": [
+                -2.3982095018938145,
+                1.288858502682614
+              ],
+              "df": 31
+            }
+          },
+          "historical_coefficient": -0.5546754996056014,
+          "historical_std_error": 0.5466949187329896,
+          "historical_p_value": 0.31868821255072366,
+          "p_holm_block": 1.0,
+          "p_holm_two_way": 1.0,
+          "classification": "sem_evidencia_em_nenhum"
+        },
+        "milho_2|deficit_cad60": {
+          "status": "ok",
+          "n": 2902,
+          "n_municipalities": 505,
+          "n_years": 9,
+          "coefficient": -0.438446172515586,
+          "r_squared_within": 0.0007372937030016846,
+          "schemes": {
+            "municipio": {
+              "n_clusters": 505,
+              "std_error": 0.32912788925301767,
+              "t_statistic": -1.3321453053117893,
+              "p_value": 0.18341449070918758,
+              "ci95": [
+                -1.0850778133445924,
+                0.20818546831342039
+              ],
+              "df": 504
+            },
+            "bloco_espacial_250km": {
+              "n_clusters": 30,
+              "std_error": 0.4931683728054829,
+              "t_statistic": -0.8890395181292766,
+              "p_value": 0.3812973337852429,
+              "ci95": [
+                -1.4470887471397105,
+                0.5701964021085386
+              ],
+              "df": 29
+            },
+            "uf": {
+              "n_clusters": 4,
+              "std_error": 0.5256379277755063,
+              "t_statistic": -0.8341220245865536,
+              "p_value": 0.46541602664790294,
+              "ci95": [
+                -2.1112606536817315,
+                1.2343683086505597
+              ],
+              "df": 3
+            },
+            "uf_ano": {
+              "n_clusters": 32,
+              "std_error": 0.8455762573381447,
+              "t_statistic": -0.5185176011159595,
+              "p_value": 0.6077788747254266,
+              "ci95": [
+                -2.1630103193102816,
+                1.2861179742791096
+              ],
+              "df": 31
+            },
+            "two_way": {
+              "n_clusters": 32,
+              "std_error": 0.8587793460975858,
+              "t_statistic": -0.5105457816468771,
+              "p_value": 0.6132857372293273,
+              "ci95": [
+                -2.189938196369127,
+                1.313045851337955
+              ],
+              "df": 31
+            }
+          },
+          "historical_coefficient": -0.43844617251558615,
+          "historical_std_error": 0.49325339450645145,
+          "historical_p_value": 0.3813783243276798,
+          "p_holm_block": 1.0,
+          "p_holm_two_way": 1.0,
+          "classification": "sem_evidencia_em_nenhum"
+        },
+        "milho_2|deficit_cad100": {
+          "status": "ok",
+          "n": 2902,
+          "n_municipalities": 505,
+          "n_years": 9,
+          "coefficient": -0.16478051603861577,
+          "r_squared_within": 7.94880494491279e-05,
+          "schemes": {
+            "municipio": {
+              "n_clusters": 505,
+              "std_error": 0.365379128338094,
+              "t_statistic": -0.4509850269447806,
+              "p_value": 0.6521943058806443,
+              "ci95": [
+                -0.882634313898645,
+                0.5530732818214135
+              ],
+              "df": 504
+            },
+            "bloco_espacial_250km": {
+              "n_clusters": 30,
+              "std_error": 0.5134507936878285,
+              "t_statistic": -0.320927570985118,
+              "p_value": 0.7505666698940288,
+              "ci95": [
+                -1.214905299065525,
+                0.8853442669882934
+              ],
+              "df": 29
+            },
+            "uf": {
+              "n_clusters": 4,
+              "std_error": 0.6584995079642938,
+              "t_statistic": -0.25023635408327555,
+              "p_value": 0.8185625030237499,
+              "ci95": [
+                -2.2604198421907236,
+                1.930858810113492
+              ],
+              "df": 3
+            },
+            "uf_ano": {
+              "n_clusters": 32,
+              "std_error": 0.8986127191128301,
+              "t_statistic": -0.18337211630088876,
+              "p_value": 0.8557001716764858,
+              "ci95": [
+                -1.9975132397720714,
+                1.6679522076948399
+              ],
+              "df": 31
+            },
+            "two_way": {
+              "n_clusters": 32,
+              "std_error": 0.9103064250829902,
+              "t_statistic": -0.18101653629830544,
+              "p_value": 0.8575329053477183,
+              "ci95": [
+                -2.021362710336419,
+                1.6918016782591874
+              ],
+              "df": 31
+            }
+          },
+          "historical_coefficient": -0.16478051603861596,
+          "historical_std_error": 0.5135393120565039,
+          "historical_p_value": 0.7506081626615283,
+          "p_holm_block": 1.0,
+          "p_holm_two_way": 1.0,
+          "classification": "sem_evidencia_em_nenhum"
+        },
+        "milho_2|deficit_cad200": {
+          "status": "ok",
+          "n": 2902,
+          "n_municipalities": 505,
+          "n_years": 9,
+          "coefficient": -0.4324402476298632,
+          "r_squared_within": 0.00015134215917977922,
+          "schemes": {
+            "municipio": {
+              "n_clusters": 505,
+              "std_error": 0.7065162217332623,
+              "t_statistic": -0.6120740534010363,
+              "p_value": 0.5407647836371818,
+              "ci95": [
+                -1.820519953572014,
+                0.9556394583122876
+              ],
+              "df": 504
+            },
+            "bloco_espacial_250km": {
+              "n_clusters": 30,
+              "std_error": 0.9788653595471619,
+              "t_statistic": -0.4417770466715838,
+              "p_value": 0.6619274006104823,
+              "ci95": [
+                -2.434444696632603,
+                1.569564201372877
+              ],
+              "df": 29
+            },
+            "uf": {
+              "n_clusters": 4,
+              "std_error": 0.8794004580418956,
+              "t_statistic": -0.49174439662306985,
+              "p_value": 0.6566320556523204,
+              "ci95": [
+                -3.231084986190096,
+                2.36620449093037
+              ],
+              "df": 3
+            },
+            "uf_ano": {
+              "n_clusters": 32,
+              "std_error": 1.3729716661891702,
+              "t_statistic": -0.3149666218751239,
+              "p_value": 0.7548973678178883,
+              "ci95": [
+                -3.2326344223439563,
+                2.3677539270842303
+              ],
+              "df": 31
+            },
+            "two_way": {
+              "n_clusters": 32,
+              "std_error": 1.3986285023505989,
+              "t_statistic": -0.3091887852300196,
+              "p_value": 0.7592465389502754,
+              "ci95": [
+                -3.2849618846871804,
+                2.4200813894274535
+              ],
+              "df": 31
+            }
+          },
+          "historical_coefficient": -0.4324402476298638,
+          "historical_std_error": 0.9790341148901176,
+          "historical_p_value": 0.6619818725407316,
+          "p_holm_block": 1.0,
+          "p_holm_two_way": 1.0,
+          "classification": "sem_evidencia_em_nenhum"
+        }
+      }
+    },
+    "F3_v29_interaction": {
+      "source": "v29_cycle_interaction.json",
+      "hypotheses": 9,
+      "reproduction_max_abs_diff": 9.193208327928915e-08,
+      "audited": {
+        "n_significant_raw_block": 2,
+        "n_significant_holm_block": 1,
+        "n_significant_raw_two_way": 0,
+        "n_significant_holm_two_way": 0
+      },
+      "holm_block": {
+        "soja|deficiency_total_mm": 0.025254863697757878,
+        "milho|precip_acumulada_mm": 0.365140171023898,
+        "milho|temp_media_c": 0.8139305197130416,
+        "milho|deficiency_total_mm": 1.0,
+        "milho_2|deficiency_total_mm": 1.0,
+        "soja|temp_media_c": 1.0,
+        "soja|precip_acumulada_mm": 1.0,
+        "milho_2|precip_acumulada_mm": 1.0,
+        "milho_2|temp_media_c": 1.0
+      },
+      "holm_two_way": {
+        "milho|precip_acumulada_mm": 0.6754256275998671,
+        "milho|deficiency_total_mm": 1.0,
+        "soja|deficiency_total_mm": 1.0,
+        "milho|temp_media_c": 1.0,
+        "milho_2|deficiency_total_mm": 1.0,
+        "soja|temp_media_c": 1.0,
+        "milho_2|precip_acumulada_mm": 1.0,
+        "soja|precip_acumulada_mm": 1.0,
+        "milho_2|temp_media_c": 1.0
+      },
+      "results": {
+        "soja|deficiency_total_mm": {
+          "status": "ok",
+          "n": 8677,
+          "reference_class": "22",
+          "contrast_class": "21",
+          "slope_difference": -1.193640193542846,
+          "historical_p_value": 0.0028060954009664794,
+          "historical_coefficient": -1.1936402011267522,
+          "se_bloco_espacial_250km": 0.3775237612415206,
+          "p_bloco_espacial_250km": 0.002806095966417542,
+          "n_clusters_bloco_espacial_250km": 46,
+          "se_two_way": 0.8589863066936454,
+          "p_two_way": 0.1725353746448448,
+          "n_clusters_two_way": 40,
+          "p_holm_block": 0.025254863697757878,
+          "p_holm_two_way": 1.0
+        },
+        "soja|temp_media_c": {
+          "status": "ok",
+          "n": 8677,
+          "reference_class": "22",
+          "contrast_class": "21",
+          "slope_difference": -3.980770731397124,
+          "historical_p_value": 0.3821459385673186,
+          "historical_coefficient": -3.9807707505155783,
+          "se_bloco_espacial_250km": 4.510304743589705,
+          "p_bloco_espacial_250km": 0.38214594006939884,
+          "n_clusters_bloco_espacial_250km": 46,
+          "se_two_way": 6.47135708367873,
+          "p_two_way": 0.5420372540976757,
+          "n_clusters_two_way": 40,
+          "p_holm_block": 1.0,
+          "p_holm_two_way": 1.0
+        },
+        "soja|precip_acumulada_mm": {
+          "status": "ok",
+          "n": 8677,
+          "reference_class": "22",
+          "contrast_class": "21",
+          "slope_difference": -0.07541197653908252,
+          "historical_p_value": 0.6499662332517634,
+          "historical_coefficient": -0.075411977845047,
+          "se_bloco_espacial_250km": 0.16506420004572883,
+          "p_bloco_espacial_250km": 0.6499662382914271,
+          "n_clusters_bloco_espacial_250km": 46,
+          "se_two_way": 0.2262387879180492,
+          "p_two_way": 0.7406713424522768,
+          "n_clusters_two_way": 40,
+          "p_holm_block": 1.0,
+          "p_holm_two_way": 1.0
+        },
+        "milho|deficiency_total_mm": {
+          "status": "ok",
+          "n": 7293,
+          "reference_class": "22",
+          "contrast_class": "21",
+          "slope_difference": -2.6119017023624305,
+          "historical_p_value": 0.17013981769597997,
+          "historical_coefficient": -2.611901684610899,
+          "se_bloco_espacial_250km": 1.8754745830716941,
+          "p_bloco_espacial_250km": 0.1701398182074515,
+          "n_clusters_bloco_espacial_250km": 49,
+          "se_two_way": 1.7456391940658582,
+          "p_two_way": 0.14127559248663335,
+          "n_clusters_two_way": 48,
+          "p_holm_block": 1.0,
+          "p_holm_two_way": 1.0
+        },
+        "milho|temp_media_c": {
+          "status": "ok",
+          "n": 7293,
+          "reference_class": "22",
+          "contrast_class": "21",
+          "slope_difference": -22.9152079968376,
+          "historical_p_value": 0.11627578801377225,
+          "historical_coefficient": -22.915208088769685,
+          "se_bloco_espacial_250km": 14.326636709557835,
+          "p_bloco_espacial_250km": 0.11627578853043452,
+          "n_clusters_bloco_espacial_250km": 49,
+          "se_two_way": 17.634828841438598,
+          "p_two_way": 0.20013466965890703,
+          "n_clusters_two_way": 48,
+          "p_holm_block": 0.8139305197130416,
+          "p_holm_two_way": 1.0
+        },
+        "milho|precip_acumulada_mm": {
+          "status": "ok",
+          "n": 7293,
+          "reference_class": "22",
+          "contrast_class": "21",
+          "slope_difference": -1.0167984447583247,
+          "historical_p_value": 0.0456425208328847,
+          "historical_coefficient": -1.0167984471382938,
+          "se_bloco_espacial_250km": 0.495508469966897,
+          "p_bloco_espacial_250km": 0.04564252137798725,
+          "n_clusters_bloco_espacial_250km": 49,
+          "se_two_way": 0.558515124136759,
+          "p_two_way": 0.07504729195554079,
+          "n_clusters_two_way": 48,
+          "p_holm_block": 0.365140171023898,
+          "p_holm_two_way": 0.6754256275998671
+        },
+        "milho_2|deficiency_total_mm": {
+          "status": "ok",
+          "n": 2888,
+          "reference_class": "21",
+          "contrast_class": "20",
+          "slope_difference": -0.7271459340857096,
+          "historical_p_value": 0.21404148966170844,
+          "historical_coefficient": -0.7271459546884269,
+          "se_bloco_espacial_250km": 0.5723772654787047,
+          "p_bloco_espacial_250km": 0.21404150486818263,
+          "n_clusters_bloco_espacial_250km": 30,
+          "se_two_way": 0.8166829162864981,
+          "p_two_way": 0.38113526499070394,
+          "n_clusters_two_way": 28,
+          "p_holm_block": 1.0,
+          "p_holm_two_way": 1.0
+        },
+        "milho_2|temp_media_c": {
+          "status": "ok",
+          "n": 2888,
+          "reference_class": "21",
+          "contrast_class": "20",
+          "slope_difference": 0.4958092517819716,
+          "historical_p_value": 0.9107333436943028,
+          "historical_coefficient": 0.4958092871620808,
+          "se_bloco_espacial_250km": 4.383948945688904,
+          "p_bloco_espacial_250km": 0.9107333496528864,
+          "n_clusters_bloco_espacial_250km": 30,
+          "se_two_way": 2.443726262497815,
+          "p_two_way": 0.8407417141414546,
+          "n_clusters_two_way": 28,
+          "p_holm_block": 1.0,
+          "p_holm_two_way": 1.0
+        },
+        "milho_2|precip_acumulada_mm": {
+          "status": "ok",
+          "n": 2888,
+          "reference_class": "21",
+          "contrast_class": "20",
+          "slope_difference": 0.16126229115064733,
+          "historical_p_value": 0.6635657479617312,
+          "historical_coefficient": 0.1612622874051968,
+          "se_bloco_espacial_250km": 0.366932278565021,
+          "p_bloco_espacial_250km": 0.6635657408770282,
+          "n_clusters_bloco_espacial_250km": 30,
+          "se_two_way": 0.4510709447413786,
+          "p_two_way": 0.7234897076519089,
+          "n_clusters_two_way": 28,
+          "p_holm_block": 1.0,
+          "p_holm_two_way": 1.0
+        }
+      }
+    }
+  },
+  "elapsed_s": 6.7
+}

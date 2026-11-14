@@ -274,6 +274,110 @@ def slope_heterogeneity(
     }
 
 
+def joint_significance(
+    rows: Sequence[dict[str, Any]],
+    variables: Sequence[str],
+    test_variables: Sequence[str] | None = None,
+    target: str = "yield_kg_ha",
+    block_key: str = "spatial_block",
+    municipality_key: str = "ibge_code",
+    year_key: str = "year",
+    state_key: str = "state",
+    min_rows: int = 400,
+    cluster: str = "two_way",
+) -> dict[str, Any]:
+    """Teste de Wald conjunto de um **bloco** de variáveis (V3.3).
+
+    Complementa ``slope_heterogeneity``: ali a hipótese é "as inclinações diferem
+    entre UFs"; aqui é "este bloco de variáveis contribui", condicionado nas
+    demais. É o análogo inferencial da comparação preditiva da Frente A.
+
+    Modelo, após transformação *within* de município e ano::
+
+        y_w = Σ_j b_j · x_jw + e
+
+    com CR1 agrupado por **UF×ano e município** (D104) por padrão. Os
+    coeficientes são associações líquidas de município e ano, não efeitos causais.
+    """
+    usable = [
+        row
+        for row in rows
+        if row.get(target) is not None
+        and all(row.get(v) is not None for v in variables)
+        and row.get(block_key)
+        and row.get(state_key)
+    ]
+    if len(usable) < min_rows:
+        return {"status": "insufficient_rows", "n": len(usable)}
+    tested = list(test_variables) if test_variables else list(variables)
+    missing = [v for v in tested if v not in variables]
+    if missing:
+        raise ValueError(f"variaveis de teste ausentes do modelo: {missing}")
+
+    municipalities = [str(row[municipality_key]) for row in usable]
+    years = [row[year_key] for row in usable]
+    states = [str(row[state_key]) for row in usable]
+    blocks = [str(row[block_key]) for row in usable]
+
+    y = np.array([float(row[target]) for row in usable], dtype="float64")
+    y_within = spatial_inference.within_transform(y, municipalities, years)
+    columns = []
+    for variable in variables:
+        raw = np.array([float(row[variable]) for row in usable], dtype="float64")
+        columns.append(spatial_inference.within_transform(raw, municipalities, years))
+    design = np.column_stack(columns)
+    if float(np.std(design, axis=0).max()) == 0.0:
+        return {"status": "degenerate_design", "n": len(usable)}
+    beta, *_ = np.linalg.lstsq(design, y_within, rcond=None)
+    residuals = y_within - design @ beta
+    if cluster == "two_way":
+        state_year = [f"{s}||{y_}" for s, y_ in zip(states, years)]
+        vcv, info = robust.two_way_cluster_vcov(
+            design, residuals, state_year, municipalities, correction=robust.CR1
+        )
+        n_clusters = min(info["n_clusters_a"], info["n_clusters_b"])
+        scheme = {"scheme": "two_way", "n_clusters_a": info["n_clusters_a"],
+                  "n_clusters_b": info["n_clusters_b"]}
+    elif cluster == "block":
+        vcv, info = robust.cluster_vcov(design, residuals, blocks, correction=robust.CR1)
+        n_clusters = int(info["n_clusters"])
+        scheme = {"scheme": "block", "n_clusters_a": n_clusters}
+    else:
+        raise ValueError(f"esquema de agrupamento desconhecido: {cluster!r}")
+    degrees = max(int(n_clusters) - 1, 1)
+
+    indices = [list(variables).index(v) for v in tested]
+    test = wald_test(beta, vcv, indices, n_clusters)
+    entries = {}
+    for position, variable in enumerate(variables):
+        coefficient = float(beta[position])
+        std_error = float(np.sqrt(max(vcv[position, position], 0.0)))
+        degenerate = robust.degenerate_std_error(coefficient, std_error)
+        statistic = None if degenerate else coefficient / std_error
+        entries[variable] = {
+            "coefficient": coefficient,
+            "std_error": std_error,
+            "t_statistic": statistic,
+            "p_value": robust.t_sf(statistic, degrees) if statistic is not None else None,
+            "ci95": [
+                coefficient - robust.t_critical(0.05, degrees) * std_error,
+                coefficient + robust.t_critical(0.05, degrees) * std_error,
+            ],
+            "tested": variable in tested,
+        }
+    return {
+        "status": "ok",
+        "n": len(usable),
+        "n_clusters": int(n_clusters),
+        "cluster_info": scheme,
+        "df": degrees,
+        "variables": list(variables),
+        "tested": tested,
+        "joint_test": test,
+        "coefficients": entries,
+    }
+
+
 def coverage_diagnostics(
     rows: Sequence[dict[str, Any]],
     variables: Sequence[str],
