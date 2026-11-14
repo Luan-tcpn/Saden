@@ -74,6 +74,9 @@ jobs:
         # A imagem é construída pelo compose porque o serviço worker referencia
         # a mesma tag (`saden:r2`). Construir com outro nome faz o worker tentar
         # puxar do registry e falhar.
+        # JWT_SECRET é exigido pela interpolação do compose (valor de CI, sem uso real).
+        env:
+          JWT_SECRET: ci-secret-nao-producao
         run: docker compose build
       - name: sobe compose com banco temporário
         env:
@@ -119,4 +122,6 @@ jobs:
       - name: logs e limpeza
         if: always()
         continue-on-error: true
+        env:
+          JWT_SECRET: ci-secret-nao-producao
         run: docker compose logs --tail=80
