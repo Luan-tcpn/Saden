@@ -49,6 +49,7 @@ ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
 sys.path.insert(0, os.path.join(ROOT, "geospatial"))
 sys.path.insert(0, os.path.join(ROOT, "tools"))
 
+from agroclimate import corrections  # noqa: E402
 from agroclimate import cycle  # noqa: E402
 from agroclimate import evapotranspiration as et_module  # noqa: E402
 from agroclimate import thermal  # noqa: E402
@@ -58,9 +59,21 @@ import v31_rebuild_panel as rb  # noqa: E402
 import v33_water_variables as wv  # noqa: E402
 
 CONFIG_PATH = os.path.join(ROOT, "config", "panel_v35.json")
-OUT_PANEL = os.path.join(ROOT, "geospatial", "data", "processed", "panel_canonical_windows.csv")
-OUT_WATER = os.path.join(ROOT, "geospatial", "data", "processed", "panel_canonical_water.csv")
-OUT_JSON = os.path.join(ROOT, "geospatial", "data", "manifests", "panel_canonical_build.json")
+BUILD_VERSION = "consolidated-2026-11-14"
+DEFAULT_PREFIX = "panel_canonical_v2"
+OUT_JSON = os.path.join(ROOT, "geospatial", "data", "manifests", "panel_canonical_build_v2.json")
+
+
+def output_paths(prefix: str = DEFAULT_PREFIX) -> tuple[str, str]:
+    """Saídas versionadas por prefixo — permite build em blocos, sem sobrescrita."""
+    base = os.path.join(ROOT, "geospatial", "data", "processed")
+    return (
+        os.path.join(base, f"{prefix}_windows.csv"),
+        os.path.join(base, f"{prefix}_water.csv"),
+    )
+
+
+OUT_PANEL, OUT_WATER = output_paths()
 
 PROFILE_BY_CROP = {"soja": "soja_gilmore", "milho": "milho_embrapa", "milho_2": "milho_embrapa"}
 CAD_LABELS = {"cad_0_60": 60, "cad_0_100": 100, "cad_0_200": 200}
@@ -338,12 +351,22 @@ def load_climate(config: dict[str, Any], codes: Sequence[str]):
     }
 
 
-def build(config: dict[str, Any], codes: Iterable[str] | None = None) -> dict[str, Any]:
+def build(
+    config: dict[str, Any],
+    codes: Iterable[str] | None = None,
+    force: bool = False,
+    out_prefix: str = DEFAULT_PREFIX,
+    states: Iterable[str] | None = None,
+) -> dict[str, Any]:
     """Reconstrói janela corrigida e descritores hídricos."""
     started = time.time()
     registry = load_registry(config)
     selected = set(codes) if codes else set(registry)
+    if states:
+        wanted = {str(item).upper() for item in states}
+        selected = {code for code in selected if registry.get(code, {}).get("state") in wanted}
     selected &= set(registry)
+    out_panel, out_water = output_paths(out_prefix)
     cad = load_cad(config)
     rows = load_panel_rows(config, selected)
     ordered_codes = sorted({row["ibge_code"] for row in rows})
@@ -359,7 +382,13 @@ def build(config: dict[str, Any], codes: Iterable[str] | None = None) -> dict[st
     for row in rows:
         by_code[row["ibge_code"]].append(row)
 
-    for code in ordered_codes:
+    for position, code in enumerate(ordered_codes):
+        if len(ordered_codes) > 200 and position % 100 == 0:
+            print(
+                f"  [{position}/{len(ordered_codes)}] {len(window_rows)} linhas "
+                f"({time.time() - started:.0f}s)",
+                flush=True,
+            )
         meta = registry[code]
         latitude = _num(meta.get("centroid_lat"))
         if latitude is None:
@@ -393,8 +422,23 @@ def build(config: dict[str, Any], codes: Iterable[str] | None = None) -> dict[st
                 records, profile, latitude, cad_mm=rules["coverage_reference_cad_mm"],
                 with_balance=True,
             )
+            # física corrigida (D128-D130): ET0 com C1+C2 e balanço com C3.
+            # Substitui apenas as variáveis afetadas; o resto da agregação de
+            # janela permanece idêntico ao histórico.
+            corrected_series = corrections.daily_et0_series(records, float(latitude))
+            corrected_monthly = wb_module.daily_to_monthly(corrected_series)
+            corrected_balance = corrections.sequential_water_balance(
+                corrected_monthly, cad_mm=float(rules["coverage_reference_cad_mm"])
+            )
+            valid_monthly = [row for row in corrected_balance if row.get("status") == "ok"]
+            aggregate["et0_total_mm"] = sum(row["et0_mm"] for row in corrected_monthly)
+            aggregate["etp_total_mm"] = aggregate["et0_total_mm"]
+            aggregate["deficiency_total_mm"] = sum(row["def_mm"] for row in valid_monthly)
+            aggregate["excess_total_mm"] = sum(row["exc_mm"] for row in valid_monthly)
+            aggregate["etr_total_mm"] = sum(row["etr_mm"] for row in valid_monthly)
             for key, value in aggregate.items():
                 record[f"{key}_corrected"] = value
+            record["physics_version"] = corrections.CORRECTION_ID
             for name, depth in CAD_LABELS.items():
                 capacity = cad.get(code, {}).get(name)
                 if not capacity:
@@ -402,29 +446,18 @@ def build(config: dict[str, Any], codes: Iterable[str] | None = None) -> dict[st
                 scenario = rb._aggregate(
                     records, profile, latitude, cad_mm=float(capacity), with_balance=True
                 )
+                scenario_balance = corrections.sequential_water_balance(
+                    corrected_monthly, cad_mm=float(capacity)
+                )
+                scenario_valid = [row for row in scenario_balance if row.get("status") == "ok"]
+                scenario["deficiency_total_mm"] = sum(row["def_mm"] for row in scenario_valid)
+                scenario["excess_total_mm"] = sum(row["exc_mm"] for row in scenario_valid)
                 record[f"deficiency_{name}"] = scenario.get("deficiency_total_mm")
                 record[f"excess_{name}"] = scenario.get("excess_total_mm")
                 record[f"cad_{name}_mm"] = float(capacity)
             window_rows.append(record)
 
-            series = et_module.daily_et0_series(
-                [
-                    {
-                        "date": r["date"],
-                        "temp_max_c": r["temp_max_c"],
-                        "temp_min_c": r["temp_min_c"],
-                        "temp_media_c": r["temp_media_c"],
-                        "radiacao_mj_m2": r["radiacao_mj_m2"],
-                        "vento_kmh": r["vento_kmh"],
-                        "umidade_rel_pct": r["umidade_rel_pct"],
-                        "pressao_kpa": r["pressao_kpa"],
-                    }
-                    for r in records
-                ],
-                float(latitude),
-                method=rules["et_method"],
-                elevation_m=None,
-            )
+            series = corrected_series
             precip = {r["date"]: r["precip_mm"] for r in records}
             for item in series:
                 item["precip_mm"] = precip.get(str(item.get("date")))
@@ -436,7 +469,7 @@ def build(config: dict[str, Any], codes: Iterable[str] | None = None) -> dict[st
                     capacity = cad.get(code, {}).get(label)
                     if not capacity:
                         continue
-                balance = wb_module.sequential_water_balance(monthly, cad_mm=float(capacity))
+                balance = corrections.sequential_water_balance(monthly, cad_mm=float(capacity))
                 descriptor = wv._descriptors(balance, float(capacity))
                 water = {
                     "ibge_code": code,
@@ -450,11 +483,12 @@ def build(config: dict[str, Any], codes: Iterable[str] | None = None) -> dict[st
                 water.update(descriptor)
                 water_rows.append(water)
 
-    _write(window_rows, OUT_PANEL)
-    _write(water_rows, OUT_WATER)
+    _write(window_rows, out_panel, force=force)
+    _write(water_rows, out_water, force=force)
     summary = {
-        "generated_at": _now(),
-        "config": config["_path"],
+        "build_version": BUILD_VERSION,
+        "physics_version": corrections.CORRECTION_ID,
+        "config": os.path.basename(config["_path"]),
         "config_version": config["version"],
         "municipalities_requested": len(selected),
         "municipalities_in_output": len({row["ibge_code"] for row in window_rows}),
@@ -463,27 +497,40 @@ def build(config: dict[str, Any], codes: Iterable[str] | None = None) -> dict[st
         "skipped": skipped,
         "climate": climate_info,
         "outputs": {
-            "panel": os.path.relpath(OUT_PANEL, ROOT).replace("\\", "/"),
-            "panel_sha256": _sha(OUT_PANEL),
-            "water": os.path.relpath(OUT_WATER, ROOT).replace("\\", "/"),
-            "water_sha256": _sha(OUT_WATER),
+            "panel": os.path.relpath(out_panel, ROOT).replace("\\", "/"),
+            "panel_sha256": _sha(out_panel),
+            "water": os.path.relpath(out_water, ROOT).replace("\\", "/"),
+            "water_sha256": _sha(out_water),
         },
         "elapsed_s": round(time.time() - started, 1),
     }
     return summary
 
 
-def _write(rows: list[dict[str, Any]], path: str) -> None:
+def _write(rows: list[dict[str, Any]], path: str, force: bool = False) -> None:
+    """Escrita atômica, com proteção contra sobrescrita por padrão.
+
+    O episódio de V3.5 (aquisição CAD sobrescrevendo `v30_cad_polygon.json`)
+    mostrou que sobrescrita silenciosa de artefato é o risco mais caro deste
+    repositório. Um arquivo existente só é substituído com ``--force``.
+    """
+    if os.path.exists(path) and not force:
+        raise FileExistsError(
+            f"saída já existe: {path}. Use --force para substituir "
+            f"(ou escolha outro diretório de saída)."
+        )
     fields: list[str] = []
     for row in rows:
         for key in row:
             if key not in fields:
                 fields.append(key)
     os.makedirs(os.path.dirname(path), exist_ok=True)
-    with open(path, "w", newline="", encoding="utf-8-sig") as handle:
+    temporary = f"{path}.tmp"
+    with open(temporary, "w", newline="", encoding="utf-8-sig") as handle:
         writer = csv.DictWriter(handle, fieldnames=fields, extrasaction="ignore")
         writer.writeheader()
         writer.writerows(rows)
+    os.replace(temporary, path)
 
 
 # ----------------------------------------------------------------------- verify
@@ -559,10 +606,14 @@ def main() -> int:
     parser.add_argument("--codes", default="")
     parser.add_argument("--limit", type=int, default=0)
     parser.add_argument("--out-manifest", default=OUT_JSON)
+    parser.add_argument("--force", action="store_true", help="permite substituir saídas existentes")
+    parser.add_argument("--out-prefix", default=DEFAULT_PREFIX, help="prefixo das saídas (build em blocos)")
+    parser.add_argument("--states", default="", help="lista de UFs separada por vírgula")
     args = parser.parse_args()
 
+    started = time.time()
     config = load_config(args.config)
-    result: dict[str, Any] = {"stage": args.stage, "generated_at": _now()}
+    result: dict[str, Any] = {"stage": args.stage, "build_version": BUILD_VERSION}
 
     if args.stage in ("validate", "all"):
         result["validate"] = validate(config)
@@ -577,7 +628,13 @@ def main() -> int:
         elif args.limit:
             registry = load_registry(config)
             codes = sorted(registry)[: args.limit]
-        result["build"] = build(config, codes)
+        result["build"] = build(
+            config,
+            codes,
+            force=args.force,
+            out_prefix=args.out_prefix,
+            states=[s.strip() for s in args.states.split(",") if s.strip()] or None,
+        )
         print(json.dumps(result["build"], ensure_ascii=False, indent=2)[:1600])
 
     if args.stage in ("verify", "all"):
@@ -585,10 +642,10 @@ def main() -> int:
         print(json.dumps(result["verify"], ensure_ascii=False, indent=2)[:1600])
 
     if args.stage in ("build", "all", "verify"):
-        os.makedirs(os.path.dirname(args.out_manifest), exist_ok=True)
-        with open(args.out_manifest, "w", encoding="utf-8", newline="\n") as handle:
-            json.dump(result, handle, ensure_ascii=False, indent=2, default=str)
-            handle.write("\n")
+        from manifest import write_manifest
+
+        written = write_manifest(args.out_manifest, result, {"stage": args.stage}, started=started)
+        print("manifesto:", written["manifest"], "conteúdo:", written["content_sha256"][:16])
     return 0
 
 

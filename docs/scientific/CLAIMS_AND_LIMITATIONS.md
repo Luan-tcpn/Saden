@@ -146,15 +146,31 @@ produtividade prevista: não há validação preditiva.
 
 ## 7. Três defeitos conhecidos que limitam leituras
 
-1. **Excedente hídrico superestimado** (D124) na implementação de referência,
+1. **p-valores CR1 anti-conservadores** (D125/D132): erro tipo I de 7,5–10,0%
+   para nominal de 5% e cobertura de 90–92,5%. **Mitigado**: o wild cluster
+   bootstrap com H0 imposta (WCR) foi calibrado (5,26–5,96%, cobertura
+   93,8–94,5%) e aplicado aos 18 estimandos; **nenhuma conclusão inverteu**.
+   Resultados novos devem reportar os dois e concluir só quando concordarem.
+2. **Excedente hídrico superestimado** na implementação de referência (D124),
    quando a chuva recompõe o solo sem saturá-lo. O déficit não é afetado.
-   Nenhuma conclusão publicada usou excedente.
-2. **p-valores liberais** (D125): com 41–56 clusters, o erro tipo I observado é
-   de 6% a 10% onde se declara 5%. Resultados com p entre 0,01 e 0,05 são mais
-   frágeis do que aparentam.
-3. **ET0 com viés de convenção**: `es(Tmean)` em vez de `es(Tmax, Tmin)` e vento
-   60% subestimado. A ET0 é consistente entre municípios, mas **não é** ET0
-   FAO-56 de referência para comparação externa.
+   Corrigido em módulo próprio; nenhuma conclusão publicada usava excedente.
+3. **ET0 não é estritamente FAO-56** (D130): `es(Tmean)` em vez de
+   `[e°(Tmax)+e°(Tmin)]/2` e fator 0,4 indevido no vento. Isoladamente o vento
+   vale **+11,3%**; as duas não conformidades **se cancelam** e o efeito líquido
+   é **+0,54%**. As magnitudes publicadas permanecem válidas, mas a ET0 **não
+   deve ser comparada** com ET0 de outras fontes.
+
+## 7.1. O que a inferência calibrada mudou
+
+Nada inverteu de lado, mas três leituras ficaram mais precisas:
+
+| resultado | leitura |
+|---|---|
+| `soja \| déficit` | associação **sustentada** sob WCR (p = 0,0001) |
+| `soja \| temperatura` | associação **sustentada** (p = 0,0011), mas a magnitude (−262 kg/ha por °C) não é interpretável causalmente: temperatura e déficit covariam |
+| `milho \| déficit`, `milho \| ET0`, `milho \| calor extremo` | sustentadas (p = 0,025–0,039) |
+| `soja \| ET0`, `milho \| temperatura` | inconclusivas (p ≈ 0,045–0,053) |
+| demais 9 | nulas confirmadas sob WCR (p > 0,10) |
 
 ---
 

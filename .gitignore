@@ -7,3 +7,6 @@ tmp/*
 __pycache__/
 *.pyc
 .commandcode/
+# Derivados do build canônico: reproduzíveis em ~11 min, com SHA-256 registrado
+# em geospatial/data/manifests/panel_canonical_build_v2.json
+geospatial/data/processed/panel_canonical_v2*.csv

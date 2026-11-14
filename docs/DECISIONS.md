@@ -2442,6 +2442,172 @@ máxima 0,000 em 10 variáveis × 204 linhas, em 7 UFs.
 **Consequências.** `SADEN_DATA_ROOT` permite que um clone limpo leia os 6,3 GB
 de derivados de um arquivo externo, sem copiá-los para o repositório.
 
+## D128 - O contrato de fonte climática passa a ser executável (2026-11-14)
+
+**Contexto.** A auditoria de 627.381 pares mostrou duas fontes sob a mesma chave
+(NASA-POWER e INMET) e 2.020 linhas INMET `paired_usable` no painel base. O
+filtro existia em todos os consumidores analíticos, mas era convenção de leitura,
+não contrato verificável.
+
+**Alternativas.** (a) filtrar por fonte em cada script, como já era feito;
+(b) centralizar o predicado e falhar alto em amostra mista.
+
+**Análise.** A opção (a) não impede um consumidor novo de repetir o erro. A
+opção (b) custa uma função e um teste.
+
+**Decisão.** `agroclimate/contracts.py` define `is_canonical_row`,
+`select_canonical` e `assert_source_declared`; `analysis.prepare_rows` levanta
+`ValueError` ao receber fontes misturadas sem declaração; um validador AST
+verifica os 72 arquivos de código.
+
+**Evidência.** 28 funções com guarda, 0 sem guarda (1 waiver documentado para um
+contador de cobertura histórico). Nenhuma análise consumiu as 2.020 linhas.
+
+**Consequências.** Nenhum resultado muda; o risco de mistura silenciosa deixa de
+ser possível sem erro explícito.
+
+**Limitações.** O waiver de `s27_panel_coverage.py` mantém um relatório histórico
+com contagem de "utilizáveis" 9,4% acima da real.
+
+## D129 - Defeitos de ferramenta na replicação e no bootstrap (2026-11-14)
+
+**Contexto.** Duas alegações da etapa anterior não resistiram à verificação
+independente desta etapa.
+
+**Evidência.**
+1. O harness de ET0 de `water_balance_reference.py` calculava o dia juliano como
+   `mês×30 + dia%30`, o que altera `Ra`, `Rso` e `Rnl`. O "−1,1% mediano"
+   reportado vinha daí.
+2. `robust.wild_cluster_bootstrap_fast` declara `null_imposed=True` mas só impõe
+   a restrição quando o desenho tem **outra coluna** além da testada
+   (`if null_imposed and others:`). Com um único regressor — o caso de todos os
+   modelos do SADEN — a hipótese nula era ignorada silenciosamente.
+3. `select_null_policy(..., "auto")` troca para o p-valor irrestrito **quando o
+   imposto não rejeita**, isto é, escolhe a regra pelo resultado.
+
+**Decisão.** Corrigir o dia juliano; **não** alterar a biblioteca de bootstrap
+(quebraria artefatos); implementar o WCR correto em
+`tools/analysis/fast_bootstrap.py`, validado contra `cluster_robust_fit` a 12
+casas decimais; proibir `null_policy="auto"` em análise nova.
+
+**Consequências.** A ET0 líquida é +0,54% (não −1,1% nem +10,3% — ver D130); a
+calibração de inferência usa o WCR correto.
+
+**Limitações.** O defeito permanece no código da biblioteca, documentado, e pode
+ser reencontrado por quem usar `null_imposed` com um regressor.
+
+## D130 - As duas não conformidades da ET0 se cancelam; nenhum artefato é reescrito (2026-11-14)
+
+**Contexto.** A implementação de referência usa `es(Tmean)` em vez de
+`[e°(Tmax)+e°(Tmin)]/2` e aplica um fator 0,4 indevido ao vento (já a 2 m).
+
+**Alternativas.** (a) reescrever a biblioteca e refazer V2.6–V3.5; (b) manter a
+histórica e usar física corrigida em módulo novo; (c) manter tudo como está.
+
+**Análise.** Medição por identidade exata (vento × 2,5 ⇒ `u2 = vento/3,6`, erro
+9e-16): o vento sozinho eleva ET0 em **+11,30%** e o déficit em 3,5×. Com as duas
+correções, ET0 fica em **+0,54%** e o déficit em **−0,6%**, com correlação 0,997.
+Os dois erros atuam no mesmo sentido sobre o termo aerodinâmico e o aumento de
+`u2` também eleva o denominador `Δ + γ(1+0,34u2)`.
+
+**Decisão.** Opção (b). `agroclimate/corrections.py` é a física canônica do
+pipeline, com `physics_version` em cada linha; `evapotranspiration.py` e
+`water_balance.py` não são alterados; nenhum artefato publicado é reescrito.
+
+**Evidência.** Build completo difere da V3.5 em 11 de 48 colunas, com mediana de
++3,06 mm em ET0; 37 colunas idênticas.
+
+**Consequências.** As magnitudes publicadas permanecem válidas. Registra-se que a
+ET0 publicada **não é** estritamente FAO-56, mesmo que o efeito líquido seja
+irrelevante.
+
+**Limitações.** O efeito de C1 isolado não é identificável por manipulação de
+entrada; a ET0 continua sem validação contra estação.
+
+## D131 - O excedente corrigido convive com o histórico (2026-11-14)
+
+**Contexto.** D124 identificou que a referência lança o saldo bruto como
+excedente quando o mês satura a CAD a partir de armazenamento parcial.
+
+**Decisão.** A formulação correta (`EXC = ARM_anterior + saldo − CAD`, limitado a
+zero) vive em `corrections.py`; `water_balance.py` permanece intacto.
+
+**Evidência.** Caso de prova 15 mm vs 5 mm; identidade de conservação
+`P = ETR + EXC + ΔARM` vale no módulo corrigido e falha na referência; 30 janelas
+reais sem gatilho nesta etapa.
+
+**Consequências.** O build canônico usa C3. Nenhuma conclusão publicada depende de
+excedente (as três variáveis foram classificadas como não sustentadas na V3.3).
+
+**Limitações.** Magnitude agregada no painel completo não medida.
+
+## D132 - A inferência passa a ser o wild cluster bootstrap restrito (2026-11-14)
+
+**Contexto.** CR1 apresentava erro tipo I de 7,54–9,98% para nominal de 5% e
+cobertura de 90,0–92,5% para intervalos de 95%.
+
+**Alternativas.** CR1, CR2, WCU, WCR (Rademacher), WCR-Webb.
+
+**Análise.** 5.000 réplicas no desenho real (G = 41–56, tamanhos e ICC reais,
+ruído casado por momento). CR2 **degenera em CR1** com `k = 1` (`K2 = 1`).
+WCR: 5,26–5,96%; WCU: 5,88–6,90%; Webb: 5,38–6,20%. Cobertura: WCR 93,8–94,5%
+contra 90,0–92,5% do CR1.
+
+**Decisão.** WCR (resíduos restritos, Rademacher por cluster, estatística
+studentizada, `p = (1+excedências)/(B+1)`) é o método padrão; CR1 permanece como
+referência histórica; concluir apenas quando os dois concordarem.
+
+**Evidência.** `bootstrap_calibration.json` (MC SE 0,32–0,42 pp, intervalos de
+Wilson) e `applied_inference.json` (18 estimandos, B = 9.999).
+
+**Consequências.** **Nenhum dos 18 estimandos inverteu de lado.** O poder cai 3–8
+pontos percentuais: a comparação anterior estava otimista.
+
+**Limitações.** DGP homocedástico e sem dependência espacial explícita; bootstrap
+bidimensional e Conley HAC não implementados.
+
+## D133 - Manifestos separam conteúdo de execução (2026-11-14)
+
+**Contexto.** `generated_at` no mesmo arquivo impedia usar o hash como
+verificação de integridade.
+
+**Decisão.** `tools/pipeline/manifest.py`: conteúdo canônico em `<nome>.json`
+(chaves ordenadas, floats em `%.12g`, campos voláteis normalizados, UTF-8 sem
+BOM, `\n`) e metadados em `<nome>.json.run.json`.
+
+**Evidência.** Duas execuções idênticas → `content_sha256` `96599508…` e SHA-256
+do arquivo `8624B904…`, ambos idênticos. Merge de blocos também determinístico.
+
+**Consequências.** Novos manifestos usam `write_manifest`. Seis manifestos desta
+etapa ainda não foram migrados (pendência mecânica).
+
+**Limitações.** O hash cobre conteúdo, não os arquivos de dados — esses têm hashes
+próprios registrados dentro do conteúdo.
+
+## D134 - O build completo é executado em blocos com merge validado (2026-11-14)
+
+**Contexto.** O build de 2.425 municípios excede o tempo de uma execução
+interativa confiável e a execução em segundo plano falhou no ambiente.
+
+**Alternativas.** (a) execução única em primeiro plano; (b) blocos com prefixos
+próprios e merge; (c) reduzir a cobertura.
+
+**Análise.** Seis blocos de ~101 s cada; merge com validação de chave e contagem.
+
+**Decisão.** Opção (b). `--out-prefix` e `--states` no pipeline;
+`merge_build_chunks.py` concatena, valida e escreve o manifesto determinístico.
+Escrita atômica e **recusa de sobrescrita** sem `--force`.
+
+**Evidência.** 30.207 janelas, 120.828 linhas de água, **1.880 municípios**,
+0 chaves duplicadas, 37 colunas idênticas à V3.5.
+
+**Consequências.** Cobertura real é **77,5%** do cadastro (1.880 de 2.425); os 545
+ausentes não têm linha analítica utilizável. **Nenhum dado foi inventado** para
+atingir a contagem do cadastro.
+
+**Limitações.** Não houve build completo com a física histórica para comparação
+bit a bit em 30.207 linhas.
+
 
 
 

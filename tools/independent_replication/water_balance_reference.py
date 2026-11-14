@@ -632,6 +632,14 @@ def run_manual_cases() -> dict[str, Any]:
     return {"n_cases": len(MANUAL_CASES), "n_passed": passed - len({f["case"] for f in failures}), "failures": failures}
 
 
+def _day_of_year(date: str) -> int:
+    """Dia juliano da data civil — a comparação de ET0 depende de Ra(DOY)."""
+    from datetime import date as date_type
+
+    year, month, day = (int(part) for part in date.split("-"))
+    return date_type(year, month, day).timetuple().tm_yday
+
+
 def et0_convention_check(limit: int = 3000, seed: int = 20261114) -> dict[str, Any]:
     """Divergência de ET0 entre a formulação independente e a de referência."""
     from agroclimate import evapotranspiration as et_module
@@ -650,7 +658,7 @@ def et0_convention_check(limit: int = 3000, seed: int = 20261114) -> dict[str, A
     relative: list[float] = []
     abs_diff: list[float] = []
     for position, row in enumerate(sample):
-        day_of_year = int(str(row["date"])[5:7]) * 30 + int(str(row["date"])[8:10]) % 30
+        day_of_year = _day_of_year(str(row["date"]))
         reference = et_module.fao56_penman_monteith(
             float(row["temp_max_c"]), float(row["temp_min_c"]), float(row["temp_media_c"]),
             float(row["radiacao_mj_m2"]), float(row["vento_kmh"]),

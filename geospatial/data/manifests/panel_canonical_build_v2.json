@@ -1,0 +1,78 @@
+{
+  "build_version": "consolidated-2026-11-14",
+  "by_crop": {
+    "milho": 12013,
+    "milho_2": 5677,
+    "soja": 12517
+  },
+  "by_state": {
+    "BA": 106,
+    "GO": 3410,
+    "MS": 1566,
+    "MT": 2261,
+    "PR": 7665,
+    "RS": 4394,
+    "SP": 10805
+  },
+  "chunks": [
+    "c1_ba_ms_mt_go",
+    "c2_rs",
+    "c3_pr_a",
+    "c4_pr_b",
+    "c5_sp_a",
+    "c6_sp_b"
+  ],
+  "content_sha256": "a8329388f76dbb3ed6ef8e498411ba43f495883e8e61e46cbdb38e8fed4f5eab",
+  "duplicate_keys": 0,
+  "municipalities": 1880,
+  "outputs": {
+    "panel": "geospatial/data/processed/panel_canonical_v2_windows.csv",
+    "panel_bytes": 18156052,
+    "panel_sha256": "6a95581c6bc8e43f4f8766c89381e729ad8d27e1e61b13928dbf71ce98324092",
+    "water": "geospatial/data/processed/panel_canonical_v2_water.csv",
+    "water_bytes": 19931299,
+    "water_sha256": "ad4e54c998154e67880d050f83bc6041639fb913d0ce3d6a0f47aaf1a62b9e0e"
+  },
+  "per_chunk": [
+    {
+      "chunk": "c1_ba_ms_mt_go",
+      "municipalities": 447,
+      "rows": 7343,
+      "sha256": "b472755d693751538c2da1e224e327f29edb1500fc586d4c043d51645a7e3774"
+    },
+    {
+      "chunk": "c2_rs",
+      "municipalities": 455,
+      "rows": 4394,
+      "sha256": "5f83f71a6c5459a453a39c33daf2e66e63f6c6c75cb216e03f94d875f42b2f8a"
+    },
+    {
+      "chunk": "c3_pr_a",
+      "municipalities": 197,
+      "rows": 3893,
+      "sha256": "0214d2599bbd923a66f9978ccec44c321f98f60244aaf7c66ea9db1d0f0a8386"
+    },
+    {
+      "chunk": "c4_pr_b",
+      "municipalities": 197,
+      "rows": 3772,
+      "sha256": "00cebd7b712787544c8b1c5f8960174cd4db253e5555008e16620f8b1bdd67f5"
+    },
+    {
+      "chunk": "c5_sp_a",
+      "municipalities": 292,
+      "rows": 5404,
+      "sha256": "e1d723c29521c03f2454674ca73c497cebdaa0aaa4a4b91824b65d2c185a522f"
+    },
+    {
+      "chunk": "c6_sp_b",
+      "municipalities": 292,
+      "rows": 5401,
+      "sha256": "febf76945cec01524cf4c4a35997eee45b9bf5f0bfb10afc08673538d2a857c9"
+    }
+  ],
+  "physics_version": "consolidated-2026-11-14",
+  "problems": [],
+  "water_rows": 120828,
+  "window_rows": 30207
+}

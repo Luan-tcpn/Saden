@@ -1,0 +1,248 @@
+{
+  "generated_at": "2026-11-14T20:29:53.148305+00:00",
+  "canonical_source": "NASA-POWER",
+  "static": {
+    "files_scanned": 72,
+    "functions_guarded": 28,
+    "functions_unguarded": 0,
+    "waivers": 2,
+    "unguarded": [],
+    "guarded": [
+      {
+        "file": "tools/s27_panel_coverage.py",
+        "function": "<module>",
+        "line": 0,
+        "waiver": "mesmo caso do main (contador de cobertura)"
+      },
+      {
+        "file": "tools/s27_panel_coverage.py",
+        "function": "main",
+        "line": 62,
+        "waiver": "contador de cobertura de um relatório histórico (V2.7); não seleciona amostra para análise. O efeito está quantificado no relatório de adjudicação: 2.020 linhas INMET (9,4% do 'utilizável') foram contadas como utilizáveis. Não foi alterado para preservar a reprodutibilidade."
+      },
+      {
+        "file": "tools/s27_phenology_window.py",
+        "function": "<module>",
+        "line": 0
+      },
+      {
+        "file": "tools/s27_phenology_window.py",
+        "function": "main",
+        "line": 109
+      },
+      {
+        "file": "tools/s28_cycle_stratification.py",
+        "function": "<module>",
+        "line": 0
+      },
+      {
+        "file": "tools/s28_cycle_stratification.py",
+        "function": "attach_cycle",
+        "line": 60
+      },
+      {
+        "file": "tools/s29_cad_expand.py",
+        "function": "<module>",
+        "line": 0
+      },
+      {
+        "file": "tools/s29_cad_expand.py",
+        "function": "panel_codes",
+        "line": 143
+      },
+      {
+        "file": "tools/s29_coverage.py",
+        "function": "<module>",
+        "line": 0
+      },
+      {
+        "file": "tools/s29_coverage.py",
+        "function": "load_panel_rows",
+        "line": 36
+      },
+      {
+        "file": "tools/s29_zarc_cycle.py",
+        "function": "<module>",
+        "line": 0
+      },
+      {
+        "file": "tools/s29_zarc_cycle.py",
+        "function": "attach_cycle",
+        "line": 53
+      },
+      {
+        "file": "tools/v30_association_cad.py",
+        "function": "<module>",
+        "line": 0
+      },
+      {
+        "file": "tools/v30_association_cad.py",
+        "function": "load_rows",
+        "line": 62
+      },
+      {
+        "file": "tools/v30_cad_acquire.py",
+        "function": "<module>",
+        "line": 0
+      },
+      {
+        "file": "tools/v30_cad_acquire.py",
+        "function": "load_panel_codes",
+        "line": 121
+      },
+      {
+        "file": "tools/v30_models_cad.py",
+        "function": "<module>",
+        "line": 0
+      },
+      {
+        "file": "tools/v30_models_cad.py",
+        "function": "load_rows",
+        "line": 86
+      },
+      {
+        "file": "tools/v30_recalculate_panel.py",
+        "function": "<module>",
+        "line": 0
+      },
+      {
+        "file": "tools/v30_recalculate_panel.py",
+        "function": "load_panel_rows",
+        "line": 102
+      },
+      {
+        "file": "tools/v31_rebuild_panel.py",
+        "function": "<module>",
+        "line": 0
+      },
+      {
+        "file": "tools/v31_rebuild_panel.py",
+        "function": "load_panel_rows",
+        "line": 120
+      },
+      {
+        "file": "tools/v35_acquire_sp.py",
+        "function": "<module>",
+        "line": 0
+      },
+      {
+        "file": "tools/v35_acquire_sp.py",
+        "function": "stage_panel",
+        "line": 309
+      },
+      {
+        "file": "tools/v35_build_windows.py",
+        "function": "<module>",
+        "line": 0
+      },
+      {
+        "file": "tools/v35_build_windows.py",
+        "function": "load_sp_rows",
+        "line": 86
+      },
+      {
+        "file": "tools/v35_region_mapping.py",
+        "function": "<module>",
+        "line": 0
+      },
+      {
+        "file": "tools/v35_region_mapping.py",
+        "function": "main",
+        "line": 40
+      }
+    ]
+  },
+  "runtime": {
+    "panel_base": {
+      "rows": 40990,
+      "usable_rows": 21422,
+      "usable_from_non_canonical_source": 2020,
+      "share_of_usable": 0.0943,
+      "by_status_source": {
+        "excluded|INMET": 3076,
+        "excluded|NASA-POWER": 16492,
+        "paired_usable|INMET": 2020,
+        "paired_usable|NASA-POWER": 19402
+      },
+      "canonical_selection": {
+        "kept": 19402,
+        "discarded": {
+          "status": 19568,
+          "fonte:INMET": 2020
+        }
+      },
+      "examples": [
+        {
+          "ibge_code": "2901007",
+          "crop": "milho",
+          "safra": "2017/18",
+          "climate_source": "INMET"
+        },
+        {
+          "ibge_code": "2901007",
+          "crop": "milho",
+          "safra": "2018/19",
+          "climate_source": "INMET"
+        },
+        {
+          "ibge_code": "2901007",
+          "crop": "milho",
+          "safra": "2019/20",
+          "climate_source": "INMET"
+        },
+        {
+          "ibge_code": "2903201",
+          "crop": "milho",
+          "safra": "2017/18",
+          "climate_source": "INMET"
+        },
+        {
+          "ibge_code": "2903201",
+          "crop": "milho",
+          "safra": "2018/19",
+          "climate_source": "INMET"
+        },
+        {
+          "ibge_code": "2903201",
+          "crop": "milho",
+          "safra": "2019/20",
+          "climate_source": "INMET"
+        },
+        {
+          "ibge_code": "2903201",
+          "crop": "milho",
+          "safra": "2020/21",
+          "climate_source": "INMET"
+        },
+        {
+          "ibge_code": "2903201",
+          "crop": "milho",
+          "safra": "2021/22",
+          "climate_source": "INMET"
+        },
+        {
+          "ibge_code": "2903201",
+          "crop": "milho",
+          "safra": "2022/23",
+          "climate_source": "INMET"
+        },
+        {
+          "ibge_code": "2903201",
+          "crop": "milho",
+          "safra": "2023/24",
+          "climate_source": "INMET"
+        }
+      ]
+    },
+    "v31_panel_windows.csv": {
+      "rows": "sem coluna climate_source (já filtrado na construção)",
+      "has_source_column": false,
+      "non_canonical_rows": 0
+    },
+    "v35_panel_windows.csv": {
+      "rows": "sem coluna climate_source (já filtrado na construção)",
+      "has_source_column": false,
+      "non_canonical_rows": 0
+    }
+  }
+}

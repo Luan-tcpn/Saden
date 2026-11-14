@@ -1,0 +1,189 @@
+{
+  "generated_at": "2026-11-14T20:45:51.069259+00:00",
+  "built": {
+    "rows": 30207,
+    "municipalities": 1880,
+    "by_crop": {
+      "milho": 12013,
+      "milho_2": 5677,
+      "soja": 12517
+    }
+  },
+  "reference": {
+    "rows": 30207,
+    "by_crop": {
+      "milho": 12013,
+      "milho_2": 5677,
+      "soja": 12517
+    }
+  },
+  "keys": {
+    "shared": 30207,
+    "only_built": 0,
+    "only_reference": 0
+  },
+  "coverage": {
+    "registry_municipalities": 2425,
+    "built_municipalities": 1880,
+    "coverage_rate": 0.7753,
+    "missing": 545,
+    "missing_examples": [
+      "2900108",
+      "2900207",
+      "2900306",
+      "2900405",
+      "2900504",
+      "2900603",
+      "2900702",
+      "2900801",
+      "2900900",
+      "2901106",
+      "2901155",
+      "2901205",
+      "2901304",
+      "2901353",
+      "2901601",
+      "2901809",
+      "2901908",
+      "2901957",
+      "2902005",
+      "2902054"
+    ],
+    "reason": "município sem linha analítica utilizável: exige produtividade PAM, clima NASA-POWER, janela ZARC e status paired_usable simultaneamente"
+  },
+  "columns": {
+    "identical": [
+      "ibge_code",
+      "crop",
+      "safra",
+      "state",
+      "zarc_cycle",
+      "harvest_year",
+      "yield_kg_ha",
+      "months",
+      "n_months_listed",
+      "n_days_corrected",
+      "precip_acumulada_mm_corrected",
+      "precip_media_diaria_mm_corrected",
+      "dias_com_chuva_corrected",
+      "dias_secos_corrected",
+      "temp_media_c_corrected",
+      "temp_max_media_c_corrected",
+      "temp_min_media_c_corrected",
+      "temp_max_abs_c_corrected",
+      "temp_min_abs_c_corrected",
+      "radiacao_media_mj_m2_corrected",
+      "umidade_rel_media_pct_corrected",
+      "vento_media_kmh_corrected",
+      "degree_days_total_corrected",
+      "degree_days_mean_corrected",
+      "degree_days_days_used_corrected",
+      "degree_days_coverage_corrected",
+      "heat_wave_events_corrected",
+      "heat_wave_days_corrected",
+      "extreme_heat_days_corrected",
+      "warm_nights_corrected",
+      "et0_days_corrected",
+      "et0_mean_mm_dia_corrected",
+      "storage_final_mm_corrected",
+      "balance_months_corrected",
+      "cad_cad_0_60_mm",
+      "cad_cad_0_100_mm",
+      "cad_cad_0_200_mm"
+    ],
+    "changed": {
+      "et0_total_mm_corrected": {
+        "classification": "alterada",
+        "n_different": 30207,
+        "n_identical": 0,
+        "max_abs_diff": 95.64082797203469,
+        "median_diff": 3.057455833153881,
+        "median_relative": 1.0
+      },
+      "etp_total_mm_corrected": {
+        "classification": "alterada",
+        "n_different": 30207,
+        "n_identical": 0,
+        "max_abs_diff": 95.64082797203469,
+        "median_diff": 3.057455833153881,
+        "median_relative": 1.0
+      },
+      "etr_total_mm_corrected": {
+        "classification": "alterada",
+        "n_different": 21589,
+        "n_identical": 8618,
+        "max_abs_diff": 33.793416041345495,
+        "median_diff": 2.7838448411734475,
+        "median_relative": 1.0
+      },
+      "deficiency_total_mm_corrected": {
+        "classification": "alterada",
+        "n_different": 25266,
+        "n_identical": 4941,
+        "max_abs_diff": 95.64082797203469,
+        "median_diff": 1.0728636326011838,
+        "median_relative": 1.0
+      },
+      "excess_total_mm_corrected": {
+        "classification": "alterada",
+        "n_different": 18565,
+        "n_identical": 11642,
+        "max_abs_diff": 113.09454915771406,
+        "median_diff": -13.157697647918667,
+        "median_relative": -1.0
+      },
+      "deficiency_cad_0_60": {
+        "classification": "alterada",
+        "n_different": 20984,
+        "n_identical": 9223,
+        "max_abs_diff": 95.64082797203469,
+        "median_diff": -0.6807196810594007,
+        "median_relative": -1.0
+      },
+      "excess_cad_0_60": {
+        "classification": "alterada",
+        "n_different": 16700,
+        "n_identical": 13507,
+        "max_abs_diff": 145.46879575472775,
+        "median_diff": -9.349191212426021,
+        "median_relative": -1.0
+      },
+      "deficiency_cad_0_100": {
+        "classification": "alterada",
+        "n_different": 15439,
+        "n_identical": 14768,
+        "max_abs_diff": 95.64082797203469,
+        "median_diff": -3.346054073362666,
+        "median_relative": -1.0
+      },
+      "excess_cad_0_100": {
+        "classification": "alterada",
+        "n_different": 15663,
+        "n_identical": 14544,
+        "max_abs_diff": 196.3930190466036,
+        "median_diff": -7.799874757697722,
+        "median_relative": -1.0
+      },
+      "deficiency_cad_0_200": {
+        "classification": "alterada",
+        "n_different": 5804,
+        "n_identical": 24403,
+        "max_abs_diff": 95.64082797203474,
+        "median_diff": -12.660241776756521,
+        "median_relative": -1.0
+      },
+      "excess_cad_0_200": {
+        "classification": "alterada",
+        "n_different": 15343,
+        "n_identical": 14864,
+        "max_abs_diff": 294.6806563988372,
+        "median_diff": -7.398510070860823,
+        "median_relative": -1.0
+      }
+    }
+  },
+  "balance_consistency": {
+    "ok": 3000,
+    "violations": 0
+  }
+}

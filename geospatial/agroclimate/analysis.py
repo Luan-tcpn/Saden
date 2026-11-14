@@ -50,11 +50,34 @@ def prepare_rows(
     dataset: Sequence[dict[str, Any]],
     crop: str | None = None,
     status: str = "paired_usable",
+    climate_source: str | None = None,
 ) -> list[dict[str, Any]]:
-    """Filtra o painel e converte os campos numéricos."""
+    """Filtra o painel e converte os campos numéricos.
+
+    Contrato de fonte (D123/D128): quando ``climate_source`` é ``None`` e o
+    conjunto contém mais de uma fonte climática entre as linhas utilizáveis, a
+    chamada falha. Selecionar só por ``status`` misturaria NASA-POWER e INMET —
+    os chamadores atuais já filtram a fonte a montante, mas a regra precisa
+    valer também para chamadores futuros.
+    """
+    if climate_source is None:
+        sources = {
+            str(row.get("climate_source"))
+            for row in dataset
+            if str(row.get("status")) == status and row.get("climate_source")
+        }
+        if len(sources) > 1:
+            raise ValueError(
+                "amostra com fontes climáticas misturadas "
+                f"({sorted(sources)}); declare climate_source"
+            )
+        if sources:
+            climate_source = sources.pop()
     out: list[dict[str, Any]] = []
     for row in dataset:
         if row.get("status") != status:
+            continue
+        if climate_source and str(row.get("climate_source")) != climate_source:
             continue
         if crop and str(row.get("crop")) != crop:
             continue

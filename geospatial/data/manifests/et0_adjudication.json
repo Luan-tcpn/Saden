@@ -1,0 +1,46 @@
+{
+  "generated_at": "2026-11-14T20:49:57.263458+00:00",
+  "method": "decomposição ancorada na biblioteca: 'vento_correto' reescala a entrada de vento por 2,5 para que u2 = vento/3,6 sem tocar no código original; 'fao56' usa a implementação corrigida",
+  "wind_identity_max_error": 8.881784197001252e-16,
+  "sample": {
+    "rows_requested": 1200,
+    "rows_used": 1200,
+    "seed": 20261114,
+    "cad_mm": 50.0
+  },
+  "by_variant": {
+    "referencia": {
+      "n": 1200,
+      "et0_mean_mm": 531.7698870220269,
+      "et0_ratio_vs_reference": 1.0,
+      "et0_median_relative": 0.0,
+      "deficit_mean_mm": 125.64746509104147,
+      "deficit_ratio_vs_reference": 1.0,
+      "deficit_correlation": 1.0
+    },
+    "vento_correto": {
+      "n": 1200,
+      "et0_mean_mm": 600.5018240082729,
+      "et0_ratio_vs_reference": 1.1159527834101453,
+      "et0_median_relative": 0.11300334243441429,
+      "deficit_mean_mm": 185.64101995127808,
+      "deficit_ratio_vs_reference": 3.472516105881934,
+      "deficit_correlation": 0.9881886243594598
+    },
+    "fao56": {
+      "n": 1200,
+      "et0_mean_mm": 533.1805265656242,
+      "et0_ratio_vs_reference": 1.0044362180183035,
+      "et0_median_relative": 0.00542369654286141,
+      "deficit_mean_mm": 124.89776723538708,
+      "deficit_ratio_vs_reference": 1.0775843411519568,
+      "deficit_correlation": 0.9966460097642719
+    }
+  },
+  "decomposition": {
+    "wind_only_median_relative": 0.11300334243441429,
+    "net_corrected_vs_reference_median_relative": 0.00542369654286141,
+    "net_corrected_vs_reference_mean_ratio": 1.0044362180183035,
+    "note": "o efeito do vento é medido por identidade exata (escala 2,5 na entrada). O passo seguinte muda a pressão de vapor e o denominador aerodinâmico ao mesmo tempo, de modo que a soma dos dois efeitos não é aditiva; só o total é identificado por esta via"
+  }
+}
