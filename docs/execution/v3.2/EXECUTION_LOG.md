@@ -102,6 +102,21 @@ Formato: data · fase · comando/script · arquivos · resultado · erro/correç
   Gelbach & Miller 2008; Hastie, Tibshirani & Friedman 2009), cada uma com URL
   persistente/DOI conferido, uso declarado e limitação aplicável.
 
+## 2026-11-14 — Fase 17: revisão crítica independente
+
+* `v32_legacy_pairing_sensitivity.json`: recalculadas as comparações pareadas da
+  V3.1 com os dois esquemas de reamostragem. O efeito da janela no milho
+  sobrevive (−29,78; bloco [−51,5; −2,3]; UF×ano [−52,5; −2,6]). A conclusão
+  sobre milho 2ª **muda** (+38,75; bloco [−1,8; 59,7] n.s. → UF×ano
+  [2,4; 71,9] significativo). D104 e relatório corrigidos; a afirmação anterior
+  de que "resultados preditivos não são afetados" foi **substituída pela
+  medição**.
+* Correção de comentário corrompido no `geospatial/.gitignore` (a V3.1 tinha
+  gravado `tools` e `v31_...` com backticks interpretados pelo PowerShell como
+  escapes). Apenas comentário; nenhum comportamento afetado.
+* Verificação numérica do relatório contra os 5 manifests: **39/39** conferem
+  (MAEs, ICs, p-valores, F, inclinações, contagens de cobertura/fallback).
+
 ## 2026-11-14 — Fases 13–17: testes, documentação e revisão
 
 * `test_v32_heterogeneity.py`: 17 testes. Suíte completa **410/410**;

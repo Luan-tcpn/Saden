@@ -55,6 +55,7 @@ MAE em kg/ha, TE. M2 comum reproduz a V3.1 exatamente.
 | novos testes V3.2 | 17 |
 | `compileall` | limpo |
 | números do relatório conferidos contra manifests | **39/39** |
+| conclusões da V3.1 recalculadas sob UF×ano | milho sobrevive; milho 2ª passa a significativo |
 
 ## Bloqueios
 

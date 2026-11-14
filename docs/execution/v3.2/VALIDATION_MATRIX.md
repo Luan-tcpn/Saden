@@ -50,6 +50,7 @@ O que foi verificado, como, e com que resultado. `✔` = executado e aprovado.
 | Holm na família confirmatória | `robust.holm_adjust`, 6 testes | ✔ |
 | BH na família exploratória | implementação local, 9 testes | ✔ |
 | bootstrap duplo (bloco e UF×ano) | ambos reportados em todo ΔMAE | ✔ |
+| conclusões da V3.1 sob a unidade da D104 | `v32_legacy_pairing_sensitivity.py` | ✔ milho sobrevive; milho 2ª passa a significativo |
 
 ## Robustez
 

@@ -418,6 +418,26 @@ tem 106 linhas. Excluir BA do milho **aumenta** o ganho aparente (+36,3 quando
 removida — ou seja, BA puxa o ganho para cima), o que reforça que o resultado é
 sensível à composição territorial.
 
+### 16.5. Aplicação da D104 aos resultados preditivos da V3.1
+
+Como a D104 muda a unidade de reamostragem, as conclusões pareadas da V3.1
+foram recalculadas com os dois esquemas (mesmo estimador, mesmas sementes;
+`v32_v31_resampling_sensitivity.json`). Não é presunção, é verificação:
+
+| comparação | ΔMAE | bloco | UF×ano | conclusão |
+|---|---:|---|---|---|
+| milho: janela corrigida − histórica | −29,78 | **[−51,5; −2,3]** | **[−52,5; −2,6]** | **sobrevive** |
+| soja: janela corrigida − histórica | −12,17 | [−24,0; 4,9] | [−24,7; 3,3] | n.s. nos dois |
+| milho 2ª: janela corrigida − histórica | +38,75 | [−1,8; 59,7] | **[2,4; 71,9]** | **muda**: passa a significativo |
+| milho: CAD 0–100 − clima | +85,73 | [−13,8; 182,4] | **[5,5; 168,4]** | pior de forma detectável |
+| milho 2ª: CAD 0–100 − clima | +193,38 | [11,0; 318,7] | [82,4; 291,3] | pior nos dois |
+
+Leitura: o achado central da V3.1 (a correção da janela melhora o milho) é
+robusto à unidade de reamostragem. Duas leituras pioram com a unidade correta —
+a janela corrigida **piora** milho 2ª e a CAD **piora** o milho em relação ao
+clima, ambas de forma detectável. Isso não contradiz a V3.1 (os pontos
+estimados são os mesmos); corrige o que se pode afirmar sobre eles.
+
 ## 17. Comparação com M1c
 
 Pareamento por (município, ano), todos os casos:
@@ -520,8 +540,9 @@ fundamentam o desenho; os números vêm do painel.
 | testes de inclinação | `geospatial/data/manifests/v32_slope_tests.json` |
 | comparação preditiva | `geospatial/data/manifests/v32_predictive.json` |
 | robustez | `geospatial/data/manifests/v32_robustness.json` |
+| sensibilidade da V3.1 à reamostragem | `geospatial/data/manifests/v32_v31_resampling_sensitivity.json` |
 | M1c pareado | `geospatial/data/manifests/v32_neighbors_paired.json` |
-| ferramentas | `tools/v32_slope_tests.py`, `tools/v32_predictive.py`, `tools/v32_neighbors.py` |
+| ferramentas | `tools/v32_slope_tests.py`, `tools/v32_predictive.py`, `tools/v32_neighbors.py`, `tools/v32_legacy_pairing_sensitivity.py` |
 | módulo | `geospatial/agroclimate/heterogeneity.py` |
 | testes | `geospatial/tests/test_v32_heterogeneity.py` |
 
@@ -532,6 +553,7 @@ python tools/v32_slope_tests.py
 python tools/v32_predictive.py --stage main
 python tools/v32_predictive.py --stage robustness
 python tools/v32_neighbors.py
+python tools/v32_legacy_pairing_sensitivity.py
 pytest geospatial/tests -q
 ```
 
@@ -545,6 +567,8 @@ por construção). Nenhum resultado depende de estado global mutável.
 | painel corrigido usado em todas as análises, sem mistura com `_legacy` | **validado** (teste de regressão dedicado) |
 | M2 comum reproduz a V3.1 exatamente; comparações pareadas | **validado** (592,19 / 1.688,58 / 1.272,40) |
 | agrupamento por bloco é otimista para regressores UF×ano | **validado nos dados** (F 8,74 → 1,13 na soja) |
+| a correção da janela melhora o milho (achado da V3.1) | **validado** sob os dois esquemas de reamostragem |
+| a correção da janela piora milho 2ª | **validado** apenas sob UF×ano (por bloco era n.s.) |
 | heterogeneidade de inclinações em soja | **não conclusivo / nível D** |
 | heterogeneidade de inclinações em milho | **não conclusivo** (Holm 0,227) |
 | ganho preditivo do partial pooling em milho | **nível C** — localizado e instável |

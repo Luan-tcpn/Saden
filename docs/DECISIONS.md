@@ -1869,10 +1869,16 @@ Efeito medido no painel (mesmo modelo, mesmos dados, só o agrupamento muda):
 
 A razão entre os erros-padrão é de ~2,5–3×. **Consequência retroativa:** os
 p-valores de associação reportados na V2.7–V3.1 com agrupamento por bloco são
-otimistas e não devem ser citados como evidência confirmatória. Os resultados
-*preditivos* dessas versões não são afetados por esta decisão (o estimando lá é
-diferença de MAE, não coeficiente), mas o mesmo cuidado de unidade foi aplicado
-a eles por bootstrap por UF×ano.
+otimistas e não devem ser citados como evidência confirmatória.
+
+Verificação feita (não presumida): as comparações **preditivas** da V3.1 foram
+recalculadas com os dois esquemas de reamostragem
+(`v32_v31_resampling_sensitivity.json`). O efeito pareado da correção da janela
+no milho sobrevive (−29,78; bloco [−51,5; −2,3]; UF×ano [−52,5; −2,6]). Mas a
+conclusão sobre milho 2ª **muda**: +38,75 era não significativo por bloco
+([−1,8; 59,7]) e passa a significativo por UF×ano ([2,4; 71,9]) — isto é, a
+correção da janela piora a 2ª safra de forma detectável, não apenas sugestiva.
+Registrado como correção da leitura da V3.1, não como novo achado.
 
 ## D105 - A heterogeneidade de inclinações NÃO está estabelecida (2026-11-14)
 

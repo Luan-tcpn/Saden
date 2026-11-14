@@ -351,12 +351,24 @@ def test_neighbor_holdout_exposes_fallback_flags():
     assert len(result["row_codes"]) == result["n"]
 
 
-def test_v32_tools_never_reference_legacy_variables():
-    """Guarda contra mistura silenciosa de janela histórica e corrigida."""
+def test_v32_modeling_tools_never_reference_legacy_variables():
+    """Guarda contra mistura silenciosa de janela histórica e corrigida.
+
+    Vale para as ferramentas de **modelagem** da V3.2. A ferramenta de
+    sensibilidade (`v32_legacy_pairing_sensitivity.py`) menciona `_legacy` de
+    propósito: ela reexecuta a comparação histórica da V3.1 para verificar se as
+    conclusões sobrevivem à unidade de reamostragem da D104. A exceção é
+    verificada explicitamente abaixo para que não vire porta de entrada.
+    """
     import pathlib
 
     root = pathlib.Path(__file__).resolve().parents[2]
-    for name in ("v32_slope_tests.py", "v32_predictive.py", "v32_neighbors.py"):
+    modeling = ("v32_slope_tests.py", "v32_predictive.py", "v32_neighbors.py")
+    for name in modeling:
         text = (root / "tools" / name).read_text(encoding="utf-8")
         assert "_legacy" not in text, name
-        assert "precip_legacy" not in text, name
+    sensitivity = (root / "tools" / "v32_legacy_pairing_sensitivity.py").read_text(
+        encoding="utf-8"
+    )
+    assert "legacy_climate" in sensitivity, "a ferramenta de sensibilidade deve existir"
+    assert "reproduc" in sensitivity.lower() or "V3.1" in sensitivity

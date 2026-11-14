@@ -1,0 +1,143 @@
+{
+  "generated_at": "2026-11-14T12:49:09.331867+00:00",
+  "purpose": "verificar se as conclusoes pareadas da V3.1 sobrevivem ao bootstrap por UFxano, unidade adotada na D104",
+  "protocol": "identico a V3.1 (TE, per_cell, 3 repeticoes, semente rr.SEED); muda apenas a unidade de reamostragem do IC",
+  "crops": {
+    "soja": {
+      "n_rows": 8884,
+      "pairs": {
+        "corrected_climate_vs_legacy_climate": {
+          "delta_mae": -12.173378927770386,
+          "n": 8884,
+          "block": {
+            "ci95": [
+              -24.04901963843169,
+              4.939749485971164
+            ],
+            "n_units": 46,
+            "excludes_zero": false
+          },
+          "state_year": {
+            "ci95": [
+              -24.71627400895955,
+              3.254601068594158
+            ],
+            "n_units": 40,
+            "excludes_zero": false
+          }
+        },
+        "corrected_water_cad100_vs_corrected_climate": {
+          "delta_mae": 8.174679834782978,
+          "n": 8884,
+          "block": {
+            "ci95": [
+              -3.725572230684602,
+              21.23732291746928
+            ],
+            "n_units": 46,
+            "excludes_zero": false
+          },
+          "state_year": {
+            "ci95": [
+              -14.604116264565778,
+              32.770163153112286
+            ],
+            "n_units": 40,
+            "excludes_zero": false
+          }
+        }
+      }
+    },
+    "milho": {
+      "n_rows": 7616,
+      "pairs": {
+        "corrected_climate_vs_legacy_climate": {
+          "delta_mae": -29.78458753874088,
+          "n": 7616,
+          "block": {
+            "ci95": [
+              -51.454977328814245,
+              -2.312888994042221
+            ],
+            "n_units": 49,
+            "excludes_zero": true
+          },
+          "state_year": {
+            "ci95": [
+              -52.49946292488622,
+              -2.622739075303676
+            ],
+            "n_units": 48,
+            "excludes_zero": true
+          }
+        },
+        "corrected_water_cad100_vs_corrected_climate": {
+          "delta_mae": 85.72540069536876,
+          "n": 7616,
+          "block": {
+            "ci95": [
+              -13.790720320480125,
+              182.44458594272723
+            ],
+            "n_units": 49,
+            "excludes_zero": false
+          },
+          "state_year": {
+            "ci95": [
+              5.474983808549558,
+              168.37465904823932
+            ],
+            "n_units": 48,
+            "excludes_zero": true
+          }
+        }
+      }
+    },
+    "milho_2": {
+      "n_rows": 2902,
+      "pairs": {
+        "corrected_climate_vs_legacy_climate": {
+          "delta_mae": 38.74895698678665,
+          "n": 2902,
+          "block": {
+            "ci95": [
+              -1.7547311485321244,
+              59.724014787610415
+            ],
+            "n_units": 30,
+            "excludes_zero": false
+          },
+          "state_year": {
+            "ci95": [
+              2.4117817918758933,
+              71.9209398214477
+            ],
+            "n_units": 32,
+            "excludes_zero": true
+          }
+        },
+        "corrected_water_cad100_vs_corrected_climate": {
+          "delta_mae": 193.37663093552646,
+          "n": 2902,
+          "block": {
+            "ci95": [
+              10.985139957799026,
+              318.71693890648993
+            ],
+            "n_units": 30,
+            "excludes_zero": true
+          },
+          "state_year": {
+            "ci95": [
+              82.44679529177012,
+              291.28219045237825
+            ],
+            "n_units": 32,
+            "excludes_zero": true
+          }
+        }
+      }
+    }
+  },
+  "elapsed_s": 10.1
+}
