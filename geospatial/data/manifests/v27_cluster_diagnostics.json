@@ -1,0 +1,351 @@
+{
+  "generated_at": "2026-11-13T04:16:33.273966+00:00",
+  "block_km": 250.0,
+  "crops": {
+    "soja": {
+      "n_observations": 8884,
+      "n_municipalities": 1225,
+      "schemes": {
+        "municipio": {
+          "n_clusters": 1225,
+          "n_observations": 8884,
+          "n_municipalities": 1,
+          "min_cluster_size": 1,
+          "max_cluster_size": 8,
+          "median_cluster_size": 8.0,
+          "mean_cluster_size": 7.252244897959184,
+          "std_cluster_size": 1.8553961734446778,
+          "imbalance_ratio": 8.0,
+          "n_singleton_clusters": 43,
+          "share_observations_in_largest_cluster": 0.0009004952723998199,
+          "cluster_sizes_top10": [
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8
+          ]
+        },
+        "celula_grade": {
+          "n_clusters": 383,
+          "n_observations": 8884,
+          "n_municipalities": 1,
+          "min_cluster_size": 1,
+          "max_cluster_size": 144,
+          "median_cluster_size": 8.0,
+          "mean_cluster_size": 23.195822454308093,
+          "std_cluster_size": 26.32902444527746,
+          "imbalance_ratio": 144.0,
+          "n_singleton_clusters": 9,
+          "share_observations_in_largest_cluster": 0.01620891490319676,
+          "cluster_sizes_top10": [
+            144,
+            137,
+            129,
+            128,
+            120,
+            120,
+            119,
+            112,
+            112,
+            104
+          ]
+        },
+        "bloco_espacial_250km": {
+          "n_clusters": 46,
+          "n_observations": 8884,
+          "n_municipalities": 1,
+          "min_cluster_size": 7,
+          "max_cluster_size": 1289,
+          "median_cluster_size": 80.0,
+          "mean_cluster_size": 193.1304347826087,
+          "std_cluster_size": 275.95814180822015,
+          "imbalance_ratio": 184.14285714285714,
+          "n_singleton_clusters": 0,
+          "share_observations_in_largest_cluster": 0.14509230076542098,
+          "cluster_sizes_top10": [
+            1289,
+            1113,
+            610,
+            600,
+            597,
+            581,
+            539,
+            352,
+            328,
+            313
+          ]
+        },
+        "uf": {
+          "n_clusters": 5,
+          "n_observations": 8884,
+          "n_municipalities": 1,
+          "min_cluster_size": 586,
+          "max_cluster_size": 2966,
+          "median_cluster_size": 1558.0,
+          "mean_cluster_size": 1776.8,
+          "std_cluster_size": 980.7665165573303,
+          "imbalance_ratio": 5.061433447098976,
+          "n_singleton_clusters": 0,
+          "share_observations_in_largest_cluster": 0.3338586222422332,
+          "cluster_sizes_top10": [
+            2966,
+            2863,
+            1558,
+            911,
+            586
+          ]
+        }
+      },
+      "diagnostics_celula_grade": {
+        "n_clusters": 383,
+        "n_municipalities": 383,
+        "n_observations": 8884,
+        "n_clusters_with_multiple_municipalities": 193,
+        "municipalities_per_cluster_max": 19,
+        "municipalities_per_cluster_mean": 3.1984334203655354,
+        "cell_pairs_comparable": 3656,
+        "cell_pairs_with_identical_climate": 0,
+        "cell_pair_identity_rate": 0.0,
+        "n_municipalities_without_cell": 1399
+      }
+    },
+    "milho": {
+      "n_observations": 7616,
+      "n_municipalities": 1063,
+      "schemes": {
+        "municipio": {
+          "n_clusters": 1063,
+          "n_observations": 7616,
+          "n_municipalities": 1,
+          "min_cluster_size": 1,
+          "max_cluster_size": 8,
+          "median_cluster_size": 8.0,
+          "mean_cluster_size": 7.164628410159925,
+          "std_cluster_size": 1.633431891548977,
+          "imbalance_ratio": 8.0,
+          "n_singleton_clusters": 4,
+          "share_observations_in_largest_cluster": 0.0010504201680672268,
+          "cluster_sizes_top10": [
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8
+          ]
+        },
+        "celula_grade": {
+          "n_clusters": 363,
+          "n_observations": 7616,
+          "n_municipalities": 1,
+          "min_cluster_size": 1,
+          "max_cluster_size": 120,
+          "median_cluster_size": 8.0,
+          "mean_cluster_size": 20.980716253443525,
+          "std_cluster_size": 23.57537966202759,
+          "imbalance_ratio": 120.0,
+          "n_singleton_clusters": 1,
+          "share_observations_in_largest_cluster": 0.015756302521008403,
+          "cluster_sizes_top10": [
+            120,
+            118,
+            114,
+            112,
+            104,
+            100,
+            97,
+            96,
+            96,
+            96
+          ]
+        },
+        "bloco_espacial_250km": {
+          "n_clusters": 49,
+          "n_observations": 7616,
+          "n_municipalities": 1,
+          "min_cluster_size": 7,
+          "max_cluster_size": 1139,
+          "median_cluster_size": 80.0,
+          "mean_cluster_size": 155.42857142857142,
+          "std_cluster_size": 235.43004507167086,
+          "imbalance_ratio": 162.71428571428572,
+          "n_singleton_clusters": 0,
+          "share_observations_in_largest_cluster": 0.14955357142857142,
+          "cluster_sizes_top10": [
+            1139,
+            986,
+            632,
+            578,
+            521,
+            352,
+            336,
+            275,
+            262,
+            168
+          ]
+        },
+        "uf": {
+          "n_clusters": 6,
+          "n_observations": 7616,
+          "n_municipalities": 1,
+          "min_cluster_size": 106,
+          "max_cluster_size": 2966,
+          "median_cluster_size": 997.0,
+          "mean_cluster_size": 1269.3333333333333,
+          "std_cluster_size": 906.8751598514293,
+          "imbalance_ratio": 27.9811320754717,
+          "n_singleton_clusters": 0,
+          "share_observations_in_largest_cluster": 0.3894432773109244,
+          "cluster_sizes_top10": [
+            2966,
+            1567,
+            1428,
+            997,
+            552,
+            106
+          ]
+        }
+      },
+      "diagnostics_celula_grade": {
+        "n_clusters": 363,
+        "n_municipalities": 363,
+        "n_observations": 7616,
+        "n_clusters_with_multiple_municipalities": 170,
+        "municipalities_per_cluster_max": 20,
+        "municipalities_per_cluster_mean": 2.928374655647383,
+        "cell_pairs_comparable": 3039,
+        "cell_pairs_with_identical_climate": 0,
+        "cell_pair_identity_rate": 0.0,
+        "n_municipalities_without_cell": 1419
+      }
+    },
+    "milho_2": {
+      "n_observations": 2902,
+      "n_municipalities": 505,
+      "schemes": {
+        "municipio": {
+          "n_clusters": 505,
+          "n_observations": 2902,
+          "n_municipalities": 1,
+          "min_cluster_size": 2,
+          "max_cluster_size": 9,
+          "median_cluster_size": 5.0,
+          "mean_cluster_size": 5.746534653465346,
+          "std_cluster_size": 1.932297885960202,
+          "imbalance_ratio": 4.5,
+          "n_singleton_clusters": 0,
+          "share_observations_in_largest_cluster": 0.0031013094417643005,
+          "cluster_sizes_top10": [
+            9,
+            9,
+            9,
+            9,
+            9,
+            9,
+            9,
+            9,
+            9,
+            9
+          ]
+        },
+        "celula_grade": {
+          "n_clusters": 194,
+          "n_observations": 2902,
+          "n_municipalities": 1,
+          "min_cluster_size": 2,
+          "max_cluster_size": 109,
+          "median_cluster_size": 5.0,
+          "mean_cluster_size": 14.958762886597938,
+          "std_cluster_size": 19.06657761567883,
+          "imbalance_ratio": 54.5,
+          "n_singleton_clusters": 0,
+          "share_observations_in_largest_cluster": 0.037560303239145415,
+          "cluster_sizes_top10": [
+            109,
+            106,
+            90,
+            85,
+            72,
+            71,
+            69,
+            65,
+            64,
+            59
+          ]
+        },
+        "bloco_espacial_250km": {
+          "n_clusters": 30,
+          "n_observations": 2902,
+          "n_municipalities": 1,
+          "min_cluster_size": 5,
+          "max_cluster_size": 910,
+          "median_cluster_size": 32.0,
+          "mean_cluster_size": 96.73333333333333,
+          "std_cluster_size": 177.12818961293414,
+          "imbalance_ratio": 182.0,
+          "n_singleton_clusters": 0,
+          "share_observations_in_largest_cluster": 0.31357684355616816,
+          "cluster_sizes_top10": [
+            910,
+            456,
+            292,
+            165,
+            146,
+            100,
+            99,
+            73,
+            69,
+            60
+          ]
+        },
+        "uf": {
+          "n_clusters": 4,
+          "n_observations": 2902,
+          "n_municipalities": 1,
+          "min_cluster_size": 285,
+          "max_cluster_size": 1836,
+          "median_cluster_size": 353.0,
+          "mean_cluster_size": 725.5,
+          "std_cluster_size": 643.1393705877443,
+          "imbalance_ratio": 6.442105263157894,
+          "n_singleton_clusters": 0,
+          "share_observations_in_largest_cluster": 0.6326671261199173,
+          "cluster_sizes_top10": [
+            1836,
+            428,
+            353,
+            285
+          ]
+        }
+      },
+      "diagnostics_celula_grade": {
+        "n_clusters": 194,
+        "n_municipalities": 194,
+        "n_observations": 2902,
+        "n_clusters_with_multiple_municipalities": 76,
+        "municipalities_per_cluster_max": 15,
+        "municipalities_per_cluster_mean": 2.6030927835051547,
+        "cell_pairs_comparable": 1209,
+        "cell_pairs_with_identical_climate": 2,
+        "cell_pair_identity_rate": 0.0016542597187758478,
+        "n_municipalities_without_cell": 1588
+      }
+    }
+  },
+  "findings": [],
+  "shared_value_groups_sample": {
+    "n_groups": 0,
+    "n_rows_sampled": 4000,
+    "interpretation": "Grupos de linhas com valores climaticos EXATAMENTE iguais. A contagem pequena mostra que o NASA POWER INTERPOLA a grade: municipios da mesma celula nao compartilham valores identicos, embora as series sejam fortemente correlacionadas."
+  }
+}

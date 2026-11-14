@@ -286,36 +286,24 @@ def _empty_row(
     }
 
 
-def _build_row(
-    municipality_code: str,
-    municipalities: dict[str, dict[str, Any]],
-    crop: str,
-    safra: str,
-    pam_year: int | None,
-    source: str,
+def build_climate_indicators(
     daily: Sequence[dict[str, Any]],
-    window: dict[str, Any],
-    months: Sequence[str],
-    pam: dict[str, Any] | None,
-    detail: dict[str, Any] | None,
+    latitude: float | None,
+    elevation: float | None,
     soil: Any,
     et_method: str,
-    min_coverage: float,
+    crop: str,
 ) -> dict[str, Any]:
-    municipality = municipalities.get(municipality_code, {})
-    latitude = municipality.get("centroid_lat")
-    longitude = municipality.get("centroid_lon")
-    elevation = municipality.get("elevation_m")
+    """Constrói os indicadores climáticos de uma janela.
 
-    row = _empty_row(
-        municipality_code, municipalities, crop, safra, pam_year, source,
-        window, months, pam, detail, "", soil, et_method,
-    )
-    row["climate_source_type"] = (
-        daily[0].get("source_type") if daily else None
-    )
-    row["station_code"] = daily[0].get("station_code") if daily else None
-    row["climate_days"] = len(daily)
+    Função extraída de :func:`_build_row` para que a V2.7 possa recalcular
+    **exatamente os mesmos** indicadores sobre a **janela fenológica**
+    (enchimento de grãos), sem criar uma segunda implementação do cálculo.
+    """
+    out: dict[str, Any] = {}
+
+    # NOTA: usa-se o ``_to_float`` do módulo (linha 44). Uma definição local
+    # com o mesmo nome sombrearia a referência e tornaria a chamada recursiva.
 
     precip = [
         v for v in (_to_float(d.get("precip_mm")) for d in daily) if v is not None
@@ -347,19 +335,19 @@ def _build_row(
     def mean(values: Sequence[float]) -> float | None:
         return sum(values) / len(values) if values else None
 
-    row["precip_acumulada_mm"] = sum(precip) if precip else None
-    row["precip_media_diaria_mm"] = mean(precip)
-    row["dias_com_chuva"] = sum(1 for value in precip if value > 0)
-    row["dias_secos"] = sum(1 for value in precip if value == 0)
-    row["temp_media_c"] = mean(tmean)
-    row["temp_max_media_c"] = mean(tmax)
-    row["temp_min_media_c"] = mean(tmin)
-    row["temp_max_abs_c"] = max(tmax) if tmax else None
-    row["temp_min_abs_c"] = min(tmin) if tmin else None
-    row["radiacao_media_mj_m2"] = mean(rad)
-    row["umidade_rel_media_pct"] = mean(humidity)
-    row["vento_media_kmh"] = mean(wind)
-    row["solo_umidade_media"] = mean(soil_moist)
+    out["precip_acumulada_mm"] = sum(precip) if precip else None
+    out["precip_media_diaria_mm"] = mean(precip)
+    out["dias_com_chuva"] = sum(1 for value in precip if value > 0)
+    out["dias_secos"] = sum(1 for value in precip if value == 0)
+    out["temp_media_c"] = mean(tmean)
+    out["temp_max_media_c"] = mean(tmax)
+    out["temp_min_media_c"] = mean(tmin)
+    out["temp_max_abs_c"] = max(tmax) if tmax else None
+    out["temp_min_abs_c"] = min(tmin) if tmin else None
+    out["radiacao_media_mj_m2"] = mean(rad)
+    out["umidade_rel_media_pct"] = mean(humidity)
+    out["vento_media_kmh"] = mean(wind)
+    out["solo_umidade_media"] = mean(soil_moist)
 
     # --- graus-dia (perfil da cultura) -------------------------------------
     profile_key = {
@@ -380,14 +368,14 @@ def _build_row(
             ],
             profile,
         )
-        row["thermal_profile"] = profile.key
-        row["thermal_profile_label"] = profile.label
-        row["degree_days_total"] = gdd["degree_days_total"]
-        row["degree_days_mean"] = gdd["degree_days_mean"]
-        row["degree_days_days_used"] = gdd["days_used"]
-        row["degree_days_coverage"] = gdd["coverage"]
-        row["base_temperature_c"] = profile.base_temperature_c
-        row["upper_temperature_c"] = profile.upper_temperature_c
+        out["thermal_profile"] = profile.key
+        out["thermal_profile_label"] = profile.label
+        out["degree_days_total"] = gdd["degree_days_total"]
+        out["degree_days_mean"] = gdd["degree_days_mean"]
+        out["degree_days_days_used"] = gdd["days_used"]
+        out["degree_days_coverage"] = gdd["coverage"]
+        out["base_temperature_c"] = profile.base_temperature_c
+        out["upper_temperature_c"] = profile.upper_temperature_c
         heat = thermal.heat_wave_events(
             [
                 {"date": d.get("date"), "temp_max_c": _to_float(d.get("temp_max_c"))}
@@ -395,8 +383,8 @@ def _build_row(
             ],
             threshold_c=35.0,
         )
-        row["heat_wave_events"] = heat["n_events"]
-        row["heat_wave_days"] = heat["total_days"]
+        out["heat_wave_events"] = heat["n_events"]
+        out["heat_wave_days"] = heat["total_days"]
         extreme = thermal.extreme_heat_days(
             [
                 {
@@ -407,8 +395,8 @@ def _build_row(
                 for d in daily
             ]
         )
-        row["extreme_heat_days"] = extreme["extreme_heat_days"]
-        row["warm_nights"] = extreme["warm_nights"]
+        out["extreme_heat_days"] = extreme["extreme_heat_days"]
+        out["warm_nights"] = extreme["warm_nights"]
 
     # --- evapotranspiração e balanço hídrico --------------------------------
     if latitude is not None:
@@ -440,20 +428,56 @@ def _build_row(
         et_values = [
             item["et0_mm"] for item in et_series if item.get("et0_mm") is not None
         ]
-        row["et0_total_mm"] = sum(et_values) if et_values else None
-        row["et0_days"] = len(et_values)
-        row["et0_mean_mm_dia"] = mean(et_values)
+        out["et0_total_mm"] = sum(et_values) if et_values else None
+        out["et0_days"] = len(et_values)
+        out["et0_mean_mm_dia"] = mean(et_values)
         monthly = wb_module.daily_to_monthly(et_series)
         balance = wb_module.sequential_water_balance(
             monthly, cad_mm=soil.cad_mm, et_method=et_method
         )
         totals = wb_module.aggregate_water_balance(balance)
-        row["etp_total_mm"] = totals["etp_total_mm"]
-        row["etr_total_mm"] = totals["etr_total_mm"]
-        row["deficiency_total_mm"] = totals["deficiency_total_mm"]
-        row["excess_total_mm"] = totals["excess_total_mm"]
-        row["storage_final_mm"] = totals["storage_final_mm"]
-        row["balance_months"] = totals["months"]
+        out["etp_total_mm"] = totals["etp_total_mm"]
+        out["etr_total_mm"] = totals["etr_total_mm"]
+        out["deficiency_total_mm"] = totals["deficiency_total_mm"]
+        out["excess_total_mm"] = totals["excess_total_mm"]
+        out["storage_final_mm"] = totals["storage_final_mm"]
+        out["balance_months"] = totals["months"]
+    return out
+
+
+def _build_row(
+    municipality_code: str,
+    municipalities: dict[str, dict[str, Any]],
+    crop: str,
+    safra: str,
+    pam_year: int | None,
+    source: str,
+    daily: Sequence[dict[str, Any]],
+    window: dict[str, Any],
+    months: Sequence[str],
+    pam: dict[str, Any] | None,
+    detail: dict[str, Any] | None,
+    soil: Any,
+    et_method: str,
+    min_coverage: float,
+) -> dict[str, Any]:
+    municipality = municipalities.get(municipality_code, {})
+    latitude = municipality.get("centroid_lat")
+    longitude = municipality.get("centroid_lon")
+    elevation = municipality.get("elevation_m")
+
+    row = _empty_row(
+        municipality_code, municipalities, crop, safra, pam_year, source,
+        window, months, pam, detail, "", soil, et_method,
+    )
+    row["climate_source_type"] = (
+        daily[0].get("source_type") if daily else None
+    )
+    row["station_code"] = daily[0].get("station_code") if daily else None
+    row["climate_days"] = len(daily)
+    row.update(
+        build_climate_indicators(daily, latitude, elevation, soil, et_method, crop)
+    )
 
     coverage = _window_coverage(
         str(window.get("start_date")), str(window.get("end_date")), len(daily)

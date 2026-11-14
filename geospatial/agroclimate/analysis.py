@@ -239,27 +239,40 @@ def territorial_holdout(
     n_folds: int = 5,
     crop_filter: str | None = None,
     seed: int = SEED,
+    group_key: str = "ibge_code",
 ) -> dict[str, Any]:
     """Validação territorial:("*fold*") por grupos de municípios.
 
     Cada *fold* testa um conjunto de municípios **inteiros**; o treino usa os
     demais. Os anos do mesmo município nunca são repartidos entre treino e
     teste.
+
+    ``group_key`` generaliza a unidade de separação (V2.7): ``ibge_code``
+    reproduz o protocolo da V2.6; outros valores (célula da grade, bloco
+    espacial, UF) impõem partições **mais**-separadas, em que nenhuma
+    unidade compartilhando informação espacial fica em lados opostos da
+    partição. O padrão mantém o resultado da V2.6 **bit a bit**.
     """
     data = [r for r in rows if crop_filter is None or r["crop"] == crop_filter]
     municipalities = sorted({str(r["ibge_code"]) for r in data})
-    if len(municipalities) < n_folds:
-        return {"status": "insufficient_municipalities", "n_municipalities": len(municipalities)}
+    groups = sorted({str(r.get(group_key)) for r in data if r.get(group_key)})
+    if len(groups) < n_folds:
+        return {
+            "status": "insufficient_municipalities",
+            "n_municipalities": len(municipalities),
+            "n_groups": len(groups),
+            "group_key": group_key,
+        }
     rng = np.random.default_rng(seed)
-    shuffled = list(municipalities)
+    shuffled = list(groups)
     rng.shuffle(shuffled)
     folds = [shuffled[i::n_folds] for i in range(n_folds)]
 
     predictions: list[dict[str, Any]] = []
     for fold_index, fold in enumerate(folds):
-        test_codes = set(fold)
-        train = [r for r in data if str(r["ibge_code"]) not in test_codes]
-        test = [r for r in data if str(r["ibge_code"]) in test_codes]
+        test_groups = set(fold)
+        train = [r for r in data if str(r.get(group_key)) not in test_groups]
+        test = [r for r in data if str(r.get(group_key)) in test_groups]
         if not train or not test:
             continue
         for row in test:
@@ -296,11 +309,52 @@ def territorial_holdout(
     return {
         "status": "ok",
         "n_folds": len(folds),
+        "group_key": group_key,
+        "n_groups": len(groups),
         "n_predictions": len(predictions),
         "models": models,
         "best_by_mae": best,
         "predictions": predictions,
     }
+
+
+def _build_fixed_effects_design(
+    data: Sequence[dict[str, Any]], variable: str
+) -> tuple[np.ndarray, np.ndarray, list[str], list[int], int, int, int]:
+    """Monta o design de efeitos fixos de município e de ano.
+
+    Layout do design matrix (índice 1 é a variável climática):
+      0                -> intercepto
+      1                -> variável climática
+      2 .. k_muni      -> dummies de município (o primeiro município é a referência)
+      k_muni+1 ..      -> dummies de ano (o primeiro ano é a referência)
+
+    A montagem é extraída de :func:`fixed_effects` para que a V2.7 possa
+    reaproveitar **exatamente** o mesmo design em outros esquemas de
+    agrupamento, sem criar uma segunda implementação do modelo.
+    """
+    municipalities = sorted({str(r["ibge_code"]) for r in data})
+    years = sorted({r["year"] for r in data})
+    muni_index = {m: i for i, m in enumerate(municipalities)}
+    year_index = {y: i for i, y in enumerate(years)}
+    n = len(data)
+    k_muni = len(municipalities)
+    k_year = len(years)
+    n_muni_dummies = k_muni - 1
+    n_year_dummies = k_year - 1
+    design = np.zeros((n, 2 + n_muni_dummies + n_year_dummies), dtype="float64")
+    y = np.zeros(n, dtype="float64")
+    for row_index, row in enumerate(data):
+        m = muni_index[str(row["ibge_code"])]
+        y_i = year_index[row["year"]]
+        design[row_index, 0] = 1.0
+        design[row_index, 1] = float(row[variable])
+        if m > 0:
+            design[row_index, 1 + m] = 1.0
+        if y_i > 0:
+            design[row_index, 1 + n_muni_dummies + y_i] = 1.0
+        y[row_index] = float(row["yield_kg_ha"])
+    return design, y, municipalities, years, n, k_muni, k_year
 
 
 def fixed_effects(
@@ -327,31 +381,9 @@ def fixed_effects(
             "n_municipalities": len(municipalities),
             "n_years": len(years),
         }
-    muni_index = {m: i for i, m in enumerate(municipalities)}
-    year_index = {y: i for i, y in enumerate(years)}
-    n = len(data)
-    k_muni = len(municipalities)
-    k_year = len(years)
-    # Layout do design matrix (índice 1 é a variável climática):
-    #   0                -> intercepto
-    #   1                -> variável climática
-    #   2 .. k_muni      -> dummies de município (o primeiro município é a referência)
-    #   k_muni+1 ..      -> dummies de ano (o primeiro ano é a referência)
-    n_muni_dummies = k_muni - 1
-    n_year_dummies = k_year - 1
-    design = np.zeros((n, 2 + n_muni_dummies + n_year_dummies), dtype="float64")
-    x = np.zeros(n, dtype="float64")
-    y = np.zeros(n, dtype="float64")
-    for row_index, row in enumerate(data):
-        m = muni_index[str(row["ibge_code"])]
-        y_i = year_index[row["year"]]
-        design[row_index, 0] = 1.0
-        design[row_index, 1] = x[row_index] = float(row[variable])
-        if m > 0:
-            design[row_index, 1 + m] = 1.0
-        if y_i > 0:
-            design[row_index, 1 + n_muni_dummies + y_i] = 1.0
-        y[row_index] = float(row["yield_kg_ha"])
+    design, y, municipalities, years, n, k_muni, k_year = _build_fixed_effects_design(
+        data, variable
+    )
     fitted = _ols(design, y, add_constant=False)
     if fitted is None:
         return {"status": "singular_design", "n": n}

@@ -1,0 +1,88 @@
+{
+  "checks": [
+    {
+      "name": "within == LSDV (milho, precip_acumulada_mm)",
+      "ok": true,
+      "detail": "diferenca 4.951e-12"
+    },
+    {
+      "name": "within == LSDV (milho, deficiency_total_mm)",
+      "ok": true,
+      "detail": "diferenca 3.371e-13"
+    },
+    {
+      "name": "within == LSDV (milho_2, precip_acumulada_mm)",
+      "ok": true,
+      "detail": "diferenca 4.749e-11"
+    },
+    {
+      "name": "within == LSDV (milho_2, deficiency_total_mm)",
+      "ok": true,
+      "detail": "diferenca 2.985e-13"
+    },
+    {
+      "name": "within == LSDV (soja, precip_acumulada_mm)",
+      "ok": true,
+      "detail": "diferenca 3.092e-12"
+    },
+    {
+      "name": "within == LSDV (soja, deficiency_total_mm)",
+      "ok": true,
+      "detail": "diferenca 9.177e-13"
+    },
+    {
+      "name": "EP coerente entre as duas rotas",
+      "ok": true,
+      "detail": "0.079558428704 vs 0.079558428704"
+    },
+    {
+      "name": "determinismo do ajuste agrupado",
+      "ok": true,
+      "detail": "duas execucoes identicas"
+    },
+    {
+      "name": "Holm monotonica no p",
+      "ok": true,
+      "detail": "ordenacao preservada"
+    },
+    {
+      "name": "Holm nao diminui o p",
+      "ok": true,
+      "detail": "p ajustado >= p bruto"
+    },
+    {
+      "name": "Holm limitado a 1",
+      "ok": true,
+      "detail": "todos <= 1"
+    },
+    {
+      "name": "Conley 150 km -> EP finito e positivo",
+      "ok": true,
+      "detail": "0.26558524"
+    },
+    {
+      "name": "Conley 250 km -> EP finito e positivo",
+      "ok": true,
+      "detail": "0.33583509"
+    },
+    {
+      "name": "Conley 400 km -> EP finito e positivo",
+      "ok": true,
+      "detail": "0.40994027"
+    },
+    {
+      "name": "Conley 600 km -> EP finito e positivo",
+      "ok": true,
+      "detail": "0.44353194"
+    },
+    {
+      "name": "two-way -> EP finito e positivo",
+      "ok": true,
+      "detail": "0.65083056"
+    }
+  ],
+  "summary": {
+    "n_checks": 16,
+    "n_ok": 16
+  }
+}
