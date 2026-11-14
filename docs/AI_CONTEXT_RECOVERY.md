@@ -418,3 +418,44 @@ tem as dependencias.
 
 **Retomada:** `docs/execution/v2.7/RECOVERY.md` (comandos de cada
 experimento; todos sao retomaveis).
+
+
+## V2.8 - generalizacao temporal-espacial e linha de base (2026-11-14)
+
+| Item | Valor |
+|---|---|
+| Branch | `v2/temporal-spatial-generalization` (base `36bf5d7` = V2.7) |
+| Foco | fatorial espaco x tempo, controle de tamanho, linhas de base, CAD, ciclo |
+| Testes | **338/338** offline (318 da V2.7 + 20 da V2.8) |
+| Codigo novo | `geospatial/agroclimate/generalization.py`; `tools/s28_{factorial,cad_balance,cycle_stratification}.py` |
+| Manifests | `v28_factorial.*`, `v28_cad_balance.*`, `v28_cycle_stratification.json` |
+| Decisoes | D87 (fatorial), D88 (CAD), D89 (classe de ciclo) |
+| Relatorio | `docs/V2_8_GENERALIZATION_REPORT.md` |
+
+**Os 7 fatos que um novo agente precisa saber:**
+
+1. **O fatorial e a leitura fatorial dos protocolos publicados**, nao um
+   protocolo novo: os bracos `SE` e `TE` reproduzem P3 (612,724390) e P5
+   (661,802276) exatamente. Ha teste para isso.
+2. **Tamanho de amostra nao explica nada aqui**: equalizar o treino desloca a
+   MAE em <= 1 kg/ha. Nao repetir a hipotese "o P5 piorou por ter menos
+   dados".
+3. **Soja e milho falham por motivos opostos**: soja depende do **ano**,
+   milho depende do **bloco**. Nao tratar "dependencia espacial" e "temporal"
+   como o mesmo problema.
+4. **Nunca compare o modelo sem termo regional com a media da UF.** O modelo
+   `climate_only` perde dela na soja (+43,2) e o ganho dele contra a media
+   nacional **nao e significativo** (-17,0; IC95 [-44,9;+3,0]). Use
+   `climate_plus_state` para comparar com a media da UF.
+5. **A media UF x ano usa produtividade contemporanea**: e diagnostico de
+   efeito regiao-ano, **nao** referencia operacional. Nos bracos que removem o
+   ano ela colapsa exatamente na media da UF.
+6. **A CAD muda o balanco muito mais que os cenarios da V2.6**: -18,6% no
+   deficit (0-100 cm) e -42,3% (0-200 cm), contra +-3% de 35/70 mm. Mas so 5
+   de 1.296 municipios do painel tem CAD: nao extrapolar.
+7. **`zarc_cycle` e classe de ciclo, nao cultivar**, e nao tem rotulo
+   documentado nos artefatos. A temperatura da soja inverte de sinal na classe
+   minoritaria — a associacao e sensivel a estratificacao.
+
+**Ambiente:** `geospatial\.venv\Scripts\python.exe` (Python 3.12.10), sem SciPy.
+**Retomada:** `docs/execution/v2.8/MASTER_STATUS.md` e `EXECUTION_LOG.md`.

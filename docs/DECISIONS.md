@@ -1472,3 +1472,61 @@ treino, ao mesmo tempo, os blocos espaciais e os anos da dobra.
 Consequência: o ganho que sobrevive a P5 não é atribuível a vizinhança
 geográfica nem a informação do próprio ano. Se o ganho existir em P1–P3 e
 desaparecer em P5, isso deve ser reportado como limitação, não corrigido.
+
+## D87 - Fatorial espaço × tempo com controle de tamanho (2026-11-14)
+
+Decisão: a separação espacial e a temporal são investigadas num fatorial 2×2
+sobre a mesma grade de dobras do P5 — ``SS`` (nada removido), ``SE`` (bloco
+removido, equivale ao P3), ``TS`` (ano removido) e ``TE`` (ambos, equivale ao
+P5) — e **todo** braço é reamostrado para o mesmo número de linhas de treino,
+estratificado por bloco espacial, com repetições.
+
+Motivo: o P5 removeu o ano **e** ~20% do treino do P3 ao mesmo tempo. Sem
+equalizar o tamanho, não é possível atribuir a degradação ao ano.
+
+Consequência: o braço `SE` reproduz o P3 (612,724390) e o `TE` reproduz o P5
+(661,802276) exatamente, o que garante que o fatorial lê os protocolos
+publicados e não cria um protocolo novo.
+
+Resultado: tamanho equalizado desloca a MAE em ≤ 1 kg/ha — a hipótese de
+tamanho está refutada. O espaço custa −3,6 na soja (n.s.) e −93,7 no milho;
+o tempo custa −39,8 na soja (significativo) e −6,9 no milho (n.s.).
+
+## D88 - CAD: unidade validada, CAD de perfil não é CAD efetiva (2026-11-14)
+
+Decisão: a unidade `mm/cm` é aceita porque é **verificada numericamente** — o
+maior valor amostrado é 2,59 e a leitura volumétrica (cm³/cm³) exigiria ≤ 1,0.
+A CAD integrada é a soma `AW(mm/cm) × espessura(cm)` por camada. A CAD do
+perfil **não** é a CAD efetiva de uma cultura: atribuir profundidade radicular
+exige fonte cultivar-específica e não é feito.
+
+Consequência: o déficit anual mediano cai 18,6% com a CAD de 0–100 cm e 42,3%
+com a de 0–200 cm, enquanto a faixa 35/50/70 mm da V2.6 o move em ±3%. Os
+cenários da V2.6 **não eram uma análise de sensibilidade significativa**: a
+50 mm corresponde a ~23 cm de solo, mais rasa que qualquer zona radicular de
+cultura.
+
+Cobertura: apenas 5 dos 1.296 municípios do painel têm CAD (0,39%). A
+integração ao painel exige extração WCS massiva e fica condicionada ao
+diagnóstico de cobertura (missão §12), como item de V2.9.
+
+Nota metodológica: por ser regressor, um reescalonamento **uniforme** da CAD
+não altera o teste t. O que altera a inferência é a heterogeneidade entre
+municípios (126–240 mm, razão 1,9) — que não pode ser simulada por um fator
+único.
+
+## D89 - `zarc_cycle` é classe de ciclo, não cultivar (2026-11-14)
+
+Decisão: o campo `zarc_cycle` do painel é a classe `Cod_Ciclo` da portaria
+ZARC. Ele **não** identifica cultivar e **não** recebe rótulo
+("precoce/médio/tardio") porque a correspondência não está documentada nos
+artefatos adquiridos — o dicionário de dados do ZARC é um PDF não coletado.
+As classes são citadas por código.
+
+Consequência: a estratificação por classe é um teste de **estabilidade da
+associação**, não uma comparação de materiais genéticos. Resultado: na soja a
+temperatura **inverte de sinal** na classe 21 (+182,7; t=+4,38) contra a
+classe 22 (−65,0; t=−3,18), que concentra 89% das linhas; no milho o déficit é
+negativo nas três classes; no milho 2ª safra nenhuma associação sobrevive
+dentro das classes. A duração modal da janela ZARC difere por classe, o que
+mostra que colapsar as classes numa janela modal mistura calendários.

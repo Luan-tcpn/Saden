@@ -379,3 +379,33 @@ ano compartilhado: soja **-3,30%** (nao robusto), milho **+1,21%** com
 **Nao foi feito (e por que):** ampliacao do painel (decisao de escopo: a
 robustez estatistica precede a escala) e acesso ao CDS (credencial
 ausente; nao se cria conta em nome do usuario).
+
+### 10.9 V2.8 - generalizacao temporal-espacial e linha de base (branch `v2/temporal-spatial-generalization`)
+
+**Pergunta:** os resultados da V2.6/V2.7 representam generalizacao real, ou
+dependem da composicao dos dados, da linha de base e de informacao
+compartilhada entre treino e teste?
+
+**O que foi descoberto:**
+
+1. **Tamanho de amostra nao explica a inversao do P5.** Equalizar o treino em
+   5.686 linhas desloca a MAE em <= 1 kg/ha (D87).
+2. **O mecanismo difere por cultura.** A soja paga pelo **ano** (-39,8;
+   IC95 -54,4 a -22,2) e nao pelo bloco (-3,6 n.s.); o milho paga pelo
+   **bloco** (-93,7) e nao pelo ano (-6,9 n.s.).
+3. **A comparacao publicada era injusta nos dois lados.** O modelo nao tinha
+   termo regional e era comparado a media **nacional**. Contra a media da UF
+   ele perde na soja (+43,2; IC95 +4,2 a +84,7); contra a media nacional o
+   ganho e -17,0 com IC incluindo zero, isto e, **nao significativo**.
+4. **Com informacao igualada (clima + dummies de UF)** o modelo supera a media
+   da UF em -13,1 na soja (~2,3%, no limite) e em -165,8 a -267,2 no milho 2a.
+5. **A CAD da V2.6 nao era analise de sensibilidade.** 35/50/70 mm movem o
+   deficit em +-3%; a CAD oficial 0-100 cm reduz 18,6% e 0-200 cm 42,3%. A
+   cobertura no painel e de 5 de 1.296 municipios, o que bloqueia a integracao
+   em escala (D88).
+6. **A associacao nao e estavel por classe de ciclo na soja:** a temperatura
+   inverte de sinal (+182,7; t=+4,38 na classe 21 contra -65,0; t=-3,18 na
+   classe 22, que tem 89% das linhas) (D89).
+
+**Estado:** 338/338 testes offline. Decisoes D87-D89. Relatorio:
+`docs/V2_8_GENERALIZATION_REPORT.md`. Checkpoints: `docs/execution/v2.8/`.

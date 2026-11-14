@@ -275,3 +275,28 @@ hidricas resistem), milho 2a safra **robusto** no protocolo mais estrito.
 
 Relatorio: `docs/V2_7_ROBUSTNESS_REPORT.md`. Checkpoints:
 `docs/execution/v2.7/`. Decisoes D76-D86.
+
+## V2.8 - Generalizacao temporal-espacial e linha de base (2026-11-14)
+
+| Item | Estado | Evidencia |
+|---|---|---|
+| Reproducao de P1/P3/P5 | DONE | bracos `SE` e `TE` do fatorial reproduzem P3 (612,724390) e P5 (661,802276) exatamente |
+| Fatorial espaco x tempo com controle de tamanho | DONE | treino equalizado em 5.686 linhas desloca a MAE em <= 1 kg/ha; **hipotese de tamanho refutada** (D87) |
+| Mecanismo por cultura | DONE | soja paga pelo **ano** (-39,8; IC95 -54,4 a -22,2) e nao pelo bloco (-3,6 n.s.); milho paga pelo **bloco** (-93,7) e nao pelo ano (-6,9 n.s.) |
+| Linha de base comparavel | DONE | media nacional / media da UF / media UF x ano, todas do mesmo treino |
+| Comparacao justa (informacao igualada) | DONE | `climate_plus_state` supera a media da UF em -13,1 na soja (IC95 -25,7 a -0,6) e em -165,8 a -267,2 no milho 2a |
+| Ganho publicado da soja | REVISADO | contra a media nacional: -17,0 kg/ha com IC95 [-44,9;+3,0] -> **nao significativo** sob dependencia espacial |
+| CAD no balanco hidrico | DONE (parcial) | unidade validada numericamente; deficit anual -18,6% (0-100 cm) e -42,3% (0-200 cm) contra os cenarios 35/50/70 que movem +-3% (D88) |
+| CAD no painel completo | BLOCKED | cobertura de 5 de 1.296 municipios (0,39%); exige extracao WCS massiva |
+| Estratificacao por classe de ciclo do ZARC | DONE (parcial) | soja: temperatura inverte de sinal na classe 21 (+182,7; t=+4,38) vs classe 22 (-65,0; t=-3,18) (D89) |
+| Rotulo das classes de ciclo | NAO REALIZADO | dicionario de dados do ZARC nao esta nos artefatos; nenhum rotulo foi inventado |
+| Testes | DONE | **338/338** offline (318 da V2.7 + 20 da V2.8) |
+
+**Conclusao da V2.8:** o ganho territorial da soja nao e sustentavel em
+nenhuma formulacao testada; o do milho e parcial e dependente da familia de
+variaveis; o do milho 2a safra resiste a todas as linhas de base. A associacao
+déficit->produtividade e estavel no milho e sensivel a estratificacao por
+ciclo na soja (temperatura).
+
+Relatorio: `docs/V2_8_GENERALIZATION_REPORT.md`. Checkpoints:
+`docs/execution/v2.8/`. Decisoes D87-D89.

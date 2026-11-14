@@ -1,0 +1,1332 @@
+{
+  "generated_at": "2026-11-14T09:28:55.778511+00:00",
+  "note": "zarc_cycle e a classe de ciclo publicada no ZARC, nao a cultivar. Estratificar por classe testa estabilidade da associacao; nao identifica material genetico.",
+  "join": {
+    "raw_rows_indexed": 19402,
+    "duplicate_keys": 0,
+    "unmatched_rows": 0
+  },
+  "min_rows_per_class": 300,
+  "crops": {
+    "soja": {
+      "n_rows": 8884,
+      "classes": {
+        "22": 7893,
+        "21": 784,
+        "20": 207
+      },
+      "class_share": {
+        "22": 0.8884511481314723,
+        "21": 0.08824853669518234,
+        "20": 0.02330031517334534
+      },
+      "window_length_by_class": {
+        "22": {
+          "3": 3735,
+          "4": 2856,
+          "5": 1096,
+          "2": 178,
+          "6": 28
+        },
+        "20": {
+          "4": 74,
+          "5": 69,
+          "3": 62,
+          "2": 2
+        },
+        "21": {
+          "4": 349,
+          "3": 261,
+          "5": 112,
+          "2": 62
+        }
+      },
+      "pooled": {
+        "deficiency_total_mm": {
+          "status": "ok",
+          "coefficient": -1.2601698938861403,
+          "n": 8884,
+          "municipality": {
+            "status": "ok",
+            "n_clusters": 1225,
+            "std_error": 0.07231118444939834,
+            "t_statistic": -17.42703986224949,
+            "df": 1224,
+            "p_value": 6.280074315486612e-61,
+            "ci_low": -1.402037495900811,
+            "ci_high": -1.1183022918714696,
+            "correction": "CR1",
+            "small_sample_multiplier": 1.0009296727022265
+          },
+          "spatial_block": {
+            "status": "ok",
+            "n_clusters": 46,
+            "std_error": 0.24036137484578707,
+            "t_statistic": -5.242813637152183,
+            "df": 45,
+            "p_value": 4.081932516475207e-06,
+            "ci_low": -1.7442825535190996,
+            "ci_high": -0.7760572342531811,
+            "correction": "CR1",
+            "small_sample_multiplier": 1.0223373114163474
+          }
+        },
+        "temp_media_c": {
+          "status": "ok",
+          "coefficient": -92.78901723571678,
+          "n": 8884,
+          "municipality": {
+            "status": "ok",
+            "n_clusters": 1225,
+            "std_error": 7.925541339911797,
+            "t_statistic": -11.707593621201076,
+            "df": 1224,
+            "p_value": 4.3767325324805216e-30,
+            "ci_low": -108.33816849250805,
+            "ci_high": -77.23986597892552,
+            "correction": "CR1",
+            "small_sample_multiplier": 1.0009296727022265
+          },
+          "spatial_block": {
+            "status": "ok",
+            "n_clusters": 46,
+            "std_error": 20.478163810455023,
+            "t_statistic": -4.531119981975328,
+            "df": 45,
+            "p_value": 4.303126645800975e-05,
+            "ci_low": -134.03415636441136,
+            "ci_high": -51.5438781070222,
+            "correction": "CR1",
+            "small_sample_multiplier": 1.0223373114163474
+          }
+        },
+        "precip_acumulada_mm": {
+          "status": "ok",
+          "coefficient": 0.5806225536205303,
+          "n": 8884,
+          "municipality": {
+            "status": "ok",
+            "n_clusters": 1225,
+            "std_error": 0.035897621481268085,
+            "t_statistic": 16.174401803292394,
+            "df": 1224,
+            "p_value": 1.7770381279065779e-53,
+            "ci_low": 0.5101948664466106,
+            "ci_high": 0.65105024079445,
+            "correction": "CR1",
+            "small_sample_multiplier": 1.0009296727022265
+          },
+          "spatial_block": {
+            "status": "ok",
+            "n_clusters": 46,
+            "std_error": 0.19657969638014214,
+            "t_statistic": 2.95362422626665,
+            "df": 45,
+            "p_value": 0.004979137430447987,
+            "ci_low": 0.184690720956118,
+            "ci_high": 0.9765543862849426,
+            "correction": "CR1",
+            "small_sample_multiplier": 1.0223373114163474
+          }
+        },
+        "et0_total_mm": {
+          "status": "ok",
+          "coefficient": 0.04856038813869434,
+          "n": 8884,
+          "municipality": {
+            "status": "ok",
+            "n_clusters": 1225,
+            "std_error": 0.09294781178851001,
+            "t_statistic": 0.522447889888864,
+            "df": 1224,
+            "p_value": 0.6014530620500135,
+            "ci_low": -0.13379429559870598,
+            "ci_high": 0.23091507187609467,
+            "correction": "CR1",
+            "small_sample_multiplier": 1.0009296727022265
+          },
+          "spatial_block": {
+            "status": "ok",
+            "n_clusters": 46,
+            "std_error": 0.3865086662982966,
+            "t_statistic": 0.1256385493338894,
+            "df": 45,
+            "p_value": 0.9005776888484901,
+            "ci_low": -0.7299080264845212,
+            "ci_high": 0.8270288027619099,
+            "correction": "CR1",
+            "small_sample_multiplier": 1.0223373114163474
+          }
+        }
+      },
+      "by_class": {
+        "22": {
+          "status": "ok",
+          "n_rows": 7893,
+          "estimate": {
+            "deficiency_total_mm": {
+              "status": "ok",
+              "coefficient": -0.8761743037672114,
+              "n": 7893,
+              "municipality": {
+                "status": "ok",
+                "n_clusters": 1213,
+                "std_error": 0.07240066318074749,
+                "t_statistic": -12.101744172976034,
+                "df": 1212,
+                "p_value": 6.585121968545546e-32,
+                "ci_low": -1.0182188465059796,
+                "ci_high": -0.7341297610284432,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.000951913718808
+              },
+              "spatial_block": {
+                "status": "ok",
+                "n_clusters": 46,
+                "std_error": 0.22525841970567406,
+                "t_statistic": -3.889640639901645,
+                "df": 45,
+                "p_value": 0.0003282383516216936,
+                "ci_low": -1.3298680502703537,
+                "ci_high": -0.4224805572640691,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.0223517650206282
+              }
+            },
+            "temp_media_c": {
+              "status": "ok",
+              "coefficient": -65.02977847402934,
+              "n": 7893,
+              "municipality": {
+                "status": "ok",
+                "n_clusters": 1213,
+                "std_error": 7.964914843626243,
+                "t_statistic": -8.1645290314771,
+                "df": 1212,
+                "p_value": 8.023673944868929e-16,
+                "ci_low": -80.65632990618484,
+                "ci_high": -49.40322704187385,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.000951913718808
+              },
+              "spatial_block": {
+                "status": "ok",
+                "n_clusters": 46,
+                "std_error": 20.478970176768783,
+                "t_statistic": -3.1754418270406353,
+                "df": 45,
+                "p_value": 0.0027004349457887527,
+                "ci_low": -106.27654170784915,
+                "ci_high": -23.783015240209537,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.0223517650206282
+              }
+            },
+            "precip_acumulada_mm": {
+              "status": "ok",
+              "coefficient": 0.4425500064513752,
+              "n": 7893,
+              "municipality": {
+                "status": "ok",
+                "n_clusters": 1213,
+                "std_error": 0.040527311750693844,
+                "t_statistic": 10.919796732972268,
+                "df": 1212,
+                "p_value": 1.5250945074960264e-26,
+                "ci_low": 0.36303853220303417,
+                "ci_high": 0.5220614806997163,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.000951913718808
+              },
+              "spatial_block": {
+                "status": "ok",
+                "n_clusters": 46,
+                "std_error": 0.17999755579406163,
+                "t_statistic": 2.4586445326941244,
+                "df": 45,
+                "p_value": 0.01785862618198465,
+                "ci_low": 0.08001631933628633,
+                "ci_high": 0.805083693566464,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.0223517650206282
+              }
+            },
+            "et0_total_mm": {
+              "status": "ok",
+              "coefficient": 0.3548724453588141,
+              "n": 7893,
+              "municipality": {
+                "status": "ok",
+                "n_clusters": 1213,
+                "std_error": 0.09764901857148556,
+                "t_statistic": 3.634162949615556,
+                "df": 1212,
+                "p_value": 0.0002905602784683425,
+                "ci_low": 0.16329256773740933,
+                "ci_high": 0.546452322980219,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.000951913718808
+              },
+              "spatial_block": {
+                "status": "ok",
+                "n_clusters": 46,
+                "std_error": 0.4283757621217564,
+                "t_statistic": 0.8284139223963597,
+                "df": 45,
+                "p_value": 0.41180843414041457,
+                "ci_low": -0.507920628845031,
+                "ci_high": 1.2176655195626593,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.0223517650206282
+              }
+            }
+          }
+        },
+        "21": {
+          "status": "ok",
+          "n_rows": 784,
+          "estimate": {
+            "deficiency_total_mm": {
+              "status": "ok",
+              "coefficient": 0.6908766264914609,
+              "n": 784,
+              "municipality": {
+                "status": "ok",
+                "n_clusters": 382,
+                "std_error": 0.7511150992950285,
+                "t_statistic": 0.9198012756498898,
+                "df": 381,
+                "p_value": 0.3582585944212757,
+                "ci_low": -0.7859733241076489,
+                "ci_high": 2.1677265770905705,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.003906800652476
+              },
+              "spatial_block": {
+                "status": "ok",
+                "n_clusters": 20,
+                "std_error": 0.9314866983783068,
+                "t_statistic": 0.7416924231921491,
+                "df": 19,
+                "p_value": 0.46734353276217766,
+                "ci_low": -1.2587474395757123,
+                "ci_high": 2.640500692558634,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.0539776551352806
+              }
+            },
+            "temp_media_c": {
+              "status": "ok",
+              "coefficient": 182.6583866321208,
+              "n": 784,
+              "municipality": {
+                "status": "ok",
+                "n_clusters": 382,
+                "std_error": 60.52868654259167,
+                "t_statistic": 3.017716013110432,
+                "df": 381,
+                "p_value": 0.002718026160593767,
+                "ci_low": 63.646283408319746,
+                "ci_high": 301.67048985592186,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.003906800652476
+              },
+              "spatial_block": {
+                "status": "ok",
+                "n_clusters": 20,
+                "std_error": 41.730361141940584,
+                "t_statistic": 4.3771101335747185,
+                "df": 19,
+                "p_value": 0.0003241656849499657,
+                "ci_low": 95.31573696289337,
+                "ci_high": 270.0010363013482,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.0539776551352806
+              }
+            },
+            "precip_acumulada_mm": {
+              "status": "ok",
+              "coefficient": -0.32610236419779187,
+              "n": 784,
+              "municipality": {
+                "status": "ok",
+                "n_clusters": 382,
+                "std_error": 0.275323552689218,
+                "t_statistic": -1.1844332277881522,
+                "df": 381,
+                "p_value": 0.23697995866827848,
+                "ci_low": -0.867446261517224,
+                "ci_high": 0.21524153312164024,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.003906800652476
+              },
+              "spatial_block": {
+                "status": "ok",
+                "n_clusters": 20,
+                "std_error": 0.5980482283536728,
+                "t_statistic": -0.5452777029295738,
+                "df": 19,
+                "p_value": 0.5919067856462621,
+                "ci_low": -1.577831691838302,
+                "ci_high": 0.9256269634427183,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.0539776551352806
+              }
+            },
+            "et0_total_mm": {
+              "status": "ok",
+              "coefficient": 1.4209145729829795,
+              "n": 784,
+              "municipality": {
+                "status": "ok",
+                "n_clusters": 382,
+                "std_error": 0.6050471308454618,
+                "t_statistic": 2.34843618049633,
+                "df": 381,
+                "p_value": 0.019362858999845384,
+                "ci_low": 0.2312649092524508,
+                "ci_high": 2.6105642367135085,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.003906800652476
+              },
+              "spatial_block": {
+                "status": "ok",
+                "n_clusters": 20,
+                "std_error": 0.6662059264703984,
+                "t_statistic": 2.1328458912262693,
+                "df": 19,
+                "p_value": 0.0461994055307394,
+                "ci_low": 0.02652954369106264,
+                "ci_high": 2.815299602274896,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.0539776551352806
+              }
+            }
+          }
+        },
+        "20": {
+          "status": "insufficient_rows",
+          "n_rows": 207
+        }
+      }
+    },
+    "milho": {
+      "n_rows": 7616,
+      "classes": {
+        "22": 6055,
+        "21": 1238,
+        "20": 323
+      },
+      "class_share": {
+        "22": 0.7950367647058824,
+        "21": 0.16255252100840337,
+        "20": 0.04241071428571429
+      },
+      "window_length_by_class": {
+        "22": {
+          "3": 2780,
+          "4": 2334,
+          "5": 830,
+          "6": 87,
+          "2": 24
+        },
+        "20": {
+          "5": 149,
+          "4": 96,
+          "6": 61,
+          "2": 12,
+          "3": 5
+        },
+        "21": {
+          "6": 424,
+          "5": 342,
+          "4": 322,
+          "3": 139,
+          "2": 11
+        }
+      },
+      "pooled": {
+        "deficiency_total_mm": {
+          "status": "ok",
+          "coefficient": -3.039498720805295,
+          "n": 7616,
+          "municipality": {
+            "status": "ok",
+            "n_clusters": 1063,
+            "std_error": 0.1768382613391293,
+            "t_statistic": -17.188015182847423,
+            "df": 1062,
+            "p_value": 1.3121145178677806e-58,
+            "ci_low": -3.3864908042950552,
+            "ci_high": -2.692506637315535,
+            "correction": "CR1",
+            "small_sample_multiplier": 1.0010730802659586
+          },
+          "spatial_block": {
+            "status": "ok",
+            "n_clusters": 49,
+            "std_error": 1.0250157391298738,
+            "t_statistic": -2.965319072451997,
+            "df": 48,
+            "p_value": 0.004698988198233215,
+            "ci_low": -5.100430993011712,
+            "ci_high": -0.9785664485988779,
+            "correction": "CR1",
+            "small_sample_multiplier": 1.0209674065318273
+          }
+        },
+        "temp_media_c": {
+          "status": "ok",
+          "coefficient": -182.66541428027145,
+          "n": 7616,
+          "municipality": {
+            "status": "ok",
+            "n_clusters": 1063,
+            "std_error": 16.775514037556746,
+            "t_statistic": -10.888811744982783,
+            "df": 1062,
+            "p_value": 2.995015274904227e-26,
+            "ci_low": -215.58233239190366,
+            "ci_high": -149.74849616863924,
+            "correction": "CR1",
+            "small_sample_multiplier": 1.0010730802659586
+          },
+          "spatial_block": {
+            "status": "ok",
+            "n_clusters": 49,
+            "std_error": 47.811185186723,
+            "t_statistic": -3.8205581720445823,
+            "df": 48,
+            "p_value": 0.0003825807367438835,
+            "ci_low": -278.79624501990554,
+            "ci_high": -86.53458354063736,
+            "correction": "CR1",
+            "small_sample_multiplier": 1.0209674065318273
+          }
+        },
+        "precip_acumulada_mm": {
+          "status": "ok",
+          "coefficient": 0.9747995078110018,
+          "n": 7616,
+          "municipality": {
+            "status": "ok",
+            "n_clusters": 1063,
+            "std_error": 0.09553130888067836,
+            "t_statistic": 10.203979399346002,
+            "df": 1062,
+            "p_value": 2.1904291080352682e-23,
+            "ci_low": 0.787347948086378,
+            "ci_high": 1.1622510675356255,
+            "correction": "CR1",
+            "small_sample_multiplier": 1.0010730802659586
+          },
+          "spatial_block": {
+            "status": "ok",
+            "n_clusters": 49,
+            "std_error": 0.3499069859545813,
+            "t_statistic": 2.785881811280935,
+            "df": 48,
+            "p_value": 0.007620969926883033,
+            "ci_low": 0.2712643599151865,
+            "ci_high": 1.678334655706817,
+            "correction": "CR1",
+            "small_sample_multiplier": 1.0209674065318273
+          }
+        },
+        "et0_total_mm": {
+          "status": "ok",
+          "coefficient": -2.4921940894785957,
+          "n": 7616,
+          "municipality": {
+            "status": "ok",
+            "n_clusters": 1063,
+            "std_error": 0.2056714069354081,
+            "t_statistic": -12.117358103459072,
+            "df": 1062,
+            "p_value": 9.544604961036805e-32,
+            "ci_low": -2.89576257893533,
+            "ci_high": -2.0886256000218615,
+            "correction": "CR1",
+            "small_sample_multiplier": 1.0010730802659586
+          },
+          "spatial_block": {
+            "status": "ok",
+            "n_clusters": 49,
+            "std_error": 0.46583130015413104,
+            "t_statistic": -5.349992773465406,
+            "df": 48,
+            "p_value": 2.424279441886634e-06,
+            "ci_low": -3.4288106927577777,
+            "ci_high": -1.5555774861994134,
+            "correction": "CR1",
+            "small_sample_multiplier": 1.0209674065318273
+          }
+        }
+      },
+      "by_class": {
+        "22": {
+          "status": "ok",
+          "n_rows": 6055,
+          "estimate": {
+            "deficiency_total_mm": {
+              "status": "ok",
+              "coefficient": -1.3795563478662478,
+              "n": 6055,
+              "municipality": {
+                "status": "ok",
+                "n_clusters": 886,
+                "std_error": 0.15745974242411592,
+                "t_statistic": -8.76132735026601,
+                "df": 885,
+                "p_value": 9.70606551763752e-18,
+                "ci_low": -1.6885944160005302,
+                "ci_high": -1.0705182797319654,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.0012953375129856
+              },
+              "spatial_block": {
+                "status": "ok",
+                "n_clusters": 45,
+                "std_error": 0.37476967712182346,
+                "t_statistic": -3.6810778248150693,
+                "df": 44,
+                "p_value": 0.0006309988982126732,
+                "ci_low": -2.134855003022329,
+                "ci_high": -0.6242576927101665,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.0228962347746422
+              }
+            },
+            "temp_media_c": {
+              "status": "ok",
+              "coefficient": -76.1867259445608,
+              "n": 6055,
+              "municipality": {
+                "status": "ok",
+                "n_clusters": 886,
+                "std_error": 16.096686336161742,
+                "t_statistic": -4.733068928193301,
+                "df": 885,
+                "p_value": 2.573794425644919e-06,
+                "ci_low": -107.77885719098568,
+                "ci_high": -44.594594698135936,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.0012953375129856
+              },
+              "spatial_block": {
+                "status": "ok",
+                "n_clusters": 45,
+                "std_error": 41.71479537667014,
+                "t_statistic": -1.8263718006194465,
+                "df": 44,
+                "p_value": 0.07458397748366137,
+                "ci_low": -160.25737192125837,
+                "ci_high": 7.883920032136757,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.0228962347746422
+              }
+            },
+            "precip_acumulada_mm": {
+              "status": "ok",
+              "coefficient": 0.40638965203173216,
+              "n": 6055,
+              "municipality": {
+                "status": "ok",
+                "n_clusters": 886,
+                "std_error": 0.13100440533535515,
+                "t_statistic": 3.10210676497042,
+                "df": 885,
+                "p_value": 0.0019824408085911487,
+                "ci_low": 0.14927410161458593,
+                "ci_high": 0.6635052024488783,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.0012953375129856
+              },
+              "spatial_block": {
+                "status": "ok",
+                "n_clusters": 45,
+                "std_error": 0.4001233619499933,
+                "t_statistic": 1.0156608953078876,
+                "df": 44,
+                "p_value": 0.31534349936965056,
+                "ci_low": -0.40000599741970944,
+                "ci_high": 1.2127853014831738,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.0228962347746422
+              }
+            },
+            "et0_total_mm": {
+              "status": "ok",
+              "coefficient": -1.622986650886203,
+              "n": 6055,
+              "municipality": {
+                "status": "ok",
+                "n_clusters": 886,
+                "std_error": 0.1903443297307682,
+                "t_statistic": -8.526582605228272,
+                "df": 885,
+                "p_value": 6.460149122017074e-17,
+                "ci_low": -1.9965655926189456,
+                "ci_high": -1.2494077091534603,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.0012953375129856
+              },
+              "spatial_block": {
+                "status": "ok",
+                "n_clusters": 45,
+                "std_error": 0.5176528206310983,
+                "t_statistic": -3.13528022296398,
+                "df": 44,
+                "p_value": 0.0030561260123056796,
+                "ci_low": -2.6662473604054715,
+                "ci_high": -0.5797259413669344,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.0228962347746422
+              }
+            }
+          }
+        },
+        "21": {
+          "status": "ok",
+          "n_rows": 1238,
+          "estimate": {
+            "deficiency_total_mm": {
+              "status": "ok",
+              "coefficient": -3.9894415626834,
+              "n": 1238,
+              "municipality": {
+                "status": "ok",
+                "n_clusters": 261,
+                "std_error": 0.8240372427977858,
+                "t_statistic": -4.841336477873716,
+                "df": 260,
+                "p_value": 2.2151807615160357e-06,
+                "ci_low": -5.612078021362704,
+                "ci_high": -2.3668051040040963,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.0046583271097833
+              },
+              "spatial_block": {
+                "status": "ok",
+                "n_clusters": 22,
+                "std_error": 1.278143897499076,
+                "t_statistic": -3.1212773229129187,
+                "df": 21,
+                "p_value": 0.00516339860815721,
+                "ci_low": -6.647487307476675,
+                "ci_high": -1.331395817890125,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.0484666358452766
+              }
+            },
+            "temp_media_c": {
+              "status": "ok",
+              "coefficient": -122.73488490997644,
+              "n": 1238,
+              "municipality": {
+                "status": "ok",
+                "n_clusters": 261,
+                "std_error": 125.52676212449505,
+                "t_statistic": -0.9777587092404273,
+                "df": 260,
+                "p_value": 0.32910254961467167,
+                "ci_low": -369.91339843397384,
+                "ci_high": 124.44362861402095,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.0046583271097833
+              },
+              "spatial_block": {
+                "status": "ok",
+                "n_clusters": 22,
+                "std_error": 283.3414889818723,
+                "t_statistic": -0.43316947811278284,
+                "df": 21,
+                "p_value": 0.6693083148717708,
+                "ci_low": -711.9757681824335,
+                "ci_high": 466.50599836248057,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.0484666358452766
+              }
+            },
+            "precip_acumulada_mm": {
+              "status": "ok",
+              "coefficient": 2.1975175132309865,
+              "n": 1238,
+              "municipality": {
+                "status": "ok",
+                "n_clusters": 261,
+                "std_error": 0.3376691061504852,
+                "t_statistic": 6.507902183540723,
+                "df": 260,
+                "p_value": 3.898756501181526e-10,
+                "ci_low": 1.5326031451022581,
+                "ci_high": 2.862431881359715,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.0046583271097833
+              },
+              "spatial_block": {
+                "status": "ok",
+                "n_clusters": 22,
+                "std_error": 0.5168607732118253,
+                "t_statistic": 4.251662395610698,
+                "df": 21,
+                "p_value": 0.00035595203155579176,
+                "ci_low": 1.122646693463021,
+                "ci_high": 3.2723883329989523,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.0484666358452766
+              }
+            },
+            "et0_total_mm": {
+              "status": "ok",
+              "coefficient": -5.381371934729765,
+              "n": 1238,
+              "municipality": {
+                "status": "ok",
+                "n_clusters": 261,
+                "std_error": 1.2186830102481587,
+                "t_statistic": -4.415727379044994,
+                "df": 260,
+                "p_value": 1.4776207269085344e-05,
+                "ci_low": -7.781117214794696,
+                "ci_high": -2.9816266546648342,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.0046583271097833
+              },
+              "spatial_block": {
+                "status": "ok",
+                "n_clusters": 22,
+                "std_error": 2.337357770118582,
+                "t_statistic": -2.3023312919941863,
+                "df": 21,
+                "p_value": 0.0316473550435283,
+                "ci_low": -10.242173513550187,
+                "ci_high": -0.520570355909344,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.0484666358452766
+              }
+            }
+          }
+        },
+        "20": {
+          "status": "ok",
+          "n_rows": 323,
+          "estimate": {
+            "deficiency_total_mm": {
+              "status": "ok",
+              "coefficient": -5.29908623871888,
+              "n": 323,
+              "municipality": {
+                "status": "ok",
+                "n_clusters": 73,
+                "std_error": 1.8834729295720358,
+                "t_statistic": -2.813465569650073,
+                "df": 72,
+                "p_value": 0.006314005847301412,
+                "ci_low": -9.053720902614632,
+                "ci_high": -1.5444515748231282,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.0170474212530285
+              },
+              "spatial_block": {
+                "status": "ok",
+                "n_clusters": 13,
+                "std_error": 2.3343133581188553,
+                "t_statistic": -2.2700835002671775,
+                "df": 12,
+                "p_value": 0.04243159525167852,
+                "ci_low": -10.38511813185183,
+                "ci_high": -0.21305434558593195,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.0867082035306332
+              }
+            },
+            "temp_media_c": {
+              "status": "ok",
+              "coefficient": -195.2637147078617,
+              "n": 323,
+              "municipality": {
+                "status": "ok",
+                "n_clusters": 73,
+                "std_error": 171.9024134308669,
+                "t_statistic": -1.1358986230079307,
+                "df": 72,
+                "p_value": 0.2597658711023485,
+                "ci_low": -537.944912903541,
+                "ci_high": 147.41748348781755,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.0170474212530285
+              },
+              "spatial_block": {
+                "status": "ok",
+                "n_clusters": 13,
+                "std_error": 220.30199615705428,
+                "t_statistic": -0.8863456442249272,
+                "df": 12,
+                "p_value": 0.3928477660488843,
+                "ci_low": -675.2605303361515,
+                "ci_high": 284.7331009204281,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.0867082035306332
+              }
+            },
+            "precip_acumulada_mm": {
+              "status": "ok",
+              "coefficient": 1.626838057282825,
+              "n": 323,
+              "municipality": {
+                "status": "ok",
+                "n_clusters": 73,
+                "std_error": 0.5813791662106026,
+                "t_statistic": 2.7982393450499194,
+                "df": 72,
+                "p_value": 0.006588241065800754,
+                "ci_low": 0.4678798710257328,
+                "ci_high": 2.785796243539917,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.0170474212530285
+              },
+              "spatial_block": {
+                "status": "ok",
+                "n_clusters": 13,
+                "std_error": 0.7556185017289972,
+                "t_statistic": 2.152988649113691,
+                "df": 12,
+                "p_value": 0.0523630933938413,
+                "ci_low": -0.01951322861824134,
+                "ci_high": 3.2731893431838914,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.0867082035306332
+              }
+            },
+            "et0_total_mm": {
+              "status": "ok",
+              "coefficient": -3.632954501939472,
+              "n": 323,
+              "municipality": {
+                "status": "ok",
+                "n_clusters": 73,
+                "std_error": 2.272901516584119,
+                "t_statistic": -1.5983774375756232,
+                "df": 72,
+                "p_value": 0.11433863403101296,
+                "ci_low": -8.163900865860423,
+                "ci_high": 0.8979918619814793,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.0170474212530285
+              },
+              "spatial_block": {
+                "status": "ok",
+                "n_clusters": 13,
+                "std_error": 3.008006883232579,
+                "t_statistic": -1.207761365903288,
+                "df": 12,
+                "p_value": 0.25040427931066134,
+                "ci_low": -10.18683849085394,
+                "ci_high": 2.9209294869749973,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.0867082035306332
+              }
+            }
+          }
+        }
+      }
+    },
+    "milho_2": {
+      "n_rows": 2902,
+      "classes": {
+        "21": 1790,
+        "20": 1098,
+        "22": 14
+      },
+      "class_share": {
+        "21": 0.616815988973122,
+        "20": 0.3783597518952447,
+        "22": 0.004824259131633356
+      },
+      "window_length_by_class": {
+        "20": {
+          "3": 437,
+          "4": 383,
+          "2": 278
+        },
+        "21": {
+          "2": 1169,
+          "3": 563,
+          "4": 58
+        },
+        "22": {
+          "2": 14
+        }
+      },
+      "pooled": {
+        "deficiency_total_mm": {
+          "status": "ok",
+          "coefficient": -0.7419606599952716,
+          "n": 2902,
+          "municipality": {
+            "status": "ok",
+            "n_clusters": 505,
+            "std_error": 0.39133255956410967,
+            "t_statistic": -1.8959849924619436,
+            "df": 504,
+            "p_value": 0.058533733077485904,
+            "ci_low": -1.5108046971112632,
+            "ci_high": 0.026883377120720087,
+            "correction": "CR1",
+            "small_sample_multiplier": 1.0023296387520524
+          },
+          "spatial_block": {
+            "status": "ok",
+            "n_clusters": 30,
+            "std_error": 0.4379462346576798,
+            "t_statistic": -1.6941820736858815,
+            "df": 29,
+            "p_value": 0.10094587489007303,
+            "ci_low": -1.6376612807775621,
+            "ci_high": 0.15373996078701901,
+            "correction": "CR1",
+            "small_sample_multiplier": 1.0348394768133173
+          }
+        },
+        "temp_media_c": {
+          "status": "ok",
+          "coefficient": -83.4762289549684,
+          "n": 2902,
+          "municipality": {
+            "status": "ok",
+            "n_clusters": 505,
+            "std_error": 31.13798752931929,
+            "t_statistic": -2.680848557613681,
+            "df": 504,
+            "p_value": 0.007584189869772796,
+            "ci_low": -144.65247267559155,
+            "ci_high": -22.299985234345264,
+            "correction": "CR1",
+            "small_sample_multiplier": 1.0023296387520524
+          },
+          "spatial_block": {
+            "status": "ok",
+            "n_clusters": 30,
+            "std_error": 85.60988123921705,
+            "t_statistic": -0.9750770325415282,
+            "df": 29,
+            "p_value": 0.33758606299020033,
+            "ci_low": -258.5680957248754,
+            "ci_high": 91.61563781493857,
+            "correction": "CR1",
+            "small_sample_multiplier": 1.0348394768133173
+          }
+        },
+        "precip_acumulada_mm": {
+          "status": "ok",
+          "coefficient": 0.19675980202517782,
+          "n": 2902,
+          "municipality": {
+            "status": "ok",
+            "n_clusters": 505,
+            "std_error": 0.2313303441280836,
+            "t_statistic": 0.8505576852305866,
+            "df": 504,
+            "p_value": 0.3954189963895568,
+            "ci_low": -0.25773076192118904,
+            "ci_high": 0.6512503659715447,
+            "correction": "CR1",
+            "small_sample_multiplier": 1.0023296387520524
+          },
+          "spatial_block": {
+            "status": "ok",
+            "n_clusters": 30,
+            "std_error": 0.47419091536636226,
+            "t_statistic": 0.41493794092018865,
+            "df": 29,
+            "p_value": 0.6812411126508064,
+            "ci_low": -0.7730695141121454,
+            "ci_high": 1.166589118162501,
+            "correction": "CR1",
+            "small_sample_multiplier": 1.0348394768133173
+          }
+        },
+        "et0_total_mm": {
+          "status": "ok",
+          "coefficient": 0.06355610962068943,
+          "n": 2902,
+          "municipality": {
+            "status": "ok",
+            "n_clusters": 505,
+            "std_error": 0.34212496986833435,
+            "t_statistic": 0.18576869628998077,
+            "df": 504,
+            "p_value": 0.8527008938024565,
+            "ci_low": -0.6086106615898333,
+            "ci_high": 0.7357228808312123,
+            "correction": "CR1",
+            "small_sample_multiplier": 1.0023296387520524
+          },
+          "spatial_block": {
+            "status": "ok",
+            "n_clusters": 30,
+            "std_error": 0.5933796594970745,
+            "t_statistic": 0.10710867587634722,
+            "df": 29,
+            "p_value": 0.9154403276888279,
+            "ci_low": -1.1500415590213366,
+            "ci_high": 1.2771537782627154,
+            "correction": "CR1",
+            "small_sample_multiplier": 1.0348394768133173
+          }
+        }
+      },
+      "by_class": {
+        "21": {
+          "status": "ok",
+          "n_rows": 1790,
+          "estimate": {
+            "deficiency_total_mm": {
+              "status": "ok",
+              "coefficient": -0.5031210340106255,
+              "n": 1790,
+              "municipality": {
+                "status": "ok",
+                "n_clusters": 372,
+                "std_error": 0.8199853630468746,
+                "t_statistic": -0.6135731888446702,
+                "df": 371,
+                "p_value": 0.5398734045360769,
+                "ci_low": -2.115522870664726,
+                "ci_high": 1.1092808026434753,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.0032562094104451
+              },
+              "spatial_block": {
+                "status": "ok",
+                "n_clusters": 29,
+                "std_error": 0.78542443232454,
+                "t_statistic": -0.6405721713056339,
+                "df": 28,
+                "p_value": 0.5270088072754424,
+                "ci_low": -2.111990050524691,
+                "ci_high": 1.1057479825034404,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.036293544263343
+              }
+            },
+            "temp_media_c": {
+              "status": "ok",
+              "coefficient": 23.858505841715896,
+              "n": 1790,
+              "municipality": {
+                "status": "ok",
+                "n_clusters": 372,
+                "std_error": 52.54639095573608,
+                "t_statistic": 0.45404651790098727,
+                "df": 371,
+                "p_value": 0.6500608489776556,
+                "ci_low": -79.46760350705537,
+                "ci_high": 127.18461519048716,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.0032562094104451
+              },
+              "spatial_block": {
+                "status": "ok",
+                "n_clusters": 29,
+                "std_error": 96.59596705538954,
+                "t_statistic": 0.24699277380840426,
+                "df": 28,
+                "p_value": 0.8067158444078737,
+                "ci_low": -174.0093629431625,
+                "ci_high": 221.7263746265943,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.036293544263343
+              }
+            },
+            "precip_acumulada_mm": {
+              "status": "ok",
+              "coefficient": 0.11571411025733301,
+              "n": 1790,
+              "municipality": {
+                "status": "ok",
+                "n_clusters": 372,
+                "std_error": 0.42551674359710107,
+                "t_statistic": 0.271937854381816,
+                "df": 371,
+                "p_value": 0.7858210719026987,
+                "ci_low": -0.7210129946676075,
+                "ci_high": 0.9524412151822735,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.0032562094104451
+              },
+              "spatial_block": {
+                "status": "ok",
+                "n_clusters": 29,
+                "std_error": 0.6256477802860787,
+                "t_statistic": 0.18495088435289023,
+                "df": 28,
+                "p_value": 0.8546007219800656,
+                "ci_low": -1.1658672711290146,
+                "ci_high": 1.3972954916436804,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.036293544263343
+              }
+            },
+            "et0_total_mm": {
+              "status": "ok",
+              "coefficient": 0.8964231183238717,
+              "n": 1790,
+              "municipality": {
+                "status": "ok",
+                "n_clusters": 372,
+                "std_error": 0.6136672224369614,
+                "t_statistic": 1.4607642147873658,
+                "df": 371,
+                "p_value": 0.14492651070911122,
+                "ci_low": -0.31027909996342384,
+                "ci_high": 2.1031253366111673,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.0032562094104451
+              },
+              "spatial_block": {
+                "status": "ok",
+                "n_clusters": 29,
+                "std_error": 0.7819906884074332,
+                "t_statistic": 1.1463347730514366,
+                "df": 28,
+                "p_value": 0.26135910948590657,
+                "ci_low": -0.7054121926272968,
+                "ci_high": 2.4982584292750403,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.036293544263343
+              }
+            }
+          }
+        },
+        "20": {
+          "status": "ok",
+          "n_rows": 1098,
+          "estimate": {
+            "deficiency_total_mm": {
+              "status": "ok",
+              "coefficient": 0.3873176794122335,
+              "n": 1098,
+              "municipality": {
+                "status": "ok",
+                "n_clusters": 227,
+                "std_error": 0.6591125336532254,
+                "t_statistic": 0.5876351300216822,
+                "df": 226,
+                "p_value": 0.5573638966351369,
+                "ci_low": -0.9114742739074775,
+                "ci_high": 1.6861096327319445,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.0053412247270848
+              },
+              "spatial_block": {
+                "status": "ok",
+                "n_clusters": 11,
+                "std_error": 0.8469784282695827,
+                "t_statistic": 0.4572934404050195,
+                "df": 10,
+                "p_value": 0.657233838416775,
+                "ci_low": -1.4998678634094946,
+                "ci_high": 2.2745032222339616,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.1010036496350366
+              }
+            },
+            "temp_media_c": {
+              "status": "ok",
+              "coefficient": -271.76170406672054,
+              "n": 1098,
+              "municipality": {
+                "status": "ok",
+                "n_clusters": 227,
+                "std_error": 60.21516258896347,
+                "t_statistic": -4.513177285957048,
+                "df": 226,
+                "p_value": 1.027413611884697e-05,
+                "ci_low": -390.41666000407855,
+                "ci_high": -153.10674812936253,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.0053412247270848
+              },
+              "spatial_block": {
+                "status": "ok",
+                "n_clusters": 11,
+                "std_error": 122.81078051314921,
+                "t_statistic": -2.21284892849959,
+                "df": 10,
+                "p_value": 0.05131247889209674,
+                "ci_low": -545.4011755708273,
+                "ci_high": 1.8777674373862396,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.1010036496350366
+              }
+            },
+            "precip_acumulada_mm": {
+              "status": "ok",
+              "coefficient": 1.0310713890933807,
+              "n": 1098,
+              "municipality": {
+                "status": "ok",
+                "n_clusters": 227,
+                "std_error": 0.44015725423232527,
+                "t_statistic": 2.3425068635791635,
+                "df": 226,
+                "p_value": 0.0200237501949915,
+                "ci_low": 0.16373437029377647,
+                "ci_high": 1.898408407892985,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.0053412247270848
+              },
+              "spatial_block": {
+                "status": "ok",
+                "n_clusters": 11,
+                "std_error": 0.7906849439296076,
+                "t_statistic": 1.3040230461061795,
+                "df": 10,
+                "p_value": 0.22144267415608576,
+                "ci_low": -0.7306844541567681,
+                "ci_high": 2.7928272323435293,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.1010036496350366
+              }
+            },
+            "et0_total_mm": {
+              "status": "ok",
+              "coefficient": 1.3867617173329776,
+              "n": 1098,
+              "municipality": {
+                "status": "ok",
+                "n_clusters": 227,
+                "std_error": 1.0661982357707394,
+                "t_statistic": 1.300660300127497,
+                "df": 226,
+                "p_value": 0.19469942730210688,
+                "ci_low": -0.7141992241733603,
+                "ci_high": 3.4877226588393153,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.0053412247270848
+              },
+              "spatial_block": {
+                "status": "ok",
+                "n_clusters": 11,
+                "std_error": 1.1724848421513077,
+                "t_statistic": 1.182754494965162,
+                "df": 10,
+                "p_value": 0.26426394103091366,
+                "ci_low": -1.225697312829347,
+                "ci_high": 3.9992207474953023,
+                "correction": "CR1",
+                "small_sample_multiplier": 1.1010036496350366
+              }
+            }
+          }
+        },
+        "22": {
+          "status": "insufficient_rows",
+          "n_rows": 14
+        }
+      }
+    }
+  }
+}
