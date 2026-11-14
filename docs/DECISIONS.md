@@ -1555,3 +1555,76 @@ Ressalva registrada: no milho 2ª safra o efeito espacial passa de
 Regra de relato: MAE e RMSE calculados **por repetição** e agregados, com a
 dispersão entre repetições. Repetições de treino não são observações de teste
 independentes e não entram como réplicas no bootstrap.
+
+## D91 - Modelos aninhados M0 → M1 → M2 como referência (2026-11-14)
+
+Decisão: a pergunta "o clima acrescenta valor?" é respondida por modelos
+aninhados com o **mesmo** conjunto de treino e de teste:
+
+* **M0** — média global do treino;
+* **M1** — média por UF do treino (fallback global para UF ausente);
+* **M2** — UF + variáveis agroclimáticas (``climate_plus_state``).
+
+A estatística de interesse é ``M2 − M1``: o valor incremental do clima
+**dentro** da UF. ``M1b`` (média UF×ano) permanece apenas como diagnóstico
+contemporâneo, nunca como referência operacional. ``M0b`` (``climate_only``)
+é mantido para a comparação histórica com a V2.6/V2.7.
+
+Consequência: na soja, ``M2 − M1`` é significativo apenas nos braços com o
+ano compartilhado (B: −13,3 em SS e −19,2 em SE) e **não** no braço mais
+estrito (TE: −6,3 [−26,8;+10,4]); o modelo hídrico **piora** quando o ano é
+retirado (+20,5 [+9,6;+31,7]). No milho 2ª safra, ``M2 − M1`` é significativo
+nos quatro braços para a família meteorológica (TE: −267,2 [−413,8;−35,1]).
+
+O fallback de UF foi instrumentado: 0,0% das linhas de teste em todos os
+braços deste desenho — ele só seria acionado num leave-one-UF-out.
+
+## D92 - A escala do bloco é uma escolha de desenho, não de ganho (2026-11-14)
+
+Decisão: o efeito do bloco é reportado em 150, 250, 400 e 600 km, com o
+número de blocos de cada escala explícito. A escala de 250 km **não** é
+reotimizada em função do resultado; nenhuma escala é escolhida por produzir
+maior ganho.
+
+Consequência: no milho o efeito espacial é −47,1 (150 km, 107 blocos),
+−170,8 (250 km, 49), −152,4 (400 km, 26) e −415,1 (600 km, 15). Há efeito a
+partir de 250 km; a 150 km o bloco é pequeno demais para remover informação
+útil. Em 600 km o poder cai (14–15 blocos) e o valor não deve ser lido como
+estimativa estável. Na soja o efeito é ~0 em 150/250/400 km.
+
+A decomposição por UF mostra que o efeito do bloco no milho está concentrado
+em PR (+421,4), BA (+291,0) e MS (+170,9), é ~0 em GO e MT e negativo em RS:
+é heterogeneidade **dentro** da UF, não um gradiente nacional.
+
+## D94 - Dicionário oficial do ZARC e correção da leitura por classe (2026-11-14)
+
+Decisão: os códigos do ZARC são documentados pela fonte oficial e a
+heterogeneidade por classe é testada por **interação**, não pela comparação
+de dois coeficientes estimados em separado.
+
+Fonte: *Dicionário de Dados — Tábua de Risco (ZARC)*, MAPA/CGRA-DEGER-SPA,
+versão `dicionario-de-dados-tabua-de-risco-2026.pdf`, consultado em
+2026-11-14, licença CC-BY.
+`Cod_Ciclo`: 13 Perene, 19 Semiperene, 20 Grupo I, 21 Grupo II, 22 Grupo III,
+24 Grupo IV, 25 Grupo V, 26 Grupo VI.
+`Cod_Solo`: 1 Arenoso, 2 Textura Média, 3 Argiloso, 11–16 AD1–AD6.
+**Grupo de ciclo não é cultivar**, e o documento **não** rotula os grupos
+como precoce/médio/tardio.
+
+Teste: ``y_w = b1·x_w + b2·(x·I_grupo)_w``, transformação within por
+município e ano, erro agrupado por bloco (CR1), ``b2`` = diferença de
+inclinação entre grupos.
+
+Consequência — **correção da V2.8**: a afirmação de que a temperatura da soja
+"inverte de sinal" entre as classes 21 e 22 **não se sustenta**. Estimadas em
+separado, as inclinações eram +182,7 (t=+4,38) e −65,0 (t=−3,18); no teste
+formal a diferença é −3,98 (t=−0,88; p=0,38). O contraste anterior era
+artefato de estimar cada classe com a sua própria transformação within.
+Resultados do teste formal: soja déficit −1,194 (t=−3,16; p=0,003); soja
+temperatura e precipitação não significativos; milho precipitação −1,017
+(t=−2,05; p=0,046, marginal e não ajustado para 9 testes); demais não
+significativos. Após multiplicidade, nenhuma diferença entre grupos
+sobrevive.
+
+Regra derivada: não declarar dois coeficientes diferentes com base em um ser
+significativo e o outro não; usar interação com erro-padrão próprio.

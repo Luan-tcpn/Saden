@@ -1,0 +1,33 @@
+{
+  "generated_at": "2026-11-14T10:06:52.177683+00:00",
+  "title": "DicionÃ¡rio de Dados - TÃ¡bua de Risco (ZARC)",
+  "institution": "MinistÃ©rio da Agricultura e PecuÃ¡ria (MAPA) â€” CGRA/DEGER/SPA",
+  "dataset": "Zoneamento AgrÃ­cola de Risco ClimÃ¡tico (Zarc) â€” TÃ¡bua de Risco",
+  "source_page": "https://dados.agricultura.gov.br/dataset/6d3d141c-885e-41a4-ab7f-dc8ff323b96f/resource/bebb0ebb-bc75-460c-b900-a7a1ebd87bee/download/dicionario-de-dados-tabua-de-risco-2026.pdf",
+  "document_url": "https://dados.agricultura.gov.br/dataset/6d3d141c-885e-41a4-ab7f-dc8ff323b96f/resource/bebb0ebb-bc75-460c-b900-a7a1ebd87bee/download/dicionario-de-dados-tabua-de-risco-2026.pdf",
+  "document_version": "dicionario-de-dados-tabua-de-risco-2026.pdf",
+  "accessed_at": "2026-11-14",
+  "license": "Creative Commons Attribution (CC-BY)",
+  "cod_ciclo": {
+    "13": "Perene",
+    "19": "Semiperene",
+    "20": "Grupo I",
+    "21": "Grupo II",
+    "22": "Grupo III",
+    "24": "Grupo IV",
+    "25": "Grupo V",
+    "26": "Grupo VI"
+  },
+  "cod_solo": {
+    "1": "Arenoso",
+    "2": "Textura Média",
+    "3": "Argiloso",
+    "11": "AD1",
+    "12": "AD2",
+    "13": "AD3",
+    "14": "AD4",
+    "15": "AD5",
+    "16": "AD6"
+  },
+  "note": "Cod_Ciclo identifica GRUPO de ciclo, nao cultivar: o dicionario lista Grupo I..VI, Perene e Semiperene. Nao ha rotulo 'precoce/medio/tardio' no documento; a traducao para duracao relativa nao e feita aqui."
+}

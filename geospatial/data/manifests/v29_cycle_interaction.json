@@ -1,0 +1,373 @@
+{
+  "generated_at": "2026-11-14T10:06:52.194257+00:00",
+  "method": "Teste formal de interacao: y_w = b1*x_w + b2*(x*I_grupo)_w, com transformacao within por municipio e ano e erro agrupado por bloco (CR1). b2 Ã© a diferenca de inclinacao entre grupos; p-valor com t de G-1 graus de liberdade.",
+  "cod_ciclo": {
+    "13": "Perene",
+    "19": "Semiperene",
+    "20": "Grupo I",
+    "21": "Grupo II",
+    "22": "Grupo III",
+    "24": "Grupo IV",
+    "25": "Grupo V",
+    "26": "Grupo VI"
+  },
+  "crops": {
+    "soja": {
+      "class_counts": {
+        "22": 7893,
+        "21": 784,
+        "20": 207
+      },
+      "class_labels": {
+        "22": "Grupo III",
+        "20": "Grupo I",
+        "21": "Grupo II"
+      },
+      "soil_counts": {
+        "3": 6128,
+        "16": 2309,
+        "2": 349,
+        "1": 59,
+        "15": 22,
+        "14": 15,
+        "13": 2
+      },
+      "tests": {
+        "deficiency_total_mm": {
+          "status": "ok",
+          "n": 8677,
+          "n_clusters": 46,
+          "reference_class": "22",
+          "reference_label": "Grupo III",
+          "contrast_class": "21",
+          "contrast_label": "Grupo II",
+          "slope_reference": {
+            "coefficient": -1.0352766705415837,
+            "std_error": 0.24775904567714108,
+            "t_statistic": -4.178562553436172,
+            "p_value": 0.00013322460505667957,
+            "ci95": [
+              -1.5342890040657982,
+              -0.5362643370173692
+            ],
+            "df": 45
+          },
+          "slope_difference": {
+            "coefficient": -1.1936402011267522,
+            "std_error": 0.3775237550550765,
+            "t_statistic": -3.161761836556784,
+            "p_value": 0.0028060954009664794,
+            "ci95": [
+              -1.9540120755662045,
+              -0.43326832668729975
+            ],
+            "df": 45
+          }
+        },
+        "temp_media_c": {
+          "status": "ok",
+          "n": 8677,
+          "n_clusters": 46,
+          "reference_class": "22",
+          "reference_label": "Grupo III",
+          "contrast_class": "21",
+          "contrast_label": "Grupo II",
+          "slope_reference": {
+            "coefficient": -82.77987469474971,
+            "std_error": 20.78463354247428,
+            "t_statistic": -3.98274400775869,
+            "p_value": 0.0002461260652459528,
+            "ci95": [
+              -124.64227554929369,
+              -40.91747384020574
+            ],
+            "df": 45
+          },
+          "slope_difference": {
+            "coefficient": -3.9807707505155783,
+            "std_error": 4.510304750895087,
+            "t_statistic": -0.8825946294927365,
+            "p_value": 0.3821459385673186,
+            "ci95": [
+              -13.064990834178758,
+              5.103449333147601
+            ],
+            "df": 45
+          }
+        },
+        "precip_acumulada_mm": {
+          "status": "ok",
+          "n": 8677,
+          "n_clusters": 46,
+          "reference_class": "22",
+          "reference_label": "Grupo III",
+          "contrast_class": "21",
+          "contrast_label": "Grupo II",
+          "slope_reference": {
+            "coefficient": 0.5521084595644304,
+            "std_error": 0.19834861747462587,
+            "t_statistic": 2.7835256257082808,
+            "p_value": 0.007834460436059721,
+            "ci95": [
+              0.1526138369289557,
+              0.9516030821999052
+            ],
+            "df": 45
+          },
+          "slope_difference": {
+            "coefficient": -0.075411977845047,
+            "std_error": 0.16506420035177807,
+            "t_statistic": -0.4568645271617472,
+            "p_value": 0.6499662332517634,
+            "ci95": [
+              -0.4078683431564703,
+              0.2570443874663763
+            ],
+            "df": 45
+          }
+        }
+      },
+      "comparison": {
+        "reference": "22",
+        "reference_label": "Grupo III",
+        "contrast": "21",
+        "contrast_label": "Grupo II"
+      }
+    },
+    "milho": {
+      "class_counts": {
+        "22": 6055,
+        "21": 1238,
+        "20": 323
+      },
+      "class_labels": {
+        "22": "Grupo III",
+        "20": "Grupo I",
+        "21": "Grupo II"
+      },
+      "soil_counts": {
+        "3": 7375,
+        "2": 228,
+        "1": 13
+      },
+      "tests": {
+        "deficiency_total_mm": {
+          "status": "ok",
+          "n": 7293,
+          "n_clusters": 49,
+          "reference_class": "22",
+          "reference_label": "Grupo III",
+          "contrast_class": "21",
+          "contrast_label": "Grupo II",
+          "slope_reference": {
+            "coefficient": -2.312248807617915,
+            "std_error": 0.5346705312361915,
+            "t_statistic": -4.324623618720583,
+            "p_value": 7.682986398758233e-05,
+            "ci95": [
+              -3.3872759615988146,
+              -1.2372216536370158
+            ],
+            "df": 48
+          },
+          "slope_difference": {
+            "coefficient": -2.611901684610899,
+            "std_error": 1.8754745680349636,
+            "t_statistic": -1.392661744993711,
+            "p_value": 0.17013981769597997,
+            "ci95": [
+              -6.38279603814229,
+              1.1589926689204915
+            ],
+            "df": 48
+          }
+        },
+        "temp_media_c": {
+          "status": "ok",
+          "n": 7293,
+          "n_clusters": 49,
+          "reference_class": "22",
+          "reference_label": "Grupo III",
+          "contrast_class": "21",
+          "contrast_label": "Grupo II",
+          "slope_reference": {
+            "coefficient": -171.83966805871327,
+            "std_error": 46.2933263112618,
+            "t_statistic": -3.7119749594858935,
+            "p_value": 0.0005347683089312628,
+            "ci95": [
+              -264.91863898617663,
+              -78.76069713124991
+            ],
+            "df": 48
+          },
+          "slope_difference": {
+            "coefficient": -22.915208088769685,
+            "std_error": 14.326636746227074,
+            "t_statistic": -1.5994827323868888,
+            "p_value": 0.11627578801377225,
+            "ci95": [
+              -51.72084189059038,
+              5.890425713051005
+            ],
+            "df": 48
+          }
+        },
+        "precip_acumulada_mm": {
+          "status": "ok",
+          "n": 7293,
+          "n_clusters": 49,
+          "reference_class": "22",
+          "reference_label": "Grupo III",
+          "contrast_class": "21",
+          "contrast_label": "Grupo II",
+          "slope_reference": {
+            "coefficient": 1.478087820354638,
+            "std_error": 0.7237792246940343,
+            "t_statistic": 2.042180501905778,
+            "p_value": 0.04664830859321339,
+            "ci95": [
+              0.022832154338493504,
+              2.9333434863707826
+            ],
+            "df": 48
+          },
+          "slope_difference": {
+            "coefficient": -1.0167984471382938,
+            "std_error": 0.49550846982536734,
+            "t_statistic": -2.0520304072635636,
+            "p_value": 0.0456425208328847,
+            "ci95": [
+              -2.0130849992663755,
+              -0.02051189501021211
+            ],
+            "df": 48
+          }
+        }
+      },
+      "comparison": {
+        "reference": "22",
+        "reference_label": "Grupo III",
+        "contrast": "21",
+        "contrast_label": "Grupo II"
+      }
+    },
+    "milho_2": {
+      "class_counts": {
+        "21": 1790,
+        "20": 1098,
+        "22": 14
+      },
+      "class_labels": {
+        "20": "Grupo I",
+        "21": "Grupo II",
+        "22": "Grupo III"
+      },
+      "soil_counts": {
+        "3": 2747,
+        "2": 155
+      },
+      "tests": {
+        "deficiency_total_mm": {
+          "status": "ok",
+          "n": 2888,
+          "n_clusters": 30,
+          "reference_class": "21",
+          "reference_label": "Grupo II",
+          "contrast_class": "20",
+          "contrast_label": "Grupo I",
+          "slope_reference": {
+            "coefficient": -0.06217147812002207,
+            "std_error": 0.7013568811160066,
+            "t_statistic": -0.08864456854133113,
+            "p_value": 0.9299737293705582,
+            "ci95": [
+              -1.49660736109222,
+              1.372264404852176
+            ],
+            "df": 29
+          },
+          "slope_difference": {
+            "coefficient": -0.7271459546884269,
+            "std_error": 0.5723772621804654,
+            "t_statistic": -1.2703962975719403,
+            "p_value": 0.21404148966170844,
+            "ci95": [
+              -1.8977888977826756,
+              0.44349698840582175
+            ],
+            "df": 29
+          }
+        },
+        "temp_media_c": {
+          "status": "ok",
+          "n": 2888,
+          "n_clusters": 30,
+          "reference_class": "21",
+          "reference_label": "Grupo II",
+          "contrast_class": "20",
+          "contrast_label": "Grupo I",
+          "slope_reference": {
+            "coefficient": -80.32973893043143,
+            "std_error": 86.95423670728061,
+            "t_statistic": -0.9238162736204605,
+            "p_value": 0.3632053296144956,
+            "ci95": [
+              -258.1711213531852,
+              97.51164349232232
+            ],
+            "df": 29
+          },
+          "slope_difference": {
+            "coefficient": 0.4958092871620808,
+            "std_error": 4.383948964596349,
+            "t_statistic": 0.11309650070429876,
+            "p_value": 0.9107333436943028,
+            "ci95": [
+              -8.470373084827338,
+              9.461991659151499
+            ],
+            "df": 29
+          }
+        },
+        "precip_acumulada_mm": {
+          "status": "ok",
+          "n": 2888,
+          "n_clusters": 30,
+          "reference_class": "21",
+          "reference_label": "Grupo II",
+          "contrast_class": "20",
+          "contrast_label": "Grupo I",
+          "slope_reference": {
+            "coefficient": 0.07549370016092095,
+            "std_error": 0.5413355926395896,
+            "t_statistic": 0.13945822367379995,
+            "p_value": 0.8900520899579704,
+            "ci95": [
+              -1.0316619002470409,
+              1.182649300568883
+            ],
+            "df": 29
+          },
+          "slope_difference": {
+            "coefficient": 0.1612622874051968,
+            "std_error": 0.36693227830324954,
+            "t_statistic": 0.43948787539460427,
+            "p_value": 0.6635657479617312,
+            "ci95": [
+              -0.5891984848358952,
+              0.9117230596462887
+            ],
+            "df": 29
+          }
+        }
+      },
+      "comparison": {
+        "reference": "21",
+        "reference_label": "Grupo II",
+        "contrast": "20",
+        "contrast_label": "Grupo I"
+      }
+    }
+  }
+}

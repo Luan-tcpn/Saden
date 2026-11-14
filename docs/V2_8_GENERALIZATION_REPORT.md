@@ -37,9 +37,11 @@ comparação publicada era **injusta nos dois lados**.
    35/50/70 mm movem o déficit anual em ±3%; a CAD oficial (0–100 cm) o reduz
    em **18,6%** e a de 0–200 cm em **42,3%** — a faixa real é uma ordem de
    grandeza maior.
-6. **A associação agroclimática não é estável por classe de ciclo na soja.**
-   A temperatura inverte de sinal na classe minoritária (+182,7, t=+4,38 na
-   classe 21 contra −65,0, t=−3,18 na classe 22, que concentra 89% das linhas).
+6. **A associação agroclimática não é estável por classe de ciclo na soja**
+   — *leitura corrigida na V2.9 (D94)*. As inclinações estimadas em separado
+   diferiam muito (+182,7 na classe 21 contra −65,0 na classe 22), mas o
+   **teste formal de interação** não confirma diferença para a temperatura
+   (p=0,38); para o déficit hídrico a diferença é real (p=0,003). Ver §13.
 
 **Conclusão defensável:** o ganho territorial da soja **não é sustentável** em
 nenhuma das formulações testadas (nem contra a média nacional, nem contra a
@@ -262,6 +264,31 @@ mostra que colapsar todas as classes numa janela modal mistura calendários.
 A janela fenológica da V2.7 (R5 = 554 °C·dia; 46 dias na soja) permanece um
 **cenário térmico**; ela não é comparável ao calendário ZARC por classe, e os
 coeficientes de janelas distintas seguem mantidos separados.
+
+> **Correção da V2.9 (D94) — a inversão de sinal não se sustenta.**
+> As tabelas acima vêm de regressões estimadas **separadamente** por classe.
+> No teste formal de interação — `y_w = b1·x_w + b2·(x·I_grupo)_w`, efeitos
+> fixos de município e ano, erro agrupado por bloco — a diferença de
+> inclinação entre as classes 22 e 21 é:
+>
+> | Cultura | déficit hídrico | temperatura | precipitação |
+> |---|---|---|---|
+> | soja | −1,194 (t=−3,16; **p=0,003**) | −3,98 (t=−0,88; p=0,38) | −0,075 (p=0,65) |
+> | milho | −2,612 (t=−1,39; p=0,17) | −22,9 (t=−1,60; p=0,12) | −1,017 (p=0,046) |
+> | milho 2ª | −0,727 (p=0,21) | +0,50 (p=0,91) | +0,161 (p=0,66) |
+>
+> Portanto: (i) a **temperatura da soja não difere** entre as classes — o
+> +182,7 vs −65,0 era artefato de estimar cada classe com a sua própria
+> transformação *within*; (ii) o **déficit hídrico da soja difere** (a
+> inclinação é mais negativa no Grupo II); (iii) no milho, só a precipitação
+> é marginal (p=0,046, sem ajuste para 9 testes). Após multiplicidade,
+> nenhuma diferença entre grupos sobrevive. A leitura de "inversão de sinal"
+> fica **retirada**.
+>
+> O dicionário oficial do ZARC (MAPA, `dicionario-de-dados-tabua-de-risco-2026.pdf`,
+> consultado em 2026-11-14) define `Cod_Ciclo` como **grupo de ciclo**
+> (20 = Grupo I, 21 = Grupo II, 22 = Grupo III) — não cultivar, e sem rótulo
+> "precoce/médio/tardio".
 
 ## 14. Diagnóstico territorial (cobertura)
 

@@ -1,0 +1,158 @@
+{
+  "generated_at": "2026-11-14T10:08:19.699249+00:00",
+  "note": "Coberturas medidas na MESMA população (linhas paired_usable de NASA POWER). A CAD foi coletada para todos os municípios do painel; 'rows_with_cad' é a interseção efetiva.",
+  "panel": {
+    "rows": 19402,
+    "municipalities": 1296,
+    "crops": [
+      "milho",
+      "milho_2",
+      "soja"
+    ]
+  },
+  "cad": {
+    "municipalities_collected": 193,
+    "coverage_of_panel_municipalities": 0.14891975308641975,
+    "cad_0_100_mm_range": [
+      112.10000097751617,
+      202.90000081062317
+    ]
+  },
+  "per_crop": {
+    "milho": {
+      "rows": 7616,
+      "municipalities": 1063,
+      "blocks": 49,
+      "states": {
+        "PR": 2966,
+        "GO": 1567,
+        "RS": 1428,
+        "MT": 997,
+        "MS": 552,
+        "BA": 106
+      },
+      "years": {
+        "2018": 908,
+        "2019": 907,
+        "2020": 911,
+        "2021": 980,
+        "2022": 978,
+        "2023": 982,
+        "2024": 975,
+        "2025": 975
+      },
+      "cycles": {
+        "Grupo III (22)": 6055,
+        "Grupo II (21)": 1238,
+        "Grupo I (20)": 323
+      },
+      "rows_with_cad": 1328,
+      "municipalities_with_cad": 191,
+      "state_share": {
+        "PR": 0.3894432773109244,
+        "GO": 0.20575105042016806,
+        "RS": 0.1875,
+        "MT": 0.13090861344537816,
+        "MS": 0.07247899159663866,
+        "BA": 0.013918067226890757
+      }
+    },
+    "milho_2": {
+      "rows": 2902,
+      "municipalities": 505,
+      "blocks": 30,
+      "states": {
+        "PR": 1836,
+        "MS": 428,
+        "MT": 353,
+        "GO": 285
+      },
+      "years": {
+        "2017": 223,
+        "2018": 221,
+        "2019": 220,
+        "2020": 222,
+        "2021": 405,
+        "2022": 405,
+        "2023": 406,
+        "2024": 399,
+        "2025": 401
+      },
+      "cycles": {
+        "Grupo II (21)": 1790,
+        "Grupo I (20)": 1098,
+        "Grupo III (22)": 14
+      },
+      "rows_with_cad": 740,
+      "municipalities_with_cad": 121,
+      "state_share": {
+        "PR": 0.6326671261199173,
+        "MS": 0.1474844934527912,
+        "MT": 0.12164024810475534,
+        "GO": 0.09820813232253618
+      }
+    },
+    "soja": {
+      "rows": 8884,
+      "municipalities": 1225,
+      "blocks": 46,
+      "states": {
+        "RS": 2966,
+        "PR": 2863,
+        "GO": 1558,
+        "MT": 911,
+        "MS": 586
+      },
+      "years": {
+        "2018": 1017,
+        "2019": 1089,
+        "2020": 1092,
+        "2021": 1105,
+        "2022": 1114,
+        "2023": 1119,
+        "2024": 1144,
+        "2025": 1204
+      },
+      "cycles": {
+        "Grupo III (22)": 7893,
+        "Grupo II (21)": 784,
+        "Grupo I (20)": 207
+      },
+      "rows_with_cad": 1169,
+      "municipalities_with_cad": 158,
+      "state_share": {
+        "RS": 0.3338586222422332,
+        "PR": 0.32226474561008556,
+        "GO": 0.17537145429986492,
+        "MT": 0.1025438991445295,
+        "MS": 0.0659612787032868
+      }
+    }
+  },
+  "gaps": {
+    "states_not_in_panel": [
+      "AC",
+      "AL",
+      "AM",
+      "AP",
+      "CE",
+      "DF",
+      "ES",
+      "MA",
+      "MG",
+      "PA",
+      "PB",
+      "PE",
+      "PI",
+      "RJ",
+      "RN",
+      "RO",
+      "RR",
+      "SC",
+      "SE",
+      "SP",
+      "TO"
+    ],
+    "note": "O painel cobre 5-6 UFs; a expansão nacional exigiria diagnóstico de representatividade por bioma e sistema produtivo, não apenas mais linhas."
+  }
+}
