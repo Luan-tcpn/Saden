@@ -151,3 +151,46 @@ versionados porque são pequenos e verificáveis. Os scripts de
 experimento ficam em `tools/` e são versionados; os scripts de sondagem
 temporários da sessão anterior (`tmp/v27_*.py`) permanecem fora do Git e
 têm seus resultados consolidados nos manifests.
+
+## D85 — Réplica com erro-padrão nulo é descartada, não contada (2026-11-14)
+
+**Decisão.** Uma réplica do bootstrap cuja variância agrupada se anula por
+arredondamento (`se` positivo da ordem de 1e-19) é **descartada**, e não
+contada como excedência. O critério é relativo à magnitude do coeficiente:
+`se <= sqrt(eps) · max(|β̂|, 1)`, a mesma tolerância de posto do
+`numpy.linalg.lstsq`. A regra vale para o bootstrap OLS
+(`robust.py`) e para o bootstrap *within* (`spatial_inference.py`), e
+também para decidir se um coeficiente observado tem `t` definido.
+
+**Evidência.** A grade de calibração da sessão anterior registrou
+`mean_t_boot_sd_cluster ≈ 8,5e14` em 9 casos (G = 5 e G = 10, DGP
+`agrupado`). O valor não era ruído de diagnóstico: vinha de `|t| ≈ 1e18`
+produzido por `se > 0` aceitar um erro-padrão numericamente nulo. Cada
+réplica assim entrava na cauda como excedência espúria e inflava
+`t_boot_sd` e os quantis.
+
+**Alcance verificado.** Nos resultados publicados da V2.7 **não havia**
+réplica degenerada: os 105 bootstraps de `v27_robust_inference.json`
+usaram `n_bootstrap_used = 999` de 999. A correção não altera nenhum
+p-valor já reportado; ela elimina um modo de falha latente e restaura a
+utilidade dos diagnósticos de dispersão.
+
+## D86 — Holdout espacial **e** temporal simultâneos (P5) (2026-11-14)
+
+**Decisão.** Os protocolos territoriais da V2.6/V2.7 (P1–P4) separam
+apenas o **espaço**. Como as variáveis climáticas têm componente regional
+comum dentro do ano, o treino contém o **mesmo ano** da observação de
+teste em outros municípios, e o coeficiente ajustado pode absorver o
+choque daquele ano. Acrescenta-se o protocolo **P5**, que remove do
+treino, ao mesmo tempo, os blocos espaciais e os anos da dobra: nenhuma
+observação de treino compartilha bloco **nem** ano com a de teste.
+
+**Consequência metodológica.** O ganho que sobrevive a P5 não pode ser
+atribuído a vizinhança geográfica nem a informação do próprio ano. Se o
+ganho desaparecer em P5 e existir em P1–P3, a conclusão correta é que o
+ganho territorial aparente era, em parte, **efeito do ano compartilhado** —
+e isso deve ser reportado como limitação, não corrigido.
+
+**Evidência.** `v27_spatial_validation.json`, chave `P5_bloco_x_ano`;
+implementação em `analysis.two_way_blocked_holdout`; teste de ausência de
+vazamento em `TwoWayHoldoutTest`.

@@ -286,7 +286,8 @@ def conley_within_inference(
             design, residuals, municipalities, group_coords, cutoff, kernel=kernel
         )
         se = float(math.sqrt(max(vcv[0, 0], 0.0)))
-        t_stat = coefficient / se if se > 0 else None
+        degenerate = robust.degenerate_std_error(coefficient, se)
+        t_stat = None if degenerate else coefficient / se
         p_value = robust.normal_sf(abs(t_stat)) if t_stat is not None else None
         critical = robust._normal_ppf(1.0 - alpha / 2.0)
         out["cutoffs"][f"{int(cutoff)}km"] = {
@@ -295,8 +296,8 @@ def conley_within_inference(
             "std_error": se,
             "t_statistic": t_stat,
             "p_value": p_value,
-            "ci_low": coefficient - critical * se if se > 0 else None,
-            "ci_high": coefficient + critical * se if se > 0 else None,
+            "ci_low": coefficient - critical * se if not degenerate else None,
+            "ci_high": coefficient + critical * se if not degenerate else None,
             "n_groups": info["n_groups"],
             "mean_weight": info["mean_weight"],
         }
@@ -371,8 +372,6 @@ def wild_cluster_bootstrap_within(
             resid_star = y_star - beta_star * x
             meat = 0.0
             for indices in index.values():
-                if len(indices) < 2:
-                    continue
                 score = float(np.dot(x[indices], resid_star[indices]))
                 meat += score * score
             n = len(x)
@@ -381,7 +380,7 @@ def wild_cluster_bootstrap_within(
             multiplier = (g / (g - 1.0)) * ((n - 1.0) / (n - k)) if g > 1 else 1.0
             variance = multiplier * meat / (denominator * denominator)
             se_star = math.sqrt(max(variance, 0.0))
-            if se_star <= 0:
+            if robust.degenerate_std_error(beta_star, se_star):
                 continue
             t_star = beta_star / se_star
             t_stats.append(float(t_star))
@@ -481,8 +480,12 @@ def _within_wild_t_stats(
     meat = np.sum(scores**2, axis=0)
     variance = multiplier * meat / (denominator * denominator)
     se = np.sqrt(np.maximum(variance, 0.0))
+    usable = np.isfinite(se) & (
+        se > robust._SE_RELATIVE_FLOOR * np.maximum(np.abs(beta_star), 1.0)
+    )
+    safe_se = np.where(usable, se, 1.0)
     with np.errstate(divide="ignore", invalid="ignore"):
-        t_stats = np.where(se > 0, beta_star / se, np.nan)
+        t_stats = np.where(usable, beta_star / safe_se, np.nan)
     return t_stats
 
 
@@ -525,9 +528,7 @@ def wild_cluster_bootstrap_within_fast(
         count=len(groups_list),
     )
     group_index = [
-        np.asarray(index[name], dtype=int)
-        for name in group_names
-        if len(index[name]) >= 2
+        np.asarray(index[name], dtype=int) for name in group_names
     ]
     rng_boot = np.random.default_rng(seed)
     if weight_scheme == robust.WEIGHT_OBSERVATION:

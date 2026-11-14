@@ -552,7 +552,6 @@ def cmd_spatial(args: argparse.Namespace) -> dict[str, Any]:
         "generated_at": _now(),
         "seed": SEED,
         "block_km": args.block_km,
-        "protocols": {},
         "crops": {},
     }
     csv_rows: list[dict[str, Any]] = []
@@ -644,6 +643,56 @@ def cmd_spatial(args: argparse.Namespace) -> dict[str, Any]:
                         }
                     )
             crop_out[protocol_name] = entry
+        p5_entry: dict[str, Any] = {
+            "description": (
+                "Holdout espacial E temporal simultaneos: cada dobra remove do "
+                f"treino os blocos de {int(args.block_km)} km e os anos da dobra. "
+                "Nenhuma observacao de treino compartilha bloco nem ano com a "
+                "de teste, o que elimina o ganho atribuivel ao choque do ano."
+            ),
+            "group_key": "spatial_block_id",
+            "time_key": "year",
+            "models": {},
+        }
+        for model_name, variables in MODELS.items():
+            result = analysis.two_way_blocked_holdout(
+                subset,
+                variables,
+                n_space_folds=5,
+                n_time_folds=5,
+                crop_filter=crop,
+                seed=SEED,
+            )
+            result.pop("predictions", None)
+            p5_entry["n_groups"] = result.get("n_groups")
+            p5_entry["n_times"] = result.get("n_times")
+            p5_entry["n_folds"] = result.get("n_folds")
+            p5_entry["models"][model_name] = result
+            models = result.get("models", {})
+            baseline = models.get("media_historica", {})
+            model = models.get("modelo", {})
+            if baseline.get("mae_kg_ha") and model.get("mae_kg_ha"):
+                gain = (baseline["mae_kg_ha"] - model["mae_kg_ha"]) / baseline["mae_kg_ha"]
+                p5_entry.setdefault("gains_vs_media_historica", {})[model_name] = {
+                    "gain_percent": 100.0 * gain,
+                    "mae_modelo": model["mae_kg_ha"],
+                    "mae_media_historica": baseline["mae_kg_ha"],
+                    "n_predictions": model.get("n_predictions"),
+                }
+                csv_rows.append(
+                    {
+                        "crop": crop,
+                        "protocol": "P5_bloco_x_ano",
+                        "model": model_name,
+                        "n_predictions": model.get("n_predictions"),
+                        "mae_modelo": model.get("mae_kg_ha"),
+                        "mae_media_historica": baseline.get("mae_kg_ha"),
+                        "gain_percent": 100.0 * gain,
+                        "mae_ultimo_valor": models.get("ultimo_valor", {}).get("mae_kg_ha"),
+                        "mae_tendencia": models.get("tendencia", {}).get("mae_kg_ha"),
+                    }
+                )
+        crop_out["P5_bloco_x_ano"] = p5_entry
         out["crops"][crop] = crop_out
         _write_json(out, os.path.join(MANIFESTS, "v27_spatial_validation.json"))
     _write_csv(csv_rows, os.path.join(MANIFESTS, "v27_spatial_validation.csv"))

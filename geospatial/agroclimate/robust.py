@@ -66,6 +66,21 @@ NULL_POLICY_IMPOSED = "imposed"
 NULL_POLICY_UNRESTRICTED = "unrestricted"
 NULL_POLICY_AUTO = "auto"
 
+# Piso relativo para considerar um erro-padrão nulo. Uma réplica do bootstrap
+# pode produzir variância agrupada que se cancela por arredondamento (~1e-19);
+# `se > 0` aceitaria esse valor e geraria |t| ~ 1e18, que entraria na cauda
+# como excedência espúria e destruiria os diagnósticos de dispersão. O piso é
+# a mesma tolerância de posto usada em `numpy.linalg.lstsq`, relativa à
+# magnitude do coeficiente.
+_SE_RELATIVE_FLOOR = math.sqrt(np.finfo("float64").eps)
+
+
+def degenerate_std_error(coefficient: float, std_error: float) -> bool:
+    """Indica se um erro-padrão é numericamente indistinguível de zero."""
+    if not math.isfinite(std_error) or std_error < 0.0:
+        return True
+    return std_error <= _SE_RELATIVE_FLOOR * max(abs(coefficient), 1.0)
+
 
 def select_null_policy(
     policy: str,
@@ -301,7 +316,8 @@ def cluster_robust_fit(
     se = float(math.sqrt(max(vcv[coef_index, coef_index], 0.0)))
     coefficient = float(beta[coef_index])
     df = max(info["n_clusters"] - 1, 1)
-    t_stat = coefficient / se if se > 0 else None
+    degenerate = degenerate_std_error(coefficient, se)
+    t_stat = None if degenerate else coefficient / se
     p_value = t_sf(t_stat, df) if t_stat is not None else None
     critical = t_critical(alpha, df)
     return {
@@ -311,8 +327,8 @@ def cluster_robust_fit(
         "t_statistic": t_stat,
         "df_cluster": df,
         "p_value": p_value,
-        "ci_low": coefficient - critical * se if se > 0 else None,
-        "ci_high": coefficient + critical * se if se > 0 else None,
+        "ci_low": coefficient - critical * se if not degenerate else None,
+        "ci_high": coefficient + critical * se if not degenerate else None,
         "confidence_level": 1.0 - alpha,
         "n": info["n_observations"],
         "n_clusters": info["n_clusters"],
@@ -516,8 +532,13 @@ def _wild_t_stats_vectorized(
     multiplier = (g / (g - 1.0)) * ((n - 1.0) / (n - k)) if g > 1 else 1.0
     vcv = multiplier * (bread @ meat @ bread)
     se = np.sqrt(np.maximum(vcv[:, coef_index, coef_index], 0.0))
+    coefficient = betas[coef_index]
+    # Variancia que se cancela por arredondamento produz |t| astronomico e
+    # entra na cauda como excedencia espuria: a replica e descartada.
+    usable = np.isfinite(se) & (se > _SE_RELATIVE_FLOOR * np.maximum(np.abs(coefficient), 1.0))
+    safe_se = np.where(usable, se, 1.0)
     with np.errstate(divide="ignore", invalid="ignore"):
-        t_stats = np.where(se > 0, betas[coef_index] / se, np.nan)
+        t_stats = np.where(usable, coefficient / safe_se, np.nan)
     return t_stats
 
 

@@ -318,6 +318,130 @@ def territorial_holdout(
     }
 
 
+def _blocked_folds(values: Sequence[str], n_folds: int, rng: np.random.Generator) -> list[list[str]]:
+    """Reparte ``values`` em ``n_folds`` dobras disjuntas (ordem sorteada)."""
+    shuffled = list(values)
+    rng.shuffle(shuffled)
+    return [shuffled[i::n_folds] for i in range(n_folds)]
+
+
+def _summarize_predictions(predictions: Sequence[dict[str, Any]]) -> dict[str, Any]:
+    """MAE, RMSE e MAPE por modelo, sobre as mesmas predições."""
+    models: dict[str, Any] = {}
+    for name in ("media_historica", "ultimo_valor", "tendencia", "modelo"):
+        usable = [p for p in predictions if name in p]
+        if not usable:
+            continue
+        errors = [p[name] - p["observed"] for p in usable]
+        observed = [p["observed"] for p in usable]
+        models[name] = {
+            "n_predictions": len(usable),
+            "mae_kg_ha": float(np.mean(np.abs(errors))),
+            "rmse_kg_ha": float(np.sqrt(np.mean(np.square(errors)))),
+            "mape_percent": float(
+                np.mean([abs(e / o) for e, o in zip(errors, observed)]) * 100.0
+            ),
+        }
+    best = min(models, key=lambda k: models[k]["mae_kg_ha"]) if models else None
+    return {"models": models, "best_by_mae": best}
+
+
+def two_way_blocked_holdout(
+    rows: Sequence[dict[str, Any]],
+    variables: Sequence[str],
+    n_space_folds: int = 5,
+    n_time_folds: int = 5,
+    crop_filter: str | None = None,
+    seed: int = SEED,
+    group_key: str = "spatial_block_id",
+    time_key: str = "year",
+) -> dict[str, Any]:
+    """Holdout **espacial e temporal simultâneos** (V2.7, protocolo P5).
+
+    O holdout territorial de :func:`territorial_holdout` separa apenas o
+    espaço: uma observação de teste do ano Y é prevista por um treino que
+    contém o **mesmo ano** em outros municípios. Como as variáveis
+    climáticas têm componente regional comum dentro do ano, o coeficiente
+    ajustado pode absorver o choque daquele ano e o modelo parece
+    generalizar territorialmente sem que a transferência seja genuína.
+
+    Aqui cada dobra remove do treino, **ao mesmo tempo**, um conjunto de
+    grupos espaciais e um conjunto de anos: nenhuma observação de treino
+    compartilha grupo espacial nem ano com a observação de teste. O ganho
+    que sobrevive a essa partição não pode ser atribuído a informação do
+    próprio ano nem a vizinhança geográfica.
+    """
+    data = [r for r in rows if crop_filter is None or r["crop"] == crop_filter]
+    groups = sorted({str(r.get(group_key)) for r in data if r.get(group_key)})
+    times = sorted({str(r.get(time_key)) for r in data if r.get(time_key) is not None})
+    if len(groups) < n_space_folds or len(times) < 2:
+        return {
+            "status": "insufficient_groups",
+            "n_groups": len(groups),
+            "n_times": len(times),
+            "group_key": group_key,
+            "time_key": time_key,
+        }
+    rng = np.random.default_rng(seed)
+    space_folds = _blocked_folds(groups, n_space_folds, rng)
+    time_folds = _blocked_folds(times, n_time_folds, rng)
+    predictions: list[dict[str, Any]] = []
+    n_folds_used = 0
+    for space_fold in space_folds:
+        space_set = set(space_fold)
+        for time_fold in time_folds:
+            time_set = set(time_fold)
+            test = [
+                r
+                for r in data
+                if str(r.get(group_key)) in space_set
+                and str(r.get(time_key)) in time_set
+            ]
+            if not test:
+                continue
+            train = [
+                r
+                for r in data
+                if str(r.get(group_key)) not in space_set
+                and str(r.get(time_key)) not in time_set
+            ]
+            if not train:
+                continue
+            n_folds_used += 1
+            for row in test:
+                entry: dict[str, Any] = {
+                    "ibge_code": row["ibge_code"],
+                    "year": row["year"],
+                    "observed": float(row["yield_kg_ha"]),
+                }
+                for name, value in baseline_predictions(train, row).items():
+                    entry[name] = value
+                if variables:
+                    prediction = fit_predict(train, row, variables)
+                    if prediction is not None:
+                        entry["modelo"] = prediction
+                predictions.append(entry)
+    if not predictions:
+        return {"status": "insufficient_pairs", "n_predictions": 0, "models": {}}
+    summary = _summarize_predictions(predictions)
+    return {
+        "status": "ok",
+        "n_folds": n_folds_used,
+        "n_space_folds": n_space_folds,
+        "n_time_folds": n_time_folds,
+        "group_key": group_key,
+        "time_key": time_key,
+        "n_groups": len(groups),
+        "n_times": len(times),
+        "space_folds": space_folds,
+        "time_folds": time_folds,
+        "n_predictions": len(predictions),
+        "models": summary["models"],
+        "best_by_mae": summary["best_by_mae"],
+        "predictions": predictions,
+    }
+
+
 def _build_fixed_effects_design(
     data: Sequence[dict[str, Any]], variable: str
 ) -> tuple[np.ndarray, np.ndarray, list[str], list[int], int, int, int]:

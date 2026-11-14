@@ -157,8 +157,6 @@ def simulate_agrupado(
     design = np.ones((n, n_covariates))
     design[:, 1] = rng.normal(size=n)
     design[:, 2] = np.arange(n) / max(1, n - 1)
-    for g in range(n_clusters):
-        design[groups == g, 0] = 0.0
     beta = np.zeros(n_covariates)
     beta[1] = effect
     shock = rng.normal(size=n_clusters) * cluster_effect_sd

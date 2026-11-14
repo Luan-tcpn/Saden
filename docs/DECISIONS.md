@@ -1442,3 +1442,31 @@ resposta bruta do WCS (2,5 MB) ficam fora do Git e são regeneráveis por
 comando; os manifests `v27_*` são versionados. Os scripts de sondagem da
 sessão anterior (`tmp/v27_*.py`) permanecem fora do Git até a consolidação
 final.
+
+## D85 - Réplica com erro-padrão nulo é descartada, não contada (2026-11-14)
+
+Decisão: uma réplica do bootstrap cuja variância agrupada se anula por
+arredondamento (`se` positivo da ordem de 1e-19) é descartada em vez de
+contada como excedência. O critério é relativo à magnitude do coeficiente
+(`se <= sqrt(eps) * max(|β̂|, 1)`, a tolerância de posto do `lstsq`) e vale
+para o bootstrap OLS e para o bootstrap *within*.
+
+Evidência: a calibração da sessão anterior registrou
+`mean_t_boot_sd_cluster ≈ 8,5e14` em 9 casos (G = 5 e G = 10, DGP
+`agrupado`). A causa era `se > 0` aceitando erro-padrão numericamente nulo,
+o que produzia `|t| ≈ 1e18` e o contava como excedência.
+
+Alcance: nos resultados publicados não havia réplica degenerada (os 105
+bootstraps de `v27_robust_inference.json` usaram 999/999 réplicas), de modo
+que nenhum p-valor já reportado muda.
+
+## D86 - Holdout espacial e temporal simultâneos (P5) (2026-11-14)
+
+Decisão: os protocolos territoriais P1–P4 separam apenas o espaço; o treino
+contém o mesmo ano da observação de teste em outros municípios, e o
+coeficiente ajustado pode absorver o choque do ano. O protocolo P5 remove do
+treino, ao mesmo tempo, os blocos espaciais e os anos da dobra.
+
+Consequência: o ganho que sobrevive a P5 não é atribuível a vizinhança
+geográfica nem a informação do próprio ano. Se o ganho existir em P1–P3 e
+desaparecer em P5, isso deve ser reportado como limitação, não corrigido.

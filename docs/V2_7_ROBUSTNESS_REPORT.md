@@ -165,20 +165,39 @@ mais permissivo; 250–600 km convergem.
 
 ## 8. Dependência espacial empírica
 
-* NASA POWER **interpola**: 0% de dias com séries diárias idênticas entre
-  municípios da mesma célula nominal; diferenças médias de temperatura de
-  0,32 a 1,90 °C. Portanto a célula nominal **não** representa observações
-  iguais — a simplificação da V2.6 estava errada.
-* Correlograma das **anomalias anuais** (1.296 municípios, 3.653 dias):
+* NASA POWER **interpola**: a taxa de pares de municípios da mesma célula
+  nominal com séries diárias idênticas é 0,0% (soja e milho) e 0,17%
+  (milho 2ª safra); a diferença média de temperatura é de 0,32 a 1,90 °C.
+  Portanto a célula nominal **não** representa observações iguais — a
+  simplificação da V2.6 estava errada.
+* Correlograma reproduzível por `run_robustness.py dependence`
+  (**1.296 municípios**, 3.653 dias, 2016-01-01 a 2025-12-31), manifesto
+  versionado `v27_spatial_dependence.json` / `.csv`:
 
 | Banda (km) | 0–25 | 50–75 | 100–125 | 200–225 | 300–325 | 400–425 |
 |---|---|---|---|---|---|---|
-| Temperatura | 0,9965 | 0,9876 | 0,9737 | 0,9417 | 0,9032 | 0,8568 |
-| Precipitação | 0,9773 | 0,9195 | 0,8307 | 0,6479 | 0,4911 | 0,3591 |
+| Temperatura (anomalia anual) | 0,9939 | 0,9801 | 0,9618 | 0,9238 | 0,8810 | 0,8339 |
+| Precipitação (anomalia anual) | 0,9816 | 0,9371 | 0,8713 | 0,7492 | 0,6791 | 0,6295 |
+| Temperatura (anomalia diária) | 0,9940 | 0,9789 | 0,9552 | 0,8999 | 0,8350 | 0,7534 |
+| Precipitação (anomalia diária) | 0,9760 | 0,9128 | 0,8138 | 0,6094 | 0,4480 | 0,3152 |
 
+* A correlação **não** cai abaixo de 0,10 em nenhum campo até 600 km
+  (`distance_below_0.10_km` nulo nos quatro campos): não há distância de
+  corte em que a dependência possa ser ignorada dentro da área do painel.
+  É essa constatação que justifica o bloco de 250 km como unidade de
+  agrupamento, e não um valor arbitrário.
 * As correlações **diárias brutas** não foram usadas como prova: o ciclo
-  climático compartilhado as infla; a análise usa **anomalias** (controle
-  de tendência e sazonalidade).
+  climático compartilhado as infla. A dependência relevante é a das
+  **anomalias** (retirado o climatolo diário de cada município), e a
+  divergência entre a linha diária e a anual é justamente o que mostra
+  quanto do sinal diário é ciclo sazonal comum.
+* **Correção de rastreabilidade:** a versão anterior desta seção trazia
+  uma tabela (0,9965 / 0,8568 / 0,3591 etc.) produzida por um script de
+  sondagem em `tmp/`, sem manifesto. Aqueles números **não eram
+  reproduzíveis pelo comando versionado** e foram substituídos pelos do
+  manifesto acima, que é agora a fonte da verdade. Os valores anuais aqui
+  coincidem com os já citados em `MASTER_STATUS.md` (0,834 e 0,630 na
+  banda 400–425 km).
 
 ---
 

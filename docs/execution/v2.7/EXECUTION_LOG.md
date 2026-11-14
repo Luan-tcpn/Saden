@@ -280,3 +280,64 @@ dois** p-valores (imposta e irrestrita) e a declarar a política usada.
 within↔LSDV, agrupado, Conley, bootstrap wild, Holm, divisões espaciais,
 vazamento, fenologia, CAD, unidades, ausentes, deduplicação, persistência,
 compatibilidade com a V2.6). Total: **309/309** offline, 10/10 externos.
+
+---
+
+## Sessão de continuidade — 2026-11-14 (auditoria e correções)
+
+### 06:20 — Auditoria do estado real
+
+Branch `v2/agroclimatic-robustness`, HEAD `aafb687`, sem commits após a
+V2.6 que não estivessem publicados (`d87addb`). Nenhuma alteração em
+arquivos rastreados (`git diff` vazio); 6 artefatos não rastreados:
+`v27_spatial_validation.{json,csv}`, `v27_wild_bootstrap_calibration.json`,
+`tools/{calibrate_wild_bootstrap,validate_v27_stats}.py` e
+`tools/__pycache__/`.
+
+Confronto entre documentação e realidade: a calibração **terminou** (84
+casos, `updated_at` 05:29Z, `elapsed_s_total` 4.127 s), ao contrário do que
+`MASTER_STATUS.md` e `NEXT_ACTIONS.md` registravam ("em curso"). A
+validação P1–P4 também terminou (02:58Z), mas o relatório a citava só como
+ponteiro, sem números.
+
+### 06:22 — Checkpoint de recuperação (`ac41210`)
+
+Commit dos artefatos não rastreados, preservando o estado numérico anterior
+a qualquer correção; `.gitignore` da raiz passa a cobrir `__pycache__/`.
+
+### 06:24 — Manifesto de dependência espacial gerado
+
+`run_robustness.py dependence` nunca havia sido executado até o fim:
+`v27_spatial_dependence.json` **não existia**, e os números do relatório
+vinham de um script de sondagem em `tmp/`. Executado: 1.296 municípios,
+3.653 dias (2016-01-01 a 2025-12-31). Reconciliação: os valores de
+`MASTER_STATUS.md` (0,834 / 0,630 na banda 400–425 km) são os das
+**anomalias anuais** e conferem; a tabela do relatório (0,8568 / 0,3591)
+não correspondia a nenhum campo reproduzível e foi substituída.
+
+### 06:30 — D85: duas falhas no caminho numérico do bootstrap
+
+1. `se > 0` aceitava erro-padrão da ordem de 1e-19, gerando `|t| ≈ 1e18`
+   que entrava na cauda como excedência. Evidência: `mean_t_boot_sd_cluster
+   ≈ 8,5e14` em 9 casos da grade anterior (G = 5 e G = 10, DGP `agrupado`).
+   Corrigido com piso relativo `sqrt(eps)·max(|β̂|,1)` em `robust.py` e
+   `spatial_inference.py`.
+2. O DGP `agrupado` **zerava a coluna 0** do design (`design[:, 0] = 0.0`
+   num laço no-op), deixando posto 2 com `k = 3` declarados e distorcendo
+   o multiplicador CR1. Corrigido mantendo o intercepto.
+
+Verificado que a correção **não altera** os resultados publicados: os 105
+bootstraps de `v27_robust_inference.json` usaram 999/999 réplicas, sem
+nenhuma degenerada.
+
+### 06:38 — P5 (D86): holdout espacial *e* temporal simultâneos
+
+P1–P4 separam só o espaço; o treino contém o mesmo **ano** do teste em
+outros municípios. Nova `analysis.two_way_blocked_holdout` remove do treino
+os blocos de 250 km **e** os anos da dobra, e o protocolo entra em
+`run_robustness.py spatial` como `P5_bloco_x_ano`.
+
+### 06:41 — Fase 9 (revalidada): 318/318 offline
+
+`318 passed` (309 da V2.7 + 9 novos: coerência observado × bootstrap com
+peso unitário e ausência de vazamento em P5).

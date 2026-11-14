@@ -343,6 +343,103 @@ class WildBootstrapTest(unittest.TestCase):
         self.assertEqual(loop["p_value"], fast["p_value"])
 
 
+# ============================================ coerência observado x bootstrap
+class BootstrapCoherenceTest(unittest.TestCase):
+    """A réplica com pesos +1 é a própria amostra.
+
+    Esse invariante é o que garante que a estatística simulada e a observada
+    são comparáveis: a distribuição bootstrap tem de reproduzir exatamente o
+    mesmo erro-padrão quando os pesos não alteram os dados. Ele também
+    protege contra a exclusão de clusters singleton da carne do estimador,
+    que reduziria a variância simulada e inflaria a rejeição.
+    """
+
+    def test_degenerate_std_error_helper(self):
+        self.assertTrue(robust.degenerate_std_error(0.0, 0.0))
+        self.assertTrue(robust.degenerate_std_error(1.0, 1e-19))
+        self.assertTrue(robust.degenerate_std_error(1.0, float("nan")))
+        self.assertFalse(robust.degenerate_std_error(1.0, 0.05))
+        self.assertFalse(robust.degenerate_std_error(0.0, 0.05))
+
+    def test_ols_bootstrap_unit_weights_reproduce_observed_statistics(self):
+        rng = np.random.default_rng(7)
+        groups = [str(i % 12) for i in range(144)]
+        design = np.column_stack([np.ones(144), rng.normal(size=144)])
+        y = design @ np.array([0.5, 1.5]) + rng.normal(size=144)
+        fit = robust.cluster_robust_fit(design, y, groups, coef_index=1)
+        beta = np.linalg.lstsq(design, y, rcond=None)[0]
+        weights = np.ones((144, 1))
+        t_stats = robust._wild_t_stats_vectorized(
+            design, design @ beta, y - design @ beta, weights, 1, groups,
+        )
+        self.assertAlmostEqual(float(t_stats[0]), fit["t_statistic"], places=8)
+
+    def test_within_bootstrap_unit_weights_reproduce_observed_se(self):
+        rows = make_panel(n_municipalities=30, n_years=5)
+        # Três municípios ficam com um único ano: são clusters singleton e
+        # precisam entrar na variância simulada exatamente como entram na
+        # observada.
+        singletons = {"m000", "m001", "m002"}
+        trimmed = [
+            row
+            for row in rows
+            if not (row["ibge_code"] in singletons and row["year"] != 2000)
+        ]
+        prepared = spatial_inference.within_data(trimmed, "deficiency_total_mm")
+        self.assertEqual(prepared["status"], "ok")
+        x = prepared["x_within"]
+        y = prepared["y_within"]
+        groups = [str(g) for g in prepared["municipalities"]]
+        index: dict[str, list[int]] = {}
+        for position, group in enumerate(groups):
+            index.setdefault(group, []).append(position)
+        self.assertTrue(any(len(v) == 1 for v in index.values()))
+        n = len(x)
+        g = len(index)
+        denominator = float(np.dot(x, x))
+        coefficient = float(np.dot(x, y) / denominator)
+        residuals = y - coefficient * x
+        names = sorted(index)
+        position = {name: i for i, name in enumerate(names)}
+        obs_position = np.array([position[name] for name in groups], dtype="int64")
+        group_index = [np.asarray(index[name], dtype=int) for name in names]
+        multiplier = (g / (g - 1.0)) * ((n - 1.0) / (n - 2))
+        draws = np.ones((1, n))
+        t_stats = spatial_inference._within_wild_t_stats(
+            x,
+            coefficient * x,
+            residuals,
+            draws,
+            obs_position,
+            group_index,
+            denominator,
+            multiplier,
+            True,
+        )
+        observed_se, _, _ = spatial_inference._clustered_se(x, y, groups)
+        self.assertAlmostEqual(
+            float(t_stats[0]), coefficient / observed_se, places=8
+        )
+
+    def test_within_fast_includes_singleton_clusters(self):
+        rows = make_panel(n_municipalities=25, n_years=6)
+        trimmed = [
+            row
+            for row in rows
+            if not (row["ibge_code"] == "m000" and row["year"] != 2003)
+        ]
+        prepared = spatial_inference.within_data(trimmed, "deficiency_total_mm")
+        groups = [str(g) for g in prepared["municipalities"]]
+        loop = spatial_inference.wild_cluster_bootstrap_within(
+            prepared, groups, n_boot=199, seed=5
+        )
+        fast = spatial_inference.wild_cluster_bootstrap_within_fast(
+            prepared, groups, n_boot=199, seed=5
+        )
+        self.assertEqual(loop["p_value"], fast["p_value"])
+        self.assertGreater(loop["t_boot_sd"], 0.0)
+
+
 # ======================================================================= Holm
 class HolmTest(unittest.TestCase):
     def test_monotone_and_bounded(self):
@@ -431,6 +528,117 @@ class SpatialSplitTest(unittest.TestCase):
         first = spatial.municipality_cells(municipalities)
         second = spatial.municipality_cells(municipalities)
         self.assertEqual(first, second)
+
+
+# ================================================== holdout espacial e temporal
+class TwoWayHoldoutTest(unittest.TestCase):
+    """O protocolo P5 não pode compartilhar bloco **nem** ano entre treino e teste."""
+
+    def _rows(self, n_municipalities: int = 30, n_years: int = 8):
+        rng = np.random.default_rng(23)
+        rows = []
+        for m in range(n_municipalities):
+            for y in range(n_years):
+                value = float(rng.normal())
+                rows.append(
+                    {
+                        "ibge_code": f"m{m:03d}",
+                        "year": 2000 + y,
+                        "crop": "soja",
+                        "v": value,
+                        "yield_kg_ha": float(100.0 + 10.0 * value + rng.normal()),
+                        "spatial_block_id": f"b{m % 10:02d}",
+                    }
+                )
+        return rows
+
+    def test_folds_are_disjoint_and_cover_groups(self):
+        rows = self._rows()
+        result = analysis.two_way_blocked_holdout(
+            rows, ["v"], crop_filter="soja", seed=7
+        )
+        self.assertEqual(result["status"], "ok")
+        groups = sorted({row["spatial_block_id"] for row in rows})
+        times = sorted({str(row["year"]) for row in rows})
+        flat_groups = sorted(g for fold in result["space_folds"] for g in fold)
+        flat_times = sorted(t for fold in result["time_folds"] for t in fold)
+        self.assertEqual(flat_groups, groups)
+        self.assertEqual(flat_times, times)
+        self.assertEqual(len(result["space_folds"]), 5)
+        self.assertEqual(len(result["time_folds"]), 5)
+
+    def test_train_and_test_share_neither_block_nor_year(self):
+        rows = self._rows()
+        result = analysis.two_way_blocked_holdout(
+            rows, ["v"], crop_filter="soja", seed=7
+        )
+        self.assertGreater(result["n_folds"], 1)
+        for space in result["space_folds"]:
+            for time in result["time_folds"]:
+                space_set, time_set = set(space), set(time)
+                test_rows = [
+                    r
+                    for r in rows
+                    if r["spatial_block_id"] in space_set and str(r["year"]) in time_set
+                ]
+                train_rows = [
+                    r
+                    for r in rows
+                    if r["spatial_block_id"] not in space_set
+                    and str(r["year"]) not in time_set
+                ]
+                self.assertFalse(
+                    {r["spatial_block_id"] for r in test_rows}
+                    & {r["spatial_block_id"] for r in train_rows}
+                )
+                self.assertFalse(
+                    {r["year"] for r in test_rows} & {r["year"] for r in train_rows}
+                )
+
+    def test_predictions_cover_all_usable_cells(self):
+        rows = self._rows()
+        result = analysis.two_way_blocked_holdout(
+            rows, ["v"], crop_filter="soja", seed=7
+        )
+        expected = 0
+        for space in result["space_folds"]:
+            for time in result["time_folds"]:
+                space_set, time_set = set(space), set(time)
+                has_test = any(
+                    r["spatial_block_id"] in space_set and str(r["year"]) in time_set
+                    for r in rows
+                )
+                has_train = any(
+                    r["spatial_block_id"] not in space_set
+                    and str(r["year"]) not in time_set
+                    for r in rows
+                )
+                if has_test and has_train:
+                    expected += sum(
+                        1
+                        for r in rows
+                        if r["spatial_block_id"] in space_set
+                        and str(r["year"]) in time_set
+                    )
+        self.assertEqual(result["n_predictions"], expected)
+
+    def test_reports_baseline_and_model(self):
+        rows = self._rows()
+        result = analysis.two_way_blocked_holdout(
+            rows, ["v"], crop_filter="soja", seed=7
+        )
+        self.assertIn("media_historica", result["models"])
+        self.assertIn("modelo", result["models"])
+        self.assertEqual(
+            result["models"]["modelo"]["n_predictions"], result["n_predictions"]
+        )
+
+    def test_insufficient_groups_returns_status(self):
+        rows = self._rows(n_municipalities=2, n_years=8)
+        result = analysis.two_way_blocked_holdout(
+            rows, ["v"], crop_filter="soja", seed=7
+        )
+        self.assertEqual(result["status"], "insufficient_groups")
 
 
 # ================================================================= fenologia
