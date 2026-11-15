@@ -131,7 +131,7 @@ jobs:
         run: |
           # Prova que backup + drill funcionam dentro da imagem publicada,
           # sobre o mesmo banco que o web e o worker estão usando.
-          docker run --rm -v saden-ci-data:/app/data saden:1.2.2 sh -c '
+          docker run --rm -e SADEN_BACKUP_DIR=/tmp/bk -v saden-ci-data:/app/data saden:1.2.2 sh -c '
             node backend/scripts/backup.js --db data/saden.db --out-dir /tmp/bk --retention 2 &&
             node backend/scripts/restore-drill.js --out-dir /tmp/bk &&
             node backend/scripts/backup-health.js
