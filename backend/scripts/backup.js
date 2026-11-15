@@ -17,6 +17,10 @@
 const fs = require('fs');
 const path = require('path');
 const Database = require('better-sqlite3');
+const cryptoLib = require('../src/backup/crypto');
+const manifestLib = require('../src/backup/manifest');
+const offsite = require('../src/backup/offsite');
+const monitor = require('../src/worker/monitor');
 
 // Tabelas que precisam existir em qualquer backup válido do SADEN.
 // Nota: o projeto não mantém tabela de migrações — o schema é aplicado por DDL
@@ -145,20 +149,35 @@ function createBackup({
     throw new Error('tamanho divergente após renomear');
   }
 
+  // Checksum e manifesto: o healthcheck confia no manifesto, não na existência
+  // do arquivo. Ambos são gravados antes de qualquer poda.
+  const sha256 = cryptoLib.checksumFile(target);
+  const manifest = manifestLib.writeManifest(target, {
+    status: 'ok',
+    created_at: date.toISOString(),
+    size: stored.size,
+    sha256,
+    counts: validation.counts,
+    integrity: validation.integrity,
+    source: path.basename(dbPath),
+  });
+
   const removed = prune(outDir, retention, target);
   return {
     ok: true,
     file: target,
     name: path.basename(target),
     size: stored.size,
+    sha256,
     counts: validation.counts,
     integrity: validation.integrity,
+    manifest,
     retention,
     removed,
   };
 }
 
-/** Remove os backups mais antigos, preservando `keep` (inclui o recém-criado). */
+/** Remove os backups mais antigos (e o manifesto correspondente). */
 function prune(outDir, keep, protectedPath) {
   const retention = Number.isFinite(keep) && keep > 0 ? Math.floor(keep) : DEFAULT_RETENTION;
   const backups = listBackups(outDir);
@@ -170,12 +189,44 @@ function prune(outDir, keep, protectedPath) {
     if (protectedPath && item.path === protectedPath) continue;
     try {
       fs.rmSync(item.path);
+      fs.rmSync(manifestLib.manifestPathFor(item.path), { force: true });
       removed.push(item.name);
     } catch {
       // Falha ao remover não invalida o backup recém-criado.
     }
   }
   return removed;
+}
+
+/**
+ * Envia o backup recém-validado para o destino off-site, se configurado.
+ * Falha do destino não desfaz nem invalida o backup local.
+ */
+async function ship(result, { cfg = offsite.config(), transport } = {}) {
+  if (!cfg.enabled) return { status: 'disabled' };
+  const sent = await offsite.push({ file: result.file, cfg, transport });
+  if (sent.status !== 'ok') {
+    manifestLib.writeManifest(result.file, {
+      ...result.manifest,
+      offsite: { status: 'error', reason: sent.reason, at: new Date().toISOString() },
+    });
+    return sent;
+  }
+  const pruned = await offsite.prune({ keep: cfg.retention, cfg, transport });
+  manifestLib.writeManifest(result.file, {
+    ...result.manifest,
+    offsite: {
+      status: 'ok',
+      key: sent.key,
+      bytes: sent.bytes,
+      sha256: sent.sha256,
+      encrypted: sent.encrypted,
+      transport: sent.transport,
+      pruned: pruned.removed || [],
+      at: new Date().toISOString(),
+    },
+  });
+  return sent;
 }
 
 function parseArgs(argv) {
@@ -186,18 +237,19 @@ function parseArgs(argv) {
     else if (arg === '--out-dir') args.outDir = argv[++i];
     else if (arg === '--retention') args.retention = Number(argv[++i]);
     else if (arg === '--verify') args.verify = argv[++i];
-    else if (arg === '--list') args.list = args.outDir;
+    else if (arg === '--list') args.list = true;
+    else if (arg === '--no-offsite') args.noOffsite = true;
     else if (arg === '--help' || arg === '-h') args.help = true;
   }
   return args;
 }
 
-function main() {
+async function main() {
   const args = parseArgs(process.argv.slice(2));
   if (args.help) {
     console.log(
       [
-        'uso: node scripts/backup.js [--db <arquivo>] [--out-dir <dir>] [--retention <n>]',
+        'uso: node scripts/backup.js [--db <arquivo>] [--out-dir <dir>] [--retention <n>] [--no-offsite]',
         '     node scripts/backup.js --verify <arquivo>',
         '     node scripts/backup.js --list --out-dir <dir>',
       ].join('\n')
@@ -212,17 +264,40 @@ function main() {
   }
 
   if (args.list) {
-    log({ event: 'backup_list', count: listBackups(args.list).length, items: listBackups(args.list) });
+    const dir = args.outDir || process.env.SADEN_BACKUP_DIR || path.join(__dirname, '..', '..', 'data', 'backups');
+    const items = listBackups(dir);
+    log({ event: 'backup_list', count: items.length, items, health: manifestLib.assess({ outDir: dir }) });
     return;
   }
 
   const dbPath = args.dbPath || process.env.DATABASE_PATH || path.join(__dirname, '..', '..', 'data', 'saden.db');
   const outDir = args.outDir || process.env.SADEN_BACKUP_DIR || path.join(__dirname, '..', '..', 'data', 'backups');
 
+  // Monitor próprio do backup: identificador **diferente** do worker.
+  const monitorBase = process.env.SADEN_BACKUP_MONITOR_PING_URL || '';
+  const started = await monitor.ping('start', { base: monitorBase });
+
   try {
     const result = createBackup({ dbPath, outDir, retention: args.retention });
-    log({ event: 'backup_ok', ...result, file: path.basename(result.file) });
+    const sent = args.noOffsite ? { status: 'disabled' } : await ship(result);
+    manifestLib.recordAttempt(outDir, { status: 'ok', file: result.name });
+
+    // Sucesso só depois de: VACUUM, validação, checksum, manifesto e envio.
+    const finished = await monitor.ping('success', { base: monitorBase });
+    log({
+      event: 'backup_ok',
+      file: result.name,
+      size: result.size,
+      sha256: result.sha256,
+      counts: result.counts,
+      integrity: result.integrity,
+      removed: result.removed,
+      offsite: { status: sent.status, reason: sent.reason || null, encrypted: sent.encrypted || false },
+      monitor: { start: monitor.describe(started), end: monitor.describe(finished) },
+    });
   } catch (error) {
+    manifestLib.recordAttempt(outDir, { status: 'failed', error: error.message });
+    await monitor.ping('fail', { base: monitorBase });
     log({ event: 'backup_failed', error: error.message });
     process.exitCode = 1;
   }
@@ -230,4 +305,13 @@ function main() {
 
 if (require.main === module) main();
 
-module.exports = { createBackup, validateBackup, listBackups, prune, timestamp, TABLES, DEFAULT_RETENTION };
+module.exports = {
+  createBackup,
+  validateBackup,
+  listBackups,
+  prune,
+  ship,
+  timestamp,
+  TABLES,
+  DEFAULT_RETENTION,
+};

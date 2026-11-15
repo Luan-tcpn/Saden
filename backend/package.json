@@ -10,7 +10,7 @@
     "dev": "node --watch src/index.js",
     "pretest": "node scripts/preflight.js",
     "seed": "node ../scripts/seed.js",
-    "test": "node --test ../tests/unit/fx.test.js ../tests/unit/validate.test.js ../tests/unit/forecast-math.test.js ../tests/unit/http.test.js ../tests/unit/coords.test.js ../tests/unit/csv.test.js ../tests/unit/backup.test.js ../tests/unit/config.test.js ../tests/unit/alerts.test.js ../tests/unit/migration.test.js ../tests/unit/worker.test.js ../tests/unit/monitor.test.js ../tests/unit/backup-routine.test.js ../tests/unit/series-freshness.test.js ../tests/integration/worker.test.js ../tests/integration/api.test.js"
+    "test": "node --test ../tests/unit/fx.test.js ../tests/unit/validate.test.js ../tests/unit/forecast-math.test.js ../tests/unit/http.test.js ../tests/unit/coords.test.js ../tests/unit/csv.test.js ../tests/unit/backup.test.js ../tests/unit/config.test.js ../tests/unit/alerts.test.js ../tests/unit/migration.test.js ../tests/unit/worker.test.js ../tests/unit/monitor.test.js ../tests/unit/backup-routine.test.js ../tests/unit/series-freshness.test.js ../tests/unit/backup-offsite.test.js ../tests/integration/worker.test.js ../tests/integration/api.test.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

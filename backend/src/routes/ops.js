@@ -9,6 +9,7 @@
 //   fontes, métricas e últimas falhas.
 
 const express = require('express');
+const path = require('path');
 const { connect } = require('../db');
 const { requireAuth } = require('../middleware/auth');
 const { requireAdmin } = require('../middleware/admin');
@@ -16,8 +17,25 @@ const { requireString } = require('../utils/validate');
 const { badRequest } = require('../utils/errors');
 const health = require('../worker/health');
 const runner = require('../worker/runner');
+const manifest = require('../backup/manifest');
 
 const router = express.Router();
+
+function backupDir() {
+  return process.env.SADEN_BACKUP_DIR || path.join(__dirname, '..', '..', '..', 'data', 'backups');
+}
+
+function backupStatus() {
+  const maxAgeHours = Number(process.env.SADEN_BACKUP_MAX_AGE_HOURS) || manifest.DEFAULT_MAX_AGE_HOURS;
+  const result = manifest.assess({ outDir: backupDir(), maxAgeHours });
+  const latest = manifest.listManifests(backupDir())[0];
+  return {
+    ...result,
+    max_age_hours: maxAgeHours,
+    offsite: latest && latest.manifest.offsite ? latest.manifest.offsite : null,
+    remote: latest && latest.manifest.offsite ? latest.manifest.offsite.status : 'disabled',
+  };
+}
 
 router.get('/health/worker', (req, res, next) => {
   try {
@@ -41,6 +59,21 @@ router.get('/health/worker', (req, res, next) => {
   }
 });
 
+// Saúde do backup local: público e mínimo, como o do worker. Diz se existe
+// backup validado e recente — não expõe caminhos, contagens nem conteúdo.
+router.get('/health/backup', (req, res) => {
+  const status = backupStatus();
+  const code = status.status === 'ok' ? 200 : 503;
+  res.status(code).json({
+    status: status.status,
+    detail: status.detail,
+    last_ok_at: status.last_ok_at,
+    age_hours: status.age_ms == null ? null : Number((status.age_ms / 3600000).toFixed(1)),
+    max_age_hours: status.max_age_hours,
+    remote: status.remote,
+  });
+});
+
 router.get('/ops/status', requireAuth, requireAdmin, (req, res, next) => {
   try {
     const db = connect();
@@ -53,6 +86,7 @@ router.get('/ops/status', requireAuth, requireAdmin, (req, res, next) => {
     const feedback = db.prepare('SELECT COUNT(*) n FROM feedback').get().n;
     res.json({
       worker: health.status(),
+      backup: backupStatus(),
       sources: health.sources(),
       metrics: runner.metrics({ windowDays: 7 }),
       runs: health.lastRuns(10),

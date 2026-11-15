@@ -1,4 +1,4 @@
-# SADEN — execução reproduzível da v1.2.1 (web + worker + backup).
+﻿# SADEN — execução reproduzível da v1.2.2 (web + worker + backup).
 # Uso:
 #   $env:JWT_SECRET = "segredo-forte-aqui"   # PowerShell (obrigatório)
 #   docker compose build
@@ -19,7 +19,7 @@
 services:
   saden:
     build: .
-    image: saden:1.2.1
+    image: saden:1.2.2
     ports:
       - "3001:3001"
     environment:
@@ -30,12 +30,17 @@ services:
       DATABASE_PATH: data/saden.db
       FRONTEND_ORIGIN: http://localhost:3001
       SADEN_ROLE: web
+      # O web só LÊ os manifestos para reportar /api/health/backup.
+      SADEN_BACKUP_DIR: /app/backups
+      SADEN_BACKUP_MAX_AGE_HOURS: ${SADEN_BACKUP_MAX_AGE_HOURS:-30}
     volumes:
       # SQLite persiste fora do ciclo de vida do container (migrations: web).
       # SADEN_DATA_DIR permite testar uma cópia sem tocar no banco real.
       - ${SADEN_DATA_DIR:-./data}:/app/data
       # Outbox de e-mails de desenvolvimento (recuperação de senha sem SMTP).
       - ./tmp/mail-outbox:/app/tmp/mail-outbox
+      # Somente leitura: o web nunca escreve em backup.
+      - saden-backups:/app/backups:ro
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3001/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
@@ -48,7 +53,7 @@ services:
   # o web está saudável — o web é o dono das migrations, então não há migração
   # concorrente nos dois processos.
   saden-worker:
-    image: saden:1.2.1
+    image: saden:1.2.2
     command: ["node", "backend/src/worker/index.js"]
     environment:
       NODE_ENV: production
@@ -81,7 +86,7 @@ services:
   # acoplar a rotina ao ciclo de vida da aplicação. O banco é montado somente
   # leitura: um bug no backup não pode escrever no dado de produção.
   saden-backup:
-    image: saden:1.2.1
+    image: saden:1.2.2
     command:
       - sh
       - -c
@@ -89,12 +94,29 @@ services:
         while true; do
         node backend/scripts/backup.js --db data/saden.db --out-dir /app/backups
         --retention $${SADEN_BACKUP_RETENTION:-14};
+        node backend/scripts/restore-drill.js --out-dir /app/backups;
         sleep $${SADEN_BACKUP_INTERVAL_SECONDS:-86400};
         done
     environment:
       NODE_ENV: production
+      SADEN_BACKUP_DIR: /app/backups
       SADEN_BACKUP_RETENTION: ${SADEN_BACKUP_RETENTION:-14}
       SADEN_BACKUP_INTERVAL_SECONDS: ${SADEN_BACKUP_INTERVAL_SECONDS:-86400}
+      SADEN_BACKUP_MAX_AGE_HOURS: ${SADEN_BACKUP_MAX_AGE_HOURS:-30}
+      # Monitor próprio (token no caminho; vazio = desabilitado).
+      SADEN_BACKUP_MONITOR_PING_URL: ${SADEN_BACKUP_MONITOR_PING_URL:-}
+      # Off-site opcional: sem credenciais, fica desabilitado.
+      SADEN_OFFSITE_MODE: ${SADEN_OFFSITE_MODE:-disabled}
+      SADEN_OFFSITE_DIR: ${SADEN_OFFSITE_DIR:-}
+      SADEN_OFFSITE_RETENTION: ${SADEN_OFFSITE_RETENTION:-14}
+      SADEN_BACKUP_ENCRYPT: ${SADEN_BACKUP_ENCRYPT:-1}
+      SADEN_BACKUP_PASSPHRASE: ${SADEN_BACKUP_PASSPHRASE:-}
+      SADEN_S3_ENDPOINT: ${SADEN_S3_ENDPOINT:-}
+      SADEN_S3_BUCKET: ${SADEN_S3_BUCKET:-}
+      SADEN_S3_REGION: ${SADEN_S3_REGION:-us-east-1}
+      SADEN_S3_ACCESS_KEY: ${SADEN_S3_ACCESS_KEY:-}
+      SADEN_S3_SECRET_KEY: ${SADEN_S3_SECRET_KEY:-}
+      SADEN_S3_PREFIX: ${SADEN_S3_PREFIX:-saden/backups}
     volumes:
       - ${SADEN_DATA_DIR:-./data}:/app/data:ro
       - saden-backups:/app/backups
@@ -102,9 +124,13 @@ services:
       saden:
         condition: service_healthy
     restart: unless-stopped
-    # O HEALTHCHECK da imagem testa a porta 3001; este serviço não abre porta.
+    # Saúde = backup validado e recente, não processo vivo.
     healthcheck:
-      disable: true
+      test: ["CMD", "node", "backend/scripts/backup-health.js"]
+      interval: 5m
+      timeout: 20s
+      start_period: 90s
+      retries: 3
 
 volumes:
   saden-backups:
