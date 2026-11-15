@@ -1,4 +1,4 @@
-﻿# SADEN — execução reproduzível da v1.2.2 (web + worker + backup).
+# SADEN — execução reproduzível da v1.2.2 (web + worker + backup).
 # Uso:
 #   $env:JWT_SECRET = "segredo-forte-aqui"   # PowerShell (obrigatório)
 #   docker compose build
@@ -19,7 +19,7 @@
 services:
   saden:
     build: .
-    image: saden:1.2.2
+    image: saden:1.2.3
     ports:
       - "3001:3001"
     environment:
@@ -53,7 +53,7 @@ services:
   # o web está saudável — o web é o dono das migrations, então não há migração
   # concorrente nos dois processos.
   saden-worker:
-    image: saden:1.2.2
+    image: saden:1.2.3
     command: ["node", "backend/src/worker/index.js"]
     environment:
       NODE_ENV: production
@@ -86,7 +86,7 @@ services:
   # acoplar a rotina ao ciclo de vida da aplicação. O banco é montado somente
   # leitura: um bug no backup não pode escrever no dado de produção.
   saden-backup:
-    image: saden:1.2.2
+    image: saden:1.2.3
     command:
       - sh
       - -c

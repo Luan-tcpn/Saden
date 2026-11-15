@@ -1,11 +1,11 @@
-﻿# SADEN — ensaio de recuperacao de desastre (v1.2.2)
+# SADEN — ensaio de recuperacao de desastre (v1.2.2)
 #
 # Executa os cenarios de perda em ambiente ISOLADO (projeto compose proprio e
 # diretorios tmp/dr-*). Nunca toca em data/ real nem em containers de producao.
 #
 # uso:  powershell -ExecutionPolicy Bypass -File scripts/dr-simulation.ps1
 #
-# Requer: Docker Desktop e a imagem saden:1.2.2 construida.
+# Requer: Docker Desktop e a imagem saden:1.2.3 construida.
 
 $ErrorActionPreference = 'Continue'
 $root = Split-Path -Parent $PSScriptRoot
@@ -125,7 +125,7 @@ Step '3. container de backup perdido' {
     Start-Sleep -Seconds 3
   }
   if (-not $ok) { throw 'backup nao produziu arquivo apos recriacao' }
-  $count = (Run-Docker @('run', '--rm', '-v', "${project}_saden-backups:/b", 'saden:1.2.2', 'sh', '-c', 'ls /b/*.db | wc -l')).Trim()
+  $count = (Run-Docker @('run', '--rm', '-v', "${project}_saden-backups:/b", 'saden:1.2.3', 'sh', '-c', 'ls /b/*.db | wc -l')).Trim()
   "backup recriado, arquivos no volume: $count"
 }
 
@@ -135,7 +135,7 @@ Step '4. volume de backup perdido (recupera do off-site)' {
   $remote = Get-ChildItem $offsiteDir -Filter '*.enc' | Sort-Object Name -Descending | Select-Object -First 1
   if (-not $remote) { throw 'nenhuma copia off-site encontrada' }
   $script = "const o=require('./src/backup/offsite');o.pull({key:'$($remote.Name)',outPath:'/out/dr-restored.db',cfg:o.config()}).then(r=>console.log('bytes '+r.bytes)).catch(e=>{console.error(e.message);process.exit(1)})"
-  $out = Run-Docker @('run', '--rm', '-e', "SADEN_BACKUP_PASSPHRASE=$passphrase", '-e', 'SADEN_OFFSITE_MODE=dir', '-e', 'SADEN_OFFSITE_DIR=/offsite', '-w', '/app/backend', '-v', "${offsiteDir}:/offsite:ro", '-v', "${root}/tmp:/out", 'saden:1.2.2', 'node', '-e', $script)
+  $out = Run-Docker @('run', '--rm', '-e', "SADEN_BACKUP_PASSPHRASE=$passphrase", '-e', 'SADEN_OFFSITE_MODE=dir', '-e', 'SADEN_OFFSITE_DIR=/offsite', '-w', '/app/backend', '-v', "${offsiteDir}:/offsite:ro", '-v', "${root}/tmp:/out", 'saden:1.2.3', 'node', '-e', $script)
   if (-not (Test-Path (Join-Path $root 'tmp/dr-restored.db'))) { throw 'arquivo restaurado nao foi criado' }
   "off-site $($remote.Name) recuperado e decifrado"
 }
@@ -145,7 +145,7 @@ Step '5. ambiente completo perdido (reconstrucao)' {
   Try-Docker @('volume', 'rm', '-f', "${project}_saden-backups") | Out-Null
   Remove-Item (Join-Path $dataDir '*') -Recurse -Force -ErrorAction SilentlyContinue
   New-Item -ItemType Directory -Path $dataDir -Force | Out-Null
-  Run-Docker @('run', '--rm', '-w', '/app/backend', '-v', "${dataDir}:/app/data", '-v', "${root}/tmp:/src:ro", 'saden:1.2.2', 'sh', '-c', 'cp /src/dr-restored.db /app/data/saden.db') | Out-Null
+  Run-Docker @('run', '--rm', '-w', '/app/backend', '-v', "${dataDir}:/app/data", '-v', "${root}/tmp:/src:ro", 'saden:1.2.3', 'sh', '-c', 'cp /src/dr-restored.db /app/data/saden.db') | Out-Null
   Compose @('up', '-d') | Out-Null
   Wait-Url 'http://127.0.0.1:3001/api/health' | Out-Null
   $login = Invoke-RestMethod 'http://127.0.0.1:3001/api/auth/login' -Method Post -ContentType 'application/json' -Body (@{ email = 'dr@teste.local'; password = '123456' } | ConvertTo-Json)
@@ -160,7 +160,7 @@ Step '6. backup corrompido e rejeitado' {
   [IO.File]::WriteAllText((Join-Path $bad 'saden-20260101-000000.db'), 'corrompido')
   $meta = '{"version":1,"file":"saden-20260101-000000.db","status":"ok","created_at":"2026-01-01T00:00:00.000Z","size":10,"sha256":"00"}'
   [IO.File]::WriteAllText((Join-Path $bad 'saden-20260101-000000.json'), $meta)
-  $out = Try-Docker @('run', '--rm', '-w', '/app/backend', '-v', "${root}/tmp:/src:ro", 'saden:1.2.2', 'node', 'backend/scripts/restore-drill.js', '--out-dir', '/src/dr-bad')
+  $out = Try-Docker @('run', '--rm', '-w', '/app/backend', '-v', "${root}/tmp:/src:ro", 'saden:1.2.3', 'node', 'backend/scripts/restore-drill.js', '--out-dir', '/src/dr-bad')
   if ($out -match '"ok":true') { throw 'drill aceitou backup corrompido' }
   'drill rejeitou o backup corrompido'
 }
@@ -168,7 +168,7 @@ Step '6. backup corrompido e rejeitado' {
 Step '7. chave incorreta nao restaura' {
   $remote = Get-ChildItem $offsiteDir -Filter '*.enc' | Sort-Object Name -Descending | Select-Object -First 1
   $script = "const o=require('./src/backup/offsite');o.pull({key:'$($remote.Name)',outPath:'/out/dr-wrong-key.db',cfg:o.config()}).then(()=>console.log('RESTAUROU')).catch(e=>{console.log('ERRO '+e.message)})"
-  $out = Try-Docker @('run', '--rm', '-e', 'SADEN_BACKUP_PASSPHRASE=chave-errada-mas-longa-999', '-e', 'SADEN_OFFSITE_MODE=dir', '-e', 'SADEN_OFFSITE_DIR=/offsite', '-w', '/app/backend', '-v', "${offsiteDir}:/offsite:ro", '-v', "${root}/tmp:/out", 'saden:1.2.2', 'node', '-e', $script)
+  $out = Try-Docker @('run', '--rm', '-e', 'SADEN_BACKUP_PASSPHRASE=chave-errada-mas-longa-999', '-e', 'SADEN_OFFSITE_MODE=dir', '-e', 'SADEN_OFFSITE_DIR=/offsite', '-w', '/app/backend', '-v', "${offsiteDir}:/offsite:ro", '-v', "${root}/tmp:/out", 'saden:1.2.3', 'node', '-e', $script)
   if ($out -match 'RESTAUROU') { throw 'restaurou com chave errada' }
   if (Test-Path (Join-Path $root 'tmp/dr-wrong-key.db')) { throw 'arquivo parcial criado com chave errada' }
   'chave errada rejeitada, nenhum arquivo gravado'

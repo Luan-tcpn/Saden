@@ -91,7 +91,7 @@ docker compose exec saden-backup \
 ### Verificar
 
 ```bash
-docker run --rm -v saden-backups:/b saden:1.2.2 \
+docker run --rm -v saden-backups:/b saden:1.2.3 \
   node backend/scripts/backup.js --list --out-dir /b
 ```
 
@@ -150,7 +150,7 @@ docker compose logs --tail=5 saden-backup     # espera "backup_ok"
 docker run --rm -e SADEN_OFFSITE_MODE=s3 -e SADEN_S3_ENDPOINT=... \
   -e SADEN_S3_BUCKET=... -e SADEN_S3_ACCESS_KEY=... -e SADEN_S3_SECRET_KEY=... \
   -e SADEN_BACKUP_PASSPHRASE=... -v saden-backups:/app/backups \
-  -w /app/backend saden:1.2.2 node backend/scripts/restore-drill.js \
+  -w /app/backend saden:1.2.3 node backend/scripts/restore-drill.js \
   --from-offsite saden-YYYYMMDD-HHMMSS.db.enc
 ```
 
@@ -158,7 +158,7 @@ docker run --rm -e SADEN_OFFSITE_MODE=s3 -e SADEN_S3_ENDPOINT=... \
 
 ```bash
 docker compose stop saden saden-worker saden-backup
-docker run --rm -v saden-backups:/b:ro -v saden-data:/d saden:1.2.2 \
+docker run --rm -v saden-backups:/b:ro -v saden-data:/d saden:1.2.3 \
   sh -c 'cp /b/saden-YYYYMMDD-HHMMSS.db /d/saden.db'
 docker compose up -d
 ```
@@ -178,11 +178,11 @@ git clone <remote> saden && cd saden && git checkout v1.2.2
 # 3. configurar .env (JWT_SECRET, passphrase, credenciais off-site)
 # 4. obter o backup mais recente do destino remoto
 docker run --rm -e SADEN_OFFSITE_MODE=s3 ... -v saden-backups:/app/backups \
-  -w /app/backend saden:1.2.2 node backend/scripts/restore-drill.js \
+  -w /app/backend saden:1.2.3 node backend/scripts/restore-drill.js \
   --from-offsite saden-YYYYMMDD-HHMMSS.db.enc
 
 # 5. conferir o arquivo restaurado antes de publicar
-docker run --rm -v saden-backups:/b saden:1.2.2 \
+docker run --rm -v saden-backups:/b saden:1.2.3 \
   node backend/scripts/backup.js --verify /b/restaurado.db
 
 # 6. subir com o banco restaurado

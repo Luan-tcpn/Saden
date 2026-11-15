@@ -1,4 +1,4 @@
-﻿name: ci
+name: ci
 
 on:
   push:
@@ -82,7 +82,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: build das imagens (via compose)
         # A imagem é construída pelo compose porque os serviços worker e backup
-        # referenciam a mesma tag (`saden:1.2.2`).
+        # referenciam a mesma tag (`saden:1.2.3`).
         # JWT_SECRET é exigido pela interpolação do compose (valor de CI, sem uso real).
         env:
           JWT_SECRET: ci-secret-nao-producao
@@ -105,7 +105,7 @@ jobs:
             -e NODE_ENV=production \
             -e DATABASE_PATH=data/saden.db \
             -v saden-ci-data:/app/data \
-            saden:1.2.2
+            saden:1.2.3
           for i in $(seq 1 60); do
             if curl -fsS http://127.0.0.1:3001/api/health > /dev/null; then echo "web ok"; exit 0; fi
             sleep 2
@@ -118,7 +118,7 @@ jobs:
             -e NODE_ENV=production \
             -e DATABASE_PATH=data/saden.db \
             -v saden-ci-data:/app/data \
-            saden:1.2.2 node backend/src/worker/index.js
+            saden:1.2.3 node backend/src/worker/index.js
       - name: health do worker
         run: |
           for i in $(seq 1 40); do
@@ -131,7 +131,7 @@ jobs:
         run: |
           # Prova que backup + drill funcionam dentro da imagem publicada,
           # sobre o mesmo banco que o web e o worker estão usando.
-          docker run --rm -e SADEN_BACKUP_DIR=/tmp/bk -v saden-ci-data:/app/data saden:1.2.2 sh -c '
+          docker run --rm -e SADEN_BACKUP_DIR=/tmp/bk -v saden-ci-data:/app/data saden:1.2.3 sh -c '
             node backend/scripts/backup.js --db data/saden.db --out-dir /tmp/bk --retention 2 &&
             node backend/scripts/restore-drill.js --out-dir /tmp/bk &&
             node backend/scripts/backup-health.js

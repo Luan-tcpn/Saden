@@ -92,9 +92,9 @@ async function drillOffsite(key, cfg = offsite.config()) {
   const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'saden-offsite-'));
   const restored = path.join(tmpDir, 'restored.db');
   try {
-    const pulled = await offsite.pull({ key, outPath: restored, cfg, transport });
+    const pulled = await offsite.pull({ key, outPath: restored, cfg, transport, expectedSha256: sha256 });
     const result = drill(restored);
-    return { ...result, bytes: pulled.bytes, sha256: pulled.sha256 };
+    return { ...result, bytes: pulled.bytes, sha256: pulled.sha256, envelope_sha256: pulled.envelopeSha256 };
   } finally {
     fs.rmSync(tmpDir, { recursive: true, force: true });
   }
@@ -110,7 +110,7 @@ async function main() {
 
   try {
     if (opt('--from-offsite')) {
-      const result = await drillOffsite(opt('--from-offsite'));
+      const result = await drillOffsite(opt('--from-offsite'), { sha256: opt('--sha256') });
       process.stdout.write(`${JSON.stringify({ at: new Date().toISOString(), event: 'drill_offsite', ...result })}\n`);
       process.exitCode = result.ok ? 0 : 1;
       return;

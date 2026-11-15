@@ -118,7 +118,10 @@ function createBackup({
 
   const base = `saden-${timestamp(date)}`;
   const target = path.join(outDir, `${base}.db`);
-  const partial = path.join(outDir, `.${base}.partial.db`);
+  // Parcial único por processo: dois backups iniciados no mesmo segundo não
+  // podem compartilhar o mesmo arquivo temporário. Sem isso, um processo apaga
+  // o parcial do outro (`rmSync` inicial) e o backup alheio falha com EBUSY.
+  const partial = path.join(outDir, `.${base}.${process.pid}-${Math.random().toString(36).slice(2, 8)}.partial.db`);
 
   // Um arquivo parcial nunca é sobrescrito silenciosamente.
   if (fs.existsSync(target)) throw new Error('já existe backup com este carimbo de tempo');

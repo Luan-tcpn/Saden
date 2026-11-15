@@ -129,7 +129,11 @@ function signV4({ method, url, payloadHash, accessKey, secretKey, region, extraH
     .sort();
   const canonicalHeaders = sortedKeys.map((k) => `${k}:${String(headers[k]).trim()}\n`).join('');
   const signedHeaders = sortedKeys.join(';');
-  const canonicalUri = u.pathname.split('/').map(encodeRfc3986).join('/').replace(/%2F/g, '/');
+  // O caminho canônico do SigV4 para S3 é o caminho **já codificado** que vai no
+  // fio. `new URL().pathname` preserva `%20` e `%C3%A7`; codificar de novo
+  // transformaria `%20` em `%2520` e a assinatura não bateria no servidor para
+  // qualquer chave ou prefixo com caractere especial (achado da auditoria).
+  const canonicalUri = u.pathname || '/';
   const canonicalQuery = [...u.searchParams.entries()]
     .sort(([a], [b]) => (a === b ? 0 : a < b ? -1 : 1))
     .map(([k, v]) => `${encodeRfc3986(k)}=${encodeRfc3986(v)}`)
@@ -272,11 +276,20 @@ async function push({ file, cfg = config(), transport = createTransport(cfg) } =
 }
 
 /** Baixa e (se necessário) decifra um objeto remoto para `outPath`. */
-async function pull({ key, outPath, cfg = config(), transport = createTransport(cfg) } = {}) {
+async function pull({ key, outPath, expectedSha256, cfg = config(), transport = createTransport(cfg) } = {}) {
   const envelope = await transport.get(key);
+
+  // Amarração ponta a ponta: o manifesto guarda o sha256 do envelope. Sem esta
+  // comparação, um objeto remoto trocado por outro backup válido (ou truncado
+  // por um proxy) decifraria sem erro e restauraria o snapshot errado.
+  const envelopeSha256 = checksumBuffer(envelope);
+  if (expectedSha256 && envelopeSha256 !== expectedSha256) {
+    throw new Error('checksum do objeto remoto diverge do manifesto');
+  }
+
   const plain = cfg.encrypted ? decryptBuffer(envelope, cfg.passphrase) : envelope;
   fs.writeFileSync(outPath, plain, { mode: 0o600 });
-  return { bytes: plain.length, sha256: checksumBuffer(plain) };
+  return { bytes: plain.length, sha256: checksumBuffer(plain), envelopeSha256 };
 }
 
 /** Mantém apenas os `keep` objetos mais recentes. Nunca remove antes de listar. */

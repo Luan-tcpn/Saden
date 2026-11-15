@@ -1,6 +1,6 @@
 {
   "name": "saden-backend",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "SADEN — Sistema de Análise, Dados e Estimativa de preços de commodities agrícolas brasileiras (backend)",
   "main": "src/index.js",
   "scripts": {
