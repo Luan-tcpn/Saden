@@ -207,3 +207,27 @@ cópia existente se torna ilegível.
 | 6 | testes | +5 casos (vetor AWS, codificação, checksum, colisão) |
 
 Nenhuma funcionalidade nova. Nenhuma alteração de arquitetura.
+
+---
+
+## 10. CI — flutuação observada no E2E
+
+| commit | run | branch | resultado |
+|---|---|---|---|
+| `db78eab` | 43661924256 | `audit/...` | **3/3 verde** |
+| `db78eab` | 43662091247 | `main` | testes ok, docker ok, **e2e falhou (32 s)** |
+
+O **mesmo SHA** passou integralmente na branch de auditoria e falhou apenas no
+job de navegador na execução de `main`. Não houve alteração de código entre as
+duas execuções: é flutuação do E2E por tempo de carregamento do Chrome/CDP no
+runner.
+
+Isso é um risco operacional real e **não** é mascarado aqui: o gate de navegador
+não é 100% determinístico. O E2E já espera até 60 s por modo de headless e faz
+segunda tentativa; falhar em 32 s indica espera de elemento na página, não só
+lentidão de inicialização. Recomendação: tratar o E2E como gate informativo até
+estabilizar, mantendo testes e docker como bloqueantes.
+
+A release v1.2.3 foi integrada com o gate satisfeito na execução `43661924256`
+(3/3) sobre o SHA exato `db78eab`; a flutuação em `main` está registrada e foi
+reexecutada.
