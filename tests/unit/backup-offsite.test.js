@@ -324,3 +324,146 @@ describe('monitor do backup', () => {
     assert.equal(monitor.redact('https://hc-ping.com/segredo-123/start').includes('segredo'), false);
   });
 });
+
+describe('SigV4 — referencia externa e caracteres especiais', () => {
+  // Vetor oficial da documentacao AWS (GET /test.txt com Range, 2013-05-24).
+  it('reproduz o vetor oficial da AWS', () => {
+    const crypto = require('node:crypto');
+    const realNow = Date;
+    global.Date = class extends realNow {
+      constructor(...args) {
+        if (args.length === 0) return new realNow('2013-05-24T00:00:00Z');
+        return new realNow(...args);
+      }
+      static now() {
+        return new realNow('2013-05-24T00:00:00Z').getTime();
+      }
+    };
+    try {
+      const headers = offsite.signV4({
+        method: 'GET',
+        url: 'https://examplebucket.s3.amazonaws.com/test.txt',
+        payloadHash: crypto.createHash('sha256').update('').digest('hex'),
+        accessKey: 'AKIAIOSFODNN7EXAMPLE',
+        secretKey: 'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY',
+        region: 'us-east-1',
+        extraHeaders: { range: 'bytes=0-9' },
+      });
+      const signature = /Signature=([0-9a-f]{64})/.exec(headers.Authorization)[1];
+      assert.equal(signature, 'f0e8bdb87c964420e857bd35b5d6ed310bd44f0170aba48dd91039c6036bdb41');
+    } finally {
+      global.Date = realNow;
+    }
+  });
+
+  // Regressao do achado: `%20` nao pode virar `%2520`.
+  it('assina o caminho ja codificado, sem dupla codificacao', () => {
+    const crypto = require('node:crypto');
+    const hmac = (k, d) => crypto.createHmac('sha256', k).update(d).digest();
+    const sha = (d) => crypto.createHash('sha256').update(d).digest('hex');
+    const realNow = Date;
+    global.Date = class extends realNow {
+      constructor(...args) {
+        if (args.length === 0) return new realNow('2013-05-24T00:00:00Z');
+        return new realNow(...args);
+      }
+      static now() {
+        return new realNow('2013-05-24T00:00:00Z').getTime();
+      }
+    };
+    try {
+      const stamp = '20130524T000000Z';
+      const payloadHash = sha('');
+      const region = 'us-east-1';
+      const secretKey = 'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY';
+      const reference = (url) => {
+        const u = new URL(url);
+        const date = stamp.slice(0, 8);
+        const canonicalHeaders = `host:${u.host}\nx-amz-content-sha256:${payloadHash}\nx-amz-date:${stamp}\n`;
+        const canonicalRequest = [
+          'GET',
+          u.pathname,
+          '',
+          canonicalHeaders,
+          'host;x-amz-content-sha256;x-amz-date',
+          payloadHash,
+        ].join('\n');
+        const scope = `${date}/${region}/s3/aws4_request`;
+        const toSign = ['AWS4-HMAC-SHA256', stamp, scope, sha(canonicalRequest)].join('\n');
+        const k = hmac(hmac(hmac(hmac(`AWS4${secretKey}`, date), region), 's3'), 'aws4_request');
+        return crypto.createHmac('sha256', k).update(toSign).digest('hex');
+      };
+
+      for (const url of [
+        'https://b.s3.amazonaws.com/k/saden-20260101-000000.db.enc',
+        'https://b.s3.amazonaws.com/k/a%20b.enc',
+        'https://b.s3.amazonaws.com/k/a%C3%A7%C3%A3o.enc',
+        'https://b.s3.amazonaws.com/k/saden%2Fbackups%2Fx.enc',
+      ]) {
+        const impl = /Signature=([0-9a-f]{64})/.exec(
+          offsite.signV4({
+            method: 'GET',
+            url,
+            payloadHash,
+            accessKey: 'AKIAIOSFODNN7EXAMPLE',
+            secretKey,
+            region,
+          }).Authorization
+        )[1];
+        assert.equal(impl, reference(url), `assinatura divergente para ${url}`);
+      }
+    } finally {
+      global.Date = realNow;
+    }
+  });
+});
+
+describe('integridade ponta a ponta do backup remoto', () => {
+  it('pull recusa objeto cujo sha256 diverge do manifesto', async () => {
+    const srcdir = tempDir('e2e-sha-src');
+    const mirror = tempDir('e2e-sha-mirror');
+    const created = backup.createBackup({ dbPath: DB_PATH, outDir: srcdir, retention: 3 });
+    const cfg = offsite.config({
+      SADEN_OFFSITE_MODE: 'dir',
+      SADEN_OFFSITE_DIR: mirror,
+      SADEN_BACKUP_PASSPHRASE: PASSPHRASE,
+    });
+    const sent = await offsite.push({ file: created.file, cfg });
+    assert.equal(sent.status, 'ok');
+
+    const out = path.join(TMP, 'sha-check.db');
+    const pulled = await offsite.pull({ key: sent.key, outPath: out, cfg, expectedSha256: sent.sha256 });
+    assert.equal(pulled.envelopeSha256, sent.sha256);
+
+    const wrong = 'a'.repeat(64);
+    await assert.rejects(
+      () => offsite.pull({ key: sent.key, outPath: path.join(TMP, 'sha-wrong.db'), cfg, expectedSha256: wrong }),
+      /checksum do objeto remoto diverge/
+    );
+    assert.ok(!fs.existsSync(path.join(TMP, 'sha-wrong.db')), 'não grava nada quando o checksum falha');
+  });
+
+  it('objeto remoto trocado por outro backup válido é detectado pelo checksum', async () => {
+    const srcdir = tempDir('e2e-swap-src');
+    const mirror = tempDir('e2e-swap-mirror');
+    const cfg = offsite.config({
+      SADEN_OFFSITE_MODE: 'dir',
+      SADEN_OFFSITE_DIR: mirror,
+      SADEN_BACKUP_PASSPHRASE: PASSPHRASE,
+    });
+    const a = backup.createBackup({ dbPath: DB_PATH, outDir: srcdir, date: new Date('2026-03-01T10:00:00'), retention: 5 });
+    const b = backup.createBackup({ dbPath: DB_PATH, outDir: srcdir, date: new Date('2026-03-02T10:00:00'), retention: 5 });
+    const sentA = await offsite.push({ file: a.file, cfg });
+    await offsite.push({ file: b.file, cfg });
+
+    // Substitui o objeto de A pelo envelope de B (ambos decifram com a mesma chave).
+    fs.copyFileSync(path.join(mirror, sentA.key.replace('.db.enc', '.db.enc')), path.join(mirror, sentA.key));
+    const bEnvelope = fs.readFileSync(path.join(mirror, `${b.name}.enc`));
+    fs.writeFileSync(path.join(mirror, sentA.key), bEnvelope);
+
+    await assert.rejects(
+      () => offsite.pull({ key: sentA.key, outPath: path.join(TMP, 'swap.db'), cfg, expectedSha256: sentA.sha256 }),
+      /checksum do objeto remoto diverge/
+    );
+  });
+});

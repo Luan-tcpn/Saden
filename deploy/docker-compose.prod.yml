@@ -1,0 +1,166 @@
+# SADEN — stack de produção (v1.2.3)
+#
+# Diferenças deliberadas em relação ao docker-compose.yml de desenvolvimento:
+#   - imagem fixada por tag E digest (SADEN_IMAGE) — nunca `latest`;
+#   - nenhuma porta pública além de 80/443 do proxy;
+#   - dados e backups em volumes NOMEADOS (não bind mount);
+#   - proxy com TLS automático (Caddy) na borda;
+#   - limites de memória por serviço.
+#
+# Uso (no servidor, em /srv/saden):
+#   cp .env.production.example .env && chmod 600 .env
+#   docker compose --env-file .env -f docker-compose.prod.yml up -d
+#
+# Rollback: trocar SADEN_IMAGE pela versão/digest anterior e repetir o comando.
+
+services:
+  saden:
+    image: ${SADEN_IMAGE:?Defina SADEN_IMAGE=tag@sha256:... no .env}
+    environment:
+      PORT: 3001
+      NODE_ENV: production
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET ausente}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-12h}
+      DATABASE_PATH: data/saden.db
+      # Origem pública; sem isso o CORS/CSRF falha no domínio real.
+      FRONTEND_ORIGIN: https://${SADEN_DOMAIN:?SADEN_DOMAIN ausente}
+      SADEN_ADMIN_EMAILS: ${SADEN_ADMIN_EMAILS:-}
+      SADEN_BACKUP_DIR: /app/backups
+      SADEN_BACKUP_MAX_AGE_HOURS: ${SADEN_BACKUP_MAX_AGE_HOURS:-30}
+      SADEN_ROLE: web
+    volumes:
+      - saden-data:/app/data
+      - saden-backups:/app/backups:ro
+    networks: [saden-net]
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3001/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      start_period: 30s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          memory: 384m
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }
+
+  saden-worker:
+    image: ${SADEN_IMAGE:?Defina SADEN_IMAGE=tag@sha256:... no .env}
+    command: ["node", "backend/src/worker/index.js"]
+    environment:
+      NODE_ENV: production
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET ausente}
+      DATABASE_PATH: data/saden.db
+      SADEN_ROLE: worker
+      SADEN_WORKER_HOUR: ${SADEN_WORKER_HOUR:-18}
+      SADEN_WORKER_MIN_SERIES_MS: ${SADEN_WORKER_MIN_SERIES_MS:-3600000}
+      SADEN_WORKER_LOCK_TTL_MS: ${SADEN_WORKER_LOCK_TTL_MS:-300000}
+      SADEN_WORKER_RUNS_KEEP: ${SADEN_WORKER_RUNS_KEEP:-500}
+      SADEN_STALE_AFTER_DAYS: ${SADEN_STALE_AFTER_DAYS:-4}
+      SADEN_MONITOR_PING_URL: ${SADEN_MONITOR_PING_URL:-}
+    volumes:
+      - saden-data:/app/data
+    networks: [saden-net]
+    depends_on:
+      saden:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "backend/src/worker/healthcheck.js"]
+      interval: 60s
+      timeout: 10s
+      start_period: 60s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          memory: 320m
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }
+
+  saden-backup:
+    image: ${SADEN_IMAGE:?Defina SADEN_IMAGE=tag@sha256:... no .env}
+    command:
+      - sh
+      - -c
+      - >-
+        while true; do
+        node backend/scripts/backup.js --db data/saden.db --out-dir /app/backups
+        --retention $${SADEN_BACKUP_RETENTION:-14};
+        node backend/scripts/restore-drill.js --out-dir /app/backups;
+        sleep $${SADEN_BACKUP_INTERVAL_SECONDS:-86400};
+        done
+    environment:
+      NODE_ENV: production
+      SADEN_BACKUP_DIR: /app/backups
+      SADEN_BACKUP_RETENTION: ${SADEN_BACKUP_RETENTION:-14}
+      SADEN_BACKUP_INTERVAL_SECONDS: ${SADEN_BACKUP_INTERVAL_SECONDS:-86400}
+      SADEN_BACKUP_MAX_AGE_HOURS: ${SADEN_BACKUP_MAX_AGE_HOURS:-30}
+      SADEN_BACKUP_MONITOR_PING_URL: ${SADEN_BACKUP_MONITOR_PING_URL:-}
+      SADEN_OFFSITE_MODE: ${SADEN_OFFSITE_MODE:-disabled}
+      SADEN_OFFSITE_RETENTION: ${SADEN_OFFSITE_RETENTION:-14}
+      SADEN_BACKUP_ENCRYPT: ${SADEN_BACKUP_ENCRYPT:-1}
+      SADEN_BACKUP_PASSPHRASE: ${SADEN_BACKUP_PASSPHRASE:-}
+      SADEN_S3_ENDPOINT: ${SADEN_S3_ENDPOINT:-}
+      SADEN_S3_BUCKET: ${SADEN_S3_BUCKET:-}
+      SADEN_S3_REGION: ${SADEN_S3_REGION:-us-east-1}
+      SADEN_S3_ACCESS_KEY: ${SADEN_S3_ACCESS_KEY:-}
+      SADEN_S3_SECRET_KEY: ${SADEN_S3_SECRET_KEY:-}
+      SADEN_S3_PREFIX: ${SADEN_S3_PREFIX:-saden/backups}
+    volumes:
+      - saden-data:/app/data:ro
+      - saden-backups:/app/backups
+    networks: [saden-net]
+    depends_on:
+      saden:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "backend/scripts/backup-health.js"]
+      interval: 5m
+      timeout: 20s
+      start_period: 120s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          memory: 256m
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }
+
+  # Borda: único serviço com portas públicas. TLS automático via ACME.
+  caddy:
+    image: ${CADDY_IMAGE:-caddy:2.8-alpine}
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      SADEN_DOMAIN: ${SADEN_DOMAIN:?SADEN_DOMAIN ausente}
+      ACME_EMAIL: ${ACME_EMAIL:-}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    networks: [saden-net]
+    depends_on:
+      saden:
+        condition: service_healthy
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }
+
+networks:
+  saden-net:
+    driver: bridge
+
+volumes:
+  saden-data:
+  saden-backups:
+  caddy-data:
+  caddy-config:

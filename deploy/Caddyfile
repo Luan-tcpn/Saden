@@ -1,0 +1,52 @@
+# SADEN — Caddy (TLS automático + cabeçalhos)
+#
+# O domínio vem de SADEN_DOMAIN no .env. O Caddy emite e renova o certificado
+# sozinho (Let's Encrypt) e redireciona HTTP → HTTPS automaticamente.
+# Nenhum serviço interno é exposto: o proxy fala com `saden:3001` na rede
+# interna do compose.
+
+{
+	# E-mail do ACME (opcional, recomendado para avisos de expiração).
+	email {$ACME_EMAIL}
+
+	# Sem telemetria e sem servidor versionado no cabeçalho.
+	servers {
+		trusted_proxies static private_ranges
+	}
+}
+
+{$SADEN_DOMAIN} {
+	encode zstd gzip
+
+	# Cabeçalhos de segurança na borda. O backend também os envia; o Caddy
+	# substitui os duplicados em vez de acumular.
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "SAMEORIGIN"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		Permissions-Policy "geolocation=(self), camera=(), microphone=()"
+		-Server
+	}
+
+	# Limite de corpo: as rotas da API são pequenas (JSON). Evita DoS trivial.
+	request_body {
+		max_size 2MB
+	}
+
+	reverse_proxy saden:3001 {
+		header_up X-Real-IP {remote_host}
+		header_up X-Forwarded-Proto {scheme}
+		health_uri /api/health
+		health_interval 30s
+	}
+
+	# Log de acesso rotacionado pelo próprio Caddy.
+	log {
+		output file /data/access.log {
+			roll_size 10MiB
+			roll_keep 5
+		}
+		format json
+	}
+}

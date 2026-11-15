@@ -126,6 +126,25 @@ describe('rotina de backup', () => {
     fs.rmSync(dir, { recursive: true, force: true });
   });
 
+  // Achado da auditoria v1.2.2: dois backups no mesmo segundo compartilhavam o
+  // arquivo parcial e um apagava o do outro. O parcial agora é único por
+  // processo; a colisão de nome final é detectada sem sobrescrever nada.
+  it('dois backups no mesmo segundo não se destroem', () => {
+    const dir = path.join(TMP, 'backups-colisao');
+    fs.rmSync(dir, { recursive: true, force: true });
+    const when = new Date('2026-05-05T10:00:00');
+    const first = backup.createBackup({ dbPath: DB_PATH, outDir: dir, date: when });
+    assert.throws(
+      () => backup.createBackup({ dbPath: DB_PATH, outDir: dir, date: when }),
+      /já existe backup com este carimbo de tempo/
+    );
+    assert.ok(fs.existsSync(first.file), 'o primeiro backup permanece');
+    assert.equal(backup.validateBackup(first.file).integrity, 'ok');
+    const restos = fs.readdirSync(dir).filter((name) => name.includes('.partial'));
+    assert.deepEqual(restos, [], 'nenhum arquivo parcial abandonado');
+    fs.rmSync(dir, { recursive: true, force: true });
+  });
+
   it('backup é consistente enquanto outra conexão escreve (WAL)', async () => {
     const writer = require('../../backend/src/db').connect();
     let running = true;
