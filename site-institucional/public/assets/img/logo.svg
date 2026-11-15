@@ -1,0 +1,14 @@
+<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="SADEN">
+  <rect x="0" y="0" width="48" height="48" rx="10" fill="#2c5f3a"/>
+  <g transform="rotate(-24 24 24)">
+    <rect x="6" y="21" width="13" height="7" rx="1" fill="#ffffff"/>
+    <line x1="10.3" y1="21" x2="10.3" y2="28" stroke="#2c5f3a" stroke-width="1.2"/>
+    <line x1="14.6" y1="21" x2="14.6" y2="28" stroke="#2c5f3a" stroke-width="1.2"/>
+    <rect x="29" y="21" width="13" height="7" rx="1" fill="#ffffff"/>
+    <line x1="33.4" y1="21" x2="33.4" y2="28" stroke="#2c5f3a" stroke-width="1.2"/>
+    <line x1="37.7" y1="21" x2="37.7" y2="28" stroke="#2c5f3a" stroke-width="1.2"/>
+    <rect x="20" y="18.5" width="8" height="12" rx="2" fill="#ffffff"/>
+    <line x1="24" y1="18.5" x2="24" y2="14.5" stroke="#ffffff" stroke-width="1.6"/>
+    <circle cx="24" cy="12.5" r="2.3" fill="none" stroke="#ffffff" stroke-width="1.6"/>
+  </g>
+</svg>

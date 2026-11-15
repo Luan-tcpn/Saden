@@ -2,6 +2,55 @@
 
 Aplicação web real, integrada e executável (TCC): preços de referência em reais, clima por localidade, mapa interativo, previsão quantitativa com intervalo, relatórios e alertas — tudo com fonte e data declaradas.
 
+---
+
+## Estado atual — v1.2.3
+
+> As seções abaixo são o registro histórico da V1. O estado vigente é este.
+
+Produto com **worker de monitoramento independente**, **backup verificado com
+criptografia e destino S3 opcional**, **monitoramento externo por heartbeat** e
+**site institucional estático**. Suíte: **198 testes** (192 passam, 6 de rede
+opt-in via `SADEN_LIVE_TESTS=1`). CI em `.github/workflows/ci.yml` (testes, docker,
+e2e).
+
+### Mapa do repositório
+
+| Caminho | O que é | Runtime? |
+|---|---|---|
+| `backend/` | API Express, worker, scripts de backup/restore | **sim** |
+| `frontend/` | interface servida pelo backend | **sim** |
+| `data/` | banco SQLite local (ignorado no git) | **sim** (gerado) |
+| `tests/` | unitários, integração e E2E | não |
+| `scripts/` | seed, smoke, simulação de desastre | não |
+| `docs/` | arquitetura, operação, auditorias, runbooks | não |
+| `deploy/` | compose de produção, Caddyfile, setup do servidor | não |
+| `site-institucional/` | site estático de apresentação (Cloudflare Pages) | **não** |
+| `geospatial/`, `tools/` | pesquisa V2/V3 (não versionados) | não |
+
+### Comandos
+
+```powershell
+# aplicação
+cd backend; npm ci; npm start                 # http://localhost:3001
+# testes
+cd backend; npm test                          # 198 testes
+# stack completa (web + worker + backup)
+$env:JWT_SECRET="segredo-forte"; docker compose up -d
+# verificação de backup off-site
+node backend/scripts/offsite-verify.js --db data/saden.db
+```
+
+### Documentação de operação
+
+- `docs/operations/DISASTER_RECOVERY_RUNBOOK.md` — recuperação passo a passo
+- `docs/operations/PRODUCTION_DEPLOYMENT_RECORD.md` — implantação e checklist
+- `docs/operations/PRODUCTION_ACCEPTANCE_AUDIT_V1_2_2.md` — auditoria de aceite
+- `docs/operations/PROJECT_WORKSPACE_HYGIENE.md` — `.commandcode` e arquivos não versionados
+- `site-institucional/README.md` e `DEPLOY.md` — site e publicação
+
+---
+
 ## O que é
 
 Os preços exibidos pelo SADEN são **referência internacional convertida**: contratos futuros CBOT/ICE (via Yahoo Finance) × dólar PTAX de venda (Banco Central). Isso **não** é preço físico regional, preço de porteira nem valor recebido pelo produtor — e o sistema declara esse nível em tela e nos relatórios.

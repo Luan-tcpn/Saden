@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SADEN — Inteligência de preços e clima para o agronegócio brasileiro</title>
+<meta name="description" content="O SADEN organiza cotações de referência de commodities, conversão cambial e contexto territorial em um painel único — com alertas de preço e metodologia aberta sobre o que os dados significam.">
+<meta name="theme-color" content="#1a3a24">
+<link rel="canonical" href="https://saden-institucional.pages.dev/">
+<link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="SADEN">
+<meta property="og:title" content="SADEN — Inteligência de preços e clima para o agronegócio">
+<meta property="og:description" content="Cotações de referência, conversão PTAX, mapa territorial e alertas de preço em um painel único. Metodologia e limites declarados.">
+<meta property="og:url" content="https://saden-institucional.pages.dev/">
+<meta property="og:image" content="https://saden-institucional.pages.dev/assets/img/hero-pivo.jpg">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preload" href="assets/img/hero-pivo.jpg" as="image">
+<link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+<a class="skip" href="#conteudo">Ir para o conteúdo</a>
+
+<header class="topo" id="topo">
+  <div class="wrap topo__inner">
+    <a class="marca" href="#topo" aria-label="SADEN — início">
+      <img src="assets/img/logo.svg" alt="" width="40" height="40" class="marca__marca">
+      <span class="marca__texto"><strong>SADEN</strong><small>AgroClima</small></span>
+    </a>
+
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu" aria-label="Abrir menu">
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav class="menu" id="menu" aria-label="Navegação principal">
+      <a href="#sobre">Sobre</a>
+      <a href="#plataforma">Plataforma</a>
+      <a href="#funcionalidades">Funcionalidades</a>
+      <a href="#dados">Dados</a>
+      <a href="#transparencia">Transparência</a>
+      <a class="menu__cta" href="#contato">Conhecer o projeto</a>
+    </nav>
+  </div>
+</header>
+
+<main id="conteudo">
+
+  <!-- 1. HERO -->
+  <section class="hero" aria-labelledby="hero-titulo">
+    <div class="wrap hero__grid">
+      <div class="hero__texto">
+        <p class="rotulo">Agroclima · commodities brasileiras</p>
+        <h1 id="hero-titulo">Preço, território e método na mesma mesa de decisão.</h1>
+        <p class="hero__sub">
+          O SADEN reúne cotações de referência de cinco commodities, conversão pelo
+          câmbio oficial e contexto regional em um painel único — com alertas de preço
+          avaliados por um serviço próprio, todos os dias úteis.
+        </p>
+        <div class="hero__acoes">
+          <a class="btn btn--primario" href="#plataforma">Explorar a plataforma</a>
+          <a class="btn btn--fantasma" href="#sobre">Entender o projeto</a>
+        </div>
+        <dl class="numeros" aria-label="Números do produto">
+          <div><dt>5</dt><dd>commodities acompanhadas</dd></div>
+          <div><dt>3</dt><dd>fontes externas integradas</dd></div>
+          <div><dt>24 h</dt><dd>ciclo de backup verificado</dd></div>
+        </dl>
+      </div>
+
+      <figure class="hero__figura">
+        <img src="assets/img/hero-pivo.jpg" alt="Pivô central de irrigação em lavoura, com estação meteorológica em primeiro plano" width="1200" height="800" fetchpriority="high">
+        <figcaption>O campo gera o dado; o painel organiza a leitura.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- 2. SOBRE -->
+  <section class="faixa faixa--clara" id="sobre" aria-labelledby="sobre-titulo">
+    <div class="wrap">
+      <p class="rotulo">O problema</p>
+      <h2 id="sobre-titulo">Decidir com informação espalhada custa caro.</h2>
+      <p class="entrada">
+        Quem trabalha com commodities agrícolas acompanha, ao mesmo tempo, cotação
+        internacional, câmbio, calendário de safra e condições da própria região.
+        Cada informação mora em um lugar diferente, com uma data diferente e um
+        significado diferente.
+      </p>
+
+      <div class="tres">
+        <article class="bloco">
+          <h3>Informação dispersa</h3>
+          <p>Cotação em um site, câmbio em outro, contexto regional em um terceiro.
+             Reunir tudo consome o tempo de quem planta.</p>
+        </article>
+        <article class="bloco">
+          <h3>Preço sem procedência é palpite</h3>
+          <p>Um número sem fonte, data e método não permite saber se está atualizado,
+             se é referência internacional ou se já foi convertido.</p>
+        </article>
+        <article class="bloco">
+          <h3>Ferramenta que esconde o limite</h3>
+          <p>Sistemas que prometem previsão infalível escondem a incerteza. O SADEN
+             declara o que cada número é — e o que ele não é.</p>
+        </article>
+      </div>
+
+      <p class="fecho">
+        O SADEN é um projeto técnico que organiza essas camadas em um produto
+        navegável: séries de preço com linhagem, alertas avaliados por um serviço
+        independente e uma camada de transparência que explica a origem de cada dado.
+      </p>
+    </div>
+  </section>
+
+  <!-- 3. PLATAFORMA -->
+  <section class="faixa faixa--escura" id="plataforma" aria-labelledby="plat-titulo">
+    <div class="wrap">
+      <div class="cabecalho-duplo">
+        <div>
+          <p class="rotulo rotulo--claro">A plataforma</p>
+          <h2 id="plat-titulo">O que existe hoje, sem promessa além disso.</h2>
+        </div>
+        <p class="nota">
+          A tela abaixo é a entrada real da aplicação na versão v1.2.3, capturada
+          do sistema em execução. Nenhum dado de usuário aparece.
+        </p>
+      </div>
+
+      <figure class="captura">
+        <img src="assets/img/tela-entrada.png" alt="Tela de entrada do SADEN: título, resumo do produto e imagem de lavoura irrigada" width="1440" height="1000" loading="lazy">
+        <figcaption>Tela de entrada — SADEN v1.2.3</figcaption>
+      </figure>
+
+      <div class="quatro">
+        <article class="cartao">
+          <h3>Painel de preços</h3>
+          <p>Séries de soja, milho, café, trigo e algodão, com data da observação,
+             unidade e o estado de atualização de cada série.</p>
+        </article>
+        <article class="cartao">
+          <h3>Contexto territorial</h3>
+          <p>Mapa do Brasil com recortes regionais para situar a leitura de mercado
+             no território em que ela acontece.</p>
+        </article>
+        <article class="cartao">
+          <h3>Alertas de preço</h3>
+          <p>Você define série, condição e limite. O serviço avalia sozinho, em dias
+             úteis, e registra um evento quando a condição é atingida.</p>
+        </article>
+        <article class="cartao">
+          <h3>Relatórios</h3>
+          <p>Histórico da série e projeção estatística de referência, exportáveis
+             em CSV para análise própria.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. FUNCIONALIDADES -->
+  <section class="faixa" id="funcionalidades" aria-labelledby="func-titulo">
+    <div class="wrap">
+      <p class="rotulo">Funcionalidades</p>
+      <h2 id="func-titulo">Recursos que a versão atual entrega</h2>
+      <p class="entrada entrada--curta">
+        Tudo abaixo está implementado e testado na v1.2.3. O que não está pronto não
+        aparece nesta lista.
+      </p>
+
+      <div class="grade">
+        <article class="item">
+          <h3>Cotação de referência com linhagem</h3>
+          <p>Contrato futuro do mercado internacional, convertido para real pela PTAX
+             de venda. A origem, a data e a unidade acompanham o número.</p>
+        </article>
+        <article class="item">
+          <h3>Estado de atualização explícito</h3>
+          <p>Cada série informa se está atualizada, aguardando o fechamento do pregão,
+             sem pregão esperado ou atrasada — em vez de exibir um número antigo como novo.</p>
+        </article>
+        <article class="item">
+          <h3>Alertas idempotentes</h3>
+          <p>Um evento por observação. Se o worker reiniciar, o mesmo alerta não
+             dispara duas vezes. Concorrência entre instâncias é controlada por lease.</p>
+        </article>
+        <article class="item">
+          <h3>Automação em dias úteis</h3>
+          <p>A verificação roda em serviço separado do site, às 18h de Brasília,
+             de segunda a sexta. Fim de semana não é tratado como falha.</p>
+        </article>
+        <article class="item">
+          <h3>Relatório exportável</h3>
+          <p>Histórico e projeção de referência em CSV, com as ressalvas do modelo
+             junto dos números.</p>
+        </article>
+        <article class="item">
+          <h3>Conta individual e isolamento</h3>
+          <p>Alertas e eventos são visíveis apenas para o próprio usuário. Rotas
+             administrativas exigem autorização explícita.</p>
+        </article>
+        <article class="item">
+          <h3>Backup verificado</h3>
+          <p>Cópia diária do banco com verificação de integridade, manifesto e teste
+             de restauração — não apenas "arquivo existe".</p>
+        </article>
+        <article class="item">
+          <h3>Falha visível</h3>
+          <p>Quando a fonte ou o serviço de monitoramento cai, a interface mostra o
+             estado real em vez de esconder o problema.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. DADOS E METODOLOGIA -->
+  <section class="faixa faixa--areia" id="dados" aria-labelledby="dados-titulo">
+    <div class="wrap">
+      <p class="rotulo">Dados e metodologia</p>
+      <h2 id="dados-titulo">De onde vem cada número</h2>
+
+      <div class="duplo">
+        <div>
+          <h3>Preço</h3>
+          <p>
+            A série é construída a partir de <strong>contratos futuros do mercado
+            internacional</strong> (Yahoo Finance) e convertida para reais pela
+            <strong>PTAX de venda do Banco Central</strong>. Quando o câmbio não é
+            publicado em um dia, o sistema usa o último valor disponível e registra
+            que houve fallback.
+          </p>
+          <p class="alerta">
+            Isso é uma <strong>referência internacional convertida</strong>. Não é o
+            preço físico recebido pelo produtor brasileiro: não inclui base local,
+            prêmio portuário, frete, impostos nem custo de exportação.
+          </p>
+        </div>
+        <div>
+          <h3>Contexto e metodologia</h3>
+          <p>
+            A leitura regional usa recortes do território brasileiro para situar a
+            informação. A documentação do projeto registra, para cada série, a fonte,
+            a data de referência e o critério de frescor aplicado.
+          </p>
+          <p class="alerta">
+            <strong>CEPEA e CONAB não estão integrados.</strong> Essas fontes não
+            oferecem API pública validada para este projeto e não são apresentadas
+            como ativas. Séries de preço físico regional ainda não existem no produto.
+          </p>
+        </div>
+      </div>
+
+      <div class="tabela-wrap">
+        <table class="tabela">
+          <caption>O que cada informação é, na versão atual</caption>
+          <thead>
+            <tr><th scope="col">Informação</th><th scope="col">Natureza</th><th scope="col">Limite declarado</th></tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">Cotação da commodity</th><td>Referência internacional convertida por PTAX</td><td>Não é preço físico no porto ou na fazenda</td></tr>
+            <tr><th scope="row">Conversão cambial</th><td>PTAX de venda, com fallback registrado</td><td>Dia sem publicação usa o último valor</td></tr>
+            <tr><th scope="row">Projeção de preço</th><td>Modelo estatístico de referência</td><td>Não é garantia nem recomendação</td></tr>
+            <tr><th scope="row">Alerta</th><td>Notificação interna do próprio painel</td><td>Sem e-mail, SMS ou WhatsApp</td></tr>
+            <tr><th scope="row">Contexto territorial</th><td>Recorte regional para leitura</td><td>Não é laudo agronômico</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. TECNOLOGIA -->
+  <section class="faixa faixa--clara" id="tecnologia" aria-labelledby="tec-titulo">
+    <div class="wrap">
+      <p class="rotulo">Tecnologia</p>
+      <h2 id="tec-titulo">Simples por decisão, não por falta de opção</h2>
+      <p class="entrada entrada--curta">
+        O SADEN roda em um único servidor com Docker: aplicação web, serviço de
+        monitoramento e serviço de backup. O banco é um arquivo SQLite — escolha
+        deliberada para um produto de baixo volume, que dispensa cluster e reduz
+        pontos de falha.
+      </p>
+
+      <div class="tres tres--linha">
+        <div class="mini"><span>01</span><h3>Aplicação web</h3><p>Node.js 22, API HTTP e interface servida pelo mesmo processo.</p></div>
+        <div class="mini"><span>02</span><h3>Serviço de monitoramento</h3><p>Processo separado, com lock, heartbeat e histórico de execuções.</p></div>
+        <div class="mini"><span>03</span><h3>Backup e restauração</h3><p>Cópia consistente, criptografada e verificada por teste de restauração.</p></div>
+      </div>
+
+      <ul class="selos" aria-label="Características técnicas">
+        <li>Node.js 22</li><li>SQLite com WAL</li><li>Docker Compose</li><li>TLS automático</li>
+        <li>Criptografia AES-256-GCM nos backups</li><li>Testes automatizados e CI</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 7. TRANSPARÊNCIA -->
+  <section class="faixa faixa--escura" id="transparencia" aria-labelledby="transp-titulo">
+    <div class="wrap transp">
+      <div>
+        <p class="rotulo rotulo--claro">Transparência</p>
+        <h2 id="transp-titulo">O que o SADEN não faz</h2>
+        <p class="entrada">
+          A parte mais importante de um sistema de apoio à decisão é dizer onde ele
+          termina. Estas são as fronteiras atuais, verificadas no código da versão v1.2.3.
+        </p>
+      </div>
+      <ul class="lista-limites">
+        <li>Não executa ordens, não intermedeia compra ou venda e não é consultoria financeira.</li>
+        <li>Não garante preço futuro nem elimina risco de mercado.</li>
+        <li>Não fornece preço físico regional nem medição de base local.</li>
+        <li>Não envia notificações por e-mail, SMS ou WhatsApp — os alertas vivem no painel.</li>
+        <li>Não utiliza imagens de satélite ou laudo agronômico para recomendação de manejo.</li>
+        <li>Não publica métricas de acurácia sem evidência reproduzível.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 8. ENCERRAMENTO -->
+  <section class="faixa faixa--final" id="contato" aria-labelledby="fim-titulo">
+    <div class="wrap final">
+      <div>
+        <p class="rotulo">Projeto</p>
+        <h2 id="fim-titulo">Um produto em construção, com o método à vista.</h2>
+        <p class="entrada">
+          O SADEN nasceu de um trabalho técnico de análise de dados agrícolas e evoluiu
+          para uma aplicação com alertas, monitoramento e rotina de recuperação. Esta
+          página apresenta o estado atual — não um roadmap.
+        </p>
+      </div>
+      <aside class="ficha" aria-label="Ficha do projeto">
+        <h3>Ficha</h3>
+        <dl>
+          <div><dt>Versão apresentada</dt><dd>v1.2.3</dd></div>
+          <div><dt>Commodities</dt><dd>soja, milho, café, trigo, algodão</dd></div>
+          <div><dt>Fontes ativas</dt><dd>Yahoo Finance · PTAX (BCB) · Open-Meteo</dd></div>
+          <div><dt>Cobertura</dt><dd>referência nacional</dd></div>
+        </dl>
+        <p class="ficha__nota">
+          Contato institucional não publicado nesta versão. Para acesso à demonstração,
+          procure o responsável pelo projeto.
+        </p>
+      </aside>
+    </div>
+  </section>
+</main>
+
+<footer class="rodape">
+  <div class="wrap rodape__inner">
+    <p>SADEN — Sistema de Apoio à Decisão em Agronegócio · versão v1.2.3</p>
+    <p class="rodape__nota">
+      Cotações são referências internacionais convertidas. Não constituem preço físico
+      nem recomendação de investimento.
+    </p>
+  </div>
+</footer>
+
+<script src="assets/js/site.js" defer></script>
+</body>
+</html>

@@ -4,3 +4,12 @@ data/*.db*
 logs/*.log
 tmp/*
 .DS_Store
+
+# Estado local do Command Code Desktop (preferências aprendidas por máquina).
+# Não é configuração compartilhável do projeto — ver
+# docs/operations/PROJECT_WORKSPACE_HYGIENE.md
+.commandcode/
+
+# Artefatos de pesquisa geoespacial e de modelagem (não fazem parte do runtime).
+geospatial/
+tools/

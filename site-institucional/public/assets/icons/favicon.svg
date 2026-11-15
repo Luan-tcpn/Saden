@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="SADEN">
+  <rect width="64" height="64" rx="14" fill="#1a3a24"/>
+  <path d="M14 44c8-2 12-8 14-16 2 8 6 14 14 16" fill="none" stroke="#8fbf9a" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="32" cy="22" r="5" fill="#f1ece0"/>
+  <path d="M20 50h24" stroke="#5d8f6a" stroke-width="3" stroke-linecap="round"/>
+</svg>

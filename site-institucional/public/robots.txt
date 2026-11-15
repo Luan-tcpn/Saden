@@ -1,0 +1,5 @@
+# SADEN - site institucional (estatico)
+User-agent: *
+Allow: /
+
+Sitemap: https://saden-institucional.pages.dev/sitemap.xml

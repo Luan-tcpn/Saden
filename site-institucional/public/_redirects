@@ -1,0 +1,5 @@
+# SADEN — site institucional
+# Página única com âncoras: não há rotas internas para reescrever.
+# Um catch-all /* quebraria o cache imutável de /assets/** no Cloudflare Pages.
+
+/index.html    /    301
