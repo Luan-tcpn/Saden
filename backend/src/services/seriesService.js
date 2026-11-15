@@ -67,21 +67,73 @@ function parseSeriesId(seriesId) {
   return { provider: parts[0], ticker: parts[1], currency: parts[2], unitSlug: parts[3] };
 }
 
-function daysSince(dateIso) {
+function daysSince(dateIso, reference = Date.now()) {
   const then = new Date(`${dateIso}T12:00:00Z`).getTime();
   if (!Number.isFinite(then)) return null;
-  return Math.floor((Date.now() - then) / 86400000);
+  return Math.floor((reference - then) / 86400000);
 }
 
-function freshnessFor(observationDate) {
+/**
+ * Data da sessão mais recente que se poderia esperar (dia útil anterior ou hoje).
+ * Limitação declarada: **feriado de mercado não é modelado**. O calendário aqui
+ * é só fim de semana; feriado é absorvido pela tolerância (`stale_after_days`).
+ */
+function expectedSessionDate(now = new Date()) {
+  const sp = new Date(now.toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' }));
+  const cursor = new Date(sp);
+  // Se ainda não fechou o pregão de hoje, a sessão esperada é a anterior.
+  const closesAt = 18;
+  if (cursor.getHours() < closesAt) cursor.setDate(cursor.getDate() - 1);
+  while (cursor.getDay() === 0 || cursor.getDay() === 6) cursor.setDate(cursor.getDate() - 1);
+  const pad = (n) => String(n).padStart(2, '0');
+  return `${cursor.getFullYear()}-${pad(cursor.getMonth() + 1)}-${pad(cursor.getDate())}`;
+}
+
+function isMarketDay(date = new Date()) {
+  const sp = new Date(date.toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' }));
+  const day = sp.getDay();
+  return day !== 0 && day !== 6;
+}
+
+/**
+ * Estado de frescor. `status` continua binário em `fresh`/`stale` para não
+ * quebrar consumidores antigos; `detail` explica o motivo (semana, pregão ainda
+ * aberto, atraso real).
+ */
+function freshnessFor(observationDate, { now = new Date() } = {}) {
   const limit = staleAfterDays();
-  if (!observationDate) return { status: 'unknown', age_days: null, stale_after_days: limit };
-  const age = daysSince(observationDate);
+  const expected = expectedSessionDate(now);
+  const marketDay = isMarketDay(now);
+
+  if (!observationDate) {
+    return {
+      status: 'unknown',
+      detail: 'sem_observacao',
+      age_days: null,
+      stale_after_days: limit,
+      expected_session_date: expected,
+      market_day: marketDay,
+      policy: POLICY,
+    };
+  }
+
+  const age = daysSince(observationDate, now.getTime());
   const stale = age == null || age > limit;
+
+  // O detalhe nunca "melhora" um atraso real: stale sempre vence.
+  let detail;
+  if (stale) detail = 'atrasado';
+  else if (age === 0) detail = 'atualizado';
+  else if (!marketDay) detail = 'sem_pregao_esperado';
+  else detail = 'aguardando_pregao';
+
   return {
     status: stale ? 'stale' : 'fresh',
+    detail,
     age_days: age,
     stale_after_days: limit,
+    expected_session_date: expected,
+    market_day: marketDay,
     policy: POLICY,
   };
 }
@@ -108,15 +160,26 @@ function stateFor(seriesId) {
 }
 
 // Estado legível para a interface. Combina frescor do dado + saúde da fonte.
+// A ordem importa: erro de fonte prevalece sobre "sem pregão", porque uma fonte
+// quebrada pode estar escondida atrás de um fim de semana.
 function operationalStatus(series, state) {
   const freshness = freshnessFor(series.observation_date);
   if (freshness.status === 'unknown') {
     if (state && state.last_error) return { status: 'source_error', label: 'erro na fonte' };
     return { status: 'awaiting', label: 'aguardando nova observação' };
   }
-  if (freshness.status === 'fresh') return { status: 'updated', label: 'atualizado' };
+  if (freshness.status === 'stale') {
+    if (state && state.last_error) return { status: 'source_error', label: 'erro na fonte' };
+    return { status: 'late', label: 'atrasado' };
+  }
   if (state && state.last_error) return { status: 'source_error', label: 'erro na fonte' };
-  return { status: 'late', label: 'atrasado' };
+  if (freshness.detail === 'sem_pregao_esperado') {
+    return { status: 'no_session', label: 'sem pregão esperado hoje' };
+  }
+  if (freshness.detail === 'aguardando_pregao') {
+    return { status: 'awaiting_session', label: 'aguardando fechamento do pregão' };
+  }
+  return { status: 'updated', label: 'atualizado' };
 }
 
 function buildSeries(commodity, observation) {
@@ -144,6 +207,9 @@ function buildSeries(commodity, observation) {
     last_price: observation ? observation.price_brl : null,
     last_updated_at: observation ? observation.retrieved_at : null,
     freshness_status: freshness.status,
+    freshness_detail: freshness.detail,
+    expected_session_date: freshness.expected_session_date,
+    market_day: freshness.market_day,
     age_days: freshness.age_days,
     stale_after_days: freshness.stale_after_days,
     operational: operationalStatus({ observation_date: observationDate }, state),
@@ -214,6 +280,8 @@ module.exports = {
   seriesIdForCommodity,
   latestObservationFor,
   freshnessFor,
+  expectedSessionDate,
+  isMarketDay,
   stateFor,
   operationalStatus,
   slugUnit,

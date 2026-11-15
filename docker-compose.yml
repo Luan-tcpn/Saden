@@ -102,6 +102,9 @@ services:
       saden:
         condition: service_healthy
     restart: unless-stopped
+    # O HEALTHCHECK da imagem testa a porta 3001; este serviço não abre porta.
+    healthcheck:
+      disable: true
 
 volumes:
   saden-backups:

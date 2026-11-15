@@ -16,8 +16,10 @@ COPY .env.example ./.env.example
 COPY docs ./docs
 COPY README.md ./README.md
 
-# Diretórios de runtime com dono não-root (data é montado como volume no compose).
-RUN mkdir -p data tmp/mail-outbox logs && chown -R node:node /app
+# Diretórios de runtime com dono não-root. `/app/backups` precisa existir **na
+# imagem**: um volume nomeado vazio herda o dono do diretório de montagem. Sem
+# isso, o volume nasce root e o `node` (uid 1000) não consegue escrever o backup.
+RUN mkdir -p data tmp/mail-outbox logs backups && chown -R node:node /app
 USER node
 
 EXPOSE 3001
